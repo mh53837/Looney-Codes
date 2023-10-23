@@ -2,20 +2,14 @@
 		
 	\section{Funkcionalni zahtjevi}
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-			\textit{Navesti \textbf{dionike} koji imaju \textbf{interes u ovom sustavu} ili  \textbf{su nositelji odgovornosti}. To su prije svega korisnici, ali i administratori sustava, naručitelji, razvojni tim.}\\
-				
-			\textit{Navesti \textbf{aktore} koji izravno \textbf{koriste} ili \textbf{komuniciraju sa sustavom}. Oni mogu imati inicijatorsku ulogu, tj. započinju određene procese u sustavu ili samo sudioničku ulogu, tj. obavljaju određeni posao. Za svakog aktora navesti funkcionalne zahtjeve koji se na njega odnose.}\\
-			
-			
 			\noindent \textbf{Dionici:}
 			
 			\begin{packed_enum}
 				
-				\item Dionik 1
-				\item Dionik 2				
-				\item ...
+				\item Voditelji
+				\item Natjecatelji				
+				\item Administrator
+				\item Razvojni tim
 				
 			\end{packed_enum}
 			
@@ -23,28 +17,69 @@
 			
 			
 			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
+				\item  \underbar{Neregistrirani/neprijavljeni korisnik (inicijator) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
-					\end{packed_enum}
-					\item  funkcionalnost 3
+					\item vidjeti kalendar s budućim natjecanjima
+					\item pregledati dostupne zadatke na stranici
+					\item pregledati profile natjecatelja i voditelja
+					\item registrirati se u sustav stvaranjem novog korisničkog računa pri čemu odabire jednu od uloga (natjecatelj ili voditelj), a potrebni su mu: korisničko ime, fotografija, lozinka, ime, prezime te email adresa
 					
 				\end{packed_enum}
 			
-				\item  \underbar{Aktor 2 (sudionik) može:}
+				\item  \underbar{Natjecatelj (inicijator) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
+					\item sudjelovati na natjecanju
+					\item vidjeti rang listu natjecatelja na natjecanju kojeg je i sam bio sudionik
+					\item vidjeti popis svih učitanih rješenja od ostalih sudionika za prethodno završena natjecanja
+					\item pristupiti rješavanju već objavljenih zadataka
+					\item izraditi virtualno natjecanje odabirom nekog prošlog natjecanja ili nasumičnim generiranjem zadataka 
+					\item vidjeti vlastiti profil s osobnim podacima, statistikom o broju točno riješenih zadatka, broju isprobanih zadataka te prikaz pehara za osvojena natjecanja
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Aktivni natjecatelj (inicijator) može:}
+				
+				\begin{packed_enum}
+					
+					\item rješavati zadatke i slati datoteke s programskim kodom tijekom natjecanja na kojem se natječe 
+					\item osvojiti bodove na natjecanju s obzirom na potrošeno vrijeme za rješavanje zadatka i postotak točnih primjera 
+					\item na temelju postignuća za prva tri mjesta osvojiti pehar koji je vidljiv na vlastitom profilu
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Voditelj (inicijator) može:}
+				
+				\begin{packed_enum}
+					
+					\item pregledati dostupne zadatke na stranici
+					\item izraditi novi zadatak pri čemu treba definirati: naziv zadatka, broj bodova, vremensko ograničenje, tekst zadatka i primjere za evaluaciju
+					\item organizirati novo natjecanje pri čemu treba definirati: vrijeme početka i završetka, broj zadataka, koji zadaci će biti aktivni te po želji sličicu pehara
+					\item uređivati vlastite prethodno objavljene zadatke te natjecanja
+					\item vidjeti vlastiti profil s osobnim podacima, popisom učitanih zadataka s mogućnošću sortiranja te kalendar s popisom objavljenih natjecanja
+										
+				\end{packed_enum}
+				
+				\item  \underbar{Administrator (inicijator) može:}
+				
+				\begin{packed_enum}
+					
+					\item uređivati sve zadatke i natjecanja
+					\item potvrditi voditelja prilikom registracije
+					\item vidjeti popis svih registriranih korisnika i njihovih osobnih podataka
+					\item mijenjati dodijeljena prava i osobne podatke
+
+				\end{packed_enum}
+				
+				\item  \underbar{Baza podataka (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item pohranjuje sve podatke o korisnicima i njihovim ovlastima te zadacima i natjecanjima
+					\item pohranjuje rezultate natjecanja, rješenja zadataka i statistiku natjecatelja			
 					
 				\end{packed_enum}
 			\end{packed_enum}
