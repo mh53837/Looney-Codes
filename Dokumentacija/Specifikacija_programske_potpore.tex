@@ -96,40 +96,196 @@
 					\textit{Funkcionalne zahtjeve razraditi u obliku obrazaca uporabe. Svaki obrazac je potrebno razraditi prema donjem predlošku. Ukoliko u nekom koraku može doći do odstupanja, potrebno je to odstupanje opisati i po mogućnosti ponuditi rješenje kojim bi se tijek obrasca vratio na osnovni tijek.}\\
 					
 
-					\noindent \underbar{\textbf{UC$<$broj obrasca$>$ -$<$ime obrasca$>$}}
+%					\noindent \underbar{\textbf{UC$<$broj obrasca$>$ -$<$ime obrasca$>$}}
+%					\begin{packed_item}
+%	
+%						\item \textbf{Glavni sudionik: }$<$sudionik$>$
+%						\item  \textbf{Cilj:} $<$cilj$>$
+%						\item  \textbf{Sudionici:} $<$sudionici$>$
+%						\item  \textbf{Preduvjet:} $<$preduvjet$>$
+%						\item  \textbf{Opis osnovnog tijeka:}
+%						
+%						\item[] \begin{packed_enum}
+%	
+%							\item $<$opis korak jedan$>$
+%							\item $<$opis korak dva$>$
+%							\item $<$opis korak tri$>$
+%							\item $<$opis korak četiri$>$
+%							\item $<$opis korak pet$>$
+%						\end{packed_enum}
+%						
+%						\item  \textbf{Opis mogućih odstupanja:}
+%						
+%						\item[] \begin{packed_item}
+%	
+%							\item[2.a] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
+%							\item[] \begin{packed_enum}
+%								
+%								\item $<$opis rješenja mogućeg scenarija korak 1$>$
+%								\item $<$opis rješenja mogućeg scenarija korak 2$>$
+%								
+%							\end{packed_enum}
+%							\item[2.b] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
+%							\item[3.a] $<$opis mogućeg scenarija odstupanja  u koraku 3$>$
+%							
+%						\end{packed_item}
+%					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC1 - Pregled kalendara}}
 					\begin{packed_item}
-	
-						\item \textbf{Glavni sudionik: }$<$sudionik$>$
-						\item  \textbf{Cilj:} $<$cilj$>$
-						\item  \textbf{Sudionici:} $<$sudionici$>$
-						\item  \textbf{Preduvjet:} $<$preduvjet$>$
+						
+						\item \textbf{Glavni sudionik: } Korisnik
+						\item \textbf{Cilj:} Pregledati kalendar s nadolazećim natjecanjima 
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} -
+						\item \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							\item Korisnik otvara početnu stranicu web aplikacije
+							\item Prikazuje se kalendar
+							\item Korisnik odabire određeni datum
+							\item Aplikacija prikazuje popis nadolazećih natjecanja za odabrani datum
+							\item Korisnik odabire natjecanje
+							\item Prikazuju se detalji i informacije o odabranom natjecanju
+						\end{packed_enum}
+					\end{packed_item}
+					
+					
+					\noindent \underbar{\textbf{UC2 - Pregled zadataka}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik
+						\item \textbf{Cilj:} Pregledati zadatke završenih natjecanja
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} -
+						\item \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							\item Korisnik odabire završeno natjecanja
+							\item Prikazuje se lista zadatka povezana s odabranim natjecanjem
+							\item Korisnik odabire specifičan zadatak
+							\item Aplikacija prikazuje detalje zadatka
+						\end{packed_enum}
+					\end{packed_item}
+					
+					
+					\noindent \underbar{\textbf{UC3 - Pregled profila natjecatelja i voditelja}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik
+						\item \textbf{Cilj:} Pregledati zadatke završenih natjecanja
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} -
+						\item \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							\item Korisnik otvara profil određenog korisnika klikom na njihovo korisničko ime
+							\item Ako je otvoren profil natjecatelja, aplikacija prikazuje informacije o broju točno riješenih zadataka, broju isprobanih zadataka te osvojene pehare
+							\item Ako je otvoren profil voditelja, aplikacija prikazuje popis učitanih zadataka i kalendar s popisom objavljenih natjecanja
+						\end{packed_enum}
+					\end{packed_item}
+					
+					
+					
+					
+					\noindent \underbar{\textbf{UC4 - Registracija}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik
+						\item  \textbf{Cilj:} Stvoriti korisnički račun
+						\item  \textbf{Sudionici:} Baza podataka, Administrator 
+						\item  \textbf{Preduvjet:} -
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
-	
-							\item $<$opis korak jedan$>$
-							\item $<$opis korak dva$>$
-							\item $<$opis korak tri$>$
-							\item $<$opis korak četiri$>$
-							\item $<$opis korak pet$>$
+							
+							\item Korisnik odabire opciju za registraciju 
+							\item Korisnik popunjava obrazac za registraciju s potrebnim podacima 
+							\item Korisnik prima obavijest o uspješnoj registraciji na svoju e-mail adresu 
+							\item Ako je korisnik odabrao ulogu "voditelj", sustav šalje obavijest administratoru 
+							\item Administrator potvrđuje registraciju voditelja 
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						\item[] \begin{packed_item}
+							
+							\item[2.a] Već zauzeto korisničko ime ili e-mail adresu, unesni podaci u nedozvoljenom formatu ili neispravna e-mail adresa 
+							\item[] \begin{packed_enum}
+								
+								\item Sustav obavještava korisnika o neuspjelom unosu i prikazuje relevantne poruke o greškama 
+								\item Korisnik mijenja potrebne podatke te završava unos ili odustaje od registracije 
+								
+							\end{packed_enum}
+							
+							\item[5.a] Administrator odbija zahtjev za registraciju voditelja natjecanja:
+							\item[] \begin{packed_enum}
+								
+								\item Sustav obavještava korisnika putem e-maila
+								
+							\end{packed_enum}
+						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC5 - Prijava}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik
+						\item \textbf{Cilj:} Dobiti pristup korisničkom sučelju
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} -
+						\item \textbf{Opis osnovnog tijeka:}
+						\item[] \begin{packed_enum}
+							\item Unos korisničkog imena i lozinke
+							\item Potvrda o ispravnosti unesenih podataka
+							\item Pristup korisničkim funkcijama
 						\end{packed_enum}
 						
 						\item  \textbf{Opis mogućih odstupanja:}
 						
 						\item[] \begin{packed_item}
-	
-							\item[2.a] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
+							
+							\item[2.a] Neispravno korisničko ime/lozinka
 							\item[] \begin{packed_enum}
 								
-								\item $<$opis rješenja mogućeg scenarija korak 1$>$
-								\item $<$opis rješenja mogućeg scenarija korak 2$>$
+								\item Sustav obavještava korisnika o neuspjelom upisu i vra´ca ga na stranicu za registraciju
 								
 							\end{packed_enum}
-							\item[2.b] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
-							\item[3.a] $<$opis mogućeg scenarija odstupanja  u koraku 3$>$
-							
 						\end{packed_item}
 					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC6 - Pregled profila}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik
+						\item \textbf{Cilj:} Pregledati vlastiti profil
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} -
+						\item \textbf{Opis osnovnog tijeka:}
+						\item[] \begin{packed_enum}
+							\item Korisnik pristupa opciji "Moj profil" klikom na ikonu profila
+							\item Aplikacija prikazuje podatke o korisniku (ime, fotografija, lozinka, ime, prezime i e-mail adresa)
+						\end{packed_enum}
+					\end{packed_item}
+					
+					
+					
+					\noindent \underbar{\textbf{UC7 - Pregled vlastite statistike}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
+						\item \textbf{Cilj:} Pregledati vlastitu statistiku unutar web aplikacije
+						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Preduvjet:} Korisnik je prijavljen
+						\item \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							\item Korisnik pristupa svojem profilu i odabire opciju "Moje statistike".
+							\item Aplikacija prikazuje statistike korisnika(broj točno riješenih zadataka, broju isprobanih zadataka, pehare za osvojena natjecanja)
+						\end{packed_enum}
+					\end{packed_item}
+
+					
+					
 				
 					
 				\subsubsection{Dijagrami obrazaca uporabe}
