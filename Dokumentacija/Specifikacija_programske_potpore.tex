@@ -603,11 +603,48 @@
 				
 			\subsection{Sekvencijski dijagrami}
 				
-				\textbf{\textit{dio 1. revizije}}\\
+%				\textbf{\textit{dio 1. revizije}}\\
+%				
+%				\textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
+
+
+				\noindent \textbf{UC15 – unos novog zadatka}\\
 				
-				\textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
-				\eject
-	
+				\noindent Korisnik prijavljen u sustav kao voditelj odabire opciju za stvaranje novog zadatka. Poslužitelj prikazuje formu s praznim poljima koje voditelj treba ispuniti podacima o zadatku. Točnije, potrebno je navesti naziv zadatka, broj bodova koje nosi, vremensko ograničenje izvršavanja, tekst zadatka i primjere za evaluaciju, a moguće je i odabrati opciju da zadatak bude stvoren kao privatan. Voditelj upisuje navedene podatke te ih šalje poslužitelju koji prvo provjerava da su svi podaci ispravno uneseni te da nema polja koja su ostala prazna. U slučaju neispravnosti podataka, poslužitelj prikazuje relevantnu poruku o problemu i ponovno omogućuje ispunjavanje forme. Nakon uspješne provjere, podaci se šalju bazi podataka koja ih sprema i time stvara novi zadatak. Ako sve prođe bez problema, baza podataka šalje potvrdu poslužitelju o uspješnom stvaranju novog zadatka, a poslužitelj zatim javlja korisniku da je njegov zahtjev uspješno proveden.
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.6]{dijagrami/sd15.png} 
+					\centering
+					\caption{Sekvencijski dijagram za obrazac uporabe - unos novog zadatka}
+					\label{fig:sekvencijski1}
+				\end{figure}
+				\pagebreak
+				
+				\noindent \textbf{UC17 – organiziranje novog natjecanja}\\
+				
+				\noindent Korisnik prijavljen u sustav kao voditelj odabire opciju za stvaranjem novog natjecanja. Poslužitelj prikazuje formu s praznim poljima koje je voditelj dužan ispuniti informacijama o natjecanju. Potrebno je unijeti vrijeme početka i završetka natjecanja, broj zadataka, odabrati zadatke koji će biti aktivni te po želji učitati sličicu pehara kojom se nagrađuju najbolji natjecatelji. Nakon što voditelj upiše podatke i preda ih poslužitelju na obradu, poslužitelj će prvo provjeriti ispravnost dobivenih vrijednosti. U slučaju da je voditelj izostavio nešto i ostavio polje praznim, sustav će ga obavijestiti i zatražiti ponovni unos podataka. Nakon uspješno ispunjene forme i uspješno primljenih podataka, poslužitelj će ih proslijediti bazi podataka i zatražiti stvaranje novog natjecanja. Nakon pohrane, ako sve prođe bez problema, baza podataka bi trebala poslati povratnu informaciju poslužitelju o uspješnom stvaranju novog natjecanja, a poslužitelj bi zatim trebao javiti korisniku da je njegov zahtjev uspješno proveden.
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.6]{dijagrami/sd17.png} 
+					\centering
+					\caption{Sekvencijski dijagram za obrazac uporabe - organiziranje novog natjecanja}
+					\label{fig:sekvencijski2}
+				\end{figure}
+				\pagebreak
+				
+				\noindent \textbf{UC10 i UC13 – rješavanje zadataka i prijenos datoteke}\\
+				
+				\noindent Korisnik prijavljen u sustav kao natjecatelj odabire opciju za prikaz svih objavljenih zadataka. Poslužitelj prikazuje popis svih javnih zadataka. Natjecatelj zatim bira zadatak koji želi pokušati riješiti pri čemu se otvara sučelje s tekstom zadatka i opcijom za prijenos datoteke rješenja. Natjecatelj odabire datoteku koju želi prenijeti kao rješenje i potvrđuje svoj odabir, a poslužitelj prosljeđuje datoteku do baze podataka koja ju sprema za prikaz prilikom nekih drugih funkcionalnosti. Na klijentov zahtjev predana datoteka se predaje evaluatoru koji pomoću definiranih primjera ulaza i izlaza određuje točnost rješenja zadatka i vraća ih poslužitelju. Poslužitelj sve rezultate sprema u bazu podataka i prikazuje klijentu u aplikaciji.
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.5]{dijagrami/sd10_sd13.png} 
+					\centering
+					\caption{Sekvencijski dijagram za obrasce uporabe -  rješavanje zadataka i prijenos datoteke}
+					\label{fig:sekvencijski3}
+				\end{figure}
+				
+
+				\eject	
 		\section{Ostali zahtjevi}
 			 
 			 \begin{packed_item}
