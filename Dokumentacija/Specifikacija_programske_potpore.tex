@@ -136,7 +136,7 @@
 						
 						\item \textbf{Glavni sudionik: } Korisnik
 						\item \textbf{Cilj:} Pregledati kalendar s nadolazećim natjecanjima 
-						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Sudionici:} baza podataka
 						\item \textbf{Preduvjet:} -
 						\item \textbf{Opis osnovnog tijeka:}
 						
@@ -156,7 +156,7 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik
 						\item \textbf{Cilj:} Pregledati zadatke završenih natjecanja
-						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Sudionici:} baza podataka
 						\item \textbf{Preduvjet:} -
 						\item \textbf{Opis osnovnog tijeka:}
 						
@@ -173,8 +173,8 @@
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }Korisnik
-						\item \textbf{Cilj:} Pregledati zadatke završenih natjecanja
-						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Cilj:} Pregledati profile natjecatelja i voditelja
+						\item \textbf{Sudionici:} baza podataka
 						\item \textbf{Preduvjet:} -
 						\item \textbf{Opis osnovnog tijeka:}
 						
@@ -187,22 +187,21 @@
 					
 					
 					
-					
 					\noindent \underbar{\textbf{UC4 - Registracija}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }Korisnik
 						\item  \textbf{Cilj:} Stvoriti korisnički račun
-						\item  \textbf{Sudionici:} Baza podataka, Administrator 
-						\item  \textbf{Preduvjet:} -
+						\item  \textbf{Sudionici:} baza podataka, administrator 
+						\item  \textbf{Preduvjet:} korisnik nije prethodno registriran ili prijavljen u sustav
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							
 							\item Korisnik odabire opciju za registraciju 
 							\item Korisnik popunjava obrazac za registraciju s potrebnim podacima 
-							\item Korisnik prima obavijest o uspješnoj registraciji na svoju e-mail adresu 
-							\item Ako je korisnik odabrao ulogu "voditelj", sustav šalje obavijest administratoru 
+							\item Korisnik na svoju e-mail adresu prima obavijest i zahtjev za potvrdu registracije
+							\item Ako je korisnik odabrao ulogu "voditelj", sustav dodatno šalje obavijest administratoru 
 							\item Administrator potvrđuje registraciju voditelja 
 						\end{packed_enum}
 						
@@ -231,13 +230,13 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik
 						\item \textbf{Cilj:} Dobiti pristup korisničkom sučelju
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} -
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je registriran u sustav, ali nije prijavljen
 						\item \textbf{Opis osnovnog tijeka:}
 						\item[] \begin{packed_enum}
-							\item Unos korisničkog imena i lozinke
-							\item Potvrda o ispravnosti unesenih podataka
-							\item Pristup korisničkim funkcijama
+							\item Korisnik unosi korisničko ime i lozinku
+							\item Sustav potvrđuje ispravnosti unesenih podataka
+							\item Korisniku je omogućen pristup korisničkim funkcijama
 						\end{packed_enum}
 						
 						\item  \textbf{Opis mogućih odstupanja:}
@@ -258,8 +257,8 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik
 						\item \textbf{Cilj:} Pregledati vlastiti profil
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} -
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen
 						\item \textbf{Opis osnovnog tijeka:}
 						\item[] \begin{packed_enum}
 							\item Korisnik pristupa opciji "Moj profil" klikom na ikonu profila
@@ -274,13 +273,13 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
 						\item \textbf{Cilj:} Pregledati vlastitu statistiku unutar web aplikacije
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Korisnik je prijavljen
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
-							\item Korisnik pristupa svojem profilu i odabire opciju "Moje statistike".
-							\item Aplikacija prikazuje statistike korisnika(broj točno riješenih zadataka, broju isprobanih zadataka, pehare za osvojena natjecanja)
+							\item Korisnik pristupa svojem profilu i odabire opciju "Moje statistike"
+							\item Aplikacija prikazuje statistike korisnika(broj točno riješenih zadataka, broj isprobanih zadataka, pehare za osvojena natjecanja)
 						\end{packed_enum}
 					\end{packed_item}
 
@@ -290,8 +289,8 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (voditelj)
 						\item \textbf{Cilj:} Pregledati popis svih vlastito objavljenih zadataka
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Korisnik je prijavljen
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -307,12 +306,11 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
 						\item \textbf{Cilj:} Pristupiti natjecanju 
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji natjecanje u tijeku
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen i postoji natjecanje u tijeku
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
-							\item Korisnik se prijavljuje u sustav kao natjecatelj
 							\item Prikazuju se informacije o natjecanju u tijeku i natjecatelj potvrđuje da želi sudjelovati na natjecanju 
 							\item Natjecatelju se prikazuju zadaci koji su dio natjecanja te preostalo vrijeme do kraja natjecanja
 						\end{packed_enum}
@@ -323,16 +321,16 @@
 					\noindent \underbar{\textbf{UC10 – Prijenos datoteke rješenja}}
 					\begin{packed_item}
 						
-						\item \textbf{Glavni sudionik: }Korisnik (aktivni natjecatelj)
+						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj, aktivni natjecatelj)
 						\item \textbf{Cilj:} Prenijeti datoteku kao rješenje nekog zadatka na natjecanju
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Natjecatelj je pristupio natjecanju
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} natjecatelj je pristupio natjecanju ili rješavanju zadataka
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
-							\item Aktivni natjecatelj nakon napisanog rješenja zadatka odabire opciju za predaju rješenja
-							\item Natjecatelj odabire datoteku s rješenjem koju želi predati i potvrđuje odabir
-							\item Datoteka se prenosi i predaje kao rješenje
+							\item Korisnik nakon napisanog rješenja zadatka odabire opciju za predaju rješenja
+							\item Korisnik odabire datoteku s rješenjem koju želi predati i potvrđuje odabir
+							\item Datoteka se prenosi, predaje kao rješenje i šalje na evaluaciju
 						\end{packed_enum}
 						
 							\item  \textbf{Opis mogućih odstupanja:}
@@ -356,8 +354,8 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
 						\item \textbf{Cilj:} Pregledati rang listu nekog natjecanja
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Korisnik je prijavljen kao natjecatelj
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen kao natjecatelj
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -382,7 +380,7 @@
 							\item Natjecatelj odabire natjecanje za koje želi vidjeti predana rješenja 
 							\item Prikazuju se informacije o natjecanju s popisom svih predanih rješenja
 							\item Odabirom opcije za prikaz natjecanja po zadacima prikazuje se pregled zadataka s tog natjecanja
-							\item Odabirom zadatka otvara se tekst zadatka s prikazom svih predanih rješenja drugih sudionika
+							\item Odabirom zadatka otvara se tekst zadatka s prikazom svih predanih rješenja drugih sudionika uz informacije o uspješnosti predanog rješenja
 						\end{packed_enum}
 					\end{packed_item}
 										
@@ -393,14 +391,14 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
 						\item \textbf{Cilj:} Vježbanje već objavljenih zadataka
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Korisnik je prijavljen kao natjecatelj
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen kao natjecatelj
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							\item Natjecatelj odabire opciju za prikaz svih objavljenih zadataka
-							\item Prikazuje se popis zadataka
-							\item Odabirom zadatka otvara se sučelje slično onome na natjecanju koje natjecatelju omogućuje učitavanje datoteke kao rješenja zadataka
+							\item Prikazuje se popis svih zadataka
+							\item Odabirom zadatka koji želi rješavati otvara se sučelje slično onom na natjecanju koje natjecatelju omogućuje učitavanje datoteke kao rješenja zadataka i evaluiranje istog
 						\end{packed_enum}
 					\end{packed_item}
 									
@@ -411,8 +409,8 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (natjecatelj)
 						\item \textbf{Cilj:} Vježbanje simuliranjem pravog natjecanja
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji barem jedno završeno natjecanje i/ili barem jedan javno vidljiv zadatak u bazi
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} postoji barem jedno završeno natjecanje i/ili barem jedan javno vidljiv zadatak u bazi
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -430,13 +428,13 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (voditelj)
 						\item \textbf{Cilj:} Stvoriti novi zadatak u bazi postojećih zadataka
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Korisnik je prijavljen kao voditelj
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen kao voditelj
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							\item Voditelj odabire opciju za unos novog zadatka
-							\item Otvara se forma gdje voditelj upisuje naziv zadatka, broj bodova koji nosi, vremenskog ograničenja izvršavanja, tekstom zadatka i primjerima za evaluaciju
+							\item Otvara se forma gdje voditelj upisuje naziv zadatka, broj bodova koji nosi, vremensko ograničenje izvršavanja, tekst zadatka i primjere za evaluaciju
 							\item Voditelj odabire želi li zadatak stvoriti kao privatan ili javan
 							\item Voditelj potvrđuje unos zadatka
 							\item Zadatak se pohranjuje u bazu ostalih zadataka s informacijom o autoru zadatka
@@ -460,15 +458,15 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (voditelj)
 						\item \textbf{Cilj:} Uređivanje postojećeg zadatka
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji zadatak koji je voditelj unio u bazu
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} postoji zadatak koji je prijavljeni voditelj unio u bazu
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							\item Voditelj odabire opciju “moji zadaci”
 							\item Otvara se pregled svih zadataka koje je voditelj unio u sustav
 							\item Voditelj odabire opciju uređivanja zadataka
-							\item Otvara se forma slična onoj kod unosa novog zadatka koja voditelju omogućuju izmjenu podataka te spremanje istih
+							\item Otvara se forma slična onoj kod unosa novog zadatka koja voditelju omogućuje izmjenu podataka te spremanje istih
 						\end{packed_enum}
 					\end{packed_item}
 					
@@ -479,8 +477,8 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (voditelj)
 						\item \textbf{Cilj:} Organizirati novo natjecanje
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} -
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} korisnik je prijavljen
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -509,15 +507,15 @@
 						
 						\item \textbf{Glavni sudionik: }Korisnik (voditelj)
 						\item \textbf{Cilj:} Uređivanje postojećeg natjecanja
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji natjecanje koje je voditelj organizirao, a ono nije prošlo
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} postoji natjecanje koje je prijavljeni voditelj organizirao, a ono nije u tijeku ili završeno
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							\item Voditelj odabire opciju “moja natjecanja”
 							\item Otvara se pregled svih natjecanja koje je voditelj organizirao
 							\item Voditelj odabire opciju uređivanja natjecanja kojemu želi izmijeniti podatke
-							\item Otvara se pregled sličan onome prilikom organiziranja novog natjecanja koje voditelju omogućuje izmjenu i spremanje novih postavki natjecanja
+							\item Otvara se pregled sličan onom prilikom organiziranja novog natjecanja koji voditelju omogućuje izmjenu i spremanje novih postavki natjecanja
 						\end{packed_enum}
 					\end{packed_item}
 					
@@ -526,7 +524,7 @@
 						
 						\item \textbf{Glavni sudionik: }Administrator
 						\item \textbf{Cilj:} Pregled svih registriranih korisnika u bazi
-						\item \textbf{Sudionici:} Baza podataka
+						\item \textbf{Sudionici:} baza podataka
 						\item \textbf{Preduvjet:} -
 						\item \textbf{Opis osnovnog tijeka:}
 						
@@ -544,8 +542,8 @@
 						
 						\item \textbf{Glavni sudionik: }Administrator
 						\item \textbf{Cilj:} Uređivanje podataka nekog korisnika
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji barem jedan registrirani korisnik u bazi 
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} postoji barem jedan registrirani korisnik u bazi 
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -562,15 +560,15 @@
 						
 						\item \textbf{Glavni sudionik: }Administrator
 						\item \textbf{Cilj:} Brisanje postojećeg korisnika iz baze podataka
-						\item \textbf{Sudionici:} Baza podataka
-						\item \textbf{Preduvjet:} Postoji barem jedan registrirani korisnik u bazi
+						\item \textbf{Sudionici:} baza podataka
+						\item \textbf{Preduvjet:} postoji barem jedan registrirani korisnik u bazi
 						\item \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							\item Administrator odabire opciju prikaza korisnika u bazi
 							\item Otvara se popis svih registriranih BytePit korisnika
 							\item Administrator odabire i potvrđuje opciju brisanja korisnika 
-							\item Korisnik se briše iz baze
+							\item Korisnik se briše iz baze podataka
 							
 						\end{packed_enum}
 					\end{packed_item}
@@ -621,7 +619,7 @@
 			 	\item Pristup sustavu treba biti omogućen putem javne mreže.
 			 	\item Sustav treba omogućiti evaluaciju rješenja zadataka za minimalno jedan programski jezik.
 			 	\item Sustav treba biti takav da se sve funkcije izvršavaju brzo, ne duže od nekoliko sekundi, uključujući i evaluaciju rješenja zadataka.
-			 	\item Baza podataka sustava mora biti kvalitetno i ispravno povezana sa sučeljem.
+			 	\item Baza podataka sustava mora biti kvalitetno i ispravno povezana sa sučeljem aplikacije.
 			 	
 			 \end{packed_item}
 			 
