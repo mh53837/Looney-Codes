@@ -11,7 +11,10 @@ import java.util.Optional;
 
 public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
   /**
-   * TODO: testiraj i dodaj servis
+   * Metoda koja pronalazi korisnike po korisnickom imenu (posto je ono unique)
+   * @param korisnickoIme ime koje zelimo naci u bazi
+   * @return Optional<Korisnik> koji ima vrijednost samo ako smo ga nasli u bazi
+   * @see Korisnik
    */
   Optional<Korisnik> findByKorisnickoIme(String korisnickoIme);
 }
