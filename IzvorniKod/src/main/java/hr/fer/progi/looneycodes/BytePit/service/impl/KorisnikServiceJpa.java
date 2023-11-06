@@ -4,10 +4,13 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
 // java imports
 import java.util.List;
 import java.util.Optional;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,8 @@ public class KorisnikServiceJpa implements KorisnikService {
     if(!korisnikRepo.findByKorisnickoIme(korisnik.getKorisnickoIme()).isEmpty())
       throw new IllegalArgumentException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
 
-    // id nastaje automatski
+    // id nastaje automatski, timestamp se generira
+    korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
     return korisnikRepo.save(korisnik);
   }
 
@@ -48,9 +52,12 @@ public class KorisnikServiceJpa implements KorisnikService {
    */
   private void validate(Korisnik korisnik){
     Assert.notNull(korisnik, "User object reference must be given");
-    Assert.isTrue(korisnik.getUloga().getNazivUloge() == "ADMIN"
-                || korisnik.getUloga().getNazivUloge() == "VODITELJ"
-                || korisnik.getUloga().getNazivUloge() == "NATJECATELJ",
+    Assert.notNull(korisnik.getUloga(), "Uloga ne moze biti null!");
+    Assert.notNull(korisnik.getLozinka(), "Lozinka ne moze biti null!");
+    Assert.notNull(korisnik.getKorisnickoIme(), "Korisnicko ime ne moze biti null!");
+    Assert.isTrue(korisnik.getUloga() == Uloga.ADMIN
+                || korisnik.getUloga() == Uloga.VODITELJ
+                || korisnik.getUloga() == Uloga.NATJECATELJ,
                 "Zadana uloga ne postoji u sustavu!");
   }
 }

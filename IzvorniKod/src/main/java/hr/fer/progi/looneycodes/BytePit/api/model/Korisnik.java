@@ -54,7 +54,7 @@ public class Korisnik{
   /**
    * uloga korisnika (admin, voditelj ili natjecatelj)
    */
-  @ManyToOne
+  @Enumerated(EnumType.STRING)
   private Uloga uloga;
 
   /**
@@ -115,5 +115,8 @@ public class Korisnik{
   }
   public Timestamp getVrijemeRegistracije() {
     return vrijemeRegistracije;
+  }
+  public void setVrijemeRegistracije(Timestamp vrijemeRegistracije){
+    this.vrijemeRegistracije = vrijemeRegistracije;
   }
 }
