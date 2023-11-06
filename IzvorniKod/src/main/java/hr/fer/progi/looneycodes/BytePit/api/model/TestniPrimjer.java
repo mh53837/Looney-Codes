@@ -10,14 +10,15 @@ import jakarta.persistence.*;
 public class TestniPrimjer {
   /**
    * redni broj testnog primjera
-   * TODO: probaj dodati partially unique
    */
-  private int testniPrimjerRb;
+  @Id
+  private Integer testniPrimjerRb;
   /**
-   * id zadatka
+   * zadatak koji testiramo
    */
+  @Id
   @ManyToOne
-  private int zadatakId;
+  private Zadatak zadatak;
   /**
    * ulazni podaci programa koji se testira
    */
@@ -28,17 +29,17 @@ public class TestniPrimjer {
   private String izlazniPodaci;
 
   // geteri i seteri
-  public int getTestniPrimjerRb() {
+  public Integer getTestniPrimjerRb() {
     return testniPrimjerRb;
   }
   public void setTestniPrimjerRb(int testniPrimjerRb) {
     this.testniPrimjerRb = testniPrimjerRb;
   }
-  public int getZadatakId() {
-    return zadatakId;
+  public Zadatak getZadatak() {
+    return zadatak;
   }
-  public void setZadatakId(int zadatakId) {
-    this.zadatakId = zadatakId;
+  public void setZadatak(Zadatak zadatak) {
+    this.zadatak = zadatak;
   }
   public String getUlazniPodaci() {
     return ulazniPodaci;

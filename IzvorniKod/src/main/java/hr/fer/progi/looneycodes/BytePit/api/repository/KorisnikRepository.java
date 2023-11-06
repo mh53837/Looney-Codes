@@ -13,5 +13,5 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
   /**
    * TODO: testiraj i dodaj servis
    */
-  Optional<Korisnik> findByUsername(String username);
+  Optional<Korisnik> findByKorisnickoIme(String korisnickoIme);
 }

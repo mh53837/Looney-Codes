@@ -10,19 +10,19 @@ import java.sql.Timestamp;
  * Entitet koji definira natjecanje, identifikator, vrijeme pocetka i kraja
  * TODO: povezivanje s bazom, testiranje
  */
+@Entity
 public class Natjecanje {
   /**
    * id natjecanja u bazi
    */
   @Id
   @GeneratedValue
-  private int natjecanjeId;
+  private Integer natjecanjeId;
   /**
-   * id voditelja natjecanja
+   * voditelj natjecanja
    */
   @ManyToOne
-  @Column(nullable = false)
-  private int voditeljId;
+  private Korisnik voditelj;
   /**
    * naziv natjecanja
    */
@@ -38,14 +38,14 @@ public class Natjecanje {
   private Timestamp krajNatjecanja;
 
   // geteri i seteri
-  public int getNatjecanjeId() {
+  public Integer getNatjecanjeId() {
     return natjecanjeId;
   }
-  public int getVoditeljId() {
-    return voditeljId;
+  public Korisnik getVoditelj() {
+    return voditelj;
   }
-  public void setVoditeljId(int voditeljId) {
-    this.voditeljId = voditeljId;
+  public void setVoditelj(Korisnik voditelj) {
+    this.voditelj = voditelj;
   }
   public String getNazivNatjecanja() {
     return nazivNatjecanja;

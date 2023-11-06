@@ -13,20 +13,21 @@ import java.sql.Timestamp;
 public class Rjesenje {
   /**
    * redni broj predanog rjesenja
-   * TODO: dodaj partially unique
    */
+  @Id
   private int rjesenjeRb;
   /**
-   * id natjecatelja koji je predao rjesenje
-   * isti kao id korisnika s tim accountom
+   * natjecatelj koji je predao rjesenje
    */
+  @Id
   @ManyToOne
-  private int natjecateljId;
+  private Korisnik natjecatelj;
   /**
-   * id zadatka za koji je predano rjesenje
+   * zadatak za koji je predano rjesenje
    */
+  @Id
   @ManyToOne
-  private int zadatakId;
+  private Zadatak zadatak;
   /**
    * vrijeme kad je poslano rjesenje
    * read-only, generira se u trenutku kad se salje
@@ -46,17 +47,17 @@ public class Rjesenje {
   public int getRjesenjeRb() {
     return rjesenjeRb;
   }
-  public int getNatjecateljId() {
-    return natjecateljId;
+  public Korisnik getNatjecatelj() {
+    return natjecatelj;
   }
-  public void setNatjecateljId(int natjecateljId) {
-    this.natjecateljId = natjecateljId;
+  public void setNatjecatelj(Korisnik natjecatelj) {
+    this.natjecatelj = natjecatelj;
   }
-  public int getZadatakId() {
-    return zadatakId;
+  public Zadatak getZadatak() {
+    return zadatak;
   }
-  public void setZadatakId(int zadatakId) {
-    this.zadatakId = zadatakId;
+  public void setZadatak(Zadatak zadatak) {
+    this.zadatak = zadatak;
   }
   public Timestamp getVrijemeOdgovora() {
     return vrijemeOdgovora;

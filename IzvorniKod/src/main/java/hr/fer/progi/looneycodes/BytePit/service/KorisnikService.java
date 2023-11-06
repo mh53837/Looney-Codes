@@ -28,4 +28,12 @@ public interface KorisnikService {
    * @see Optional
    */
   public Optional<Korisnik> fetch(int Id);
+  /**
+   * Stvori novog Korisnika i spremi ga u bazu
+   * @param korisnik referenca na korisnika kojeg moramo staviti u bazu, (nema postavljeni id)
+   * @return referenca na napravljenog korisnika s postavljenim id-em
+   * @see Korisnik
+   * NOTE: metoda je tu samo radi testiranja, trebamo sloziti pravu registraciju kasnije
+   */
+  public Korisnik createKorisnik(Korisnik korisnik);
 }

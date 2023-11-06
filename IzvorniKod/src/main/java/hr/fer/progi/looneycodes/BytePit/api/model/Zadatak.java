@@ -13,17 +13,17 @@ public class Zadatak {
    */
   @Id
   @GeneratedValue
-  private int zadatakId;
+  private Integer zadatakId;
   /**
-   * id natjecanja u kojem se pojavljuje zadatak
+   * natjecanje u kojem se pojavljuje zadatak
    */
   @ManyToOne
-  private int natjecanjeId;
+  private Natjecanje natjecanje;
   /**
-   * id autora/voditelja koji je napisao zadatak
+   * autor/voditelj koji je napisao zadatak
    */
   @ManyToOne
-  private int voditeljId;
+  private Korisnik voditelj;
   /**
    * naziv zadatka
    */
@@ -49,20 +49,20 @@ public class Zadatak {
 
   // geteri i seteri
 
-  public int getZadatakId() {
+  public Integer getZadatakId() {
     return zadatakId;
   }
-  public int getNatjecanjeId() {
-    return natjecanjeId;
+  public Natjecanje getNatjecanje() {
+    return natjecanje;
   }
-  public void setNatjecanjeId(int natjecanjeId) {
-    this.natjecanjeId = natjecanjeId;
+  public void setNatjecanje(Natjecanje natjecanje) {
+    this.natjecanje = natjecanje;
   }
-  public int getVoditeljId() {
-    return voditeljId;
+  public Korisnik getVoditelj() {
+    return voditelj;
   }
-  public void setVoditeljId(int voditeljId) {
-    this.voditeljId = voditeljId;
+  public void setVoditelj(Korisnik voditelj) {
+    this.voditelj = voditelj;
   }
   public String getNazivZadatka() {
     return nazivZadatka;

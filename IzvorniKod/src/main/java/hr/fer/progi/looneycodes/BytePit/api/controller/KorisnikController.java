@@ -7,6 +7,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.websocket.server.PathParam;
@@ -36,5 +37,10 @@ public class KorisnikController{
   @GetMapping("/{id}")
   public Optional<Korisnik> getKorisnik(@PathParam("id") int id){
     return korisnikService.fetch(id);
+  }
+
+  @GetMapping("/add")
+  public Korisnik addKorisnik(@RequestBody Korisnik korisnik){
+    return korisnikService.createKorisnik(korisnik);
   }
 }

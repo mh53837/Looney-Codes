@@ -17,17 +17,17 @@ public class VirtualnoNatjecanje {
    */
   @Id
   @GeneratedValue
-  private int virtualnoNatjecanjeId;
+  private Integer virtualnoNatjecanjeId;
   /**
-   * id natjecanja od kojeg je nastalo virtualno
+   * natjecanje od kojeg je nastalo virtualno
    */
   @ManyToOne
-  private int orginalnoNatjecanjeId;
+  private Natjecanje orginalnoNatjecanje;
   /**
-   * id natjecatelja koji je generirao virtualno natjecanje
+   * natjecatelj koji je generirao virtualno natjecanje
    */
   @OneToOne
-  private int natjecateljId;
+  private Korisnik natjecatelj;
   /**
    * vrijeme pocetka virtualnog natjecanja
    * read-only, generira se kad natjecatelj zatrazi novo virtualno natjecanje
@@ -35,20 +35,20 @@ public class VirtualnoNatjecanje {
   private Timestamp vrijemePocetka;
 
   // geteri i seteri
-  public int getVirtualnoNatjecanjeId() {
+  public Integer getVirtualnoNatjecanjeId() {
     return virtualnoNatjecanjeId;
   }
-  public int getOrginalnoNatjecanjeId() {
-    return orginalnoNatjecanjeId;
+  public Natjecanje getOrginalnoNatjecanje() {
+    return orginalnoNatjecanje;
   }
-  public void setOrginalnoNatjecanjeId(int orginalnoNatjecanjeId) {
-    this.orginalnoNatjecanjeId = orginalnoNatjecanjeId;
+  public void setOrginalnoNatjecanje(Natjecanje orginalnoNatjecanje) {
+    this.orginalnoNatjecanje = orginalnoNatjecanje;
   }
-  public int getNatjecateljId() {
-    return natjecateljId;
+  public Korisnik getNatjecatelj() {
+    return natjecatelj;
   }
-  public void setNatjecateljId(int natjecateljId) {
-    this.natjecateljId = natjecateljId;
+  public void setNatjecatelj(Korisnik natjecatelj) {
+    this.natjecatelj = natjecatelj;
   }
   public Timestamp getVrijemePocetka() {
     return vrijemePocetka;

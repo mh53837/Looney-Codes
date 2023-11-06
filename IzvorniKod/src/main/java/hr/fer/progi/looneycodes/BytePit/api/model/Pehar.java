@@ -13,17 +13,17 @@ public class Pehar {
    */
   @Id
   @GeneratedValue
-  private int peharId;
+  private Integer peharId;
   /**
-   * id natjecatelja koji su osvojili
+   * natjecatelj koji je osvojio
    */
   @ManyToOne
-  private int natjecateljId;
+  private Korisnik natjecatelj;
   /**
-   * id natjecanja na kojem je dodjeljen
+   * natjecanje na kojem je dodjeljen
    */
   @ManyToOne
-  private int natjecanjeId;
+  private Natjecanje natjecanje;
   /**
    * mjesto za koje je dodijeljen (1, 2, 3 su validna mesta)
    */
@@ -34,20 +34,20 @@ public class Pehar {
   private byte[] slikaPehara;
 
   // geteri i seteri
-  public int getPeharId() {
+  public Integer getPeharId() {
     return peharId;
   }
-  public int getNatjecateljId() {
-    return natjecateljId;
+  public Korisnik getNatjecatelj() {
+    return natjecatelj;
   }
-  public void setNatjecateljId(int natjecateljId) {
-    this.natjecateljId = natjecateljId;
+  public void setNatjecatelj(Korisnik natjecatelj) {
+    this.natjecatelj = natjecatelj;
   }
-  public int getNatjecanjeId() {
-    return natjecanjeId;
+  public Natjecanje getNatjecanje() {
+    return natjecanje;
   }
-  public void setNatjecanjeId(int natjecanjeId) {
-    this.natjecanjeId = natjecanjeId;
+  public void setNatjecanje(Natjecanje natjecanje) {
+    this.natjecanje = natjecanje;
   }
   public int getMjesto() {
     return mjesto;

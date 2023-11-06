@@ -17,7 +17,7 @@ public class Korisnik{
    */
   @Id
   @GeneratedValue
-  private int korisnikId;
+  private Integer korisnikId;
 
   /**
    * jedinstveno korisnicko ime
@@ -49,12 +49,13 @@ public class Korisnik{
   /**
    * vrijeme registracije, read-only (samo geter postoji)
    */
+  @GeneratedValue
   private Timestamp vrijemeRegistracije;
   /**
    * uloga korisnika (admin, voditelj ili natjecatelj)
    */
   @ManyToOne
-  private int ulogaId;
+  private Uloga uloga;
 
   /**
    * toString metoda koja se koristi uglavnom za debugiranje
@@ -67,7 +68,13 @@ public class Korisnik{
   }
 
   // geteri i seteri
-  public int getKorisnikId() {
+  public Uloga getUloga() {
+    return uloga;
+  }
+  public void setUloga(Uloga uloga) {
+    this.uloga = uloga;
+  }
+  public Integer getKorisnikId() {
     return korisnikId;
   }
   public String getKorisnickoIme() {

@@ -14,7 +14,7 @@ public class Uloga {
    */
   @Id
   @GeneratedValue
-  private int ulogaId;
+  private Integer ulogaId;
   /**
    * naziv uloge
    */
@@ -22,7 +22,7 @@ public class Uloga {
 
   // geteri i seteri
 
-  public int getUlogaId() {
+  public Integer getUlogaId() {
     return ulogaId;
   }
   public String getNazivUloge() {
