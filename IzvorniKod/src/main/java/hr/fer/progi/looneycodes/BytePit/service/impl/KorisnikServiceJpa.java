@@ -8,6 +8,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
 // java imports
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -43,7 +44,21 @@ public class KorisnikServiceJpa implements KorisnikService {
     korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
     return korisnikRepo.save(korisnik);
   }
+  @Override
+  public Korisnik updateKorisnik(Korisnik korisnik){
+    validate(korisnik);
+    int idKorisnika = Objects.requireNonNull(korisnik.getKorisnikId());
 
+    Optional<Korisnik> stariKorisnik = korisnikRepo.findById(idKorisnika);
+    if(stariKorisnik.isEmpty())
+      throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
+
+    // ne smijemo mijenjati vrstu accounta!!!
+    if(stariKorisnik.get().getUloga() != korisnik.getUloga())
+      throw new IllegalArgumentException("Korisnik ne smije mijenjati uloge!");
+
+    return korisnikRepo.save(korisnik);
+  }
 
   /**
    * privatna metoda koja sluzi za validaciju korisnika prije umetanja/updateanja u bazu

@@ -36,4 +36,11 @@ public interface KorisnikService {
    * NOTE: metoda je tu samo radi testiranja, trebamo sloziti pravu registraciju kasnije
    */
   public Korisnik createKorisnik(Korisnik korisnik);
+  /**
+   * Azuriraj podatke o Korisniku sa zadanim id-em
+   * @param korisnik instanca u kojoj su pohranjeni azurirani podaci
+   * @return referenca na instancu Korisnik klase s novim zapisom iz baze
+   * @see Korisnik
+   */
+  public Korisnik updateKorisnik(Korisnik korisnik);
 }
