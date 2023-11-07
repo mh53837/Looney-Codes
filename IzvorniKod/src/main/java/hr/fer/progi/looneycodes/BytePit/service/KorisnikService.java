@@ -12,15 +12,14 @@ import java.util.Optional;
 
 /**
  * Interface koji definira komunikaciju s bazom u odnosu na Korisnik entitete.
- * TODO: dodavanje novih metoda
  */
 @Service
 public interface KorisnikService {
   /**
-   * Vrati listu svih korisnika.
+   * Vrati listu svih korisnika s potvrdenim racunom.
    * @return lista svih korisnika ili null ako nitko nije u sustavu
    */
-  public List<Korisnik> listAll();
+  public List<Korisnik> listAllVerified();
   /**
    * Vrati referencu na Korisnika s zadanim id-em.
    * @param Id id korisnika kojeg trazimo

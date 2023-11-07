@@ -24,8 +24,8 @@ public class KorisnikServiceJpa implements KorisnikService {
   KorisnikRepository korisnikRepo;
 
   @Override
-  public List<Korisnik> listAll(){
-    return korisnikRepo.findAll();
+  public List<Korisnik> listAllVerified(){
+    return korisnikRepo.findAllVerified();
   }
   @Override
   public Optional<Korisnik> fetch(int id){

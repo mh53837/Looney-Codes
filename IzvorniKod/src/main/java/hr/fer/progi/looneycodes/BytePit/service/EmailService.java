@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 
 // spring-boot imports
 import org.springframework.stereotype.Service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 
 /**
  * Jednostavni servis koji sluzi za slanje mailova, uglavnom kod registracije.
- * @see KorisnikService
+ * @see KorisnikController
  */
 @Service
 public class EmailService {

@@ -42,7 +42,7 @@ public class KorisnikController{
    */
   @GetMapping("/all")
   public List<Korisnik> listAll(){
-    return korisnikService.listAll();
+    return korisnikService.listAllVerified();
   }
 
   /**
