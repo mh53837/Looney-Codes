@@ -34,7 +34,7 @@ public class KorisnikController{
   @Autowired
   private EmailService mailService;
 
-  @Value("BytePit.domain")
+  @Value("${BytePit.domain}")
   private String domena;
   /*
    * Izlistaj sve registrirane korisnike koji imaju potvrdeni account.
@@ -66,6 +66,7 @@ public class KorisnikController{
     // salji mail za potvrdu registracije
     mailService.sendMail(korisnik.getEmail(), 
                           "DO NOT REPLY: Account confirmation for BytePit",
+                          "Verify your BytePit account using this link: " +
                           domena + "/user/confirmEmail/" + korisnik.getKorisnikId());
     return korisnik;
   }
