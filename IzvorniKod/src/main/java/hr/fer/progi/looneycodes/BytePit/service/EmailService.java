@@ -41,7 +41,7 @@ public class EmailService {
 
   /**
    * Metoda koja se koristi za validaciju formata emaila
-   * @exception IllegalArgumentException u slucaju da argument nije valjan email
+   * @exception RequestDeniedException u slucaju da argument nije valjan email
    */
   private void validateMail(String email){
     // regex pattern za mail naden na internetu (https://www.baeldung.com/java-email-validation-regex)
@@ -49,6 +49,6 @@ public class EmailService {
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
     if(!Pattern.matches(regexPattern, email))
-        throw new IllegalArgumentException("Not a valid email!");
+        throw new RequestDeniedException(email + "is not a valid email!");
   }
 }

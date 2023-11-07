@@ -3,6 +3,7 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 // local imports
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
+import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
@@ -38,7 +39,10 @@ public class KorisnikServiceJpa implements KorisnikService {
     Assert.isNull(korisnik.getKorisnikId(), "Id for new user must be null!");
     // ako je korisnicko ime zauzeto, baci iznimku
     if(!korisnikRepo.findByKorisnickoIme(korisnik.getKorisnickoIme()).isEmpty())
-      throw new IllegalArgumentException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
+      throw new RequestDeniedException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
+    if(!korisnikRepo.findByEmail(korisnik.getEmail()).isEmpty())
+      throw new RequestDeniedException("Korisnik s emailom: " +
+                                  korisnik.getEmail() + " vec postoji");
 
     korisnik.setConfirmedEmail(false);
     // id nastaje automatski, timestamp se generira

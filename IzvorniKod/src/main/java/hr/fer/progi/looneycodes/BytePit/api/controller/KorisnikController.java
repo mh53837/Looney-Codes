@@ -3,6 +3,8 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 // local import
 import hr.fer.progi.looneycodes.BytePit.service.EmailService;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
+import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
+import hr.fer.progi.looneycodes.BytePit.service.NotFoundException;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 
 // spring-boot imports
@@ -71,21 +73,27 @@ public class KorisnikController{
     return korisnik;
   }
 
+  /**
+   * Potvrdi email za novog korisnika.
+   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * @exception NotFoundException u slucaju da id ne postoji
+   * @exception RequestDeniedException u slucaju da je korisnik vec potvrdio adresu
+   */
   @GetMapping("/confirmEmail/{id}")
   public Korisnik confirmEmail(@PathVariable int id){
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
     if(korisnik.isEmpty())
-      throw new IllegalArgumentException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
+      throw new NotFoundException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
     if(korisnik.get().isConfirmedEmail())
-      throw new IllegalStateException("Korisnik je vec potvrdio svoju email adresu!");
+      throw new RequestDeniedException("Korisnik je vec potvrdio svoju email adresu!");
 
     Korisnik newKorisnik = korisnik.get();
     newKorisnik.setConfirmedEmail(true);
     return korisnikService.updateKorisnik(newKorisnik);
   }
   /**
-   * azuriraj korisnicke podatke za odredenog korisnika
+   * Azuriraj korisnicke podatke za odredenog korisnika.
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update")

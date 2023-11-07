@@ -26,4 +26,11 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Integer> {
    */
   @Query("SELECT k FROM Korisnik k WHERE k.confirmedEmail = TRUE")
   List<Korisnik> findAllVerified();
+  /**
+   * Metoda koja pronalazi korisnike po emailu
+   * @param email email adresa za koju zelimo naci korisnicki racun
+   * @return Optional<Korisnik> koji je Optional.empty() ukoliko nema rezultata
+   * @see Korisink
+   */
+  Optional<Korisnik> findByEmail(String email);
 }

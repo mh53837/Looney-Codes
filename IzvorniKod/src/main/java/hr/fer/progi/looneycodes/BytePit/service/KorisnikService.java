@@ -31,6 +31,8 @@ public interface KorisnikService {
    * Stvori novog Korisnika i spremi ga u bazu
    * @param korisnik referenca na korisnika kojeg moramo staviti u bazu, (nema postavljeni id)
    * @return referenca na napravljenog korisnika s postavljenim id-em
+   * @exception RequestDeniedException u slucaju da je email ili username vec zauzet 
+   * @exception IllegalArgumentException u slucaju da je frontend team krivo stvorio objekt :(
    * @see Korisnik
    * NOTE: metoda je tu samo radi testiranja, trebamo sloziti pravu registraciju kasnije
    */
@@ -38,6 +40,7 @@ public interface KorisnikService {
   /**
    * Azuriraj podatke o Korisniku sa zadanim id-em
    * @param korisnik instanca u kojoj su pohranjeni azurirani podaci
+   * @exception IllegalArgumentException u slucaju da je id nepostojeci ili da pokusavamo mijenjati uloge, a.k.a. frontend team je kriv
    * @return referenca na instancu Korisnik klase s novim zapisom iz baze
    * @see Korisnik
    */
