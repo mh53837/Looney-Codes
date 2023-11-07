@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 
 /**
  * Entitet koji definira naseg korisnika, onako kako je u bazi definiran.
- * TODO: povezivanje s bazom, testiranje
  */
 @Entity
 public class Korisnik{
@@ -43,6 +42,10 @@ public class Korisnik{
   @Column(unique = true, nullable = false)
   private String email;
   /**
+   * bool koji se postavlja nakon potvrdivanja maila
+   */
+  private boolean confirmedEmail;
+/**
    * profilna slika korisnika
    */
   private byte[] fotografija;
@@ -118,5 +121,11 @@ public class Korisnik{
   }
   public void setVrijemeRegistracije(Timestamp vrijemeRegistracije){
     this.vrijemeRegistracije = vrijemeRegistracije;
+  }
+  public boolean isConfirmedEmail() {
+	return confirmedEmail;
+  }
+  public void setConfirmedEmail(boolean confirmedEmail) {
+    this.confirmedEmail = confirmedEmail;
   }
 }

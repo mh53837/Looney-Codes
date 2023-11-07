@@ -7,11 +7,11 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.websocket.server.PathParam;
 
 // java imports
 import java.util.List;
@@ -20,9 +20,8 @@ import java.util.Optional;
 /**
  * Kontroler koji sluzi kao pristup metodama vezane uz Korisnik entitet.
  * Ovdje su definirane adrese preko kojih mozemo kroz browser/postman pristupati nasim servisima.
- * @see KorisnikController
+ * @see KorisnikService
  * @see Korisnik
- * TODO: dodaj vise mapinga, testiraj
  */
 @RestController
 @RequestMapping("/user")
@@ -30,21 +29,51 @@ public class KorisnikController{
   @Autowired
   private KorisnikService korisnikService;
 
+  /*
+   * Izlistaj sve registrirane korisnike koji imaju potvrdeni account.
+   * @return lista svih korisnika koji imaju atribut confirmedEmail = true
+   */
   @GetMapping("/all")
   public List<Korisnik> listAll(){
     return korisnikService.listAll();
   }
 
+  /**
+   * Vrati korisnika na temelju id-a
+   * @return bilo koji korisnik koji je zapisan u bazi s zadanim id-em
+   * @return Optional.empty() ako ne postoji korisnik s tim id-em
+   */
   @GetMapping("/get/{id}")
-  public Optional<Korisnik> getKorisnik(@PathParam("id") int id){
+  public Optional<Korisnik> getKorisnik(@PathVariable int id){
     return korisnikService.fetch(id);
   }
 
-  @PostMapping("/add")
+  /**
+   * Registriraj novog korisnika, nakon cega on mora potvrditi registraciju
+   * @return referenca na novi zapis korisnika u bazi
+   */
+  @PostMapping("/register")
   public Korisnik addKorisnik(@RequestBody Korisnik korisnik){
     return korisnikService.createKorisnik(korisnik);
   }
 
+  @GetMapping("/confirmEmail/{id}")
+  public Korisnik confirmEmail(@PathVariable int id){
+    Optional<Korisnik> korisnik = korisnikService.fetch(id);
+
+    if(korisnik.isEmpty())
+      throw new IllegalArgumentException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
+    if(korisnik.get().isConfirmedEmail())
+      throw new IllegalStateException("Korisnik je vec potvrdio svoju email adresu!");
+
+    Korisnik newKorisnik = korisnik.get();
+    newKorisnik.setConfirmedEmail(true);
+    return korisnikService.updateKorisnik(newKorisnik);
+  }
+  /**
+   * azuriraj korisnicke podatke za odredenog korisnika
+   * @return referenca na azurirani zapis u bazi
+   */
   @PostMapping("/update")
   public Korisnik updateKorisnik(@RequestBody Korisnik korisnik){
     return korisnikService.updateKorisnik(korisnik);

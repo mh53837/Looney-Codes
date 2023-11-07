@@ -41,6 +41,7 @@ public class KorisnikServiceJpa implements KorisnikService {
       throw new IllegalArgumentException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
 
     // id nastaje automatski, timestamp se generira
+    korisnik.setConfirmedEmail(false);
     korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
     return korisnikRepo.save(korisnik);
   }
