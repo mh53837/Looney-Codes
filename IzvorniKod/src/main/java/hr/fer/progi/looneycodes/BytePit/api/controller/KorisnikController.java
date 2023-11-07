@@ -1,11 +1,13 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 // local import
+import hr.fer.progi.looneycodes.BytePit.service.EmailService;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,11 @@ public class KorisnikController{
   @Autowired
   private KorisnikService korisnikService;
 
+  @Autowired
+  private EmailService mailService;
+
+  @Value("BytePit.domain")
+  private String domena;
   /*
    * Izlistaj sve registrirane korisnike koji imaju potvrdeni account.
    * @return lista svih korisnika koji imaju atribut confirmedEmail = true
@@ -54,7 +61,13 @@ public class KorisnikController{
    */
   @PostMapping("/register")
   public Korisnik addKorisnik(@RequestBody Korisnik korisnik){
-    return korisnikService.createKorisnik(korisnik);
+    // daj mu id
+    korisnik = korisnikService.createKorisnik(korisnik);
+    // salji mail za potvrdu registracije
+    mailService.sendMail(korisnik.getEmail(), 
+                          "DO NOT REPLY: Account confirmation for BytePit",
+                          domena + "/user/confirmEmail/" + korisnik.getKorisnikId());
+    return korisnik;
   }
 
   @GetMapping("/confirmEmail/{id}")

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  * Interface koji definira komunikaciju s bazom u odnosu na Korisnik entitete.
- * TODO: implementacija (model/jpa + service/impl mape s odgovarajucim metodama), dodavanje novih metoda
+ * TODO: dodavanje novih metoda
  */
 @Service
 public interface KorisnikService {

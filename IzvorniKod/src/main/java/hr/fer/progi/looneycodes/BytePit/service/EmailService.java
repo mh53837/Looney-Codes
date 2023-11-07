@@ -31,6 +31,7 @@ public class EmailService {
     // send it
     SimpleMailMessage poruka = new SimpleMailMessage();
     poruka.setTo(to);
+    poruka.setFrom("BytePit@noreply.com");
     poruka.setSubject(subject);
     poruka.setText(body);
 

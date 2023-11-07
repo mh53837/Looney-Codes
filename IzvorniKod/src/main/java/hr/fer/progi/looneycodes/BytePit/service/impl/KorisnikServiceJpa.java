@@ -40,8 +40,8 @@ public class KorisnikServiceJpa implements KorisnikService {
     if(!korisnikRepo.findByKorisnickoIme(korisnik.getKorisnickoIme()).isEmpty())
       throw new IllegalArgumentException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
 
-    // id nastaje automatski, timestamp se generira
     korisnik.setConfirmedEmail(false);
+    // id nastaje automatski, timestamp se generira
     korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
     return korisnikRepo.save(korisnik);
   }
