@@ -46,7 +46,32 @@ public class KorisnikController{
   public List<Korisnik> listAll(){
     return korisnikService.listAllVerified();
   }
+  /**
+   * Izlistaj sve korisnike kojima je trenutna uloga razlicita od zatrazene.
+   * @return lista svih korisnika s atributima uloga != requestedUloga
+   */
+  @GetMapping("/listRequested")
+  public List<Korisnik> listRequested(){
+    return korisnikService.listAllRequested();
+  }
+  /**
+   * Metoda kojom admini potvrduju drugima uloge.
+   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * TODO: sigurnost
+   */
+  @PostMapping("/confirmRequest/{id}")
+  public Korisnik confirmRequest(@PathVariable int id){
+    Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
+    if(korisnik.isEmpty())
+      throw new NotFoundException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
+    if(korisnik.get().getRequestedUloga() == korisnik.get().getUloga())
+      throw new RequestDeniedException("Admin je vec potvrdio korisnikovu ulogu!");
+
+    Korisnik newKorisnik = korisnik.get();
+    newKorisnik.setUloga(newKorisnik.getRequestedUloga());
+    return korisnikService.updateKorisnik(newKorisnik);
+  }
   /**
    * Vrati korisnika na temelju id-a
    * @return bilo koji korisnik koji je zapisan u bazi s zadanim id-em
@@ -59,6 +84,12 @@ public class KorisnikController{
 
   /**
    * Registriraj novog korisnika, nakon cega on mora potvrditi registraciju
+   *
+   * u slucaju da je zatrazena uloga == Uloga.VODITELJ postavljamo ga da bude imao
+   * ovlasti natjecatelja tak dugo dok ga admin ne potvrdi!
+   *
+   * @param korisnik instanca korisnika koju zelimo registrirati u JSON formatu. mora imati sljedece atribute:
+   * username, password, email, requestedUloga
    * @return referenca na novi zapis korisnika u bazi
    */
   @PostMapping("/register")

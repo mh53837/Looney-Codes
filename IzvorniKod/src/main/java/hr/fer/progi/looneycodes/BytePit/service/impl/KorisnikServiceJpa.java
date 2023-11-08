@@ -29,6 +29,10 @@ public class KorisnikServiceJpa implements KorisnikService {
     return korisnikRepo.findAllVerified();
   }
   @Override
+  public List<Korisnik> listAllRequested(){
+    return korisnikRepo.findAllRequested();
+  }
+  @Override
   public Optional<Korisnik> fetch(int id){
     return korisnikRepo.findById(id);
   }
@@ -44,6 +48,11 @@ public class KorisnikServiceJpa implements KorisnikService {
       throw new RequestDeniedException("Korisnik s emailom: " +
                                   korisnik.getEmail() + " vec postoji");
 
+    Assert.notNull(korisnik.getRequestedUloga(), "Korisnik nije zatrazio ulogu!");
+      
+    // na pocetku je natjecatelj bez obzira na zatrazene uloge
+    korisnik.setUloga(Uloga.NATJECATELJ);
+    // treba potvrditi maila
     korisnik.setConfirmedEmail(false);
     // id nastaje automatski, timestamp se generira
     korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
@@ -58,10 +67,6 @@ public class KorisnikServiceJpa implements KorisnikService {
     if(stariKorisnik.isEmpty())
       throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
 
-    // ne smijemo mijenjati vrstu accounta!!!
-    if(stariKorisnik.get().getUloga() != korisnik.getUloga())
-      throw new IllegalArgumentException("Korisnik ne smije mijenjati uloge!");
-
     return korisnikRepo.save(korisnik);
   }
 
@@ -72,12 +77,8 @@ public class KorisnikServiceJpa implements KorisnikService {
    */
   private void validate(Korisnik korisnik){
     Assert.notNull(korisnik, "User object reference must be given");
-    Assert.notNull(korisnik.getUloga(), "Uloga ne moze biti null!");
     Assert.notNull(korisnik.getLozinka(), "Lozinka ne moze biti null!");
     Assert.notNull(korisnik.getKorisnickoIme(), "Korisnicko ime ne moze biti null!");
-    Assert.isTrue(korisnik.getUloga() == Uloga.ADMIN
-                || korisnik.getUloga() == Uloga.VODITELJ
-                || korisnik.getUloga() == Uloga.NATJECATELJ,
-                "Zadana uloga ne postoji u sustavu!");
+    Assert.notNull(korisnik.getEmail(), "Email ne moze biti null!");
   }
 }

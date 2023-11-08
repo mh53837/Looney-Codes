@@ -21,6 +21,11 @@ public interface KorisnikService {
    */
   public List<Korisnik> listAllVerified();
   /**
+   * Vrati listu svih korisnika koji traze promijenu uloga
+   * @return lista svih korisnika s atributima: uloga != requestedUloga
+   */
+  public List<Korisnik> listAllRequested();
+  /**
    * Vrati referencu na Korisnika s zadanim id-em.
    * @param Id id korisnika kojeg trazimo
    * @return korisnik ako postoji, inace Optional bez zadane vrijednosti (Optional.empty())

@@ -59,6 +59,12 @@ public class Korisnik{
    */
   @Enumerated(EnumType.STRING)
   private Uloga uloga;
+  /**
+   * uloga koju korisnik trazi prilikom registracije
+   * bitno za potencijalne voditelje!
+   */
+  @Enumerated(EnumType.STRING)
+  private Uloga requestedUloga;
 
   /**
    * toString metoda koja se koristi uglavnom za debugiranje
@@ -76,6 +82,12 @@ public class Korisnik{
   }
   public void setUloga(Uloga uloga) {
     this.uloga = uloga;
+  }
+  public Uloga getRequestedUloga() {
+    return requestedUloga;
+  }
+  public void setRequestedUloga(Uloga requestedUloga) {
+    this.requestedUloga = requestedUloga;
   }
   public Integer getKorisnikId() {
     return korisnikId;
