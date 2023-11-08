@@ -4,6 +4,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -19,6 +20,9 @@ public class EmailService {
   @Autowired
   private JavaMailSender mailSender;
 
+  @Value("${BytePit.mail}")
+  private String bytePitMail;
+
   /**
    * Jednostavna metoda za slanje maila koji ukljucuje samo tekst (nit nam ne treba vise!)
    * @param to primatelj maila
@@ -32,7 +36,7 @@ public class EmailService {
     // send it
     SimpleMailMessage poruka = new SimpleMailMessage();
     poruka.setTo(to);
-    poruka.setFrom("BytePit@noreply.com");
+    poruka.setFrom(bytePitMail);
     poruka.setSubject(subject);
     poruka.setText(body);
 
