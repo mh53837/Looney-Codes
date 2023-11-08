@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 
 // local import
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
 // spring-boot imports
 import org.springframework.stereotype.Service;
@@ -50,4 +51,16 @@ public interface KorisnikService {
    * @see Korisnik
    */
   public Korisnik updateKorisnik(Korisnik korisnik);
+  /**
+   * Dohvati hash sifre prilikom registracije
+   * @param username korisnicko ime za koju trazimo sifru
+   * @return sifra ili Optional.empty() ako nema username-a u bazi
+   */
+  public Optional<String> getPassHash(String username);
+  /**
+   * Dohvati ulogu korisnika
+   * @param username korisnicko ime za koje trazimo ulogu
+   * @return uloga ili Optional.empty() ako nema username-a u bazi
+   */
+  public Optional<Uloga> getRole(String username);
 }

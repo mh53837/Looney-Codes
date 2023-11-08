@@ -69,6 +69,18 @@ public class KorisnikServiceJpa implements KorisnikService {
 
     return korisnikRepo.save(korisnik);
   }
+  @Override
+  public Optional<String> getPassHash(String username){
+    Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
+
+    return korisnik.isEmpty()? Optional.empty() : Optional.of(korisnik.get().getLozinka());
+  }
+  @Override
+  public Optional<Uloga> getRole(String username){
+    Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
+
+    return korisnik.isEmpty()? Optional.empty() : Optional.of(korisnik.get().getUloga());
+  }
 
   /**
    * privatna metoda koja sluzi za validaciju korisnika prije umetanja/updateanja u bazu
