@@ -15,7 +15,8 @@ public class Korisnik{
    * id korisnika u bazi
    */
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="korisnikSeq")
+  @SequenceGenerator(name="korisnikSeq", sequenceName = "korisnik_seq", initialValue=1, allocationSize=1)
   private Integer korisnikId;
 
   /**

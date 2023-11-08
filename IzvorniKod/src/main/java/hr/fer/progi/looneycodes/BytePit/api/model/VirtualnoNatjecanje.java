@@ -11,12 +11,14 @@ import java.sql.Timestamp;
  * Referencira se na "parent natjecanje"
  * TODO: povezivanje s bazom, testiranje
  */
+@Entity
 public class VirtualnoNatjecanje {
   /**
    * id virtualnog natjecanja u bazi
    */
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="virtualnoSeq")
+  @SequenceGenerator(name="virtualnoSeq", sequenceName = "virtualno_natjecanje_seq", initialValue=100001, allocationSize=1)
   private Integer virtualnoNatjecanjeId;
   /**
    * natjecanje od kojeg je nastalo virtualno
@@ -26,7 +28,7 @@ public class VirtualnoNatjecanje {
   /**
    * natjecatelj koji je generirao virtualno natjecanje
    */
-  @OneToOne
+  @ManyToOne
   private Korisnik natjecatelj;
   /**
    * vrijeme pocetka virtualnog natjecanja

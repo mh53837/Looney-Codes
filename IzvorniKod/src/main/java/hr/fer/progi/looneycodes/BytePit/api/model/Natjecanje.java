@@ -16,7 +16,8 @@ public class Natjecanje {
    * id natjecanja u bazi
    */
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="natjecanjeSeq")
+  @SequenceGenerator(name="natjecanjeSeq", sequenceName = "natjecanje_seq", initialValue=101, allocationSize=1)
   private Integer natjecanjeId;
   /**
    * voditelj natjecanja

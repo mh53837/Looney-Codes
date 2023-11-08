@@ -12,7 +12,8 @@ public class Pehar {
    * id pehara
    */
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="peharSeq")
+  @SequenceGenerator(name="peharSeq", sequenceName = "pehar_seq", initialValue=1001, allocationSize=10)
   private Integer peharId;
   /**
    * natjecatelj koji je osvojio

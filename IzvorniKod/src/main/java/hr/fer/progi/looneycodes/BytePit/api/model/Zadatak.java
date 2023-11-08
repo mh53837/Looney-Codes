@@ -12,7 +12,8 @@ public class Zadatak {
    * id zadatka
    */
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="zadatakSeq")
+  @SequenceGenerator(name="zadatakSeq", sequenceName = "zadatak_seq", initialValue=1001, allocationSize=1)
   private Integer zadatakId;
   /**
    * natjecanje u kojem se pojavljuje zadatak
