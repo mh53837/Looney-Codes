@@ -10,7 +10,9 @@ import org.springframework.util.Assert;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.ZadatakRepository;
 import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
 
@@ -18,6 +20,8 @@ import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
 public class ZadatakServiceJpa implements ZadatakService {
 	@Autowired
 	ZadatakRepository zadatakRepo;
+	@Autowired
+	KorisnikRepository korisnikRepo;
 	
 	@Override
 	public List<Zadatak> listAllJavniZadatak() {
@@ -32,6 +36,10 @@ public class ZadatakServiceJpa implements ZadatakService {
 	@Override
 	public Zadatak createZadatak(Zadatak zadatak) {
 		Assert.isNull(zadatak.getZadatakId(), "ZadatakId mora biti null prilikom stvaranja zadatka");
+		if(korisnikRepo.findById(zadatak.getVoditelj().getKorisnikId()).isEmpty()) 
+			throw new IllegalArgumentException("Voditelj s id-em " + zadatak.getVoditelj().getKorisnikId() + " ne postoji!");
+		if(korisnikRepo.findById(zadatak.getVoditelj().getKorisnikId()).get().getUloga() != Uloga.VODITELJ)
+			throw new IllegalArgumentException("Korisnik s id-em  " + zadatak.getVoditelj().getKorisnikId() + " nije voditelj!");
 		return zadatakRepo.save(zadatak);
 	}
 

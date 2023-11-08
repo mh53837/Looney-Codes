@@ -32,7 +32,7 @@ public class ZadatakController {
 	}
 	
 	@PostMapping("/new")
-	public Zadatak addKorisnik(@RequestBody Zadatak zadatak){
+	public Zadatak addZadatak(@RequestBody Zadatak zadatak){
 		zadatak = zadatakService.createZadatak(zadatak);
 		return zadatak;
 	}
