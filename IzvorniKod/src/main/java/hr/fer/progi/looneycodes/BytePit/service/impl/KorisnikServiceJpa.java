@@ -70,11 +70,11 @@ public class KorisnikServiceJpa implements KorisnikService {
     if(stariKorisnik.isEmpty())
       throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    if(!stariKorisnik.get().getLozinka()
-                           .equals(
-                            encoder.encode(
-                              korisnik.getLozinka())))
+    if(!stariKorisnik.get()
+          .getLozinka().equals(
+              korisnik.getLozinka()
+              )
+        )
       korisnik = hashPass(korisnik);
     return korisnikRepo.save(korisnik);
   }

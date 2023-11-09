@@ -7,12 +7,12 @@ import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import hr.fer.progi.looneycodes.BytePit.service.NotFoundException;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 
-import org.apache.catalina.User;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -132,7 +132,10 @@ public class KorisnikController{
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update")
-  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik, @AuthenticationPrincipal User user){
+  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik, @AuthenticationPrincipal UserDetails user){
+    if(!user.getUsername().equals(korisnik.getKorisnickoIme()))
+      throw new IllegalStateException("Krivi korisnik!");
+
     return korisnikService.updateKorisnik(korisnik);
   }
 }
