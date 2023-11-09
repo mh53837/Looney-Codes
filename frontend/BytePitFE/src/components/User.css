@@ -1,0 +1,23 @@
+.user-info-table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .user-info-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-info-table th, .user-info-table td {
+    border: 1px solid #551a1a;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .user-info-table th {
+    background-color: #912e2e;
+  }
+  
+  .user-info-table tbody tr:hover {
+    background-color: #4d4d4d;
+  }
