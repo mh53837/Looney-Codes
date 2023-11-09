@@ -7,9 +7,12 @@ import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import hr.fer.progi.looneycodes.BytePit.service.NotFoundException;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 
+import org.apache.catalina.User;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,15 +54,16 @@ public class KorisnikController{
    * @return lista svih korisnika s atributima uloga != requestedUloga
    */
   @GetMapping("/listRequested")
+  @Secured("ADMIN")
   public List<Korisnik> listRequested(){
     return korisnikService.listAllRequested();
   }
   /**
    * Metoda kojom admini potvrduju drugima uloge.
    * @return referenca na korisnika kojeg smo upravo potvrdili
-   * TODO: sigurnost
    */
   @PostMapping("/confirmRequest/{id}")
+  @Secured("ADMIN")
   public Korisnik confirmRequest(@PathVariable int id){
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
@@ -128,7 +132,7 @@ public class KorisnikController{
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update")
-  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik){
+  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik, @AuthenticationPrincipal User user){
     return korisnikService.updateKorisnik(korisnik);
   }
 }
