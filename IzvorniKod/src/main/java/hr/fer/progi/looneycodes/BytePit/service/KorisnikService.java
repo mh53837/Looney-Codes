@@ -54,7 +54,7 @@ public interface KorisnikService {
    * @see Korisnik
    * @see RegisterKorisnikDTO
    */
-  public Korisnik updateKorisnik(Korisnik korisnik);
+  public Korisnik updateKorisnik(RegisterKorisnikDTO dto);
   /**
    * Dohvati hash sifre prilikom registracije
    * @param username korisnicko ime za koju trazimo sifru
@@ -67,4 +67,16 @@ public interface KorisnikService {
    * @return uloga ili Optional.empty() ako nema username-a u bazi
    */
   public Optional<Uloga> getRole(String username);
+  /**
+   * Potvrdi ulogu za odredenog korisnika
+   * @param korisnik referenca na korisnika kojemu zelimo potvrditi requestedUlogu
+   * @return boolean ako smo uspjensno potvrdili
+   */
+  public boolean confirmRequest(Korisnik korisnik);
+  /**
+   * Potvrdi mail za odredenog korisnika
+   * @param korisnik referenca na korisnika kojemu zelimo potvrditi mail
+   * @return boolean ako smo uspjensno potvrdili
+   */
+  public boolean confirmMail(Korisnik korisnik);
 }

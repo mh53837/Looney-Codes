@@ -88,6 +88,18 @@ public class Korisnik{
     this.fotografija = dto.getFotografija();
   }
   /**
+   * konstruktor koji se koristi kod azuriranja
+   */
+  public Korisnik(Korisnik stariKorisnik, RegisterKorisnikDTO dto){
+    // pozovi normalni konstruktor
+    this(dto);
+    // prekopiraj privatne podatke
+    this.korisnikId = stariKorisnik.getKorisnikId();
+    this.confirmedEmail = stariKorisnik.isConfirmedEmail();
+    this.vrijemeRegistracije = stariKorisnik.getVrijemeRegistracije();
+    this.uloga = stariKorisnik.getUloga();
+  }
+  /**
    * toString metoda koja se koristi uglavnom za debugiranje
    */
   @Override

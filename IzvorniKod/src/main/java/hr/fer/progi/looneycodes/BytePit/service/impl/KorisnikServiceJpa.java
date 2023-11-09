@@ -68,15 +68,17 @@ public class KorisnikServiceJpa implements KorisnikService {
     return korisnikRepo.save(korisnik);
   }
   @Override
-  public Korisnik updateKorisnik(Korisnik korisnik){
+  public Korisnik updateKorisnik(RegisterKorisnikDTO dto){
+    String korisnickoIme = Objects.requireNonNull(dto.getKorisnickoIme());
+
+    Korisnik stariKorisnik = korisnikRepo.findByKorisnickoIme(korisnickoIme)
+                                         .orElseThrow(()
+                                           -> new IllegalArgumentException("Korisnik s korisnickim imenom: " 
+                                                                            + korisnickoIme + " ne postoji!"));
+
+    Korisnik korisnik = new Korisnik(stariKorisnik, dto);
     validate(korisnik);
-    int idKorisnika = Objects.requireNonNull(korisnik.getKorisnikId());
-
-    Optional<Korisnik> stariKorisnik = korisnikRepo.findById(idKorisnika);
-    if(stariKorisnik.isEmpty())
-      throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
-
-    if(!stariKorisnik.get()
+    if(!stariKorisnik
           .getLozinka().equals(
               korisnik.getLozinka()
               )
@@ -95,6 +97,24 @@ public class KorisnikServiceJpa implements KorisnikService {
     Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
 
     return korisnik.isEmpty()? Optional.empty() : Optional.of(korisnik.get().getUloga());
+  }
+  @Override
+  public boolean confirmMail(Korisnik korisnik){
+    if(korisnik == null)
+      return false;
+
+    korisnik.setConfirmedEmail(true);
+    korisnikRepo.save(korisnik);
+    return true;
+  }
+  @Override
+  public boolean confirmRequest(Korisnik korisnik){
+    if(korisnik == null)
+      return false;
+
+    korisnik.setUloga(korisnik.getRequestedUloga());
+    korisnikRepo.save(korisnik);
+    return true;
   }
 
   /**

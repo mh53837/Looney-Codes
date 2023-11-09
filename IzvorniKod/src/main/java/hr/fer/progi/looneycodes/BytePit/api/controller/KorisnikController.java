@@ -10,6 +10,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,7 +65,7 @@ public class KorisnikController{
    */
   @PostMapping("/confirmRequest/{id}")
   @Secured("ADMIN")
-  public Korisnik confirmRequest(@PathVariable int id){
+  public ResponseEntity<?> confirmRequest(@PathVariable int id){
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
     if(korisnik.isEmpty())
@@ -72,9 +73,7 @@ public class KorisnikController{
     if(korisnik.get().getRequestedUloga() == korisnik.get().getUloga())
       throw new RequestDeniedException("Admin je vec potvrdio korisnikovu ulogu!");
 
-    Korisnik newKorisnik = korisnik.get();
-    newKorisnik.setUloga(newKorisnik.getRequestedUloga());
-    return korisnikService.updateKorisnik(newKorisnik);
+    return ResponseEntity.ok(korisnikService.confirmRequest(korisnik.get()));
   }
   /**
    * Vrati korisnika na temelju id-a
@@ -116,7 +115,7 @@ public class KorisnikController{
    * @exception RequestDeniedException u slucaju da je korisnik vec potvrdio adresu
    */
   @GetMapping("/confirmEmail/{id}")
-  public Korisnik confirmEmail(@PathVariable int id){
+  public ResponseEntity<?> confirmEmail(@PathVariable int id){
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
     if(korisnik.isEmpty())
@@ -124,19 +123,17 @@ public class KorisnikController{
     if(korisnik.get().isConfirmedEmail())
       throw new RequestDeniedException("Korisnik je vec potvrdio svoju email adresu!");
 
-    Korisnik newKorisnik = korisnik.get();
-    newKorisnik.setConfirmedEmail(true);
-    return korisnikService.updateKorisnik(newKorisnik);
+    return ResponseEntity.ok(korisnikService.confirmMail(korisnik.get()));
   }
   /**
    * Azuriraj korisnicke podatke za odredenog korisnika.
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update")
-  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik, @AuthenticationPrincipal UserDetails user){
-    if(!user.getUsername().equals(korisnik.getKorisnickoIme()))
+  public Korisnik updateKorisnik(@RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
+    if(!user.getUsername().equals(dto.getKorisnickoIme()))
       throw new IllegalStateException("Krivi korisnik!");
 
-    return korisnikService.updateKorisnik(korisnik);
+    return korisnikService.updateKorisnik(dto);
   }
 }
