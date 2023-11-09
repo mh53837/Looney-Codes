@@ -16,6 +16,7 @@ import java.time.Instant;
 
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -56,6 +57,8 @@ public class KorisnikServiceJpa implements KorisnikService {
     korisnik.setConfirmedEmail(false);
     // id nastaje automatski, timestamp se generira
     korisnik.setVrijemeRegistracije(Timestamp.from(Instant.now()));
+    // hashiraj sifru
+    korisnik = hashPass(korisnik);
     return korisnikRepo.save(korisnik);
   }
   @Override
@@ -67,6 +70,12 @@ public class KorisnikServiceJpa implements KorisnikService {
     if(stariKorisnik.isEmpty())
       throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
 
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    if(!stariKorisnik.get().getLozinka()
+                           .equals(
+                            encoder.encode(
+                              korisnik.getLozinka())))
+      korisnik = hashPass(korisnik);
     return korisnikRepo.save(korisnik);
   }
   @Override
@@ -92,5 +101,13 @@ public class KorisnikServiceJpa implements KorisnikService {
     Assert.notNull(korisnik.getLozinka(), "Lozinka ne moze biti null!");
     Assert.notNull(korisnik.getKorisnickoIme(), "Korisnicko ime ne moze biti null!");
     Assert.notNull(korisnik.getEmail(), "Email ne moze biti null!");
+  }
+  /**
+   * Metoda koja hashira sifru
+   */
+  private Korisnik hashPass(Korisnik korisnik){
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    korisnik.setLozinka(encoder.encode(korisnik.getLozinka()));
+    return korisnik;
   }
 }
