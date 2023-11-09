@@ -46,7 +46,7 @@ public class KorisnikController{
    * @return lista svih korisnika koji imaju atribut confirmedEmail = true
    */
   @GetMapping("/all")
-  public List<Korisnik> listAll(){
+  public List<KorisnikInfoDTO> listAll(){
     return korisnikService.listAllVerified();
   }
   /**
@@ -55,7 +55,7 @@ public class KorisnikController{
    */
   @GetMapping("/listRequested")
   @Secured("ADMIN")
-  public List<Korisnik> listRequested(){
+  public List<KorisnikInfoDTO> listRequested(){
     return korisnikService.listAllRequested();
   }
   /**
@@ -82,6 +82,7 @@ public class KorisnikController{
    * @return Optional.empty() ako ne postoji korisnik s tim id-em
    */
   @GetMapping("/get/{id}")
+  @Secured("ADMIN")
   public Optional<Korisnik> getKorisnik(@PathVariable int id){
     return korisnikService.fetch(id);
   }
@@ -92,14 +93,14 @@ public class KorisnikController{
    * u slucaju da je zatrazena uloga == Uloga.VODITELJ postavljamo ga da bude imao
    * ovlasti natjecatelja tak dugo dok ga admin ne potvrdi!
    *
-   * @param korisnik instanca korisnika koju zelimo registrirati u JSON formatu. mora imati sljedece atribute:
+   * @param dto instanca RegisterKorisnikDTO objekta s postavljenim podacima za registraciju
    * username, password, email, requestedUloga
    * @return referenca na novi zapis korisnika u bazi
    */
   @PostMapping("/register")
-  public Korisnik addKorisnik(@RequestBody Korisnik korisnik){
+  public Korisnik addKorisnik(@RequestBody RegisterKorisnikDTO dto){
     // daj mu id
-    korisnik = korisnikService.createKorisnik(korisnik);
+    Korisnik korisnik = korisnikService.createKorisnik(dto);
     // salji mail za potvrdu registracije
     mailService.sendMail(korisnik.getEmail(), 
                           "DO NOT REPLY: Account confirmation for BytePit",

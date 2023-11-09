@@ -1,6 +1,8 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
 // local import
+import hr.fer.progi.looneycodes.BytePit.api.controller.KorisnikInfoDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
@@ -20,12 +22,12 @@ public interface KorisnikService {
    * Vrati listu svih korisnika s potvrdenim racunom.
    * @return lista svih korisnika ili null ako nitko nije u sustavu
    */
-  public List<Korisnik> listAllVerified();
+  public List<KorisnikInfoDTO> listAllVerified();
   /**
    * Vrati listu svih korisnika koji traze promijenu uloga
    * @return lista svih korisnika s atributima: uloga != requestedUloga
    */
-  public List<Korisnik> listAllRequested();
+  public List<KorisnikInfoDTO> listAllRequested();
   /**
    * Vrati referencu na Korisnika s zadanim id-em.
    * @param Id id korisnika kojeg trazimo
@@ -35,20 +37,22 @@ public interface KorisnikService {
   public Optional<Korisnik> fetch(int Id);
   /**
    * Stvori novog Korisnika i spremi ga u bazu
-   * @param korisnik referenca na korisnika kojeg moramo staviti u bazu, (nema postavljeni id)
+   * @param dto instanca RegisterKorisnikDTO objekta s postavljenim podacima za registraciju
    * @return referenca na napravljenog korisnika s postavljenim id-em
    * @exception RequestDeniedException u slucaju da je email ili username vec zauzet 
    * @exception IllegalArgumentException u slucaju da je frontend team krivo stvorio objekt :(
    * @see Korisnik
+   * @see RegisterKorisnikDTO
    * NOTE: metoda je tu samo radi testiranja, trebamo sloziti pravu registraciju kasnije
    */
-  public Korisnik createKorisnik(Korisnik korisnik);
+  public Korisnik createKorisnik(RegisterKorisnikDTO dto);
   /**
    * Azuriraj podatke o Korisniku sa zadanim id-em
    * @param korisnik instanca u kojoj su pohranjeni azurirani podaci
    * @exception IllegalArgumentException u slucaju da je id nepostojeci ili da pokusavamo mijenjati uloge, a.k.a. frontend team je kriv
    * @return referenca na instancu Korisnik klase s novim zapisom iz baze
    * @see Korisnik
+   * @see RegisterKorisnikDTO
    */
   public Korisnik updateKorisnik(Korisnik korisnik);
   /**

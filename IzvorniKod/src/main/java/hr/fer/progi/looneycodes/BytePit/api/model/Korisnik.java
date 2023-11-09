@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 // java imports
 import java.sql.Timestamp;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
+
 /**
  * Entitet koji definira naseg korisnika, onako kako je u bazi definiran.
  */
@@ -67,6 +69,24 @@ public class Korisnik{
   @Enumerated(EnumType.STRING)
   private Uloga requestedUloga;
 
+  /**
+   * defaultni konstruktor
+   */
+  public Korisnik(){
+  }
+  /**
+   * konstruktor koji se koristi kod registracije
+   */
+  public Korisnik(RegisterKorisnikDTO dto){
+    this.korisnikId = null;
+    this.korisnickoIme = dto.getKorisnickoIme();
+    this.ime = dto.getIme();
+    this.prezime = dto.getPrezime();
+    this.lozinka = dto.getLozinka();
+    this.email = dto.getEmail();
+    this.requestedUloga = dto.getRequestedUloga();
+    this.fotografija = dto.getFotografija();
+  }
   /**
    * toString metoda koja se koristi uglavnom za debugiranje
    */
