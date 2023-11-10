@@ -76,14 +76,11 @@ public class KorisnikServiceJpa implements KorisnikService {
                                            -> new IllegalArgumentException("Korisnik s korisnickim imenom: " 
                                                                             + korisnickoIme + " ne postoji!"));
 
-    Korisnik korisnik = new Korisnik(stariKorisnik, dto);
+    Korisnik korisnik = Korisnik.update(stariKorisnik, dto);
     validate(korisnik);
-    if(!stariKorisnik
-          .getLozinka().equals(
-              korisnik.getLozinka()
-              )
-        )
-      korisnik = hashPass(korisnik);
+    if(Objects.nonNull(dto.getLozinka())) {
+    	korisnik = hashPass(korisnik);
+    }
     return korisnikRepo.save(korisnik);
   }
   @Override

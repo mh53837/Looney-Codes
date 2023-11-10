@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 // java imports
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -129,11 +130,11 @@ public class KorisnikController{
    * Azuriraj korisnicke podatke za odredenog korisnika.
    * @return referenca na azurirani zapis u bazi
    */
-  @PostMapping("/update")
-  public Korisnik updateKorisnik(@RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
-    if(!user.getUsername().equals(dto.getKorisnickoIme()))
+  @PostMapping("/update/{korisnickoIme}")
+  public Korisnik updateKorisnik(@PathVariable String korisnickoIme, @RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
+	if(!(Objects.nonNull(user) &&  user.getUsername().equals(korisnickoIme)))
       throw new IllegalStateException("Krivi korisnik!");
-
+	dto.setKorisnickoIme(korisnickoIme);
     return korisnikService.updateKorisnik(dto);
   }
 }

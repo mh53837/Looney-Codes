@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 
 // java imports
 import java.sql.Timestamp;
+import java.util.Arrays;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 
@@ -90,14 +94,10 @@ public class Korisnik{
   /**
    * konstruktor koji se koristi kod azuriranja
    */
-  public Korisnik(Korisnik stariKorisnik, RegisterKorisnikDTO dto){
-    // pozovi normalni konstruktor
-    this(dto);
-    // prekopiraj privatne podatke
-    this.korisnikId = stariKorisnik.getKorisnikId();
-    this.confirmedEmail = stariKorisnik.isConfirmedEmail();
-    this.vrijemeRegistracije = stariKorisnik.getVrijemeRegistracije();
-    this.uloga = stariKorisnik.getUloga();
+  public static Korisnik update(Korisnik stariKorisnik, RegisterKorisnikDTO dto){   
+    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija");
+    copyIfSpecified(dto, stariKorisnik, properties);
+    return stariKorisnik;
   }
   /**
    * toString metoda koja se koristi uglavnom za debugiranje
@@ -172,5 +172,11 @@ public class Korisnik{
   }
   public void setConfirmedEmail(boolean confirmedEmail) {
     this.confirmedEmail = confirmedEmail;
+  }
+  
+  private static void copyIfSpecified(RegisterKorisnikDTO dto, Korisnik korisnik, Iterable<String> props) {
+	  BeanWrapper from = PropertyAccessorFactory.forBeanPropertyAccess(dto);
+	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(korisnik);
+	  props.forEach(p -> to.setPropertyValue(p, from.getPropertyValue(p) != null ? from.getPropertyValue(p) : to.getPropertyValue(p)));
   }
 }
