@@ -14,6 +14,9 @@ export const Navbar = () => {
         <Link to="/user/all">
           <button>korisnici</button>
         </Link>
+        <Link to="/problems/all">
+          <button>zadaci</button>
+        </Link>
       </div>
     </div>
   );
