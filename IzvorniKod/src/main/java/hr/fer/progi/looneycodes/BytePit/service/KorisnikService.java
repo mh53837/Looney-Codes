@@ -48,13 +48,19 @@ public interface KorisnikService {
   public Korisnik createKorisnik(RegisterKorisnikDTO dto);
   /**
    * Azuriraj podatke o Korisniku sa zadanim id-em
-   * @param korisnik instanca u kojoj su pohranjeni azurirani podaci
+   * @param dto instanca u kojoj su pohranjeni podaci koje zelimo mijenjati
    * @exception IllegalArgumentException u slucaju da je id nepostojeci ili da pokusavamo mijenjati uloge, a.k.a. frontend team je kriv
    * @return referenca na instancu Korisnik klase s novim zapisom iz baze
    * @see Korisnik
    * @see RegisterKorisnikDTO
    */
   public Korisnik updateKorisnik(RegisterKorisnikDTO dto);
+  /**
+   * Vraca referencu na korisnika na temelju korisnickog imena
+   * @param korisnickoIme korisnickoIme korisnika kojeg trazimo
+   * @return Optional<Korisnik> ovisno o tome dal postoji u bazi
+   */
+  public Optional<Korisnik> getKorisnik(String korisnickoIme);
   /**
    * Dohvati hash sifre prilikom registracije
    * @param username korisnicko ime za koju trazimo sifru

@@ -84,6 +84,10 @@ public class KorisnikServiceJpa implements KorisnikService {
     return korisnikRepo.save(korisnik);
   }
   @Override
+  public Optional<Korisnik> getKorisnik(String korisnickoIme){
+    return korisnikRepo.findByKorisnickoIme(korisnickoIme);
+  }
+  @Override
   public Optional<String> getPassHash(String username){
     Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
 

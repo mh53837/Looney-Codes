@@ -62,19 +62,23 @@ public class KorisnikController{
   }
   /**
    * Metoda kojom admini potvrduju drugima uloge.
-   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * @param korisnickoIme korisnicko ime korisnika kojeg potvrdujemo
+   * @exception NotFoundException ako korisnik s zadanim imenom ne postoji u bazi
+   * @exception RequestDeniedException ako je admin vec potvrdio ulogu
+   * @return ResponseEntity s kodom 200 ak je sve ok
    */
-  @PostMapping("/confirmRequest/{id}")
+  @PostMapping("/confirmRequest/{korisnickoIme}")
   @Secured("ADMIN")
-  public ResponseEntity<?> confirmRequest(@PathVariable int id){
-    Optional<Korisnik> korisnik = korisnikService.fetch(id);
+  public ResponseEntity<?> confirmRequest(@PathVariable String korisnickoIme){
+    Korisnik korisnik = korisnikService.getKorisnik(korisnickoIme)
+                                       .orElseThrow(()
+                                          -> new NotFoundException("Korisnik s korisnickim imenom: " + 
+                                                                    korisnickoIme + " ne postoji!"));
 
-    if(korisnik.isEmpty())
-      throw new NotFoundException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
-    if(korisnik.get().getRequestedUloga() == korisnik.get().getUloga())
+    if(korisnik.getRequestedUloga() == korisnik.getUloga())
       throw new RequestDeniedException("Admin je vec potvrdio korisnikovu ulogu!");
 
-    return ResponseEntity.ok(korisnikService.confirmRequest(korisnik.get()));
+    return ResponseEntity.ok(korisnikService.confirmRequest(korisnik));
   }
   /**
    * Vrati korisnika na temelju id-a
@@ -111,7 +115,8 @@ public class KorisnikController{
 
   /**
    * Potvrdi email za novog korisnika.
-   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * @param id id korisnika kao path variable (automatski dobije za rutu link na mail)
+   * @return ResponseEntity s kodom 200 ak je sve ok
    * @exception NotFoundException u slucaju da id ne postoji
    * @exception RequestDeniedException u slucaju da je korisnik vec potvrdio adresu
    */
@@ -128,13 +133,18 @@ public class KorisnikController{
   }
   /**
    * Azuriraj korisnicke podatke za odredenog korisnika.
+   * @param korisnickoIme salje se kao path variable
+   * @param dto samo atributi koje zelimo mijenjati se postave u dto, ostalo se ignorira automatski
+   * @param user trenutno autentificirani korisnik, radi sigurnosti provjeravamo da ne mijenja tude podatke
+   * @exception IllegalArgumentException u slucaju da pokusavamo mijenjati tude podatke
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update/{korisnickoIme}")
   public Korisnik updateKorisnik(@PathVariable String korisnickoIme, @RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
-	if(!(Objects.nonNull(user) &&  user.getUsername().equals(korisnickoIme)))
+    if(!(Objects.nonNull(user) && user.getUsername().equals(korisnickoIme)))
       throw new IllegalStateException("Krivi korisnik!");
-	dto.setKorisnickoIme(korisnickoIme);
+
+    dto.setKorisnickoIme(korisnickoIme);
     return korisnikService.updateKorisnik(dto);
   }
 }
