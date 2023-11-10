@@ -94,8 +94,7 @@ VALUES
 (1, 1004, '3', '1 1 2'),
 (1, 1005, '3', '3'),
 (2, 1005, 'jeka', 'jeka'),
-(1, 1006, '75345', '10000'),
-(1, 1007, '4', '16');
+(1, 1006, '75345', '10000');
 
 INSERT INTO virtualno_natjecanje (virtualno_natjecanje_id, natjecatelj_korisnik_id, orginalno_natjecanje_natjecanje_id, vrijeme_pocetka) 
 VALUES
