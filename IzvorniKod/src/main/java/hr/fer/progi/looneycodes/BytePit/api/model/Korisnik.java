@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 
 // java imports
 import java.sql.Timestamp;
+import java.util.Arrays;
+
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
+
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 
 /**
  * Entitet koji definira naseg korisnika, onako kako je u bazi definiran.
@@ -67,6 +73,32 @@ public class Korisnik{
   @Enumerated(EnumType.STRING)
   private Uloga requestedUloga;
 
+  /**
+   * defaultni konstruktor
+   */
+  public Korisnik(){
+  }
+  /**
+   * konstruktor koji se koristi kod registracije
+   */
+  public Korisnik(RegisterKorisnikDTO dto){
+    this.korisnikId = null;
+    this.korisnickoIme = dto.getKorisnickoIme();
+    this.ime = dto.getIme();
+    this.prezime = dto.getPrezime();
+    this.lozinka = dto.getLozinka();
+    this.email = dto.getEmail();
+    this.requestedUloga = dto.getRequestedUloga();
+    this.fotografija = dto.getFotografija();
+  }
+  /**
+   * konstruktor koji se koristi kod azuriranja
+   */
+  public static Korisnik update(Korisnik stariKorisnik, RegisterKorisnikDTO dto){   
+    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija");
+    copyIfSpecified(dto, stariKorisnik, properties);
+    return stariKorisnik;
+  }
   /**
    * toString metoda koja se koristi uglavnom za debugiranje
    */
@@ -140,5 +172,11 @@ public class Korisnik{
   }
   public void setConfirmedEmail(boolean confirmedEmail) {
     this.confirmedEmail = confirmedEmail;
+  }
+  
+  private static void copyIfSpecified(RegisterKorisnikDTO dto, Korisnik korisnik, Iterable<String> props) {
+	  BeanWrapper from = PropertyAccessorFactory.forBeanPropertyAccess(dto);
+	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(korisnik);
+	  props.forEach(p -> to.setPropertyValue(p, from.getPropertyValue(p) != null ? from.getPropertyValue(p) : to.getPropertyValue(p)));
   }
 }

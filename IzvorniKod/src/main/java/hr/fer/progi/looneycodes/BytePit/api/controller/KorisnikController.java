@@ -10,6 +10,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 // java imports
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -46,7 +48,7 @@ public class KorisnikController{
    * @return lista svih korisnika koji imaju atribut confirmedEmail = true
    */
   @GetMapping("/all")
-  public List<Korisnik> listAll(){
+  public List<KorisnikInfoDTO> listAll(){
     return korisnikService.listAllVerified();
   }
   /**
@@ -55,26 +57,28 @@ public class KorisnikController{
    */
   @GetMapping("/listRequested")
   @Secured("ADMIN")
-  public List<Korisnik> listRequested(){
+  public List<KorisnikInfoDTO> listRequested(){
     return korisnikService.listAllRequested();
   }
   /**
    * Metoda kojom admini potvrduju drugima uloge.
-   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * @param korisnickoIme korisnicko ime korisnika kojeg potvrdujemo
+   * @exception NotFoundException ako korisnik s zadanim imenom ne postoji u bazi
+   * @exception RequestDeniedException ako je admin vec potvrdio ulogu
+   * @return ResponseEntity s kodom 200 ak je sve ok
    */
-  @PostMapping("/confirmRequest/{id}")
+  @PostMapping("/confirmRequest/{korisnickoIme}")
   @Secured("ADMIN")
-  public Korisnik confirmRequest(@PathVariable int id){
-    Optional<Korisnik> korisnik = korisnikService.fetch(id);
+  public ResponseEntity<?> confirmRequest(@PathVariable String korisnickoIme){
+    Korisnik korisnik = korisnikService.getKorisnik(korisnickoIme)
+                                       .orElseThrow(()
+                                          -> new NotFoundException("Korisnik s korisnickim imenom: " + 
+                                                                    korisnickoIme + " ne postoji!"));
 
-    if(korisnik.isEmpty())
-      throw new NotFoundException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
-    if(korisnik.get().getRequestedUloga() == korisnik.get().getUloga())
+    if(korisnik.getRequestedUloga() == korisnik.getUloga())
       throw new RequestDeniedException("Admin je vec potvrdio korisnikovu ulogu!");
 
-    Korisnik newKorisnik = korisnik.get();
-    newKorisnik.setUloga(newKorisnik.getRequestedUloga());
-    return korisnikService.updateKorisnik(newKorisnik);
+    return ResponseEntity.ok(korisnikService.confirmRequest(korisnik));
   }
   /**
    * Vrati korisnika na temelju id-a
@@ -82,6 +86,7 @@ public class KorisnikController{
    * @return Optional.empty() ako ne postoji korisnik s tim id-em
    */
   @GetMapping("/get/{id}")
+  @Secured("ADMIN")
   public Optional<Korisnik> getKorisnik(@PathVariable int id){
     return korisnikService.fetch(id);
   }
@@ -92,14 +97,14 @@ public class KorisnikController{
    * u slucaju da je zatrazena uloga == Uloga.VODITELJ postavljamo ga da bude imao
    * ovlasti natjecatelja tak dugo dok ga admin ne potvrdi!
    *
-   * @param korisnik instanca korisnika koju zelimo registrirati u JSON formatu. mora imati sljedece atribute:
+   * @param dto instanca RegisterKorisnikDTO objekta s postavljenim podacima za registraciju
    * username, password, email, requestedUloga
    * @return referenca na novi zapis korisnika u bazi
    */
   @PostMapping("/register")
-  public Korisnik addKorisnik(@RequestBody Korisnik korisnik){
+  public Korisnik addKorisnik(@RequestBody RegisterKorisnikDTO dto){
     // daj mu id
-    korisnik = korisnikService.createKorisnik(korisnik);
+    Korisnik korisnik = korisnikService.createKorisnik(dto);
     // salji mail za potvrdu registracije
     mailService.sendMail(korisnik.getEmail(), 
                           "DO NOT REPLY: Account confirmation for BytePit",
@@ -110,12 +115,13 @@ public class KorisnikController{
 
   /**
    * Potvrdi email za novog korisnika.
-   * @return referenca na korisnika kojeg smo upravo potvrdili
+   * @param id id korisnika kao path variable (automatski dobije za rutu link na mail)
+   * @return ResponseEntity s kodom 200 ak je sve ok
    * @exception NotFoundException u slucaju da id ne postoji
    * @exception RequestDeniedException u slucaju da je korisnik vec potvrdio adresu
    */
   @GetMapping("/confirmEmail/{id}")
-  public Korisnik confirmEmail(@PathVariable int id){
+  public ResponseEntity<?> confirmEmail(@PathVariable int id){
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
     if(korisnik.isEmpty())
@@ -123,19 +129,22 @@ public class KorisnikController{
     if(korisnik.get().isConfirmedEmail())
       throw new RequestDeniedException("Korisnik je vec potvrdio svoju email adresu!");
 
-    Korisnik newKorisnik = korisnik.get();
-    newKorisnik.setConfirmedEmail(true);
-    return korisnikService.updateKorisnik(newKorisnik);
+    return ResponseEntity.ok(korisnikService.confirmMail(korisnik.get()));
   }
   /**
    * Azuriraj korisnicke podatke za odredenog korisnika.
+   * @param korisnickoIme salje se kao path variable
+   * @param dto samo atributi koje zelimo mijenjati se postave u dto, ostalo se ignorira automatski
+   * @param user trenutno autentificirani korisnik, radi sigurnosti provjeravamo da ne mijenja tude podatke
+   * @exception IllegalArgumentException u slucaju da pokusavamo mijenjati tude podatke
    * @return referenca na azurirani zapis u bazi
    */
-  @PostMapping("/update")
-  public Korisnik updateKorisnik(@RequestBody Korisnik korisnik, @AuthenticationPrincipal UserDetails user){
-    if(!user.getUsername().equals(korisnik.getKorisnickoIme()))
+  @PostMapping("/update/{korisnickoIme}")
+  public Korisnik updateKorisnik(@PathVariable String korisnickoIme, @RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
+    if(!(Objects.nonNull(user) && user.getUsername().equals(korisnickoIme)))
       throw new IllegalStateException("Krivi korisnik!");
 
-    return korisnikService.updateKorisnik(korisnik);
+    dto.setKorisnickoIme(korisnickoIme);
+    return korisnikService.updateKorisnik(dto);
   }
 }

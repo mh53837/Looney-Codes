@@ -4,6 +4,8 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
+import hr.fer.progi.looneycodes.BytePit.api.controller.KorisnikInfoDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
@@ -11,6 +13,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -26,22 +29,25 @@ public class KorisnikServiceJpa implements KorisnikService {
   KorisnikRepository korisnikRepo;
 
   @Override
-  public List<Korisnik> listAllVerified(){
-    return korisnikRepo.findAllVerified();
+  public List<KorisnikInfoDTO> listAllVerified(){
+    return korisnikRepo.findAllVerified()
+                       .stream().map(korisnik -> new KorisnikInfoDTO(korisnik))
+                       .collect(Collectors.toList());
   }
   @Override
-  public List<Korisnik> listAllRequested(){
-    return korisnikRepo.findAllRequested();
+  public List<KorisnikInfoDTO> listAllRequested(){
+    return korisnikRepo.findAllRequested()
+                       .stream().map(korisnik -> new KorisnikInfoDTO(korisnik))
+                       .collect(Collectors.toList());
   }
   @Override
   public Optional<Korisnik> fetch(int id){
     return korisnikRepo.findById(id);
   }
   @Override
-  public Korisnik createKorisnik(Korisnik korisnik){
+  public Korisnik createKorisnik(RegisterKorisnikDTO dto){
+    Korisnik korisnik = new Korisnik(dto);
     validate(korisnik);
-    // id novog korisnika mora biti null, inace baci iznimku
-    Assert.isNull(korisnik.getKorisnikId(), "Id for new user must be null!");
     // ako je korisnicko ime zauzeto, baci iznimku
     if(!korisnikRepo.findByKorisnickoIme(korisnik.getKorisnickoIme()).isEmpty())
       throw new RequestDeniedException("Korisnik s korisnickim imenom: " + korisnik.getKorisnickoIme() + " vec postoji!");
@@ -62,21 +68,24 @@ public class KorisnikServiceJpa implements KorisnikService {
     return korisnikRepo.save(korisnik);
   }
   @Override
-  public Korisnik updateKorisnik(Korisnik korisnik){
+  public Korisnik updateKorisnik(RegisterKorisnikDTO dto){
+    String korisnickoIme = Objects.requireNonNull(dto.getKorisnickoIme());
+
+    Korisnik stariKorisnik = korisnikRepo.findByKorisnickoIme(korisnickoIme)
+                                         .orElseThrow(()
+                                           -> new IllegalArgumentException("Korisnik s korisnickim imenom: " 
+                                                                            + korisnickoIme + " ne postoji!"));
+
+    Korisnik korisnik = Korisnik.update(stariKorisnik, dto);
     validate(korisnik);
-    int idKorisnika = Objects.requireNonNull(korisnik.getKorisnikId());
-
-    Optional<Korisnik> stariKorisnik = korisnikRepo.findById(idKorisnika);
-    if(stariKorisnik.isEmpty())
-      throw new IllegalArgumentException("Korisnik s id-em: " + Integer.toString(idKorisnika) + " ne postoji!");
-
-    if(!stariKorisnik.get()
-          .getLozinka().equals(
-              korisnik.getLozinka()
-              )
-        )
-      korisnik = hashPass(korisnik);
+    if(Objects.nonNull(dto.getLozinka())) {
+    	korisnik = hashPass(korisnik);
+    }
     return korisnikRepo.save(korisnik);
+  }
+  @Override
+  public Optional<Korisnik> getKorisnik(String korisnickoIme){
+    return korisnikRepo.findByKorisnickoIme(korisnickoIme);
   }
   @Override
   public Optional<String> getPassHash(String username){
@@ -89,6 +98,24 @@ public class KorisnikServiceJpa implements KorisnikService {
     Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
 
     return korisnik.isEmpty()? Optional.empty() : Optional.of(korisnik.get().getUloga());
+  }
+  @Override
+  public boolean confirmMail(Korisnik korisnik){
+    if(korisnik == null)
+      return false;
+
+    korisnik.setConfirmedEmail(true);
+    korisnikRepo.save(korisnik);
+    return true;
+  }
+  @Override
+  public boolean confirmRequest(Korisnik korisnik){
+    if(korisnik == null)
+      return false;
+
+    korisnik.setUloga(korisnik.getRequestedUloga());
+    korisnikRepo.save(korisnik);
+    return true;
   }
 
   /**
