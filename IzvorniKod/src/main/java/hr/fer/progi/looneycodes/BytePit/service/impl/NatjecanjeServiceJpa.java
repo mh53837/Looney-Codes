@@ -18,9 +18,11 @@ import java.util.List;
 @Service
 public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
-    private NatjecanjeRepository natjecanjeRepo;
+    private KorisnikService korisnikService;
+
     @Autowired
-    private KorisnikService KorisnikService;
+    private NatjecanjeRepository natjecanjeRepo;
+
     public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId){
         Assert.notNull(nazivNatjecanja, "Naziv natjecanja ne smije biti null!");
         Assert.notNull(pocetakNatjecanja, "Pocetak natjecanja ne smije biti null!");
@@ -28,21 +30,20 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         Assert.notNull(korisnikId, "ID voditelja ne smije biti null!");
         Assert.isTrue(pocetakNatjecanja.before(krajNatjecanja), "Pocetak natjecanja mora biti prije kraja natjecanja!");
         // Assert.isTrue(pocetakNatjecanja.after(Timestamp.from(Instant.now())), "Pocetak natjecanja mora biti u buducnosti!");
-        Optional<Korisnik> korisnik = KorisnikService.fetch(korisnikId);
+        Optional<Korisnik> korisnik = korisnikService.fetch(korisnikId);
         Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + korisnikId + " ne postoji!");
         Assert.isTrue(korisnik.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s ID-em " + korisnikId + " nije voditelj!");
         return korisnik;
     }
 
     @Override
-    public Natjecanje createNatjecanje(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId) {
-
-        Optional<Korisnik> korisnik = validacija(nazivNatjecanja, pocetakNatjecanja, krajNatjecanja, korisnikId);
-        Natjecanje natjecanje = new Natjecanje(korisnik.get(), nazivNatjecanja, pocetakNatjecanja, krajNatjecanja);
+    public Natjecanje createNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
+        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getVoditeljId());
+        Natjecanje natjecanje = new Natjecanje(korisnik.get(), natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja());
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
-
     }
+
 
     @Override
     public Natjecanje updateNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
