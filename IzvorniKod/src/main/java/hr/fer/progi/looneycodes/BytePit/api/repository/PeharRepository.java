@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.api.repository;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,9 +20,9 @@ public interface PeharRepository extends JpaRepository<Pehar, Integer> {
     List<Pehar> findAllTrophies();
 
     /**
-     * Metoda koja pronalazi pehar na temelju ID.
-     * @return pehar
+     * Metoda koja pronalazi pehare jednog korisnika.
+     * @param korisnik - identifikator korisnik za kojeg se traže pehari
+     * @return listu pehara jednog korisnika
      */
-    @Query("SELECT p FROM Pehar p")
-    List<Pehar> oneTrophy();
+    List<Pehar> findTrophiesByNatjecatelj(Korisnik natjecatelj);
 }

@@ -23,4 +23,10 @@ public interface PeharService {
      */
     public Pehar oneTrophy(Integer Id);
 
+    /**
+     * Vrati listu svih pehara jednog korisnika.
+     * @return lista svih pehara jednog korisnika ili null ako nema pehara u sustavu
+     */
+    public List<Pehar> listAllFromOneNatjecatelj(String korisnickoIme);
+
 }

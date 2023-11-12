@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.PeharService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,15 @@ public class PeharController {
     @GetMapping("/get/{id}")
     public Pehar oneTrophy(@PathVariable Integer id) {
         return peharService.oneTrophy(id);
+    }
+
+    /**
+     * Ruta za ispis svih pehara jednog korisnika.
+     * @return lista pehara.
+     */
+    @GetMapping("/user/{korisnickoIme}")
+    public List<Pehar> listAllFromOneKorisnik(@PathVariable String korisnickoIme){
+        return peharService.listAllFromOneNatjecatelj(korisnickoIme);
     }
 
 }
