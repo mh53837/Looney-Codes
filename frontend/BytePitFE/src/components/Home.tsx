@@ -11,7 +11,10 @@ const Home: React.FC = () => {
             <img src = "../slike/logo-bytepit3.png" alt="BytePit logo" />
             </div>
             <Link to="/login">
-                <button>login</button>
+                <button>Login</button>
+            </Link>
+            <Link to="/register">
+                <button>Register</button>
             </Link>
         </div>
     );

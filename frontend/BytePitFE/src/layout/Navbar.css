@@ -1,16 +1,30 @@
 .navbar-container {
     display: flex;
-    justify-content: space-around; 
-    align-items: center; 
-    background-color: #f1f1f1;
+    justify-content: flex-start;
+    align-items: center;
     padding: 10px;
-  }
-  .nav-item {
+}
+
+.logo-container img {
+    width: 115px;
+}
+
+.navbar-options-container {
+    flex: 1;
+    margin: 5px;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-item {
+    padding: 8px;
     margin: 0 10px;
     color: #000;
-  }
-  .nav-item button {
+}
+
+.nav-item button {
     margin: 20px;
     margin-bottom: 0;
     margin-top: 0;
-  }
+}
