@@ -23,19 +23,22 @@ const Login: React.FC<LoginProps> = (props) => {
         e.preventDefault();
         setError('');
 
-        const body = `username=${loginForm.username}&password=${loginForm.password}`;
+        const credentials = btoa(`${loginForm.username}:${loginForm.password}`);
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': `Basic ${credentials}`,
+                  'Content-Type': 'application/json'
             },
-            body: body,
+            body: JSON.stringify(loginForm),
         };
 
-        fetch('/api/login', options).then((response) => {
+        // ruta uopce nije bitna, jedino je bitno da nas server prihvaca!
+        fetch('/api/user/', options).then((response) => {
             if (response.status === 401) {
                 setError('Login failed');
             } else {
+                console.log('Success!');
                 props.onLogin();
             }
         });

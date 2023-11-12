@@ -33,16 +33,15 @@ const Register: React.FC<RegisterProps> = (props) => {
             return;
         }
 
-        const body = `username=${registerForm.username}&password=${registerForm.password}`;
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: body,
+            body: JSON.stringify(registerForm),
         };
 
-        fetch('/api/register', options).then((response) => {
+        fetch('/api/user/register', options).then((response) => {
             if (response.status === 401) {
                 setError('Registration failed');
             } else {
