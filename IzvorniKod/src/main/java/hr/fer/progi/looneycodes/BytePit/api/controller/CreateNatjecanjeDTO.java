@@ -8,8 +8,10 @@ public class CreateNatjecanjeDTO {
     private Timestamp pocetakNatjecanja;
     private Timestamp krajNatjecanja;
     private Integer voditeljId;
+
     public CreateNatjecanjeDTO() {
     }
+
     public CreateNatjecanjeDTO(Integer natjecanjeId, String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer voditeljId) {
         this.natjecanjeId = natjecanjeId;
         this.nazivNatjecanja = nazivNatjecanja;
@@ -17,6 +19,7 @@ public class CreateNatjecanjeDTO {
         this.krajNatjecanja = krajNatjecanja;
         this.voditeljId = voditeljId;
     }
+
     public Integer getNatjecanjeId() {
         return natjecanjeId;
     }
@@ -24,6 +27,7 @@ public class CreateNatjecanjeDTO {
     public void setNatjecanjeId(Integer natjecanjeId) {
         this.natjecanjeId = natjecanjeId;
     }
+
     public String getNazivNatjecanja() {
         return nazivNatjecanja;
     }

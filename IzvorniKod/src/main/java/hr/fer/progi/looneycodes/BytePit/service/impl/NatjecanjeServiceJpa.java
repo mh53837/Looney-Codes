@@ -64,7 +64,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     }
 
     @Override
-    public List<Natjecanje> getAllNatjecanja() {
+    public List<Natjecanje> listAllNatjecanja() {
         return natjecanjeRepo.findAll();
 
     }
