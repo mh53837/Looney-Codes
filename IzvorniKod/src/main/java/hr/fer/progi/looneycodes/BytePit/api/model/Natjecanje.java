@@ -6,12 +6,22 @@ import jakarta.persistence.*;
 // java imports
 import java.sql.Timestamp;
 
+
 /**
  * Entitet koji definira natjecanje, identifikator, vrijeme pocetka i kraja
  * TODO: povezivanje s bazom, testiranje
  */
 @Entity
 public class Natjecanje {
+
+    public Natjecanje() {
+    }
+    public Natjecanje(Korisnik voditelj, String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja) {
+        this.voditelj = voditelj;
+        this.nazivNatjecanja = nazivNatjecanja;
+        this.pocetakNatjecanja = pocetakNatjecanja;
+        this.krajNatjecanja = krajNatjecanja;
+    }
   /**
    * id natjecanja u bazi
    */

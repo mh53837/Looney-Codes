@@ -13,6 +13,15 @@ import java.sql.Timestamp;
  */
 @Entity
 public class VirtualnoNatjecanje {
+
+  public VirtualnoNatjecanje() {
+  }
+  public VirtualnoNatjecanje(Natjecanje orginalnoNatjecanje, Korisnik natjecatelj, Timestamp vrijemePocetka) {
+    this.orginalnoNatjecanje = orginalnoNatjecanje;
+    this.natjecatelj = natjecatelj;
+    this.vrijemePocetka = vrijemePocetka;
+  }
+
   /**
    * id virtualnog natjecanja u bazi
    */
