@@ -9,15 +9,15 @@
   }
   
   .user-info-table th, .user-info-table td {
-    border: 1px solid #551a1a;
+    border: 1px solid #00000085;
     padding: 10px;
     text-align: left;
   }
   
   .user-info-table th {
-    background-color: #912e2e;
+    background-color: #f4c95de7;
   }
   
   .user-info-table tbody tr:hover {
-    background-color: #4d4d4d;
+    background-color: #f4c95d52;
   }

@@ -6,13 +6,16 @@
 }
 
 .logo-container img {
-    width: 135px;
+    margin: 1rem;
+    width: 10rem;
 }
 
 .navbar-options-container {
     flex: 1;
-    margin: 5px;
-    background-color: #f1f1f1;
+    margin: 1rem;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-radius: 1px;
     display: flex;
     justify-content: center;
 }

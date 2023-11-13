@@ -1,5 +1,5 @@
 .FormRow {
-    margin: 8px 0;
+    margin: 10px 0;
 }
 
 .Register {
@@ -18,7 +18,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+
 }
 
 .Register .FormRow:first-child {
@@ -28,6 +28,7 @@
 .FormRow label {
     display: block;
     margin-bottom: 2px;
+    font-weight: 500;
 }
 
 .FormRow input {
@@ -47,10 +48,6 @@
     cursor: pointer;
 }
 
-.Register button:hover {
-    background-color: #aaa;
-}
-
 .Register button:disabled {
     color: #ddd;
 }
@@ -59,3 +56,23 @@
     color: red;
     margin-bottom: 8px;
 }
+
+.Register .RadioLbl input{
+    margin: 0px;
+    padding: 0px;
+    max-width: 20px;
+}
+
+.FormRow .RadioLbl {
+    display: inline;
+    font-weight: 400;
+}
+
+.RadioLbl:first-child{
+    margin-right: 30px;
+}
+
+.RoleOptions input[type="radio"] {
+    accent-color:#000000;
+}
+    

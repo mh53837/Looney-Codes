@@ -10,7 +10,7 @@ export const Navbar = () => {
         <div className="navbar-options-container">
             <div className="nav-item">
                 <Link to="/">
-                    <button>home</button>
+                    <button>kalendar</button>
                 </Link>
                 <Link to="/user/all">
                     <button>korisnici</button>

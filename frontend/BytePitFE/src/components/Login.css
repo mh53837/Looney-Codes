@@ -47,10 +47,6 @@
     cursor: pointer;
 }
 
-.Login button:hover {
-    background-color: #aaa;
-}
-
 .Login button:disabled {
     color: #ddd;
 }

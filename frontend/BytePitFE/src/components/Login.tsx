@@ -49,15 +49,15 @@ const Login: React.FC<LoginProps> = (props) => {
             <div className="Login">
                 <form onSubmit={onSubmit}>
                     <div className="FormRow">
-                        <label>Username</label>
+                        <label>korisničko ime</label>
                         <input name="username" onChange={onChange} value={loginForm.username} />
                     </div>
                     <div className="FormRow">
-                        <label>Password</label>
+                        <label>lozinka</label>
                         <input name="password" type="password" onChange={onChange} value={loginForm.password} />
                     </div>
                     <div className="error">{error}</div>
-                    <button type="submit">Login</button>
+                    <button type="submit">prijavi se!</button>
                 </form>
             </div>
         </div>

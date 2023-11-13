@@ -7,6 +7,10 @@ interface RegisterProps {
 
 interface RegisterForm {
     username: string;
+    ime: string;
+    prezime: string;
+    email: string;
+    uloga: string;
     password: string;
     confirmPassword: string;
 }
@@ -14,10 +18,21 @@ interface RegisterForm {
 const Register: React.FC<RegisterProps> = (props) => {
     const [registerForm, setRegisterForm] = useState<RegisterForm>({
         username: '',
+        ime: '',
+        prezime: '',
+        email: '',
+        uloga: '',
         password: '',
         confirmPassword: '',
     });
     const [error, setError] = useState<string>('');
+
+    const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRegisterForm({
+            ...registerForm,
+            uloga: event.target.value,
+        });
+    };
 
     function onChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -54,20 +69,58 @@ const Register: React.FC<RegisterProps> = (props) => {
         <div className="register-container">
             <div className="Register">
                 <form onSubmit={onSubmit}>
+                    
                     <div className="FormRow">
-                        <label>Username</label>
+                        <label>korisničko ime</label>
                         <input name="username" onChange={onChange} value={registerForm.username} />
                     </div>
                     <div className="FormRow">
-                        <label>Password</label>
+                        <label>ime</label>
+                        <input name="ime" onChange={onChange} value={registerForm.ime} />
+                    </div>
+                    <div className="FormRow">
+                        <label>prezime</label>
+                        <input name="prezime" onChange={onChange} value={registerForm.prezime} />
+                    </div>
+                    <div className="FormRow">
+                        <label>email</label>
+                        <input name="email" onChange={onChange} value={registerForm.email} />
+                    </div>
+
+                    <div className="FormRow">
+                        <label>lozinka</label>
                         <input name="password" type="password" onChange={onChange} value={registerForm.password} />
                     </div>
                     <div className="FormRow">
-                        <label>Confirm Password</label>
+                        <label>potvrdi lozinku</label>
                         <input name="confirmPassword" type="password" onChange={onChange} value={registerForm.confirmPassword} />
                     </div>
+                    <div className = "FormRow">
+                        <label>uloga</label>
+                        <div className = "RoleOptions" >
+                            <label className = "RadioLbl">
+                                <input
+                                    type="radio"
+                                    value="voditelj"
+                                    checked={registerForm.uloga === 'voditelj'}
+                                    onChange={handleUlogaChange}
+                                />
+                                voditelj
+                            </label>
+                            <label className = "RadioLbl">
+                                <input 
+                                    type="radio"
+                                    value="natjecatelj"
+                                    checked={registerForm.uloga === 'natjecatelj'}
+                                    onChange={handleUlogaChange}
+                                />
+                                natjecatelj
+                            </label>
+                        </div>
+                    </div>
+
                     <div className="error">{error}</div>
-                    <button type="submit">Register</button>
+                    <button type="submit">registriraj se!</button>
                 </form>
             </div>
         </div>

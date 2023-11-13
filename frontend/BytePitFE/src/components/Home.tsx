@@ -7,14 +7,11 @@ const Home: React.FC = () => {
     getHome();
     return (
         <div>
-            <div>
-            <img src = "../slike/logo-bytepit3.png" alt="BytePit logo" />
-            </div>
             <Link to="/login">
-                <button>Login</button>
+                <button>prijavi se!</button>
             </Link>
             <Link to="/register">
-                <button>Register</button>
+                <button>registriraj se!</button>
             </Link>
         </div>
     );
