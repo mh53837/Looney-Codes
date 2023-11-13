@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- * Kontroler koji se koristi za pristup metodama vezanim uz VirtualnoNatjecanje entitet.
+ * Kontroler koji se koristi za pristup metodama vezanim uz VirtualnoNatjecanje entitet
  *
  * @see VirtualnoNatjecanjeService
  * @see VirtualnoNatjecanje

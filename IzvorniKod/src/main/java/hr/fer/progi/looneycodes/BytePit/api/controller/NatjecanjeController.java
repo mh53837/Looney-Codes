@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Kontroler koji se koristi za pristup metodama vezanim uz Natjecanje entitet.
+ * Kontroler koji se koristi za pristup metodama vezanim uz Natjecanje entitet
  *
  * @see NatjecanjeService
  * @see Natjecanje
