@@ -1,6 +1,6 @@
-import { useEffect, useState} from "react";
+import { useEffect} from "react";
 
-export const getHome = ()=>{
+export const GetHome = ()=>{
     useEffect(() => {
         fetch('/api')
             .then(response => response.json())

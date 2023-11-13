@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {getHome} from "../hooks/usersAPI";
+import {GetHome} from "../hooks/usersAPI";
 
 
 const Home: React.FC = () => {
-    getHome();
+    GetHome();
     return (
         <div>
             <Link to="/login">
