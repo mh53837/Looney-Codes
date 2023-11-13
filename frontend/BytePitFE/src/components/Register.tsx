@@ -6,31 +6,31 @@ interface RegisterProps {
 }
 
 interface RegisterForm {
-    username: string;
+    korisnickoIme: string;
     ime: string;
     prezime: string;
     email: string;
-    uloga: string;
-    password: string;
-    confirmPassword: string;
+    requestedUloga: string;
+    lozinka: string;
+    confirmLozinka: string;
 }
 
 const Register: React.FC<RegisterProps> = (props) => {
     const [registerForm, setRegisterForm] = useState<RegisterForm>({
-        username: '',
+        korisnickoIme: '',
         ime: '',
         prezime: '',
         email: '',
-        uloga: '',
-        password: '',
-        confirmPassword: '',
+        requestedUloga: '',
+        lozinka: '',
+        confirmLozinka: '',
     });
     const [error, setError] = useState<string>('');
 
     const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRegisterForm({
             ...registerForm,
-            uloga: event.target.value,
+            requestedUloga: event.target.value,
         });
     };
 
@@ -43,7 +43,7 @@ const Register: React.FC<RegisterProps> = (props) => {
         e.preventDefault();
         setError('');
 
-        if (registerForm.password !== registerForm.confirmPassword) {
+        if (registerForm.lozinka !== registerForm.confirmLozinka) {
             setError('Passwords do not match');
             return;
         }
@@ -72,7 +72,7 @@ const Register: React.FC<RegisterProps> = (props) => {
                     
                     <div className="FormRow">
                         <label>korisničko ime</label>
-                        <input name="username" onChange={onChange} value={registerForm.username} />
+                        <input name="korisnickoIme" onChange={onChange} value={registerForm.korisnickoIme} />
                     </div>
                     <div className="FormRow">
                         <label>ime</label>
@@ -89,11 +89,11 @@ const Register: React.FC<RegisterProps> = (props) => {
 
                     <div className="FormRow">
                         <label>lozinka</label>
-                        <input name="password" type="password" onChange={onChange} value={registerForm.password} />
+                        <input name="lozinka" type="password" onChange={onChange} value={registerForm.lozinka} />
                     </div>
                     <div className="FormRow">
                         <label>potvrdi lozinku</label>
-                        <input name="confirmPassword" type="password" onChange={onChange} value={registerForm.confirmPassword} />
+                        <input name="confirmLozinka" type="password" onChange={onChange} value={registerForm.confirmLozinka} />
                     </div>
                     <div className = "FormRow">
                         <label>uloga</label>
@@ -101,8 +101,8 @@ const Register: React.FC<RegisterProps> = (props) => {
                             <label className = "RadioLbl">
                                 <input
                                     type="radio"
-                                    value="voditelj"
-                                    checked={registerForm.uloga === 'voditelj'}
+                                    value="VODITELJ"
+                                    checked={registerForm.requestedUloga === 'VODITELJ'}
                                     onChange={handleUlogaChange}
                                 />
                                 voditelj
@@ -110,8 +110,8 @@ const Register: React.FC<RegisterProps> = (props) => {
                             <label className = "RadioLbl">
                                 <input 
                                     type="radio"
-                                    value="natjecatelj"
-                                    checked={registerForm.uloga === 'natjecatelj'}
+                                    value="NATJECATELJ"
+                                    checked={registerForm.requestedUloga === 'NATJECATELJ'}
                                     onChange={handleUlogaChange}
                                 />
                                 natjecatelj
