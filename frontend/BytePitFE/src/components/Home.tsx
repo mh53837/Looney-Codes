@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {GetHome} from "../hooks/usersAPI";
 
 
@@ -6,9 +7,12 @@ const Home: React.FC = () => {
     GetHome();
     return (
         <div>
-            bok!
-            <br />
-            *kalendar*
+            <Link to="/login">
+                <button>prijavi se!</button>
+            </Link>
+            <Link to="/register">
+                <button>registriraj se!</button>
+            </Link>
         </div>
     );
 };

@@ -17,7 +17,6 @@ const App = () => {
                     <Route path="/problems/all" element={<ProblemsList />} />
                     <Route path="/login" element={<Login onLogin={() => console.log('User logged in!')} />} />
                     <Route path="/register" element={<Register onRegister={() => console.log('User registered!')} />} />
-
                 </Routes>
         </Router>
     );   

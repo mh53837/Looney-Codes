@@ -7,7 +7,6 @@ interface ProblemsProps {
         nazivZadatka: string;
         tekstZadatka: string;
     };
-
 }
 
 const Problems: React.FC<ProblemsProps> = (props) => {
@@ -18,9 +17,8 @@ const Problems: React.FC<ProblemsProps> = (props) => {
         <td>{voditelj?.korisnickoIme}</td>
         <td>{nazivZadatka }</td>
         <td>{tekstZadatka}</td>
-        </tr>       
+        </tr>
     );
 };
-
 
 export default Problems;

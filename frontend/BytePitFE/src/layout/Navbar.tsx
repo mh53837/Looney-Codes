@@ -5,7 +5,9 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       <div className="logo-container">
-          <img src="../slike/logo-bytepit3.png" alt="BytePit logo" />
+          <Link to="/">
+              <img src="../slike/logo-bytepit3.png" alt="BytePit logo" />
+          </Link>
       </div>
         <div className="navbar-options-container">
             <div className="nav-item">
