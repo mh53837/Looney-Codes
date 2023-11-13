@@ -45,10 +45,10 @@ public class NatjecanjeController {
         return natjecanjeService.updateNatjecanje(natjecanjeDTO);
     }
 
-    @DeleteMapping("/delete/{natjecanjeId}")
+    /*@DeleteMapping("/delete/{natjecanjeId}")
     public void deleteNatjecanje(@PathVariable Integer natjecanjeId) {
         natjecanjeService.deleteNatjecanje(natjecanjeId);
-    }
+    }*/
 
 }
 

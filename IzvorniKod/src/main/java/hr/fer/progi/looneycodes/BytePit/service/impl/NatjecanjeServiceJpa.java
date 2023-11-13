@@ -5,15 +5,15 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
-import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
+import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import java.time.Instant;
-import java.util.Optional;
+
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NatjecanjeServiceJpa implements NatjecanjeService {
@@ -23,7 +23,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
     private NatjecanjeRepository natjecanjeRepo;
 
-    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId){
+    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId) {
         Assert.notNull(nazivNatjecanja, "Naziv natjecanja ne smije biti null!");
         Assert.notNull(pocetakNatjecanja, "Pocetak natjecanja ne smije biti null!");
         Assert.notNull(krajNatjecanja, "Kraj natjecanja ne smije biti null!");
@@ -56,7 +56,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         natjecanje.setVoditelj(korisnik.get());
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
-        }
+    }
 
     @Override
     public Natjecanje getNatjecanje(Integer natjecanjeId) {
@@ -68,13 +68,14 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         return natjecanjeRepo.findAll();
 
     }
+
     @Override
     public List<Natjecanje> getNatjecanjaByKorisnikId(Integer korisnikId) {
         return natjecanjeRepo.findByKorisnikId(korisnikId);
     }
 
-    @Override
+    /*@Override
     public void deleteNatjecanje(Integer natjecanjeId) {
         natjecanjeRepo.deleteByNatjecanjeId(natjecanjeId);
-    }
+    }*/
 }

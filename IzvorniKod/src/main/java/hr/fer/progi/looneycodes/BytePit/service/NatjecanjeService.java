@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Interface koje definira komunikaciju s bazom podataka u odnosu na Natjecanje entitete
+ */
 @Service
 public interface NatjecanjeService {
     /**
@@ -52,7 +55,7 @@ public interface NatjecanjeService {
      *
      * @param natjecanjeId - jedinstveni identifikator natjecanja
      */
-    void deleteNatjecanje(Integer natjecanjeId);
+    //void deleteNatjecanje(Integer natjecanjeId);
 
 
 }
