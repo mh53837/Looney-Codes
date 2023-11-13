@@ -7,12 +7,12 @@ interface LoginProps {
 }
 
 interface LoginForm {
-    username: string;
-    password: string;
+    korisnickoIme: string;
+    lozinka: string;
 }
 
 const Login: React.FC<LoginProps> = (props) => {
-    const [loginForm, setLoginForm] = useState<LoginForm>({ username: '', password: '' });
+    const [loginForm, setLoginForm] = useState<LoginForm>({ korisnickoIme: '', lozinka: '' });
     const [error, setError] = useState<string>('');
 
     function onChange(event: ChangeEvent<HTMLInputElement>) {
@@ -24,7 +24,7 @@ const Login: React.FC<LoginProps> = (props) => {
         e.preventDefault();
         setError('');
 
-        const credentials = btoa(`${loginForm.username}:${loginForm.password}`);
+        const credentials = btoa(`${loginForm.korisnickoIme}:${loginForm.lozinka}`);
         const options = {
             method: 'POST',
             headers: {
@@ -34,13 +34,12 @@ const Login: React.FC<LoginProps> = (props) => {
             body: JSON.stringify(loginForm),
         };
 
-        // ruta uopce nije bitna, jedino je bitno da nas server prihvaca!
-        fetch('/api/user/', options).then((response) => {
-            if (response.status === 401) {
-                setError('Login failed');
-            } else {
-                console.log('Success!');
+        fetch('/api/user/login', options).then((response) => {
+            if (response.status === 200) {
+                console.log("Success!");
                 props.onLogin();
+            } else {
+                setError('Login failed!');
             }
         });
     }
@@ -51,11 +50,11 @@ const Login: React.FC<LoginProps> = (props) => {
                 <form onSubmit={onSubmit}>
                     <div className="FormRow">
                         <label>korisničko ime</label>
-                        <input name="username" onChange={onChange} value={loginForm.username} />
+                        <input name="korisnickoIme" onChange={onChange} value={loginForm.korisnickoIme} />
                     </div>
                     <div className="FormRow">
                         <label>lozinka</label>
-                        <input name="password" type="password" onChange={onChange} value={loginForm.password} />
+                        <input name="lozinka" type="password" onChange={onChange} value={loginForm.lozinka} />
                     </div>
                     <div className="error">{error}</div>
                     <button type="submit">prijavi se!</button>
