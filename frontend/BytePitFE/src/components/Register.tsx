@@ -72,28 +72,28 @@ const Register: React.FC<RegisterProps> = (props) => {
                     
                     <div className="FormRow">
                         <label>korisničko ime</label>
-                        <input name="korisnickoIme" onChange={onChange} value={registerForm.korisnickoIme} />
+                        <input name="korisnickoIme" placeholder='korisničko ime' onChange={onChange} value={registerForm.korisnickoIme} />
                     </div>
                     <div className="FormRow">
                         <label>ime</label>
-                        <input name="ime" onChange={onChange} value={registerForm.ime} />
+                        <input name="ime" placeholder='ime' onChange={onChange} value={registerForm.ime} />
                     </div>
                     <div className="FormRow">
                         <label>prezime</label>
-                        <input name="prezime" onChange={onChange} value={registerForm.prezime} />
+                        <input name="prezime" placeholder='prezime' onChange={onChange} value={registerForm.prezime} />
                     </div>
                     <div className="FormRow">
                         <label>email</label>
-                        <input name="email" onChange={onChange} value={registerForm.email} />
+                        <input name="email" placeholder='email' onChange={onChange} value={registerForm.email} />
                     </div>
 
                     <div className="FormRow">
                         <label>lozinka</label>
-                        <input name="lozinka" type="password" onChange={onChange} value={registerForm.lozinka} />
+                        <input name="lozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.lozinka} />
                     </div>
                     <div className="FormRow">
                         <label>potvrdi lozinku</label>
-                        <input name="confirmLozinka" type="password" onChange={onChange} value={registerForm.confirmLozinka} />
+                        <input name="confirmLozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.confirmLozinka} />
                     </div>
                     <div className = "FormRow">
                         <label>uloga</label>

@@ -52,12 +52,11 @@ button {
   font-family: inherit;
   background-color: transparent;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s;
   margin: 10px;
 }
 button:hover {
-  border-color: #f4c95d;
-  background-color: #f4c95d80;
+  background-color: #dd7230;
 }
 
 

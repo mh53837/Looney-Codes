@@ -20,6 +20,14 @@ export const Navbar = () => {
                 </Link>
             </div>
         </div>
+    
+
+        <div className="loginDiv">
+        <Link to="/login">
+            <img className = "userIconImg" src="../slike/bytepit-usericon.png" alt="BytePit unregistered user icon" />
+            <button>prijavi se!</button>
+        </Link>
+        </div>
     </div>
   );
 };
