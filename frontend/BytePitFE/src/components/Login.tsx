@@ -60,7 +60,7 @@ const Login: React.FC<LoginProps> = (props) => {
                     <div className="error">{error}</div>
                     <button type="submit">prijavi se!</button>
                     <Link to="/register">
-                        <button type="button">prijava</button>
+                        <button type="button">registracija</button>
                     </Link>
                 </form>
             </div>
