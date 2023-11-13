@@ -10,10 +10,12 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +42,9 @@ public class KorisnikController{
 
   @Autowired
   private EmailService mailService;
+
+  @Autowired
+  private PasswordEncoder encoder;
 
   @Value("${BytePit.domain}")
   private String domena;
@@ -111,6 +116,27 @@ public class KorisnikController{
                           "Verify your BytePit account using this link: " +
                           domena + "/user/confirmEmail/" + korisnik.getKorisnikId());
     return korisnik;
+  }
+  /**
+   * Ruta koja sluzi za login korisnika
+   *
+   * Moguci ishodi: 200 OK, RequestDenied ako user ne postoji ili FORBIDDEN ako nije potvrden
+   *
+   * @param dto objekt koji sadrzi username i password
+   * @exception RequestDeniedException ako imamo krive podatke ili nepotvrdeni account
+   */
+  @PostMapping("/login")
+  public ResponseEntity<?> loginKorisnik(@RequestBody LoginKorisnikDTO dto) {
+    Korisnik korisnik = korisnikService.getKorisnik(dto.getKorisnickoIme())
+                                       .orElseThrow(()
+                                          -> new RequestDeniedException("Username not found!"));
+
+    if(!encoder.matches(dto.getLozinka(), korisnik.getLozinka()))
+      throw new RequestDeniedException("Wrong password!");
+
+    
+    return korisnik.isConfirmedEmail()?
+            ResponseEntity.ok(HttpStatus.OK) : ResponseEntity.ok(HttpStatus.FORBIDDEN);
   }
 
   /**
