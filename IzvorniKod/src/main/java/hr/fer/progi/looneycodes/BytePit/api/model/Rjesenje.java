@@ -12,22 +12,10 @@ import java.sql.Timestamp;
 @Entity
 public class Rjesenje {
   /**
-   * redni broj predanog rjesenja
+   * identifikator rjesenja
    */
-  @Id
-  private int rjesenjeRb;
-  /**
-   * natjecatelj koji je predao rjesenje
-   */
-  @Id
-  @ManyToOne
-  private Korisnik natjecatelj;
-  /**
-   * zadatak za koji je predano rjesenje
-   */
-  @Id
-  @ManyToOne
-  private Zadatak zadatak;
+  @EmbeddedId
+  private RjesenjeKey rjesenjeId;
   /**
    * vrijeme kad je poslano rjesenje
    * read-only, generira se u trenutku kad se salje
@@ -44,21 +32,8 @@ public class Rjesenje {
   private String programskiKod;
 
   // geteri i seteri
-  public int getRjesenjeRb() {
-    return rjesenjeRb;
-  }
-  public Korisnik getNatjecatelj() {
-    return natjecatelj;
-  }
-  public void setNatjecatelj(Korisnik natjecatelj) {
-    this.natjecatelj = natjecatelj;
-  }
-  public Zadatak getZadatak() {
-    return zadatak;
-  }
-  public void setZadatak(Zadatak zadatak) {
-    this.zadatak = zadatak;
-  }
+  public RjesenjeKey getRjesenjeId() { return rjesenjeId; }
+  public void setRjesenjeId(RjesenjeKey rjesenjeId) { this.rjesenjeId = rjesenjeId; }
   public Timestamp getVrijemeOdgovora() {
     return vrijemeOdgovora;
   }
