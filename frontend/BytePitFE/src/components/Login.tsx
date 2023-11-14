@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Login.css';
 
 interface LoginProps {
-    onLogin: () => void;
+    onLogin: (korisnickoIme: string) => void;
 }
 
 interface LoginForm {
@@ -37,7 +37,7 @@ const Login: React.FC<LoginProps> = (props) => {
         fetch('/api/user/login', options).then((response) => {
             if (response.status === 200) {
                 console.log("Success!");
-                props.onLogin();
+                props.onLogin(loginForm.korisnickoIme);
             } else {
                 setError('Login failed!');
             }
@@ -50,11 +50,11 @@ const Login: React.FC<LoginProps> = (props) => {
                 <form onSubmit={onSubmit}>
                     <div className="FormRow">
                         <label>korisničko ime</label>
-                        <input name="korisnickoIme" onChange={onChange} value={loginForm.korisnickoIme} />
+                        <input name="korisnickoIme" placeholder='korisničko ime' onChange={onChange} value={loginForm.korisnickoIme} />
                     </div>
                     <div className="FormRow">
                         <label>lozinka</label>
-                        <input name="lozinka" type="password" onChange={onChange} value={loginForm.lozinka} />
+                        <input name="lozinka" placeholder='lozinka' type="password" onChange={onChange} value={loginForm.lozinka} />
                     </div>
                     <div className="error">{error}</div>
                     <button type="submit">prijavi se!</button>
