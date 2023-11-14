@@ -6,7 +6,6 @@ COPY ../.mvn .mvn
 COPY ../mvnw .
 COPY ../pom.xml .
 COPY ../src src
-COPY ../../frontend/BytePitFE src/main/resources/static 
 RUN chmod +x mvnw
 
 # Pokretanje builda
