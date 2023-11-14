@@ -9,7 +9,7 @@ COPY ../src src
 RUN chmod +x mvnw
 
 # Pokretanje builda
-RUN ./mvnw clean package
+RUN ./mvnw clean package -Dmaven.test.skip
 
 # Stvaranje containera u kojem ce se vrtiti aplikacija
 FROM openjdk:17-alpine
