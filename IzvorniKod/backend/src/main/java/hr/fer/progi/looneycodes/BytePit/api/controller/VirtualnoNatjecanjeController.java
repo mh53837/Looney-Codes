@@ -16,7 +16,7 @@ import java.util.List;
  * @see VirtualnoNatjecanje
  */
 @RestController
-@RequestMapping("/virtualnaNatjecanja")
+@RequestMapping("/api/virtualnaNatjecanja")
 public class VirtualnoNatjecanjeController {
 
     @Autowired

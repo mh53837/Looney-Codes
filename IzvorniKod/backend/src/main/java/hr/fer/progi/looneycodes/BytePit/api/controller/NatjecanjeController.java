@@ -14,7 +14,7 @@ import java.util.List;
  * @see Natjecanje
  */
 @RestController
-@RequestMapping("/natjecanja")
+@RequestMapping("/api/natjecanja")
 public class NatjecanjeController {
 
     @Autowired
