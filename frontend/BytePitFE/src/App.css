@@ -11,3 +11,16 @@ body {
   box-sizing: border-box;
 }
 
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.react-calendar {
+  width: 100vh !important;
+
+}
+
