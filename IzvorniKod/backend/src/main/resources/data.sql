@@ -1,3 +1,5 @@
+DROP TABLE virtualno_natjecanje;
+
 DELETE FROM rjesenje;
 DELETE FROM testni_primjer;
 DELETE FROM pehar;
