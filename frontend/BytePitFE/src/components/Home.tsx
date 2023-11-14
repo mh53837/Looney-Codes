@@ -1,20 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {GetHome} from "../hooks/usersAPI";
 
 
-const Home: React.FC = () => {
-    GetHome();
+interface HomeProps {
+    loggedInUser: string | null;
+  }
+  
+  const Home: React.FC<HomeProps> = ({ loggedInUser }) => {
     return (
-        <div>
-            <Link to="/login">
-                <button>prijavi se!</button>
-            </Link>
-            <Link to="/register">
-                <button>registriraj se!</button>
-            </Link>
-        </div>
+      <div>
+        
+        {loggedInUser ? (
+          <div>
+            <p>pozdrav, {loggedInUser}!</p>
+            {/* Additional content for logged-in users */}
+          </div>
+        ) : (
+          <div>
+            <p>pozdrav, nepoznati korisnik!</p>
+          </div>
+        )}
+
+        <p>*kalendar*</p>
+      </div>
     );
-};
+  };
 
 export default Home;

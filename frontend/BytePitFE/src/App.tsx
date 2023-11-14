@@ -4,40 +4,55 @@ import Home from './components/Home';
 import ProblemsList from './components/ProblemsList.tsx';
 import Login from './components/Login.tsx';
 import { Navbar } from './layout/Navbar.tsx';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from "./components/Register.tsx";
 import { useState } from 'react';
 
-const App = () => {
+const App: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
+
 
     const handleLogin = (korisnickoIme: string) => {
         setLoggedInUser(korisnickoIme);
+        setRedirectToHome(true);
+
+        setTimeout(() => {
+            setRedirectToHome(false);
+        }, 100);
     };
 
     const handleLogout = () => {
         setLoggedInUser(null);
+        setRedirectToHome(true);
+
+        setTimeout(() => {
+            setRedirectToHome(false);
+        }, 100);
     };
     
     return (
         <Router>
-            <Navbar />
+            <Navbar loggedInUser={loggedInUser} onLogout={handleLogout}/>
+            {redirectToHome && <Navigate to="/" replace={true} />} 
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home loggedInUser={loggedInUser} />} />
                     <Route path="/user/all" element={<UserList />} />
                     <Route path="/problems/all" element={<ProblemsList />} />
-                    <Route path="/login" element={
-                    <div>
-                        {loggedInUser ? (
+                    <Route
+                        path="/login"
+                        element={
                             <div>
-                                <p>pozdrav, {loggedInUser}!</p>
+                            {loggedInUser ? (
+                                <div>
                                 <button onClick={handleLogout}>odjavi se!</button>
-                                {/*  */}
+                                </div>
+                            ) : (
+                                <Login onLogin={handleLogin} />
+                            )}
                             </div>
-                        ) : (
-                            <Login onLogin={handleLogin} />
-                        )}
-                    </div>} />
+                        }
+                    />
                     <Route path="/register" element={<Register onRegister={() => console.log('User registered!')} />} />
                 </Routes>
         </Router>

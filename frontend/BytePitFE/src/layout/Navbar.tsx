@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Import the CSS file for styling
+import './Navbar.css';
+import React from 'react';
 
-export const Navbar = () => {
-  return (
+
+interface NavbarProps {
+    loggedInUser: string | null;
+    onLogout: () => void;
+  }
+
+export const Navbar: React.FC<NavbarProps> = ({ loggedInUser, onLogout }) => {
+
+    return (
+
     <div className="navbar-container">
       <div className="logo-container">
           <Link to="/">
@@ -23,13 +32,20 @@ export const Navbar = () => {
             </div>
         </div>
     
-
+        {loggedInUser ? (
         <div className="loginDiv">
-        <Link to="/login">
-            <img className = "userIconImg" src="../slike/bytepit-usericon.png" alt="BytePit unregistered user icon" />
-            <button>prijavi se!</button>
-        </Link>
+          <Link to="/login">
+          <button onClick={onLogout}>odjavi se!</button>
+          </Link>
         </div>
+        ) : (
+        <div className="loginDiv">
+          <Link to="/login">
+            <img className="userIconImg" src="../slike/bytepit-usericon.png" alt="BytePit unregistered user icon" />
+            <button>prijavi se!</button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
