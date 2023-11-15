@@ -46,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ loggedInUser, onLogout }) => {
           </Link>
         </div>
       )}
+
     </div>
   );
 };

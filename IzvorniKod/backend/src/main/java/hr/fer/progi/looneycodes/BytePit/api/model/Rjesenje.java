@@ -16,6 +16,7 @@ public class Rjesenje {
    */
   @EmbeddedId
   private RjesenjeKey rjesenjeId;
+
   /**
    * vrijeme kad je poslano rjesenje
    * read-only, generira se u trenutku kad se salje
@@ -44,3 +45,4 @@ public class Rjesenje {
     return programskiKod;
   }
 }
+

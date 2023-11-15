@@ -28,8 +28,10 @@ const Home: React.FC<HomeProps> = ({ loggedInUser }) => {
             <div className="selected-date-container">
                 Selected date: {date.toDateString()}
             </div>
+
         </div>
     );
 };
 
 export default Home;
+

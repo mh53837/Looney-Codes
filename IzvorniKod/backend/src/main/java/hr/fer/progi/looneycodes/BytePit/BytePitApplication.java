@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class BytePitApplication implements WebMvcConfigurer {
 
+
   @Bean
   public PasswordEncoder pswdEcoder(){
     return new BCryptPasswordEncoder();
@@ -21,8 +22,5 @@ public class BytePitApplication implements WebMvcConfigurer {
     registry.addViewController("/").setViewName("index.html");
   }
 
-	public static void main(String[] args) {
-		SpringApplication.run(BytePitApplication.class, args);
-	}
 
 }

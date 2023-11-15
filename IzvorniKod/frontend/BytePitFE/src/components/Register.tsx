@@ -128,6 +128,7 @@ const Register: React.FC<RegisterProps> = (props) => {
 
                     <div className="error">{error}</div>
                     <div className="poruka">{poruka}</div>
+
                     <button type="submit">registriraj se!</button>
                 </form>
             </div>

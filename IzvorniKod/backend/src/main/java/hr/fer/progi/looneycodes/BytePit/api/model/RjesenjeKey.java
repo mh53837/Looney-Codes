@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+
 @Embeddable
 public class RjesenjeKey implements Serializable {
+
 
   private static final long serialVersionUID = 1L;
 

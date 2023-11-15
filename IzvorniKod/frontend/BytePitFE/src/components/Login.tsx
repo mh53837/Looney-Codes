@@ -38,6 +38,7 @@ const Login: React.FC<LoginProps> = (props) => {
             if (response.status === 200) {
                 console.log("Success!");
                 props.onLogin(loginForm.korisnickoIme);
+
             } else {
                 setError('Login failed!');
             }
@@ -55,6 +56,7 @@ const Login: React.FC<LoginProps> = (props) => {
                     <div className="FormRow">
                         <label>lozinka</label>
                         <input name="lozinka" placeholder='lozinka' type="password" onChange={onChange} value={loginForm.lozinka} />
+
                     </div>
                     <div className="error">{error}</div>
                     <button type="submit">prijavi se!</button>
