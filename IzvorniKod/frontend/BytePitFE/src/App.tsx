@@ -3,6 +3,7 @@ import './App.css';
 import Home from './components/Home';
 import ProblemsList from './components/ProblemsList.tsx';
 import Login from './components/Login.tsx';
+import ConfirmRegAdmin from './components/ConfirmRegAdmin.tsx';
 import ConfirmEmail from './components/ConfirmEmail.tsx';
 import { Navbar } from './layout/Navbar.tsx';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -64,6 +65,17 @@ const App: React.FC = () => {
                     />
 
                     <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
+                    <Route path="/user/listRequested" element={
+                        <div>
+                        {loggedInUser ? (
+                            <div>
+                            <ConfirmRegAdmin />
+                            </div>
+                        ) : (
+                            <p>moras bit ulogiran</p>)}
+                        </div>
+                    }/>
+                                        
                 </Routes>
         </Router>
     );   

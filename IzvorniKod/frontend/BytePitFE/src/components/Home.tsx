@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -69,7 +70,9 @@ const Home: React.FC<HomeProps> = ({ loggedInUser }) => {
             {loggedInUser ? (
                 <div>
                     <p>Pozdrav, {loggedInUser}!</p>
-                    {/* Dodatni sadržaj za ulogirane korisnike */}
+                    {loggedInUser === 'admin' ? (
+                        <Link to="/user/listRequested">odobri voditelje</Link>
+                    ) : (<p></p>)}
                 </div>
             ) : (
                 <div>
