@@ -11,6 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class BytePitApplication implements WebMvcConfigurer {
 
+  public static void main(String[] args) {
+    SpringApplication.run(BytePitApplication.class, args);
+  }
 
   @Bean
   public PasswordEncoder pswdEcoder(){
