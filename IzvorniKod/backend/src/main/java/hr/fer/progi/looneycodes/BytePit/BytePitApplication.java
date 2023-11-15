@@ -22,5 +22,8 @@ public class BytePitApplication implements WebMvcConfigurer {
     registry.addViewController("/").setViewName("index.html");
   }
 
+   public static void main(String[] args) {
+    SpringApplication.run(BytePitApplication.class, args);
+  }
 
 }

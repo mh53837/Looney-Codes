@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/trophies")
+@RequestMapping("/api/trophies")
 public class PeharController {
 
     @Autowired

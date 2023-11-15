@@ -35,7 +35,7 @@ import java.util.Optional;
  * @see Korisnik
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class KorisnikController{
   @Autowired
   private KorisnikService korisnikService;

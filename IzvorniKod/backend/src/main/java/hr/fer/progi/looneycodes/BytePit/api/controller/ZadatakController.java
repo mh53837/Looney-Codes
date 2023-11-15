@@ -29,7 +29,7 @@ import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
  * 
  */
 @RestController
-@RequestMapping("/problems")
+@RequestMapping("/api/problems")
 public class ZadatakController {
 	@Autowired
 	private ZadatakService zadatakService;
