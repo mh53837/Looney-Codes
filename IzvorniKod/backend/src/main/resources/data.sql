@@ -1,10 +1,10 @@
+DELETE FROM virtualno_natjecanje;
 DELETE FROM rjesenje;
 DELETE FROM testni_primjer;
 DELETE FROM pehar;
 DELETE FROM zadatak;
 DELETE FROM natjecanje;
 DELETE FROM korisnik;
-DELETE FROM virtualno_natjecanje;
 DROP SEQUENCE korisnik_seq;
 DROP SEQUENCE natjecanje_seq;
 DROP SEQUENCE pehar_seq;
