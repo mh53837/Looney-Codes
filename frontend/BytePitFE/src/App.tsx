@@ -3,6 +3,7 @@ import './App.css';
 import Home from './components/Home';
 import ProblemsList from './components/ProblemsList.tsx';
 import Login from './components/Login.tsx';
+import ConfirmEmail from './components/ConfirmEmail.tsx';
 import { Navbar } from './layout/Navbar.tsx';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from "./components/Register.tsx";
@@ -53,7 +54,16 @@ const App: React.FC = () => {
                             </div>
                         }
                     />
-                    <Route path="/register" element={<Register onRegister={() => console.log('User registered!')} />} />
+                    <Route path="/register" element={
+                        <div>
+                            <Register onRegister={() => console.log('User registered!')} />
+                        </div>
+                    
+                        }
+                        
+                    />
+
+                    <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
                 </Routes>
         </Router>
     );   
