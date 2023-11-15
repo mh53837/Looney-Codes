@@ -1,4 +1,6 @@
 IzvorniKod/.classpath
 IzvorniKod/.project
 IzvorniKod/.settings
-IzvorniKod/target
+IzvorniKod/backend/target
+IzvorniKod/frontend/node_modules
+*.idea
