@@ -57,6 +57,12 @@
     margin-bottom: 8px;
 }
 
+.Register .poruka {
+    color: rgb(67, 179, 2);
+    margin-bottom: 8px;
+}
+
+
 .Register .RadioLbl input{
     margin: 0px;
     padding: 0px;

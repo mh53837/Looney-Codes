@@ -26,6 +26,8 @@ const Register: React.FC<RegisterProps> = (props) => {
         confirmLozinka: '',
     });
     const [error, setError] = useState<string>('');
+    const [poruka, setPoruka] = useState<string>('');
+
 
     const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRegisterForm({
@@ -44,7 +46,7 @@ const Register: React.FC<RegisterProps> = (props) => {
         setError('');
 
         if (registerForm.lozinka !== registerForm.confirmLozinka) {
-            setError('Passwords do not match');
+            setError('lozinke se ne podudaraju!');
             return;
         }
 
@@ -58,8 +60,13 @@ const Register: React.FC<RegisterProps> = (props) => {
 
         fetch('/api/user/register', options).then((response) => {
             if (response.status === 401) {
-                setError('Registration failed');
-            } else {
+                setError('došlo je do pogreške, pokušaj ponovno!');
+            }  else if (response.status === 400) {
+                setError('korisničko ime je zauzeto, pokušaj ponovno!');
+            }
+            
+            else {
+                setPoruka('provjeri mail kako bi potvrdio registraciju!')
                 props.onRegister();
             }
         });
@@ -120,6 +127,8 @@ const Register: React.FC<RegisterProps> = (props) => {
                     </div>
 
                     <div className="error">{error}</div>
+                    <div className="poruka">{poruka}</div>
+
                     <button type="submit">registriraj se!</button>
                 </form>
             </div>
