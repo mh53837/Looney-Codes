@@ -28,3 +28,11 @@
 - Teme sastanka:
 	– zajednička diskusija o dosad odrađenim zadacima
 	– konkretna raspodjela daljnjih poslova i uloga
+
+5. sastanak
+- Datum: 15. studenog 2023.
+- Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
+Teme sastanka:
+	- pregled svih odrađenih zadataka
+	- diskusija o predaji projekta 17.11.
+     	- deployment aplikacije
