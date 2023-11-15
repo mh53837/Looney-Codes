@@ -17,7 +17,7 @@ const ConfirmEmail:React.FC = () => {
                         if (response.status === 200) {
                             console.log("Success!");
                             setErrorPoruka('uspješno si potvrdio svoju email adresu!');
-                        } else if (response.status === 500) {
+                        } else if (response.status === 404) {
                             setErrorPoruka('korisnik ne postoji!');
                         } else if (response.status === 400) {
                             setErrorPoruka('uspješno si potvrdio svoju email adresu!');
