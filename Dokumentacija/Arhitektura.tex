@@ -203,11 +203,29 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 
 \section{Dijagram razreda}
 
-\textit{Potrebno je priložiti dijagram razreda s pripadajućim opisom. Zbog preglednosti je moguće dijagram razlomiti na više njih, ali moraju biti grupirani prema sličnim razinama apstrakcije i srodnim funkcionalnostima.}\\
+Na slikama 4.3 i 4.4 prikazani su dijagrami razreda koji predstavljaju backend dio arhitekture.
+Prva slika opisuje servise, odnosno njihovu implementaciju i prikazani su atributi i metode u pojedinim razredima.
+Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitorijima koji su između ostalog prikazani na slici 4.4.
+Osim repozitorija, na slici 4.4 prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
+Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose prethodno navedenih razreda. \\
 
-\textbf{\textit{dio 1. revizije}}\\
+Razred Korisnik predstavlja neregistriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav.
+Razred Natjecanje definira naziv, početak i kraj natjecanja te voditelja. Razred Pehar je entitet u kojeg spremamo koje mjesto je osvojio natjecatelj na nekom natjecanju i sliku pehara.
+Razred uloga je enumeracija koja definira ulogu korisnika (admin, natjecatelj ili voditelj). Razred zadatak je entitet koji predstavlja određeni problem na natjecanju i sadrži referencu na testne primjere.
+Testni primjer sadrži informacije o tesnim primjerima za pojedinačni zadatak. Razred Rjesenje predstavlja predano rješenje pojedinog korisnika za zadatak. 
+Razred Virtualno natjecanje predstavlja natjecanje koje se može naknadno pokrenuti i rješavati. 
 
-\textit{Prilikom prve predaje projekta, potrebno je priložiti potpuno razrađen dijagram razreda vezan uz \textbf{generičku funkcionalnost} sustava. Ostale funkcionalnosti trebaju biti idejno razrađene u dijagramu sa sljedećim komponentama: nazivi razreda, nazivi metoda i vrste pristupa metodama (npr. javni, zaštićeni), nazivi atributa razreda, veze i odnosi između razreda.}\\
+\begin{figure}[H]
+	\includegraphics[scale=0.19]{slike/serviceDiagram.png}
+	\centering
+	\caption{Dijagram razreda - Servisi}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.19]{slike/apiDiagram.png}
+	\centering
+	\caption{Dijagram razreda - Kontroleri, Repozitoriji i Modeli}
+\end{figure}
 
 \textbf{\textit{dio 2. revizije}}\\
 
