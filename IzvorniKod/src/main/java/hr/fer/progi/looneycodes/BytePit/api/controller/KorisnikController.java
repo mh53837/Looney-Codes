@@ -151,7 +151,7 @@ public class KorisnikController{
     Optional<Korisnik> korisnik = korisnikService.fetch(id);
 
     if(korisnik.isEmpty())
-      throw new NotFoundException("Korisnik s id-em: " + korisnik.get().getKorisnikId() + " ne postoji!");
+      throw new NotFoundException("Korisnik s id-em: " + id + " ne postoji!");
     if(korisnik.get().isConfirmedEmail())
       throw new RequestDeniedException("Korisnik je vec potvrdio svoju email adresu!");
 
