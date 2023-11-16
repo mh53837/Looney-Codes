@@ -6,23 +6,43 @@ export interface IUser {
     korisnickoIme:string;
     ime:string;
     prezime:string;
-    email: string
+    email: string;
+    uloga: string;
 }
 
-const ConfirmRegAdmin: React.FC = () => {
+interface ConfirmRegAdminProps {
+    loggedInUser: string | null;
+    loggedInUserPass : string | null;
+}
+
+const ConfirmRegAdmin: React.FC<ConfirmRegAdminProps> = ({loggedInUser, loggedInUserPass}) => {
     const [users, setUsers] = useState<IUser[]>([]);
+
 
     const handleButtonClick = async (korisnickoIme : string) => {
         console.log(`Button clicked for user: ${korisnickoIme}`);
 
+        const credentials = btoa(`${loggedInUser}:${loggedInUserPass}`);
         try {
-            const response = await fetch(`/api/confirmRequest/${korisnickoIme}`);
-            if (response.ok) {
-              const data = await response.json();
-              console.log('Response data:', data);
-            } else {
-              console.error('Error fetching data:', response.statusText);
-            }
+            const options = {
+                method: 'POST',
+                headers: {
+                      'Authorization': `Basic ${credentials}`,
+                      'Content-Type': 'application/json'
+                },
+            };
+    
+            fetch(`/api/user/confirmRequest/${korisnickoIme}`, options).then((response) => {
+                if (response.status === 200) {
+                    console.log("okej!");
+                    setUsers(prevUsers => prevUsers.filter(user => user.korisnickoIme !== korisnickoIme));
+
+    
+                } else {
+                    console.log("nije okej!");
+                }
+            });
+
           } catch (error) {
             console.error('Error:', error);
           }
@@ -30,11 +50,24 @@ const ConfirmRegAdmin: React.FC = () => {
     };
 
     useEffect(() => {
-        fetch('/api/user/listRequested')
+        const credentials = btoa(`${loggedInUser}:${loggedInUserPass}`);
+        try {
+            const options = {
+                method: 'GET',
+                headers: {
+                      'Authorization': `Basic ${credentials}`,
+                      'Content-Type': 'application/json'
+                },
+            };
+        fetch('/api/user/listRequested', options)
             .then(response => response.json())
             .then((data: IUser[]) => setUsers(data))
             .catch(error => console.error('Error fetching users:', error));
-    }, []);
+
+        } catch (error) {
+            console.error('Error:', error);
+          }
+    }, [loggedInUser, loggedInUserPass]);
 
     return (
         <div className="user-info-table">

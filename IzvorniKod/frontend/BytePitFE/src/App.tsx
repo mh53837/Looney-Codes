@@ -12,11 +12,14 @@ import { useState } from 'react';
 
 const App: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+    const [loggedInUserPass, setLoggedInUserPass] = useState<string | null>(null);
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
 
 
-    const handleLogin = (korisnickoIme: string) => {
+    const handleLogin = (korisnickoIme: string, lozinka:string) => {
         setLoggedInUser(korisnickoIme);
+        setLoggedInUserPass(lozinka);
+
         setRedirectToHome(true);
 
         setTimeout(() => {
@@ -26,12 +29,15 @@ const App: React.FC = () => {
 
     const handleLogout = () => {
         setLoggedInUser(null);
+        setLoggedInUserPass(null);
         setRedirectToHome(true);
 
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
     };
+
+    
     
     return (
         <Router>
@@ -69,10 +75,10 @@ const App: React.FC = () => {
                         <div>
                         {loggedInUser ? (
                             <div>
-                            <ConfirmRegAdmin />
+                            <ConfirmRegAdmin loggedInUser={loggedInUser} loggedInUserPass = {loggedInUserPass}/>
                             </div>
                         ) : (
-                            <p>moras bit ulogiran</p>)}
+                            <p>moras biti prijavljen kao admin</p>)}
                         </div>
                     }/>
                                         

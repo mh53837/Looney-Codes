@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Login.css';
 
 interface LoginProps {
-    onLogin: (korisnickoIme: string) => void;
+    onLogin: (korisnickoIme: string, lozinka:string) => void;
 }
 
 interface LoginForm {
@@ -37,7 +37,7 @@ const Login: React.FC<LoginProps> = (props) => {
         fetch('/api/user/login', options).then((response) => {
             if (response.status === 200) {
                 console.log("Success!");
-                props.onLogin(loginForm.korisnickoIme);
+                props.onLogin(loginForm.korisnickoIme, loginForm.lozinka);
 
             } else {
                 setError('Login failed!');
