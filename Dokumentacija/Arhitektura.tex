@@ -125,7 +125,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					\SetCell{LightBlue}NatjecateljID	 & INT &  Jedinstveni identifikator natjecatelja 	\\ \hline 
 					\SetCell{LightBlue}NatjecanjeID & INT &  Jedinstveni identifikator natjecanja	\\ \hline 
 					Mjesto & INT & Mjesto koje je dobiveno peharom (1, 2 ili 3) \\ \hline
-					SlikaPehara & BYTEA & Slika dobivenog pehara \\ \hline
+					SlikaPehara & PATH & Slika dobivenog pehara \\ \hline
 				\end{longtblr}
 
 \textbf{Zadatak} \quad Ovaj enitet sadržava sve bitne značajke za definiciju jednog zadataka u aplikaciji. Atributi koje sadržava su: zadatakID, natjecanjeID, voditeljID, nazivZadatka, brojBodova, vremenskoOgranicenje, tekstZadatka te privatniZadatak. Ovaj entitet ima \textit{One-To-Many} vezu sa slabim entitetom testniPrimjer preko atributa zadatakID. Vanjskim ključem natjecanjeID stvorena je opcionalna \textit{Many-To-One} veza sa entitetom natjecanje. Postoji i \textit{One-To-Many} veza s entitetom rješenje preko atributa zadatakID. \textit{Many-To-One} veza postoji i sa entitetom korisnik preko vanjskog ključa voditeljID (označava identifikator korisnika s ulogom voditelja).
@@ -209,20 +209,20 @@ Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitori
 Osim repozitorija, na slici 4.4 prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
 Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose prethodno navedenih razreda. \\
 
-Razred Korisnik predstavlja neregistriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav.
+Razred Korisnik predstavlja registriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav.
 Razred Natjecanje definira naziv, početak i kraj natjecanja te voditelja. Razred Pehar je entitet u kojeg spremamo koje mjesto je osvojio natjecatelj na nekom natjecanju i sliku pehara.
 Razred uloga je enumeracija koja definira ulogu korisnika (admin, natjecatelj ili voditelj). Razred zadatak je entitet koji predstavlja određeni problem na natjecanju i sadrži referencu na testne primjere.
 Testni primjer sadrži informacije o tesnim primjerima za pojedinačni zadatak. Razred Rjesenje predstavlja predano rješenje pojedinog korisnika za zadatak. 
 Razred Virtualno natjecanje predstavlja natjecanje koje se može naknadno pokrenuti i rješavati. 
 
 \begin{figure}[H]
-	\includegraphics[scale=0.19]{slike/serviceDiagram.png}
+	\includegraphics[scale=0.19]{dijagrami/serviceDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Servisi}
 \end{figure}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.19]{slike/apiDiagram.png}
+	\includegraphics[scale=0.39]{dijagrami/apiDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Kontroleri, Repozitoriji i Modeli}
 \end{figure}
