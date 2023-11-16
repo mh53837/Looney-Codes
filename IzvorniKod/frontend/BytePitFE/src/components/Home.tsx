@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { UserContext } from '../context/userContext';
+import { useContext } from 'react';
 
-interface HomeProps {
-    loggedInUser: string | null;
-}
+
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -15,10 +15,12 @@ interface Natjecanje {
     voditeljId: number;
 }
 
-const Home: React.FC<HomeProps> = ({ loggedInUser }) => {
+const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
+
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,10 +69,10 @@ const Home: React.FC<HomeProps> = ({ loggedInUser }) => {
 
     return (
         <div>
-            {loggedInUser ? (
+            {user.korisnickoIme !== '' ? (
                 <div>
-                    <p>Pozdrav, {loggedInUser}!</p>
-                    {loggedInUser === 'admin' ? (
+                    <p>Pozdrav, {user.korisnickoIme}!</p>
+                    {user.korisnickoIme === 'admin' ? (
                         <Link to="/user/listRequested">odobri voditelje</Link>
                     ) : (<p></p>)}
                 </div>

@@ -1,5 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
 import './Login.css';
 
 interface LoginProps {
@@ -14,6 +16,7 @@ interface LoginForm {
 const Login: React.FC<LoginProps> = (props) => {
     const [loginForm, setLoginForm] = useState<LoginForm>({ korisnickoIme: '', lozinka: '' });
     const [error, setError] = useState<string>('');
+    const { setUser } = useContext(UserContext)!;
 
     function onChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
@@ -37,6 +40,7 @@ const Login: React.FC<LoginProps> = (props) => {
         fetch('/api/user/login', options).then((response) => {
             if (response.status === 200) {
                 console.log("Success!");
+                setUser({ korisnickoIme: loginForm.korisnickoIme, lozinka: loginForm.lozinka});
                 props.onLogin(loginForm.korisnickoIme, loginForm.lozinka);
 
             } else {

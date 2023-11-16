@@ -8,19 +8,21 @@ import ConfirmEmail from './components/ConfirmEmail.tsx';
 import { Navbar } from './layout/Navbar.tsx';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from "./components/Register.tsx";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from './context/userContext';
 
 const App: React.FC = () => {
-    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-    const [loggedInUserPass, setLoggedInUserPass] = useState<string | null>(null);
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
+
+    const { user } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
 
 
     const handleLogin = (korisnickoIme: string, lozinka:string) => {
-        setLoggedInUser(korisnickoIme);
-        setLoggedInUserPass(lozinka);
 
         setRedirectToHome(true);
+        
+        setUser({ korisnickoIme, lozinka });
 
         setTimeout(() => {
             setRedirectToHome(false);
@@ -28,9 +30,9 @@ const App: React.FC = () => {
     };
 
     const handleLogout = () => {
-        setLoggedInUser(null);
-        setLoggedInUserPass(null);
         setRedirectToHome(true);
+
+        setUser({ korisnickoIme: '', lozinka: '' });
 
         setTimeout(() => {
             setRedirectToHome(false);
@@ -41,17 +43,17 @@ const App: React.FC = () => {
     
     return (
         <Router>
-            <Navbar loggedInUser={loggedInUser} onLogout={handleLogout}/>
+            <Navbar loggedInUser={user.korisnickoIme} onLogout={handleLogout}/>
             {redirectToHome && <Navigate to="/" replace={true} />} 
                 <Routes>
-                <Route path="/" element={<Home loggedInUser={loggedInUser} />} />
+                <Route path="/" element={<Home />} />
                     <Route path="/user/all" element={<UserList />} />
                     <Route path="/problems/all" element={<ProblemsList />} />
                     <Route
                         path="/login"
                         element={
                             <div>
-                            {loggedInUser ? (
+                            {user.korisnickoIme !== '' ? (
                                 <div>
                                 <button onClick={handleLogout}>odjavi se!</button>
                                 </div>
@@ -73,9 +75,9 @@ const App: React.FC = () => {
                     <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
                     <Route path="/user/listRequested" element={
                         <div>
-                        {loggedInUser ? (
+                        {user ? (
                             <div>
-                            <ConfirmRegAdmin loggedInUser={loggedInUser} loggedInUserPass = {loggedInUserPass}/>
+                            <ConfirmRegAdmin loggedInUser={user.korisnickoIme} loggedInUserPass = {user.lozinka}/>
                             </div>
                         ) : (
                             <p>moras biti prijavljen kao admin</p>)}

@@ -37,7 +37,6 @@ const ConfirmRegAdmin: React.FC<ConfirmRegAdminProps> = ({loggedInUser, loggedIn
                     console.log("okej!");
                     setUsers(prevUsers => prevUsers.filter(user => user.korisnickoIme !== korisnickoIme));
 
-    
                 } else {
                     console.log("nije okej!");
                 }
