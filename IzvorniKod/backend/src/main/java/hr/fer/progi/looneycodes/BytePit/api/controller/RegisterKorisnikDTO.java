@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+
 // local imports
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
@@ -34,14 +35,14 @@ public class RegisterKorisnikDTO {
   /**
    * profilna slika
    */
-  private byte[] fotografija;
+  private String fotografija;
 
 // geteri i seteri
-  public byte[] getFotografija() {
+  public String getFotografija() {
     return fotografija;
   }
-  public void setFotografija(byte[] fotografija) {
-    this.fotografija = fotografija;
+  public void setFotografija(String string) {
+    this.fotografija = string;
   }
   public String getIme() {
     return ime;

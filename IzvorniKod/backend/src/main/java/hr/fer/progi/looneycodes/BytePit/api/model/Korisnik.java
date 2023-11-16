@@ -55,7 +55,7 @@ public class Korisnik{
 /**
    * profilna slika korisnika
    */
-  private byte[] fotografija;
+  private String fotografija;
   /**
    * vrijeme registracije, read-only (samo geter postoji)
    */
@@ -155,10 +155,10 @@ public class Korisnik{
   public void setEmail(String email) {
     this.email = email;
   }
-  public byte[] getFotografija() {
+  public String getFotografija() {
     return fotografija;
   }
-  public void setFotografija(byte[] fotografija) {
+  public void setFotografija(String fotografija) {
     this.fotografija = fotografija;
   }
   public Timestamp getVrijemeRegistracije() {
