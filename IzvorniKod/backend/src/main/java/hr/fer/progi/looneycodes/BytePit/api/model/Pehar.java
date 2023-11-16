@@ -1,4 +1,5 @@
 package hr.fer.progi.looneycodes.BytePit.api.model;
+import java.nio.file.Path;
 
 // spring-boot imports
 import jakarta.persistence.*;
@@ -32,7 +33,7 @@ public class Pehar {
   /**
    * slika pehara
    */
-  private byte[] slikaPehara;
+  private Path slikaPehara;
 
   // geteri i seteri
   public Integer getPeharId() {
@@ -59,10 +60,10 @@ public class Pehar {
 
     this.mjesto = mjesto;
   }
-  public byte[] getSlikaPehara() {
+  public Path getSlikaPehara() {
     return slikaPehara;
   }
-  public void setSlikaPehara(byte[] slikaPehara) {
+  public void setSlikaPehara(Path slikaPehara) {
     this.slikaPehara = slikaPehara;
   }
 }
