@@ -24,7 +24,7 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("/solutions")
+@RequestMapping("/api/solutions")
 public class RjesenjeController {
     @Autowired
     private RjesenjeService rjesenjeService;
