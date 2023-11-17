@@ -38,13 +38,18 @@ const Login: React.FC<LoginProps> = (props) => {
         };
 
         fetch('/api/user/login', options).then((response) => {
+            e.preventDefault();
+            console.log(response.status);
             if (response.status === 200) {
                 console.log("Success!");
                 setUser({ korisnickoIme: loginForm.korisnickoIme, lozinka: loginForm.lozinka});
                 props.onLogin(loginForm.korisnickoIme, loginForm.lozinka);
-
-            } else {
-                setError('Login failed!');
+            } else if (response.status === 401) {
+                setError('Neispravno korisničko ime ili lozinka!');
+            } else if (response.status === 403) {
+                setError('Email adresa nije potvrđena!');
+            }  else {
+                setError('Greška prilikom prijave, pokušajte ponovno!');
             }
         });
     }

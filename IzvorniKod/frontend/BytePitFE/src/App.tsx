@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Register from "./components/Register.tsx";
 import { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
+import NotFoundPage from "./components/NotFoundPage.tsx"
 
 const App: React.FC = () => {
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
@@ -83,7 +84,7 @@ const App: React.FC = () => {
                             <p>moras biti prijavljen kao admin</p>)}
                         </div>
                     }/>
-                                        
+                  <Route path="*" element={<NotFoundPage />} />              
                 </Routes>
         </Router>
     );   

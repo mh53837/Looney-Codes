@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+
 // local imports
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
@@ -40,6 +41,7 @@ public class RegisterKorisnikDTO {
   public String getFotografija() {
     return fotografija;
   }
+
   public void setFotografija(String fotografija) {
     this.fotografija = fotografija;
   }

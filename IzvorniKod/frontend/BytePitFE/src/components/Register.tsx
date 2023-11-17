@@ -13,6 +13,7 @@ interface RegisterForm {
     requestedUloga: string;
     lozinka: string;
     confirmLozinka: string;
+    slika: File | null;
 }
 
 const Register: React.FC<RegisterProps> = (props) => {
@@ -24,10 +25,10 @@ const Register: React.FC<RegisterProps> = (props) => {
         requestedUloga: '',
         lozinka: '',
         confirmLozinka: '',
+        slika: null,
     });
     const [error, setError] = useState<string>('');
     const [poruka, setPoruka] = useState<string>('');
-
 
     const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRegisterForm({
@@ -41,32 +42,55 @@ const Register: React.FC<RegisterProps> = (props) => {
         setRegisterForm((oldForm) => ({ ...oldForm, [name]: value }));
     }
 
+    function onSlikaChange(event: ChangeEvent<HTMLInputElement>) {
+        if (event.target.files && event.target.files.length > 0) {
+            const slika = event.target.files[0];
+            setRegisterForm((oldForm) => ({ ...oldForm, slika }));
+        }
+    }
+
     function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
 
         if (registerForm.lozinka !== registerForm.confirmLozinka) {
-            setError('lozinke se ne podudaraju!');
+            setError('Lozinke se ne podudaraju!');
             return;
         }
 
+        const formData = new FormData();
+        const jsonPart = {
+            korisnickoIme: registerForm.korisnickoIme,
+            ime: registerForm.ime,
+            prezime: registerForm.prezime,
+            email: registerForm.email,
+            requestedUloga: registerForm.requestedUloga,
+            lozinka: registerForm.lozinka,
+        };
+
+        if (registerForm.slika) {
+            formData.append('image', registerForm.slika, registerForm.slika.name);
+        } else {
+            setError("Dodajte sliku!")
+            return
+        }
+
+        formData.append('userData', new Blob([JSON.stringify(jsonPart)], { type: 'application/json' }), 'userData.json');
+
+
+
         const options = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(registerForm),
+            body: formData,
         };
 
         fetch('/api/user/register', options).then((response) => {
             if (response.status === 401) {
-                setError('došlo je do pogreške, pokušaj ponovno!');
-            }  else if (response.status === 400) {
-                setError('korisničko ime je zauzeto, pokušaj ponovno!');
-            }
-            
-            else {
-                setPoruka('provjeri mail kako bi potvrdio registraciju!')
+                setError('Došlo je do pogreške, pokušajte ponovno!');
+            } else if (response.status === 400) {
+                setError('Korisničko ime ili email je zauzet, pokušajte ponovno!');
+            } else {
+                setPoruka('Provjerite e-mail kako biste potvrdili registraciju!');
                 props.onRegister();
             }
         });
@@ -76,7 +100,6 @@ const Register: React.FC<RegisterProps> = (props) => {
         <div className="register-container">
             <div className="Register">
                 <form onSubmit={onSubmit}>
-                    
                     <div className="FormRow">
                         <label>korisničko ime</label>
                         <input name="korisnickoIme" placeholder='korisničko ime' onChange={onChange} value={registerForm.korisnickoIme} />
@@ -93,7 +116,6 @@ const Register: React.FC<RegisterProps> = (props) => {
                         <label>email</label>
                         <input name="email" placeholder='email' onChange={onChange} value={registerForm.email} />
                     </div>
-
                     <div className="FormRow">
                         <label>lozinka</label>
                         <input name="lozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.lozinka} />
@@ -102,10 +124,14 @@ const Register: React.FC<RegisterProps> = (props) => {
                         <label>potvrdi lozinku</label>
                         <input name="confirmLozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.confirmLozinka} />
                     </div>
-                    <div className = "FormRow">
+                    <div className="FormRow">
+                        <label>Slika profila</label>
+                        <input name="slika" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
+                    </div>
+                    <div className="FormRow">
                         <label>uloga</label>
-                        <div className = "RoleOptions" >
-                            <label className = "RadioLbl">
+                        <div className="RoleOptions">
+                            <label className="RadioLbl">
                                 <input
                                     type="radio"
                                     value="VODITELJ"
@@ -114,8 +140,8 @@ const Register: React.FC<RegisterProps> = (props) => {
                                 />
                                 voditelj
                             </label>
-                            <label className = "RadioLbl">
-                                <input 
+                            <label className="RadioLbl">
+                                <input
                                     type="radio"
                                     value="NATJECATELJ"
                                     checked={registerForm.requestedUloga === 'NATJECATELJ'}
@@ -125,10 +151,8 @@ const Register: React.FC<RegisterProps> = (props) => {
                             </label>
                         </div>
                     </div>
-
                     <div className="error">{error}</div>
                     <div className="poruka">{poruka}</div>
-
                     <button type="submit">registriraj se!</button>
                 </form>
             </div>

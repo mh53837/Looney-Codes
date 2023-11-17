@@ -28,7 +28,6 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     return storedUser ? JSON.parse(storedUser) : { korisnickoIme: '' , lozinka: ''};
   });
 
-  // Update local storage whenever the user data changes
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
