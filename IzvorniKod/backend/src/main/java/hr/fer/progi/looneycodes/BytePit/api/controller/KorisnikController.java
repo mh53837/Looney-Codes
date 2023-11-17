@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -162,11 +163,12 @@ public class KorisnikController{
     if(!encoder.matches(dto.getLozinka(), korisnik.getLozinka()))
       throw new RequestDeniedException("Wrong password!");
 
-    
-    return korisnik.isConfirmedEmail()?
-            ResponseEntity.ok(HttpStatus.OK) : ResponseEntity.ok(HttpStatus.FORBIDDEN);
+    if (korisnik.isConfirmedEmail()) {
+    	return ResponseEntity.ok(HttpStatus.OK);
+    } else {
+    	throw new AccessDeniedException("Korisnik nije potvrdio email!");
+    }
   }
-
   /**
    * Potvrdi email za novog korisnika.
    * @param id id korisnika kao path variable (automatski dobije za rutu link na mail)
