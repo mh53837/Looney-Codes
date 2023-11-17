@@ -21,7 +21,7 @@ public interface PeharRepository extends JpaRepository<Pehar, Integer> {
 
     /**
      * Metoda koja pronalazi pehare jednog korisnika.
-     * @param korisnik - identifikator korisnik za kojeg se traže pehari
+     * @param natjecatelj - identifikator korisnik za kojeg se traže pehari
      * @return listu pehara jednog korisnika
      */
     List<Pehar> findTrophiesByNatjecatelj(Korisnik natjecatelj);

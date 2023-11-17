@@ -34,13 +34,13 @@ public class RegisterKorisnikDTO {
   /**
    * profilna slika
    */
-  private byte[] fotografija;
+  private String fotografija;
 
 // geteri i seteri
-  public byte[] getFotografija() {
+  public String getFotografija() {
     return fotografija;
   }
-  public void setFotografija(byte[] fotografija) {
+  public void setFotografija(String fotografija) {
     this.fotografija = fotografija;
   }
   public String getIme() {
