@@ -28,7 +28,6 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 	\item Natjecanje
 	\item VirtualnoNatjecanje
 	\item Korisnik
-	\item Uloga
 	\item Pehar
 	\item Zadatak
 	\item Rješenje
@@ -146,7 +145,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					brojBodova & INT & broj bodova koliko nosi zadatak \\ \hline
 					vremenskoOgranicenje & INT & vremensko ograničenje za izvođenje predanog rješenja \\ \hline
 					privatniZadatak & BOOLEAN & zastavica koja određuje ako je zadatak privatan \\ \hline
-					\SetCell{LightBlue}VoditeljD & INT &  Jedinstveni identifikator voditelja koji je stvorio zadatak	\\ \hline 
+					\SetCell{LightBlue}VoditeljID & INT &  Jedinstveni identifikator voditelja koji je stvorio zadatak	\\ \hline 
 				\end{longtblr}
 				
 				
@@ -163,7 +162,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					\hline \SetCell[c=3]{c}{\textbf{Rješenje}}	 \\ \hline[3pt]
 					\SetCell{LightGreen}rjesenjeRb & INT & Redni broj predanog rješenja određenog korisnika za predani zadatak \\ \hline
 					\SetCell{LightBlue}ZadatakID & INT	&  	Jedinstveni  privatni identifikator zadatka  	\\ \hline
-					\SetCell{LightBlue}NatjecateljD & INT &  Jedinstveni identifikator natjecatelja koji je predao rješenje	\\ \hline 
+					\SetCell{LightBlue}NatjecateljID & INT &  Jedinstveni identifikator natjecatelja koji je predao rješenje	\\ \hline 
 					vrijemeOdgovora & TIMESTAMP & Vrijeme predaje rješenja \\ \hline
 					brojTočnihOdgovora & INT & Broj primjera koji prolaze evaluaciju \\ \hline
 					brojBodova & INT & Ostvareni broj bodova na zadatku \\ \hline
