@@ -29,14 +29,6 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #747bff;
-}
 
 h1 {
   font-size: 3.2em;
@@ -59,4 +51,18 @@ button:hover {
   background-color: #dd7230;
 }
 
+a{
+  text-decoration: none;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: black;
+  cursor: pointer;
+  transition: color 0.25s;
+  margin: 10px;
+}
 
+a:hover {
+  color: #dd7230;
+}

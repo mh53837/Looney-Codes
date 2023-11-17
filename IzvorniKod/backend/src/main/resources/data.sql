@@ -31,22 +31,22 @@ CREATE SEQUENCE virtualno_natjecanje_seq
 START 100001
 INCREMENT 1;
 
-INSERT INTO korisnik (korisnik_id, korisnicko_ime, ime, prezime, email, lozinka, uloga, vrijeme_registracije, confirmed_email) 
+INSERT INTO korisnik (korisnik_id, korisnicko_ime, ime, prezime, email, lozinka, uloga, vrijeme_registracije, confirmed_email, fotografija) 
 VALUES
 -- sifra za admina: 'adminSifra'
-(nextval('korisnik_seq'), 'admin', 'Admin', 'Administrator', 'admin@bytepit.hr', '$2y$10$Hpi8VX8KT2MyLvdoCQKX9uBprCdU2sDsAt8gx1mrznSPKmrDwHv0W', 'ADMIN', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'admin', 'Admin', 'Administrator', 'admin@bytepit.hr', '$2y$10$Hpi8VX8KT2MyLvdoCQKX9uBprCdU2sDsAt8gx1mrznSPKmrDwHv0W', 'ADMIN', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za spidermana: 'iLoveMJ'
-(nextval('korisnik_seq'), 'spiderman', 'Miles', 'Morales', 'spidey@avengers.net', '$2y$10$TnCTVD9HyIRkTrv1dcfSTuwwBCHnwV07Q9By9GHqshfiqdJltdLt.', 'NATJECATELJ', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'spiderman', 'Miles', 'Morales', 'spidey@avengers.net', '$2y$10$TnCTVD9HyIRkTrv1dcfSTuwwBCHnwV07Q9By9GHqshfiqdJltdLt.', 'NATJECATELJ', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za hulka: 'greenMonster'
-(nextval('korisnik_seq'), 'hulk', 'Bruce', 'Banner', 'hulk@avengers.net', '$2y$10$EQzrPL8ccKBY7SgXFYcRN.zxPmAhLOHoTgEXhWyHxGWIHYQWEjmXq', 'NATJECATELJ', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'hulk', 'Bruce', 'Banner', 'hulk@avengers.net', '$2y$10$EQzrPL8ccKBY7SgXFYcRN.zxPmAhLOHoTgEXhWyHxGWIHYQWEjmXq', 'NATJECATELJ', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za buttlera: 'robin'
-(nextval('korisnik_seq'), 'buttler', 'Alfred', 'Pennyworth', 'penny.alfred@justice.com', '$2y$10$q7MTDmHKnznsZBRR0Ho9N.TUEh2X4aV04V6QIrDLMY3lKfKc9.oVq', 'VODITELJ', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'buttler', 'Alfred', 'Pennyworth', 'penny.alfred@justice.com', '$2y$10$q7MTDmHKnznsZBRR0Ho9N.TUEh2X4aV04V6QIrDLMY3lKfKc9.oVq', 'VODITELJ', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za batmana: 'harleyQueen'
-(nextval('korisnik_seq'), 'batman', 'Bruce', 'Bayne', 'batman@justice.com', '$2y$10$P4eDgjwT4ykRFt74.fTwV.tIwaoLMMjunlGirBEtmNPsRrIcAcU5m', 'NATJECATELJ', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'batman', 'Bruce', 'Bayne', 'batman@justice.com', '$2y$10$P4eDgjwT4ykRFt74.fTwV.tIwaoLMMjunlGirBEtmNPsRrIcAcU5m', 'NATJECATELJ', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za furyja: 'catLover', ouch haha
-(nextval('korisnik_seq'), 'eyepatch', 'Nick', 'Fury', 'nick.fury@shield.gov', '$2y$10$p4dWESqApfxgcJ3lqatdV.tY0/li8vPIaNC0TxIeDdEgm0tupjJkq', 'VODITELJ', CURRENT_TIMESTAMP, true),
+(nextval('korisnik_seq'), 'eyepatch', 'Nick', 'Fury', 'nick.fury@shield.gov', '$2y$10$p4dWESqApfxgcJ3lqatdV.tY0/li8vPIaNC0TxIeDdEgm0tupjJkq', 'VODITELJ', CURRENT_TIMESTAMP, true, './src/main/resources/profilneSlike/placeHolder.png'),
 -- sifra za missMinutes: 'kang<3'
-(nextval('korisnik_seq'), 'missMinutes', 'Miss', 'Minutes', 'miss.minutes@tva.gov', '$2y$10$SkXSgI414ejZLRi9nq5bZeZjgYUA6JjRS1mbspjxrmseFEp.UpOb2', 'VODITELJ', CURRENT_TIMESTAMP, false);
+(nextval('korisnik_seq'), 'missMinutes', 'Miss', 'Minutes', 'miss.minutes@tva.gov', '$2y$10$SkXSgI414ejZLRi9nq5bZeZjgYUA6JjRS1mbspjxrmseFEp.UpOb2', 'VODITELJ', CURRENT_TIMESTAMP, false, './src/main/resources/profilneSlike/placeHolder.png');
 
 
 INSERT INTO natjecanje (natjecanje_id, naziv_natjecanja, voditelj_korisnik_id, pocetak_natjecanja, kraj_natjecanja) 

@@ -39,7 +39,7 @@ public class KorisnikInfoDTO {
   /**
    * profilna slika
    */
-  private byte[] fotografija;
+  private String fotografija;
 
   /**
    * konstruktor koji stvara DTO prema zadanom korisniku
@@ -56,10 +56,10 @@ public class KorisnikInfoDTO {
   }
   // geteri i seteri
 
-  public byte[] getFotografija() {
+  public String getFotografija() {
     return fotografija;
   }
-  public void setFotografija(byte[] fotografija) {
+  public void setFotografija(String fotografija) {
     this.fotografija = fotografija;
   }
   public String getKorisnickoIme() {

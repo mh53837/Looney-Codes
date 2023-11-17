@@ -32,7 +32,7 @@ public class Pehar {
   /**
    * slika pehara
    */
-  private byte[] slikaPehara;
+  private String slikaPehara;
 
   // geteri i seteri
   public Integer getPeharId() {
@@ -59,10 +59,10 @@ public class Pehar {
 
     this.mjesto = mjesto;
   }
-  public byte[] getSlikaPehara() {
+  public String getSlikaPehara() {
     return slikaPehara;
   }
-  public void setSlikaPehara(byte[] slikaPehara) {
+  public void setSlikaPehara(String slikaPehara) {
     this.slikaPehara = slikaPehara;
   }
 }

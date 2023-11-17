@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,12 +22,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 
 // java imports
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.io.IOException;
+
 
 /**
  * Kontroler koji sluzi kao pristup metodama vezane uz Korisnik entitet.
@@ -107,7 +115,28 @@ public class KorisnikController{
    * @return referenca na novi zapis korisnika u bazi
    */
   @PostMapping("/register")
-  public Korisnik addKorisnik(@RequestBody RegisterKorisnikDTO dto){
+  public Korisnik addKorisnik(@RequestPart("image") MultipartFile file, @RequestPart("userData")  RegisterKorisnikDTO dto){
+
+
+    try {
+    	int extensionIndex = file.getOriginalFilename().lastIndexOf('.');
+    	if (extensionIndex < 1) {
+    		dto.setFotografija(null);
+    	} else {
+    		String extension = file.getOriginalFilename().substring(extensionIndex);
+
+        	if (!List.of(".jpg", ".jpeg", ".png").contains(extension)) 
+        		throw new RequestDeniedException("Format slike nije podržan! Podržani formati su .jpg, .jpeg, .png");
+        	
+            Path savePath = Path.of("./src/main/resources/profilneSlike").resolve(dto.getKorisnickoIme() +  extension);
+            file.transferTo(savePath);
+            dto.setFotografija(savePath.toString());
+    	}
+    	
+    } catch (IOException e) {
+        throw new RequestDeniedException("Nije uspio upload slike");
+    }
+
     // daj mu id
     Korisnik korisnik = korisnikService.createKorisnik(dto);
     // salji mail za potvrdu registracije
@@ -134,11 +163,12 @@ public class KorisnikController{
     if(!encoder.matches(dto.getLozinka(), korisnik.getLozinka()))
       throw new RequestDeniedException("Wrong password!");
 
-    
-    return korisnik.isConfirmedEmail()?
-            ResponseEntity.ok(HttpStatus.OK) : ResponseEntity.ok(HttpStatus.FORBIDDEN);
+    if (korisnik.isConfirmedEmail()) {
+    	return ResponseEntity.ok(HttpStatus.OK);
+    } else {
+    	throw new AccessDeniedException("Korisnik nije potvrdio email!");
+    }
   }
-
   /**
    * Potvrdi email za novog korisnika.
    * @param id id korisnika kao path variable (automatski dobije za rutu link na mail)
