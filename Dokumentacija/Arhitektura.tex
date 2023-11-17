@@ -73,7 +73,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					\SetCell{LightBlue}originalnoNatjecanjeID & INT &  ID natjecanja na kojem se temelji virtualno natjecanje 	\\ \hline  
 				\end{longtblr}
 
-\textbf{Korisnik} \quad Ovaj entitet sadržava sve bitne informacije o korisniku aplikacije. Sadrži atribute: KorisnickoIme, lozinka, ime, prezime, email, fotografija, vrijemeRegistracije te ulogaID. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom Natjecanje preko atributa VoditeljID, u vezi  \textit{One-to-Many} s entitetom Zadatak preko atributa VoditeljID, u vezi  \textit{One-to-Many} s entitetom Rjesenje preko atributa NatjecateljID, te je u  \textit{One-to-Many} s entitetom Pehar preko atributa NatjecateljID. Entitet ima  \textit{Many-to-One} vezu s entitetom Uloga preko atribura UlogaID.
+\textbf{Korisnik} \quad Ovaj entitet sadržava sve bitne informacije o korisniku aplikacije. Sadrži atribute: KorisnickoIme, lozinka, ime, prezime, email, fotografija, vrijemeRegistracije te ulogaID. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom Natjecanje preko atributa VoditeljID, u vezi  \textit{One-to-Many} s entitetom Zadatak preko atributa VoditeljID, u vezi  \textit{One-to-Many} s entitetom Rjesenje preko atributa NatjecateljID, te je u  \textit{One-to-Many} s entitetom Pehar preko atributa NatjecateljID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -92,23 +92,23 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					Email & VARCHAR & elektronička pošta korisnika \\ \hline 
 					Fotografija & PATH & fotografija korisnika \\ \hline 
 					VrijemeRegistracije & TIMESTAMP & Vrijeme kada se korisnik registrirao u sustav \\ \hline 
-					\SetCell{LightBlue}UlogaID & INT & Jedinstveni identifikator uloge	\\ \hline
+					UlogaID & VARCHAR & Jedinstveni identifikator uloge	\\ \hline
 				\end{longtblr}
 				
-\textbf{Uloga} \quad Ovaj entitet predstavlja ulogu koju korisnik može poprimiti. Sadrži atribute UlogaID te UlogaNaziv. Ima  \textit{One-to-Many} vezu s entitetom Korisnik preko atributa UlogaID.
-				
-				\begin{longtblr}[
-					label=none,
-					entry=none
-					]{
-						width = \textwidth,
-						colspec={|X[9,l]|X[6, l]|X[18, l]|}, 
-						rowhead = 1,
-					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-					\hline \SetCell[c=3]{c}{\textbf{Uloga}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}UlogaID & INT	&  	Jedinstveni identifikator uloge  	\\ \hline
-					UlogaNaziv	& VARCHAR &  Naziv uloge 	\\ \hline 
-				\end{longtblr}
+%\textbf{Uloga} \quad Ovaj entitet predstavlja ulogu koju korisnik može poprimiti. Sadrži atribute UlogaID te UlogaNaziv. Ima  \textit{One-to-Many} vezu s entitetom Korisnik preko atributa UlogaID.
+%				
+%				\begin{longtblr}[
+%					label=none,
+%					entry=none
+%					]{
+%						width = \textwidth,
+%						colspec={|X[9,l]|X[6, l]|X[18, l]|}, 
+%						rowhead = 1,
+%					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+%					\hline \SetCell[c=3]{c}{\textbf{Uloga}}	 \\ \hline[3pt]
+%					\SetCell{LightGreen}UlogaID & INT	&  	Jedinstveni identifikator uloge  	\\ \hline
+%					UlogaNaziv	& VARCHAR &  Naziv uloge 	\\ \hline 
+%				\end{longtblr}
 				
 \textbf{Pehar} \quad Ovaj entitet predstavlja pehar kojeg natjecatelji (korisnici) mogu osvojiti u natjecanju. Sadrži atribute: PeharID, NatjecateljID, NatjecanjeID, Mjesto te SlikaPehara. Ovaj entitet ima  \textit{Many-to-One} vezu s entitetom Natjecanje preko atributa NatjecanjeID, te ima vezu  \textit{Many-to-One} s entitetom Korisnik preko atributa NatjecateljID.
 				
