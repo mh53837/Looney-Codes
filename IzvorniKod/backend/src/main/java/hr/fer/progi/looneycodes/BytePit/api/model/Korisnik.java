@@ -4,6 +4,7 @@ package hr.fer.progi.looneycodes.BytePit.api.model;
 import jakarta.persistence.*;
 
 // java imports
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.Arrays;
 

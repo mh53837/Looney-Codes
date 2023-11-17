@@ -41,8 +41,9 @@ public class RegisterKorisnikDTO {
   public String getFotografija() {
     return fotografija;
   }
-  public void setFotografija(String string) {
-    this.fotografija = string;
+
+  public void setFotografija(String fotografija) {
+    this.fotografija = fotografija;
   }
   public String getIme() {
     return ime;
