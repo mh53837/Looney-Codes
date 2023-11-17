@@ -1,0 +1,68 @@
+.navbar-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo-container img {
+    margin: 1rem;
+    width: 10rem;
+}
+
+.navbar-options-container {
+    flex: 1;
+    margin: 1rem;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-item {
+    padding: 15px;
+    margin: 0 10px;
+    color: #000;
+}
+
+.nav-item button {
+    margin: 20px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.userIconImg {
+    max-width: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.loginDiv {
+    background-color: transparent;
+    border: 3px solid transparent;
+    border-radius:10px;
+    padding: 1rem;
+
+}
+.loginDiv a{
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    align-items: center;
+    border: 3px solid transparent;
+    border-radius:10px;
+    padding: 0.1rem;
+    transition: border-color 0.25s;
+
+}
+.loginDiv button {
+    margin:0;
+    padding: 0.5rem;
+
+}
+.loginDiv button:hover {
+    background-color: transparent;
+}
+.loginDiv a:hover{
+    border-color: #dd7230;
+}

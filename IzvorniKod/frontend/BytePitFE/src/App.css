@@ -1,0 +1,32 @@
+body {
+  box-sizing: inherit;
+}
+#root {
+  max-width: 1280px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.react-calendar {
+  width: 100vh !important;
+
+}
+
+.naziv-natjecanje {
+  font-size: 10px;
+  margin: 2px;
+}
+
+
