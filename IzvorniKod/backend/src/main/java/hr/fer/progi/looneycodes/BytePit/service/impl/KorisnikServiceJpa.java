@@ -10,6 +10,8 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
 // java imports
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +21,8 @@ import java.time.Instant;
 
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -136,5 +140,20 @@ public class KorisnikServiceJpa implements KorisnikService {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     korisnik.setLozinka(encoder.encode(korisnik.getLozinka()));
     return korisnik;
+  }
+  public Pair<byte[], MediaType> getProfilePicture(String username) {
+    Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
+    Assert.isTrue(korisnik.isPresent(), "Korisnik s korisnickim imenom: " + username + " ne postoji!");
+    String path = korisnik.get().getFotografija();
+    Assert.notNull(path, "Korisnik nema profilnu sliku!");
+    try {
+      byte[] imageData = Files.readAllBytes(Paths.get(path));
+      String fileExtension = path.substring(path.lastIndexOf('.') + 1);
+      String contentType = "image/" + fileExtension.toLowerCase();
+      MediaType mediaType = MediaType.parseMediaType(contentType);
+      return Pair.of(imageData, mediaType);
+    } catch (Exception e) {
+      throw new RequestDeniedException("Greska prilikom čitanja slike!");
+    }
   }
 }

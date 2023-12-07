@@ -10,7 +10,9 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
@@ -202,5 +204,17 @@ public class KorisnikController{
 
     dto.setKorisnickoIme(korisnickoIme);
     return korisnikService.updateKorisnik(dto);
+  }
+  /**
+   * Dohvati profilnu sliku korisnika
+   * @param username korisnicko ime korisnika za kojeg trazimo profilnu sliku
+   * @return profilna slika korisnika
+   */
+  @GetMapping("/image/{username}")
+  public ResponseEntity<byte[]> getProfilePicture(@PathVariable("username") String username) {
+    Pair<byte[], MediaType> picture = korisnikService.getProfilePicture(username);
+    return ResponseEntity.ok()
+            .contentType(picture.getSecond())
+            .body(picture.getFirst());
   }
 }
