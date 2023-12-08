@@ -10,6 +10,7 @@ import hr.fer.progi.looneycodes.BytePit.api.repository.TestniPrimjerRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.ZadatakRepository;
 import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,6 +22,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 
 @Service
 public class RjesenjeServiceJpa implements RjesenjeService {
@@ -33,6 +39,11 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     
     @Autowired
     ZadatakRepository zadatakRepository;
+
+    @Value("${BytePit.rapidApiKey}")
+    private String apiKey;
+    @Value("${BytePit.rapidApiHost}")
+    private String apiHost;
     
     @Override
     public List<Rjesenje> listAll() {
@@ -54,23 +65,33 @@ public class RjesenjeServiceJpa implements RjesenjeService {
      */
 	@Override
 	public double evaluate(SubmissionDTO dto) {
-		Zadatak zadatak = zadatakRepository.getById(dto.getZadatakId());
+		Zadatak zadatak = zadatakRepository.getReferenceById(dto.getZadatakId());
 		
-		int count = 0, correct = 0;
+    List<TestniPrimjer> testniPrimjeri = testRepository.findByTestniPrimjerIdZadatak(zadatak);
+		int total = testniPrimjeri.size(), correct = 0;
 		
-		for(TestniPrimjer test : testRepository.findByTestniPrimjerIdZadatak(zadatak)) {
-			String json = "{"
-                    + "\"source_code\":\"" + dto.getProgramskiKod().replace("\n", "\\n") + "\","
-                    + "\"language_id\":\"52\","
-                    + "\"stdin\":\"" + test.getUlazniPodaci() + "\","
-                    + "\"expected_output\":\"" + test.getIzlazniPodaci() + "\""
-                    + "}";
+    // salji request za svaki test primjer - posle provjeravamo status
+    Queue<String> tokenQueue = new LinkedList<>();
+		for(TestniPrimjer test : testniPrimjeri) {
+			String json = String.format(
+          """
+          {
+            "source_code" : "%s",
+            "language_id" : 52,
+            "stdin" : "%s",
+            "expected_output" : "%s"
+          }
+          """,
+          dto.getProgramskiKod().replace("\n", "\\n"),
+          test.getUlazniPodaci(), test.getIzlazniPodaci()
+      );
+      System.out.println("Sending json: " + json);
 			HttpRequest request = HttpRequest.newBuilder()
 	    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*"))
 	    			.header("content-type", "application/json")
 	    			.header("Content-Type", "application/json")
-	    			.header("X-RapidAPI-Key", "960c7317cdmsh4407a23d8b9aaabp1f99d8jsnd618f8fb2e8c")
-	    			.header("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com")
+	    			.header("X-RapidAPI-Key", apiKey)
+	    			.header("X-RapidAPI-Host", apiHost)
 	    			.method("POST", HttpRequest.BodyPublishers.ofString(json))
 	    			.build();
 			
@@ -80,22 +101,32 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 			} catch (IOException | InterruptedException e) {
 				e.printStackTrace();
 			}
-	    	String token = getToken(response.body());
-	    	
-	    	
-		    //TODO pametnije napisati ovo čekanje procesuiranja
-	    	int status = 0;  	
-	    	while(status < 3) {
-	    		status = getEvaluation(token);
-	    	}
-	    	if(status == 3) {
-	    		correct++;
-	    	}
-	    	count++;
-	    	
+      String token = getToken(response.body());
+      
+      //zapamti token za posle dok bumo provjeravali rezultate evaluacije
+      tokenQueue.add(token);
+
+      // break;
 		}
-		System.out.println(correct/count*100 + "% correct");
-    	return correct/count*100;
+  
+    // provjeri rezultate
+    while(!tokenQueue.isEmpty()) {
+      String curr = tokenQueue.remove();
+      int status = getEvaluation(curr);
+
+      // nije gotovo
+      if(status < 3) {
+        tokenQueue.add(curr);
+      }
+      else if(status == 3) {
+        correct++;
+      }
+      // ak je krivo, ne brojimo nist..
+    }
+
+    // debug output
+		System.out.println(correct/total*100 + "% correct");
+    return total != 0? correct/total*100 : 0;
 	}
 	
 	/*
@@ -103,21 +134,20 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 	 */
 	private String getToken(String jsonString) {
 		ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // Pretvorba JSON stringa u Jackson JsonNode
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
+      try {
+          // Pretvorba JSON stringa u Jackson JsonNode
+          JsonNode jsonNode = objectMapper.readTree(jsonString);
 
-            // Dobivanje vrijednosti za stdout, expected_output i status
-            String token = jsonNode.get("token").asText();
+          // Dobivanje vrijednosti za stdout, expected_output i status
+          String token = jsonNode.get("token").asText();
 
-            // Ispis rezultata
-            System.out.println("token: " + token);
-            return token;
+          // Ispis rezultata
+          System.out.println("token: " + token);
+          return token;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		return null;
+      } catch (Exception e) {
+        throw new RuntimeException(jsonString);
+      }
 	}
 	
 	/*
@@ -129,8 +159,8 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 	private int getEvaluation(String token) {
 		HttpRequest request = HttpRequest.newBuilder()
     			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=true&fields=*"))
-    			.header("X-RapidAPI-Key", "960c7317cdmsh4407a23d8b9aaabp1f99d8jsnd618f8fb2e8c")
-    			.header("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com")
+    			.header("X-RapidAPI-Key", apiKey)
+    			.header("X-RapidAPI-Host", apiHost)
     			.method("GET", HttpRequest.BodyPublishers.noBody())
     			.build();
     	HttpResponse<String> response = null;
@@ -140,30 +170,31 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	String jsonString =	response.body();
+    String jsonString =	response.body();
 
-        // Koristimo Jackson ObjectMapper za parsiranje JSON-a
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // Pretvorba JSON stringa u Jackson JsonNode
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
+    // Koristimo Jackson ObjectMapper za parsiranje JSON-a
+    ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      // Pretvorba JSON stringa u Jackson JsonNode
+      JsonNode jsonNode = objectMapper.readTree(jsonString);
 
-            // Dobivanje vrijednosti za stdout, expected_output i status
-            String stdout = jsonNode.get("stdout").asText();
-            String expectedOutput = jsonNode.get("expected_output").asText();
-            Integer status = Integer.parseInt(jsonNode.get("status_id").asText());
-            
-            // Ispis rezultata
-            System.out.println("stdout: " + stdout);
-            System.out.println("expected_output: " + expectedOutput);
-            System.out.println("status: " + status);
+      // Dobivanje vrijednosti za stdout, expected_output i status
+      int status = jsonNode.get("status_id").asInt();
+      if(status < 3)
+        return status;
 
-            return status;
-            
-           
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		return 0;
+      String stdout = jsonNode.get("stdout").asText();
+      String expectedOutput = jsonNode.get("expected_output").asText();
+      // Ispis rezultata
+      System.out.println("stdout: " + stdout);
+      System.out.println("expected_output: " + expectedOutput);
+      System.out.println("status: " + status);
+
+      return status;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return -1;
 	}
 }
