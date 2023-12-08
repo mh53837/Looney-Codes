@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
@@ -26,5 +27,13 @@ public interface RjesenjeService {
      * @return lista svih rješenja zadanog natjecatelja ili null ako nema rješenja u sustavu
      */
     public List<Rjesenje> findByRjesenjeIdNatjecatelj(Korisnik natjecatelj);
+
+    /**
+     * Vrati evaluirano rješenje s brojem točnih odgovora.
+     * @param dto - SubmissionDTO 
+     * @return postotak točnih odgovora
+     * TODO pogledaj Jpa
+     */
+	public double evaluate(SubmissionDTO dto);
 
 }

@@ -77,7 +77,7 @@ VALUES
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera) 
 VALUES
 (1, 1005, 3, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'2 day'::INTERVAL, 1),
-(2, 1005, 3, '#include<bits/stdc++.h>\n int main() {string s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 2),
+(2, 1005, 3, '#include<bits/stdc++.h>\n using namespace std;\n int main() {string s;\n cin >> s;\n cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 2),
 -- syntax error (prazno rjesenje) -> ne prolaz
 (1, 1005, 5, null, CURRENT_TIMESTAMP-'16 hour'::INTERVAL, 0),
 (1, 1005, 4, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'1 day'::INTERVAL, 1),
