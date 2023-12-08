@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
@@ -22,6 +23,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Base64;
@@ -60,11 +62,9 @@ public class RjesenjeServiceJpa implements RjesenjeService {
      * TODO 
      * 	- pretvoriti dobivene podatke u Rjesenje i spremiti ga
      * 	- dodati u json kojim se zove evaluacija time_limit
-     *  - riješiti ostale TODO napomene u funkciji
-     *  ???? kaj bi sve trebalo vratti na front? dal nam trebaju podaci zakaj, de i kak pada? kak to strukturirati - možda novi DTO s detaljima evaluacije rješenja?
      */
 	@Override
-	public double evaluate(SubmissionDTO dto) {
+	public EvaluationResultDTO evaluate(SubmissionDTO dto) {
 		Zadatak zadatak = zadatakRepository.getReferenceById(dto.getZadatakId());
 		
     List<TestniPrimjer> testniPrimjeri = testRepository.findByTestniPrimjerIdZadatak(zadatak);
@@ -85,7 +85,6 @@ public class RjesenjeServiceJpa implements RjesenjeService {
           dto.getProgramskiKod().replace("\n", "\\n"),
           test.getUlazniPodaci(), test.getIzlazniPodaci()
       );
-      System.out.println("Sending json: " + json);
 			HttpRequest request = HttpRequest.newBuilder()
 	    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*"))
 	    			.header("content-type", "application/json")
@@ -110,23 +109,37 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 		}
   
     // provjeri rezultate
+    EvaluationResultDTO out = new EvaluationResultDTO();
     while(!tokenQueue.isEmpty()) {
       String curr = tokenQueue.remove();
-      int status = getEvaluation(curr);
+      String stderr = new String();
+      int status = getEvaluationStatus(curr, stderr);
 
       // nije gotovo
       if(status < 3) {
         tokenQueue.add(curr);
+        continue;
       }
-      else if(status == 3) {
+      // greska!
+      else if(status == 6) {
+        out.setCompilerOutput(Optional.of(stderr));
+        out.setTests(null);
+        break;
+      }
+
+      // tocno
+      if(status == 3) {
         correct++;
       }
-      // ak je krivo, ne brojimo nist..
+
+      out.addStatus(status);
     }
 
-    // debug output
-		System.out.println(correct/total*100 + "% correct");
-    return total != 0? correct/total*100 : 0;
+    if(out.getTests() == null)
+      return out;
+
+    out.setRezultat(total != 0? (double) correct / total : 0);
+    return out;
 	}
 	
 	/*
@@ -152,13 +165,13 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 	
 	/*
 	 * Vadi rezultate za pojedini testni primjer prema dobivenom tokenu.
+   * Ako se radi o gresci u kompajliranju, poruku o toj gresci zapisujemo u parametar "stderr"
 	 * TODO 
 	 * 	- riješiti base64 dekodiranje
-	 *  - bumo i compiler output vraćali?
 	 */
-	private int getEvaluation(String token) {
+	private int getEvaluationStatus(String token, String stderr) {
 		HttpRequest request = HttpRequest.newBuilder()
-    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=true&fields=*"))
+    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=false"))
     			.header("X-RapidAPI-Key", apiKey)
     			.header("X-RapidAPI-Host", apiHost)
     			.method("GET", HttpRequest.BodyPublishers.noBody())
@@ -167,34 +180,35 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 		try {
 			response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+      return -1; // nema smisla obradivati ak nemamo odgovor...
 		}
     String jsonString =	response.body();
 
     // Koristimo Jackson ObjectMapper za parsiranje JSON-a
     ObjectMapper objectMapper = new ObjectMapper();
+    int status = -1;
+    String stdout = new String(), expectedOutput = new String();
     try {
       // Pretvorba JSON stringa u Jackson JsonNode
       JsonNode jsonNode = objectMapper.readTree(jsonString);
 
       // Dobivanje vrijednosti za stdout, expected_output i status
-      int status = jsonNode.get("status_id").asInt();
-      if(status < 3)
-        return status;
+      status = jsonNode.get("status_id").asInt();
+      stdout = jsonNode.get("stdout").asText();
+      expectedOutput = jsonNode.get("expected_output").asText();
 
-      String stdout = jsonNode.get("stdout").asText();
-      String expectedOutput = jsonNode.get("expected_output").asText();
-      // Ispis rezultata
-      System.out.println("stdout: " + stdout);
-      System.out.println("expected_output: " + expectedOutput);
-      System.out.println("status: " + status);
-
-      return status;
+      if(status == 6) {
+        stderr = jsonNode.get("compile_output").asText();
+      }
     } catch (Exception e) {
-      e.printStackTrace();
+      return -1;
     }
 
-    return -1;
+    // Ispis rezultata
+    System.out.println("stdout: " + stdout);
+    System.out.println("expected_output: " + expectedOutput);
+    System.out.println("status: " + status);
+
+    return status;
 	}
 }
