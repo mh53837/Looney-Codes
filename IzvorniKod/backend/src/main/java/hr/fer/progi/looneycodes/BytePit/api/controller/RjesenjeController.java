@@ -67,10 +67,19 @@ public class RjesenjeController {
     }
     /*
      * Ruta za upload novog rješenja korisnika.
+     * Rezultat se vraća u obliku EvaluationResultDTO
+     *
+     * @see EvaluationResultDTO
      */
     @PostMapping("/upload")
-    public double uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
-    	return rjesenjeService.evaluate(dto);
+    public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
+    	EvaluationResultDTO resultDTO = rjesenjeService.evaluate(dto);
+
+      // TODO fali createRjesenje funkcija u rjesenjeDTO ???
+      // dodati rjesenje u bazu
+
+      // vrati resultDTO nakon kaj si ga spremil
+      return resultDTO;
     }
     
     
