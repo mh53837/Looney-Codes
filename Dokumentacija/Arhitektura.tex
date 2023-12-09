@@ -56,7 +56,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					ZavrsetakNatjecanja	& TIMESTAMP &   Vrijeme završetka natjecanja	\\ \hline 
 				\end{longtblr}
 				
-\textbf{VirtualnoNatjecanje} \quad Ovaj enitet sadržava informacije o virtualnom natjecanju koje je pokrenuo korisnik na temelju nekog natjecanja. Atributi koje sadržava su: virtualnoNatjecanjeID, natjecateljID i originalnoNatjecanjeID. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom korisnik preko atributa i vanjskog ključa korisnikID. Atribut originalnoNatjecanjeID predstavlja vanjski ključ koji se referencira na natjecanjeID u relaciji natjecanje pa se time tvori \textit{Many-To-One} veza.
+\textbf{VirtualnoNatjecanje} \quad Ovaj enitet sadržava informacije o virtualnom natjecanju koje je pokrenuo korisnik na temelju nekog natjecanja. Atributi koje sadržava su: virtualnoNatjecanjeID, natjecateljID i originalnoNatjecanjeID. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom Korisnik preko atributa i vanjskog ključa korisnikID. Atribut originalnoNatjecanjeID predstavlja vanjski ključ koji se referencira na natjecanjeID u relaciji natjecanje pa se time tvori \textit{Many-To-One} veza.
 		
 				\begin{longtblr}[
 					label=none,
