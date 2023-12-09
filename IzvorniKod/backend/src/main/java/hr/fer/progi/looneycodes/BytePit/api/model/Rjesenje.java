@@ -33,6 +33,11 @@ public class Rjesenje {
   private String programskiKod;
 
   /**
+   * Defaultni Konstruktor (da nebi sql tulil)
+   */
+  public Rjesenje() {
+  }
+  /**
    * Konstruktor za stvaranje rjesenja
    */
   public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, int brojTocnihPrimjera, String programskiKod) {

@@ -85,7 +85,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
       Rjesenje rjesenje = new Rjesenje(rjesenjeId,
                                       Timestamp.from(Instant.now()),
-                                      (int) dto.getTests().stream().filter(x -> x % 3 == 0).count(),
+                                      (int) dto.getTests().stream().filter(x -> x == 3).count(),
                                       programskiKod
                                       );
   
@@ -111,7 +111,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
           """
           {
             "source_code" : "%s",
-            "language_id" : 52,
+            "language_id" : 12,
             "stdin" : "%s",
             "expected_output" : "%s"
           }
@@ -223,7 +223,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
       // Pretvorba JSON stringa u Jackson JsonNode
       JsonNode jsonNode = objectMapper.readTree(jsonString);
 
-      // Dobivanje vrijednosti za stdout, expected_output i status
+      // Dobivanje vrijednosti za status
       status = jsonNode.get("status_id").asInt();
 
       if(status == 6) {

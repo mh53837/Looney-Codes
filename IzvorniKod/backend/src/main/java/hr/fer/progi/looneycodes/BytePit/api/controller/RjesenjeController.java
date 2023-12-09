@@ -77,6 +77,10 @@ public class RjesenjeController {
     public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
     	EvaluationResultDTO resultDTO = rjesenjeService.evaluate(dto);
 
+      // ne spremamo u bazu ako se nije dalo kompajlirati!
+      if(resultDTO.getCompilerOutput().isPresent())
+        return resultDTO;
+
       rjesenjeService.add(resultDTO, dto.getKorisnickoIme(), dto.getZadatakId(), dto.getProgramskiKod());
 
       // vrati resultDTO nakon kaj si ga spremil

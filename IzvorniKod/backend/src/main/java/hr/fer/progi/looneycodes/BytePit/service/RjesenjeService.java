@@ -43,7 +43,9 @@ public interface RjesenjeService {
     /**
      * Vrati evaluirano rješenje s brojem točnih odgovora.
      * @param dto - SubmissionDTO 
-     * @return postotak točnih odgovora
+     * @return EvaluationResultDTO koji sadrzi rezultate obrade rjesenja
+     *
+     * @see EvaluationResultDTO
      */
 	public EvaluationResultDTO evaluate(SubmissionDTO dto);
 
