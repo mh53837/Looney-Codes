@@ -7,6 +7,9 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +68,21 @@ public class RjesenjeController {
 
         return rjesenjeService.findByRjesenjeIdNatjecatelj(natjecatelj);
     }
+
+    /**
+     * Ruta za stvaranje novog rjesenja.
+     * Preko bodyja se šalju informacije o rješenju.
+     *
+     * @param rjesenje
+     * @return Rjesenje
+     */
+    @PostMapping("/new")
+    @Secured("NATJECATELJ")
+    public Rjesenje addRjesenje(@RequestBody Rjesenje rjesenje){
+        rjesenje = rjesenjeService.add(rjesenje);
+        return rjesenje;
+    }
+
     /*
      * Ruta za upload novog rješenja korisnika.
      * Rezultat se vraća u obliku EvaluationResultDTO

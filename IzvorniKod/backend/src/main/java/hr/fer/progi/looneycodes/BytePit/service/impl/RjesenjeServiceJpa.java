@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.URI;
@@ -56,8 +57,22 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     public List<Rjesenje> findByRjesenjeIdNatjecatelj(Korisnik natjecatelj) {
         return rjesenjeRepository.findByRjesenjeIdNatjecatelj(natjecatelj);
     }
-    
-      
+
+    @Override
+    public Rjesenje add(Rjesenje rjesenje) {
+        Integer max;
+
+        try {
+            max = rjesenjeRepository.findByRjesenjeIdNatjecatelj(rjesenje.getRjesenjeId().getNatjecatelj()).stream().mapToInt(x -> x.getRjesenjeId().getRjesenjeRb()).max().getAsInt();
+        } catch (Exception e){
+            max = 0;
+        }
+
+        rjesenje.getRjesenjeId().setRjesenjeRb(max+1);
+        return rjesenjeRepository.save(rjesenje);
+    }
+
+
     /*
      * TODO 
      * 	- pretvoriti dobivene podatke u Rjesenje i spremiti ga

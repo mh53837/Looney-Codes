@@ -5,6 +5,7 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
+import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,12 @@ public interface RjesenjeService {
      * @return lista svih rješenja zadanog natjecatelja ili null ako nema rješenja u sustavu
      */
     public List<Rjesenje> findByRjesenjeIdNatjecatelj(Korisnik natjecatelj);
+
+    /**
+     * Stvori novo Rjesenje.
+     * @return stvoreno Rjesenje
+     */
+    public Rjesenje add(Rjesenje rjesenje);
 
     /**
      * Vrati evaluirano rješenje s brojem točnih odgovora.
