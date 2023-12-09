@@ -95,8 +95,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 
     /*
      * TODO 
-     * 	- pretvoriti dobivene podatke u Rjesenje i spremiti ga
-     * 	- dodati u json kojim se zove evaluacija time_limit
+     * 	- dodati u json kojim se zove evaluacija time_limit -> budemo limitirali vreme ili preskacemo to za ve???
      */
 	@Override
 	public EvaluationResultDTO evaluate(SubmissionDTO dto) {
@@ -139,8 +138,6 @@ public class RjesenjeServiceJpa implements RjesenjeService {
       
       //zapamti token za posle dok bumo provjeravali rezultate evaluacije
       tokenQueue.add(token);
-
-      // break;
 		}
   
     // provjeri rezultate
@@ -206,7 +203,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 	 */
 	private int getEvaluationStatus(String token, String stderr) {
 		HttpRequest request = HttpRequest.newBuilder()
-    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=false"))
+    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=true&fields=*"))
     			.header("X-RapidAPI-Key", apiKey)
     			.header("X-RapidAPI-Host", apiHost)
     			.method("GET", HttpRequest.BodyPublishers.noBody())
@@ -222,15 +219,12 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     // Koristimo Jackson ObjectMapper za parsiranje JSON-a
     ObjectMapper objectMapper = new ObjectMapper();
     int status = -1;
-    String stdout = new String(), expectedOutput = new String();
     try {
       // Pretvorba JSON stringa u Jackson JsonNode
       JsonNode jsonNode = objectMapper.readTree(jsonString);
 
       // Dobivanje vrijednosti za stdout, expected_output i status
       status = jsonNode.get("status_id").asInt();
-      stdout = jsonNode.get("stdout").asText();
-      expectedOutput = jsonNode.get("expected_output").asText();
 
       if(status == 6) {
         stderr = jsonNode.get("compile_output").asText();
@@ -238,11 +232,6 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     } catch (Exception e) {
       return -1;
     }
-
-    // Ispis rezultata
-    System.out.println("stdout: " + stdout);
-    System.out.println("expected_output: " + expectedOutput);
-    System.out.println("status: " + status);
 
     return status;
 	}

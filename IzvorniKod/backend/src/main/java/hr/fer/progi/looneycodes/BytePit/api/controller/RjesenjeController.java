@@ -74,7 +74,6 @@ public class RjesenjeController {
      * @see EvaluationResultDTO
      */
     @PostMapping("/upload")
-    @Secured("NATJECATELJ")
     public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
     	EvaluationResultDTO resultDTO = rjesenjeService.evaluate(dto);
 
