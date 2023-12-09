@@ -5,8 +5,6 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
-import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
-import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +30,15 @@ public interface RjesenjeService {
 
     /**
      * Stvori novo Rjesenje.
+     * Parametri su EvaluationResultDTO koji predstavlja rezultate evaluacije te id-evi korisnika / zadatka
+     *
+     * @param dto
+     * @param korisnickoIme
+     * @param zadatakId
+     * @param programskiKod
      * @return stvoreno Rjesenje
      */
-    public Rjesenje add(Rjesenje rjesenje);
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod);
 
     /**
      * Vrati evaluirano rješenje s brojem točnih odgovora.

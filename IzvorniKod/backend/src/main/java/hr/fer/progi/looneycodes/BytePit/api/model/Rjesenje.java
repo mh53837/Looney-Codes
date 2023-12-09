@@ -32,6 +32,16 @@ public class Rjesenje {
    */
   private String programskiKod;
 
+  /**
+   * Konstruktor za stvaranje rjesenja
+   */
+  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, int brojTocnihPrimjera, String programskiKod) {
+    this.rjesenjeId = rjesenjeId;
+    this.vrijemeOdgovora = vrijemeOdgovora;
+    this.brojTocnihPrimjera = brojTocnihPrimjera;
+    this.programskiKod = programskiKod;
+  }
+
   // geteri i seteri
   public RjesenjeKey getRjesenjeId() { return rjesenjeId; }
   public void setRjesenjeId(RjesenjeKey rjesenjeId) { this.rjesenjeId = rjesenjeId; }

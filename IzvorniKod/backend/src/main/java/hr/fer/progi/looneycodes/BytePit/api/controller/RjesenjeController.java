@@ -2,10 +2,10 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
-import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
-import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
+import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,7 +45,6 @@ public class RjesenjeController {
     @Autowired
     private KorisnikService korisnikService;
 
-    
     /*
      * Ruta za dohvaćanje svih rješenja
      */
@@ -61,26 +60,11 @@ public class RjesenjeController {
     public List<Rjesenje> getRjesenjeByKorisnikId(@PathVariable String korisnickoIme) {
         Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
 
-        Korisnik natjecatelj = null;
-        if (korisnik.isPresent()) {
-            natjecatelj = korisnik.get();
+        if (!korisnik.isPresent()) {
+          throw new RequestDeniedException("Korisnik ne postoji!");
         }
 
-        return rjesenjeService.findByRjesenjeIdNatjecatelj(natjecatelj);
-    }
-
-    /**
-     * Ruta za stvaranje novog rjesenja.
-     * Preko bodyja se šalju informacije o rješenju.
-     *
-     * @param rjesenje
-     * @return Rjesenje
-     */
-    @PostMapping("/new")
-    @Secured("NATJECATELJ")
-    public Rjesenje addRjesenje(@RequestBody Rjesenje rjesenje){
-        rjesenje = rjesenjeService.add(rjesenje);
-        return rjesenje;
+        return rjesenjeService.findByRjesenjeIdNatjecatelj(korisnik.get());
     }
 
     /*
@@ -90,16 +74,15 @@ public class RjesenjeController {
      * @see EvaluationResultDTO
      */
     @PostMapping("/upload")
+    @Secured("NATJECATELJ")
     public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
     	EvaluationResultDTO resultDTO = rjesenjeService.evaluate(dto);
 
-      // TODO fali createRjesenje funkcija u rjesenjeDTO ???
-      // dodati rjesenje u bazu
+      rjesenjeService.add(resultDTO, dto.getKorisnickoIme(), dto.getZadatakId(), dto.getProgramskiKod());
 
       // vrati resultDTO nakon kaj si ga spremil
       return resultDTO;
     }
-    
     
     /*
      * Pomoćna ruta za ručni pregled evaluacije pojedinog testnog primjera.

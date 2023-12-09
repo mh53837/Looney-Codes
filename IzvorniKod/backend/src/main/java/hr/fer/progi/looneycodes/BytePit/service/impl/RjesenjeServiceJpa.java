@@ -4,8 +4,10 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
+import hr.fer.progi.looneycodes.BytePit.api.model.RjesenjeKey;
 import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.RjesenjeRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.TestniPrimjerRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.ZadatakRepository;
@@ -27,9 +29,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
+import java.util.OptionalInt;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Service
 public class RjesenjeServiceJpa implements RjesenjeService {
@@ -42,6 +44,9 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     
     @Autowired
     ZadatakRepository zadatakRepository;
+
+    @Autowired
+    KorisnikRepository korisnikRepository;
 
     @Value("${BytePit.rapidApiKey}")
     private String apiKey;
@@ -59,17 +64,32 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     @Override
-    public Rjesenje add(Rjesenje rjesenje) {
-        Integer max;
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod) {
+      Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
+      Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
 
-        try {
-            max = rjesenjeRepository.findByRjesenjeIdNatjecatelj(rjesenje.getRjesenjeId().getNatjecatelj()).stream().mapToInt(x -> x.getRjesenjeId().getRjesenjeRb()).max().getAsInt();
-        } catch (Exception e){
-            max = 0;
-        }
+      if(natjecatelj.isEmpty())
+        throw new IllegalArgumentException("Natjecatelj ne postoji!");
+      if(zadatak.isEmpty())
+        throw new IllegalArgumentException("Zadatak ne postoji!");
 
-        rjesenje.getRjesenjeId().setRjesenjeRb(max+1);
-        return rjesenjeRepository.save(rjesenje);
+      OptionalInt max = rjesenjeRepository.findByRjesenjeIdNatjecatelj(natjecatelj.get())
+                                          .stream()
+                                          .mapToInt(x -> x.getRjesenjeId().getRjesenjeRb())
+                                          .max();
+
+      int rjesenjeRb = 0;
+      if(max.isPresent())
+        rjesenjeRb = max.getAsInt() + 1;
+
+      RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
+      Rjesenje rjesenje = new Rjesenje(rjesenjeId,
+                                      Timestamp.from(Instant.now()),
+                                      (int) dto.getTests().stream().filter(x -> x % 3 == 0).count(),
+                                      programskiKod
+                                      );
+  
+      return rjesenjeRepository.save(rjesenje);
     }
 
 

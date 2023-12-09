@@ -18,17 +18,6 @@ public class SubmissionDTO {
 	  * tekst programskog koda
 	  */
 	private String programskiKod;
-	/**
-	 * 
-	 * @return
-	 */
-	private String stdin;
-	/**
-	 * 
-	 * @return
-	 */
-	private String expectedOutput;
-	
 	
 	//getteri i setteri
 	public Integer getZadatakId() {
@@ -49,6 +38,4 @@ public class SubmissionDTO {
 	public void setProgramskiKod(String programskiKod) {
 		this.programskiKod = programskiKod;
 	}
-	  
-	  
 }

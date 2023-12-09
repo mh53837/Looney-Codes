@@ -31,7 +31,7 @@ public class TestniPrimjerServiceJpa implements TestniPrimjerService {
 			max = 0;
 		} 
 	
-		test.getTestniPrimjerId().setTestniPrimjerRb(max+1);;
+		test.getTestniPrimjerId().setTestniPrimjerRb(max+1);
 		return testRepo.save(test); 
 	}
 
