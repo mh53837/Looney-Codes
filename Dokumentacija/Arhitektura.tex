@@ -202,10 +202,10 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 
 \section{Dijagram razreda}
 
-Na slikama 4.3 i 4.4 prikazani su dijagrami razreda koji predstavljaju backend dio arhitekture.
+Na slikama \ref{fig:dijagramRazreda1} i \ref{fig:dijagramRazreda2} prikazani su dijagrami razreda koji predstavljaju backend dio arhitekture.
 Prva slika opisuje servise, odnosno njihovu implementaciju i prikazani su atributi i metode u pojedinim razredima.
-Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitorijima koji su između ostalog prikazani na slici 4.4.
-Osim repozitorija, na slici 4.4 prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
+Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitorijima koji su između ostalog prikazani na slici \ref{fig:dijagramRazreda2}.
+Osim repozitorija, na slici \ref{fig:dijagramRazreda2} prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
 Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose prethodno navedenih razreda. \\
 
 Razred Korisnik predstavlja registriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav.
@@ -218,12 +218,14 @@ Razred Virtualno natjecanje predstavlja natjecanje koje se može naknadno pokren
 	\includegraphics[scale=0.19]{dijagrami/serviceDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Servisi}
+	\label{fig:dijagramRazreda1}
 \end{figure}
 
 \begin{figure}[H]
 	\includegraphics[scale=0.2]{dijagrami/apiDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Kontroleri, Repozitoriji i Modeli}
+	\label{fig:dijagramRazreda2}
 \end{figure}
 
 %\textbf{\textit{dio 2. revizije}}\\
@@ -244,7 +246,16 @@ Razred Virtualno natjecanje predstavlja natjecanje koje se može naknadno pokren
 %
 %\eject
 %
-%\section{Dijagram aktivnosti}
+\section{Dijagram aktivnosti}
+
+Dijagram aktivnosti na slici \ref{fig:dijagramAktivnosti} prikazuje proces kreiranja novog natjecanja. Voditelj se prijavljuje u sustav te nakon uspješne prijave odabire opciju za organiziranje novog natjecanja. Web stranica preko baze podataka dohvaća dostupne zadatke te ih prikazuje kao dio forme u koju voditelj unosi podatke te odabire zadatke koji će se ispitivati u sklopu natjecanja. Nakon slanja unesenih podataka web aplikaciji, ona ih prosljeđuje bazi podataka koja ih zatim pohranjuje i šalje potvrdu o uspješnom stvaranju novog natjecanja. 
+\\
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{dijagrami/act_novo_natjecanje.png}
+	\centering
+	\caption{Dijagram aktivnosti - organiziranje novog natjecanja}
+	\label{fig:dijagramAktivnosti}
+\end{figure}
 %
 %\textbf{\textit{dio 2. revizije}}\\
 %
