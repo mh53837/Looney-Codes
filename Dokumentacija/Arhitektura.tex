@@ -262,7 +262,16 @@ Dijagram aktivnosti na slici \ref{fig:dijagramAktivnosti} prikazuje proces kreir
 %\textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
 %
 %\eject
-%\section{Dijagram komponenti}
+\section{Dijagram komponenti}
+
+Dijagram komponenti prikazan na slici \ref{fig:dijagramKomponenti} opisuje organizaciju i međuovisnost  komponenti, interne strukture i odnose prema okolini. Web aplikacija sastoji se od komponenti: Controllers, Services, Repositories i Models. Controllers pruža REST API sučelje na koje vanjski web preglednik može slati zahtjeve i primati odgovore pomoću JSON datoteka. Repositories pristupa SQL bazi podataka koja ostvaruje sučelje SQL API. Repositories upisuje podatke iz baze podataka u komponentu Services. Models oblikuje korištene entitete i njihov međuodnos. Controllers šalje i prima podatke od komponente Services.
+\\
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{dijagrami/dijagramKomponenti.png}
+	\centering
+	\caption{Dijagram komponenti}
+	\label{fig:dijagramKomponenti}
+\end{figure}
 %
 %\textbf{\textit{dio 2. revizije}}\\
 %
