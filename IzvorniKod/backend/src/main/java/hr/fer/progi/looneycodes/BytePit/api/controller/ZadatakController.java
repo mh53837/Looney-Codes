@@ -1,11 +1,13 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
 import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjerKey;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
-import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.TestniPrimjerService;
 import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
 
@@ -49,9 +49,9 @@ public class ZadatakController {
 	
 	
 	/**
-	 * Ruta za ispis svih javnih zadataka.
+	 * Ruta za ispis svih zadataka.
 	 * 
-	 * @return lista svih javnih zadataka
+	 * @return lista svih zadataka
 	 */
 	@GetMapping("/adminView")
 	@Secured("ADMIN")
@@ -116,6 +116,7 @@ public class ZadatakController {
 	 * @return lista testnih primjera
 	 */
 	@GetMapping("/get/{id}/tests")
+  @Secured({"ADMIN", "VODITELJ"})
 	public List<TestniPrimjer> listTests(@PathVariable Integer id){
 		Zadatak zadatak = zadatakService.fetch(id);
 		return testService.listAllByZadatak(zadatak);
@@ -128,8 +129,17 @@ public class ZadatakController {
 	 * @return postavljeni testni primjer
 	 */
 	@PostMapping("/get/{id}/addTest")
-	public TestniPrimjer addTest(@PathVariable Integer id, @RequestBody TestniPrimjer test){
+  @Secured({"ADMIN", "VODITELJ"})
+	public TestniPrimjer addTest(@PathVariable Integer id, @RequestBody TestniPrimjer test, @AuthenticationPrincipal UserDetails user){
+    if(Objects.isNull(user))
+      throw new AccessDeniedException("You must be logged in for that!");
+
 		Zadatak zadatak = zadatakService.fetch(id);
+
+    if(!user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))
+        && !zadatak.getVoditelj().getIme().equals(user.getUsername()))
+      throw new AccessDeniedException("Morate biti autor zadatka ili admin da biste dodali testove!");
+
 		test.setTestniPrimjerId(new TestniPrimjerKey(null, zadatak));
 		return testService.add(test);
 	}
