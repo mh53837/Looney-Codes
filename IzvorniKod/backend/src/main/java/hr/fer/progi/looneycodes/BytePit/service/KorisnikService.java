@@ -26,6 +26,11 @@ public interface KorisnikService {
    */
   public List<KorisnikInfoDTO> listAllVerified();
   /**
+   * Vrati listu svih korisnika
+   * @return lista svih korisnika ili null ako nitko nije u sustavu
+   */
+  public List<KorisnikInfoDTO> listAllAdmin();
+  /**
    * Vrati listu svih korisnika koji traze promijenu uloga
    * @return lista svih korisnika s atributima: uloga != requestedUloga
    */

@@ -44,6 +44,14 @@ public class KorisnikServiceJpa implements KorisnikService {
                        .stream().map(korisnik -> new KorisnikInfoDTO(korisnik))
                        .collect(Collectors.toList());
   }
+
+  @Override
+  public List<KorisnikInfoDTO> listAllAdmin() {
+    return korisnikRepo.findAll()
+                       .stream().map(korisnik -> new KorisnikInfoDTO(korisnik))
+                       .collect(Collectors.toList());    
+  }
+
   @Override
   public Optional<Korisnik> fetch(int id){
     return korisnikRepo.findById(id);
@@ -141,6 +149,8 @@ public class KorisnikServiceJpa implements KorisnikService {
     korisnik.setLozinka(encoder.encode(korisnik.getLozinka()));
     return korisnik;
   }
+
+  @Override
   public Pair<byte[], MediaType> getProfilePicture(String username) {
     Optional<Korisnik> korisnik = korisnikRepo.findByKorisnickoIme(username);
     Assert.isTrue(korisnik.isPresent(), "Korisnik s korisnickim imenom: " + username + " ne postoji!");
