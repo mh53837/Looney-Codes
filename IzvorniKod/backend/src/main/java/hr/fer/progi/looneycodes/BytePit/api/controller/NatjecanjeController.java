@@ -1,11 +1,20 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Kontroler koji se koristi za pristup metodama vezanim uz Natjecanje entitet
@@ -20,6 +29,9 @@ public class NatjecanjeController {
     @Autowired
     private NatjecanjeService natjecanjeService;
 
+    @Autowired
+    private KorisnikService korisnikService;
+
     /**
      * Stvara natjecanje i sprema ga u bazu
      *
@@ -27,7 +39,17 @@ public class NatjecanjeController {
      * @return natjecanje
      */
     @PostMapping("/new")
-    public Natjecanje createNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO) {
+    @Secured({"VODITELJ", "ADMIN"})
+    public Natjecanje createNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+
+        Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
+        
+        if((voditelj.isEmpty() || !natjecanjeDTO.getVoditeljId().equals(voditelj.get().getKorisnikId()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
+    
         return natjecanjeService.createNatjecanje(natjecanjeDTO);
     }
 
@@ -75,7 +97,16 @@ public class NatjecanjeController {
      * @return referenca na azurirano natjecanje
      */
     @PostMapping("/update")
-    public Natjecanje updateNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO) {
+    @Secured({"VODITELJ", "ADMIN"})
+    public Natjecanje updateNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+
+        Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
+        if((voditelj.isEmpty() || !natjecanjeDTO.getVoditeljId().equals(voditelj.get().getKorisnikId()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
+
         return natjecanjeService.updateNatjecanje(natjecanjeDTO);
     }
 

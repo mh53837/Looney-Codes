@@ -7,8 +7,11 @@ import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -45,10 +49,16 @@ public class RjesenjeController {
     @Autowired
     private KorisnikService korisnikService;
 
+    @Value("${BytePit.rapidApiKey}")
+    private String apiKey;
+    @Value("${BytePit.rapidApiHost}")
+    private String apiHost;
+
     /*
      * Ruta za dohvaćanje svih rješenja
      */
     @GetMapping("/all")
+    @Secured("ADMIN")
     public List<Rjesenje> listAll() {
         return rjesenjeService.listAll();
     }
@@ -57,8 +67,14 @@ public class RjesenjeController {
      * Ruta za dohvaćanje svih rješenja jednog korisnika.
      */
     @GetMapping("get/natjecatelj/{korisnickoIme}")
-    public List<Rjesenje> getRjesenjeByKorisnikId(@PathVariable String korisnickoIme) {
+    public List<Rjesenje> getRjesenjeByKorisnikId(@PathVariable String korisnickoIme, @AuthenticationPrincipal UserDetails user) {
         Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+        if(!korisnickoIme.equals(user.getUsername()) &&
+            !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new AccessDeniedException("You do not have the authority to access this!");
 
         if (!korisnik.isPresent()) {
           throw new RequestDeniedException("Korisnik ne postoji!");
@@ -68,13 +84,20 @@ public class RjesenjeController {
     }
 
     /*
-     * Ruta za upload novog rješenja korisnika.
+     * Ruta za upload novog rješenja korisnika. Username se automatski postavlja!
      * Rezultat se vraća u obliku EvaluationResultDTO
      *
      * @see EvaluationResultDTO
      */
     @PostMapping("/upload")
-    public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto) throws IOException, InterruptedException {
+    @Secured("NATJECATELJ")
+    public EvaluationResultDTO uploadSolution(@RequestBody SubmissionDTO dto, @AuthenticationPrincipal UserDetails user)
+                                              throws IOException, InterruptedException
+    {
+      if(Objects.isNull(user))
+        throw new AccessDeniedException("You must be logged in for that!");
+
+      dto.setKorisnickoIme(user.getUsername());
     	EvaluationResultDTO resultDTO = rjesenjeService.evaluate(dto);
 
       // ne spremamo u bazu ako se nije dalo kompajlirati!
@@ -91,11 +114,12 @@ public class RjesenjeController {
      * Pomoćna ruta za ručni pregled evaluacije pojedinog testnog primjera.
      */
     @GetMapping("/get/byToken/{token}")
+    @Secured("ADMIN")
     public String lastSubmission(@PathVariable String token) throws IOException, InterruptedException {
     	HttpRequest request = HttpRequest.newBuilder()
     			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=true&fields=*"))
-    			.header("X-RapidAPI-Key", "960c7317cdmsh4407a23d8b9aaabp1f99d8jsnd618f8fb2e8c")
-    			.header("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com")
+    			.header("X-RapidAPI-Key", apiKey)
+    			.header("X-RapidAPI-Host", apiHost)
     			.method("GET", HttpRequest.BodyPublishers.noBody())
     			.build();
     	HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
