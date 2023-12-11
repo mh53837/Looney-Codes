@@ -110,10 +110,31 @@ public class NatjecanjeController {
         return natjecanjeService.updateNatjecanje(natjecanjeDTO);
     }
 
-    /*@DeleteMapping("/delete/{natjecanjeId}")
-    public void deleteNatjecanje(@PathVariable Integer natjecanjeId) {
-        natjecanjeService.deleteNatjecanje(natjecanjeId);
-    }*/
+    /**
+     * Dohvaća sva natjecanja koja se tek trebaju održati
+     *
+     * @return lista natjecanja
+     */
+
+    @GetMapping("/get/upcoming")
+    public List<CreateNatjecanjeDTO> getUpcomingNatjecanja() {
+        return natjecanjeService.getUpcomingNatjecanja().stream().map(natjecanje -> {
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+        }).toList();
+    }
+
+    /**
+     * Dohvaća sva natjecanja koja su u tijeku
+     *
+     * @return lista natjecanja
+     */
+
+    @GetMapping("/get/ongoing")
+    public List<CreateNatjecanjeDTO> getOngoingNatjecanja() {
+        return natjecanjeService.getOngoingNatjecanja().stream().map(natjecanje -> {
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+        }).toList();
+    }
 
 }
 

@@ -30,6 +30,20 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
     @Query("SELECT n FROM Natjecanje n WHERE n.voditelj.korisnikId = :korisnikId")
     List<Natjecanje> findByKorisnikId(@Param("korisnikId") Integer korisnikId);
 
-    /*@Transactional
-    void deleteByNatjecanjeId(Integer natjecanjeId);*/
+    /**
+     * Metoda koja vraća sva natjecanja koja se tek trebaju održati
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.pocetakNatjecanja > CURRENT_TIMESTAMP")
+    List<Natjecanje> findUpcomingNatjecanja();
+
+    /**
+     * Metoda koja vraća sva natjecanja koja su u tijeku
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.pocetakNatjecanja < CURRENT_TIMESTAMP AND n.krajNatjecanja > CURRENT_TIMESTAMP")
+    List<Natjecanje> findOngoingNatjecanja();
+
 }

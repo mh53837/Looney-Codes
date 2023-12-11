@@ -51,11 +51,19 @@ public interface NatjecanjeService {
     List<Natjecanje> getNatjecanjaByKorisnikId(Integer korisnikId);
 
     /**
-     * Briše natjecanje prema jedinstvenom identifikatoru
+     * Dohvaća sva natjecanja koja se tek trebaju održati
      *
-     * @param natjecanjeId - jedinstveni identifikator natjecanja
+     * @return lista natjecanja
      */
-    //void deleteNatjecanje(Integer natjecanjeId);
+
+    List<Natjecanje> getUpcomingNatjecanja();
+
+    /**
+     * Dohvaća sva natjecanja koja su u tijeku
+     *
+     * @return lista natjecanja
+     */
+    List<Natjecanje> getOngoingNatjecanja();
 
 
 }

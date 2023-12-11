@@ -73,9 +73,14 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     public List<Natjecanje> getNatjecanjaByKorisnikId(Integer korisnikId) {
         return natjecanjeRepo.findByKorisnikId(korisnikId);
     }
+    @Override
+    public List<Natjecanje> getUpcomingNatjecanja() {
+        return natjecanjeRepo.findUpcomingNatjecanja();
+    }
 
-    /*@Override
-    public void deleteNatjecanje(Integer natjecanjeId) {
-        natjecanjeRepo.deleteByNatjecanjeId(natjecanjeId);
-    }*/
+    @Override
+    public List<Natjecanje> getOngoingNatjecanja() {
+        return natjecanjeRepo.findOngoingNatjecanja();
+    }
+
 }
