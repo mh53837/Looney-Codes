@@ -94,8 +94,9 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 
 
     /*
-     * TODO 
-     * 	- dodati u json kojim se zove evaluacija time_limit -> budemo limitirali vreme ili preskacemo to za ve???
+     * Metoda za evaluaciju.
+     *
+     * @see /IzvorniKod/backend/evaluacija_readme.md
      */
 	@Override
 	public EvaluationResultDTO evaluate(SubmissionDTO dto) {
@@ -113,11 +114,13 @@ public class RjesenjeServiceJpa implements RjesenjeService {
             "source_code" : "%s",
             "language_id" : 12,
             "stdin" : "%s",
-            "expected_output" : "%s"
+            "expected_output" : "%s",
+            "cpu_time_limit" : %d
           }
           """,
           dto.getProgramskiKod().replace("\n", "\\n"),
-          test.getUlazniPodaci(), test.getIzlazniPodaci()
+          test.getUlazniPodaci(), test.getIzlazniPodaci(),
+          zadatak.getVremenskoOgranicenje()
       );
 			HttpRequest request = HttpRequest.newBuilder()
 	    			.uri(URI.create("https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*"))
