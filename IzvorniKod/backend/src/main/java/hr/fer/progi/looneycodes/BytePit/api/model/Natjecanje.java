@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 // java imports
 import java.sql.Timestamp;
+import java.util.Set;
 
 
 /**
@@ -47,6 +48,9 @@ public class Natjecanje {
    * vrijeme kraja natjecanja
    */
   private Timestamp krajNatjecanja;
+
+  @ManyToMany
+  private Set<Zadatak> zadaci;
 
   // geteri i seteri
   public Integer getNatjecanjeId() {

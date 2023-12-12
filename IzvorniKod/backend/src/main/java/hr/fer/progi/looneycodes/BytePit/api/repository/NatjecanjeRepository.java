@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.repository;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -53,6 +54,15 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
      */
     @Query("SELECT n FROM Natjecanje n WHERE n.krajNatjecanja < CURRENT_TIMESTAMP")
     List<Natjecanje> findFinishedNatjecanja();
+
+    /**
+     * Metoda koja pronalazi sve zadatake povezane s zadanim natjecanjem
+     * @param natjecanjeId
+     * @return lista zadataka
+     */
+
+    @Query("select z from Natjecanje n join n.zadaci z where n.natjecanjeId = :natjecanjeId")
+    List<Zadatak> findZadaciByNatjecanjeId(@Param("natjecanjeId") Integer natjecanjeId);
 
 
 }

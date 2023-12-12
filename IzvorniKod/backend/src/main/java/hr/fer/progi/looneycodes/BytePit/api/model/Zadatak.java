@@ -3,6 +3,8 @@ package hr.fer.progi.looneycodes.BytePit.api.model;
 // spring-boot imports
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 /**
  * Entitet koji sprema podatke vezane uz zadatak i reference na testne primjere.
  */
@@ -18,8 +20,8 @@ public class Zadatak {
   /**
    * natjecanje u kojem se pojavljuje zadatak
    */
-  @ManyToOne
-  private Natjecanje natjecanje;
+  @ManyToMany(mappedBy = "zadaci")
+  private Set<Natjecanje> natjecanje;
   /**
    * autor/voditelj koji je napisao zadatak
    */
@@ -53,11 +55,11 @@ public class Zadatak {
   public Integer getZadatakId() {
     return zadatakId;
   }
-  public Natjecanje getNatjecanje() {
+  public Set<Natjecanje> getNatjecanje() {
     return natjecanje;
   }
-  public void setNatjecanje(Natjecanje natjecanje) {
-    this.natjecanje = natjecanje;
+  public void setNatjecanje(Set<Natjecanje> natjecanja) {
+    this.natjecanje = natjecanja;
   }
   public Korisnik getVoditelj() {
     return voditelj;

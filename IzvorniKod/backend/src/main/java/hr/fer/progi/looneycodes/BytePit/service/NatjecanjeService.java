@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,6 +72,14 @@ public interface NatjecanjeService {
      * @return lista natjecanja
      */
     List<Natjecanje> getFinishedNatjecanja();
+
+    /**
+     * Metoda koja pronalazi sve zadatake povezane s zadanim natjecanjem
+     * @param natjecanjeId
+     * @return lista zadataka
+     */
+    public List<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId);
+
 
 
 

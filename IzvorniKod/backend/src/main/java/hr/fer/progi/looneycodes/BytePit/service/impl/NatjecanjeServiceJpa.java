@@ -4,6 +4,7 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
@@ -87,4 +88,10 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     public List<Natjecanje> getFinishedNatjecanja() {
         return natjecanjeRepo.findFinishedNatjecanja();
     }
+
+    @Override
+    public List<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId) {
+        return natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
+    }
+
 }

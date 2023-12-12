@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class NatjecanjeController {
           throw new AccessDeniedException("You must be logged in for that!");
 
         Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
-        
+
         if((voditelj.isEmpty() || !natjecanjeDTO.getVoditeljId().equals(voditelj.get().getKorisnikId()))
             && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
@@ -148,6 +149,17 @@ public class NatjecanjeController {
             return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
         }).toList();
     }
+
+    /**
+     * Dohvaća sve zadatke povezane s zadanim natjecanjem
+     * @param natjecanjeId
+     * @return lista zadataka
+     */
+    @GetMapping("/get/zadaci/{natjecanjeId}")
+    public List<Zadatak> getZadaciByNatjecanjeId(@PathVariable Integer natjecanjeId) {
+        return natjecanjeService.getZadaciByNatjecanjeId(natjecanjeId);
+    }
+
 
 
 }
