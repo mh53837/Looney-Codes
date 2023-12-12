@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Problems from './Problems';
 import { IUser } from './UserList';
 
@@ -7,6 +7,7 @@ export interface IProblems {
     voditelj: IUser;
     nazivZadatka: string;
     tekstZadatka: string;
+    zadatakId: BigInteger;
 }
 
 const ProblemsList: React.FC = () => {
@@ -23,16 +24,17 @@ const ProblemsList: React.FC = () => {
         <div className="user-info-table">
             <table>
                 <thead>
-                <tr>
-                    <th>korisničko ime</th>
-                    <th>naziv</th>
-                    <th>tekst</th>
-                </tr>
+                    <tr>
+                        <th>korisničko ime</th>
+                        <th>naziv</th>
+                        <th>tekst</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                {problem.map((problem, index) => (
-                    <Problems key={index} problem={problem} />
-                ))}
+                    {problem.map((problem, index) => (
+                        <Problems key={index} problem={problem} />
+                    ))}
                 </tbody>
             </table>
         </div>
