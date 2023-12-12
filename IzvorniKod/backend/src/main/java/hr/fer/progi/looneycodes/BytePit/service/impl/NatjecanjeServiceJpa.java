@@ -83,4 +83,8 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         return natjecanjeRepo.findOngoingNatjecanja();
     }
 
+    @Override
+    public List<Natjecanje> getFinishedNatjecanja() {
+        return natjecanjeRepo.findFinishedNatjecanja();
+    }
 }

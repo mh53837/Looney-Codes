@@ -65,5 +65,13 @@ public interface NatjecanjeService {
      */
     List<Natjecanje> getOngoingNatjecanja();
 
+    /**
+     * Dohvaća sva natjecanja koja su završena
+     *
+     * @return lista natjecanja
+     */
+    List<Natjecanje> getFinishedNatjecanja();
+
+
 
 }

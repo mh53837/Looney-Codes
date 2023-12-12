@@ -46,4 +46,13 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
     @Query("SELECT n FROM Natjecanje n WHERE n.pocetakNatjecanja < CURRENT_TIMESTAMP AND n.krajNatjecanja > CURRENT_TIMESTAMP")
     List<Natjecanje> findOngoingNatjecanja();
 
+    /**
+     * Metoda koja vraća sva natjecanja koja su završena
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.krajNatjecanja < CURRENT_TIMESTAMP")
+    List<Natjecanje> findFinishedNatjecanja();
+
+
 }

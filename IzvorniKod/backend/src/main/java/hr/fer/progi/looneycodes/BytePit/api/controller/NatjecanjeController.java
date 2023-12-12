@@ -136,5 +136,19 @@ public class NatjecanjeController {
         }).toList();
     }
 
+    /**
+     * Dohvaća sva natjecanja koja su završena
+     *
+     * @return lista natjecanja
+     */
+
+    @GetMapping("/get/finished")
+    public List<CreateNatjecanjeDTO> getFinishedNatjecanja() {
+        return natjecanjeService.getFinishedNatjecanja().stream().map(natjecanje -> {
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+        }).toList();
+    }
+
+
 }
 
