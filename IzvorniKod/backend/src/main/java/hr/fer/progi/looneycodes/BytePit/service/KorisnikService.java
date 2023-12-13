@@ -29,7 +29,7 @@ public interface KorisnikService {
    * Vrati listu svih korisnika
    * @return lista svih korisnika ili null ako nitko nije u sustavu
    */
-  public List<KorisnikInfoDTO> listAllAdmin();
+  public List<Korisnik> listAllAdmin();
   /**
    * Vrati listu svih korisnika koji traze promijenu uloga
    * @return lista svih korisnika s atributima: uloga != requestedUloga

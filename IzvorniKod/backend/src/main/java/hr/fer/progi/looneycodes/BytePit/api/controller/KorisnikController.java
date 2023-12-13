@@ -73,7 +73,7 @@ public class KorisnikController{
    */
   @GetMapping("/allAdmin")
   @Secured("ADMIN")
-  public List<KorisnikInfoDTO> listAllAdmin(){
+  public List<Korisnik> listAllAdmin(){
     return korisnikService.listAllAdmin();
   }
   /**

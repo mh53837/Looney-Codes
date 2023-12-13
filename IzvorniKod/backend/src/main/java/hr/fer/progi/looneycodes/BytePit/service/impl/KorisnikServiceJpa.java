@@ -46,10 +46,8 @@ public class KorisnikServiceJpa implements KorisnikService {
   }
 
   @Override
-  public List<KorisnikInfoDTO> listAllAdmin() {
-    return korisnikRepo.findAll()
-                       .stream().map(korisnik -> new KorisnikInfoDTO(korisnik))
-                       .collect(Collectors.toList());    
+  public List<Korisnik> listAllAdmin() {
+    return korisnikRepo.findAll();
   }
 
   @Override
