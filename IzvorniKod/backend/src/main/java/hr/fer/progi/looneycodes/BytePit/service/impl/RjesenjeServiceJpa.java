@@ -85,7 +85,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
       Rjesenje rjesenje = new Rjesenje(rjesenjeId,
                                       Timestamp.from(Instant.now()),
-                                      (int) dto.getTests().stream().filter(x -> x == 3).count(),
+                                      dto.getRezultat(),
                                       programskiKod
                                       );
   
@@ -201,8 +201,6 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 	/*
 	 * Vadi rezultate za pojedini testni primjer prema dobivenom tokenu.
    * Ako se radi o gresci u kompajliranju, poruku o toj gresci zapisujemo u parametar "stderr"
-	 * TODO 
-	 * 	- riješiti base64 dekodiranje
 	 */
 	private int getEvaluationStatus(String token, String stderr) {
 		HttpRequest request = HttpRequest.newBuilder()

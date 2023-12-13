@@ -23,10 +23,10 @@ public class Rjesenje {
    */
   private Timestamp vrijemeOdgovora;
   /**
-   * broj tocnih primjera koje je postiglo trenutno rjesenje
+   * udio tocnih primjera koje je postiglo trenutno rjesenje
    * read-only, evaluator ga postavlja jednom
    */
-  private int brojTocnihPrimjera;
+  private double brojTocnihPrimjera;
   /**
    * tekst programskog koda je bio evaluiran
    */
@@ -40,7 +40,7 @@ public class Rjesenje {
   /**
    * Konstruktor za stvaranje rjesenja
    */
-  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, int brojTocnihPrimjera, String programskiKod) {
+  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, double brojTocnihPrimjera, String programskiKod) {
     this.rjesenjeId = rjesenjeId;
     this.vrijemeOdgovora = vrijemeOdgovora;
     this.brojTocnihPrimjera = brojTocnihPrimjera;
@@ -53,7 +53,7 @@ public class Rjesenje {
   public Timestamp getVrijemeOdgovora() {
     return vrijemeOdgovora;
   }
-  public int getBrojTocnihPrimjera() {
+  public double getBrojTocnihPrimjera() {
     return brojTocnihPrimjera;
   }
   public String getProgramskiKod() {
