@@ -20,11 +20,11 @@ const App: React.FC = () => {
     const { setUser } = useContext(UserContext);
 
 
-    const handleLogin = (korisnickoIme: string, lozinka: string) => {
+    const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string) => {
 
         setRedirectToHome(true);
 
-        setUser({ korisnickoIme, lozinka });
+        setUser({ korisnickoIme, lozinka, uloga });
 
         setTimeout(() => {
             setRedirectToHome(false);
@@ -34,7 +34,7 @@ const App: React.FC = () => {
     const handleLogout = () => {
         setRedirectToHome(true);
 
-        setUser({ korisnickoIme: '', lozinka: '' });
+        setUser({ korisnickoIme: '', lozinka: '', uloga: '' });
 
         setTimeout(() => {
             setRedirectToHome(false);

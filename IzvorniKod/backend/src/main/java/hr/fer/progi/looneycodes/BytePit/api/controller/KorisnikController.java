@@ -167,7 +167,7 @@ public class KorisnikController{
    * @exception RequestDeniedException ako imamo krive podatke ili nepotvrdeni account
    */
   @PostMapping("/login")
-  public ResponseEntity<?> loginKorisnik(@RequestBody LoginKorisnikDTO dto) {
+  public KorisnikInfoDTO loginKorisnik(@RequestBody LoginKorisnikDTO dto) {
     Korisnik korisnik = korisnikService.getKorisnik(dto.getKorisnickoIme())
                                        .orElseThrow(()
                                           -> new RequestDeniedException("Username not found!"));
@@ -176,7 +176,7 @@ public class KorisnikController{
       throw new RequestDeniedException("Wrong password!");
 
     if (korisnik.isConfirmedEmail()) {
-    	return ResponseEntity.ok(HttpStatus.OK);
+    	return new KorisnikInfoDTO(korisnik);
     } else {
     	throw new AccessDeniedException("Korisnik nije potvrdio email!");
     }

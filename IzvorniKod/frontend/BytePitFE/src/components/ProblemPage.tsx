@@ -45,6 +45,7 @@ const ProblemPage: React.FC = () => {
                                 if (event.target && event.target.result) {
                                         const fileContent = event.target.result as string;
                                         setSourceCode(fileContent);
+                                        console.log(fileContent);
                                 }
                         };
 
@@ -105,9 +106,10 @@ const ProblemPage: React.FC = () => {
                 }
         };
 
+
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
-        if (user.korisnickoIme.length > 0) {
+        if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
                                 <input type="file" accept=".cpp" onChange={handleFileChange} />

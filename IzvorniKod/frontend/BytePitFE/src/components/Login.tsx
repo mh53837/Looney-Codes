@@ -5,7 +5,7 @@ import { UserContext } from '../context/userContext';
 import './Login.css';
 
 interface LoginProps {
-    onLogin: (korisnickoIme: string, lozinka:string) => void;
+    onLogin: (korisnickoIme: string, lozinka: string, uloga: string) => void;
 }
 
 interface LoginForm {
@@ -31,8 +31,8 @@ const Login: React.FC<LoginProps> = (props) => {
         const options = {
             method: 'POST',
             headers: {
-                  'Authorization': `Basic ${credentials}`,
-                  'Content-Type': 'application/json'
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(loginForm),
         };
@@ -42,15 +42,26 @@ const Login: React.FC<LoginProps> = (props) => {
             console.log(response.status);
             if (response.status === 200) {
                 console.log("Success!");
-                setUser({ korisnickoIme: loginForm.korisnickoIme, lozinka: loginForm.lozinka});
-                props.onLogin(loginForm.korisnickoIme, loginForm.lozinka);
+                return response.json();
             } else if (response.status === 401) {
                 setError('Neispravno korisničko ime ili lozinka!');
+                throw new Error("Bad request");
             } else if (response.status === 403) {
                 setError('Email adresa nije potvrđena!');
-            }  else {
+                throw new Error("Forbidden");
+            } else {
                 setError('Greška prilikom prijave, pokušajte ponovno!');
+                throw new Error("Error");
             }
+        }).then((data) => {
+            props.onLogin(loginForm.korisnickoIme, loginForm.lozinka, data.uloga);
+            setUser({
+                korisnickoIme: loginForm.korisnickoIme,
+                lozinka: loginForm.lozinka,
+                uloga: data.uloga
+            });
+        }).catch((e) => {
+            console.error(e);
         });
     }
 
