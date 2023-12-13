@@ -38,7 +38,6 @@ public class SecurityConfig {
   @Profile("basic-security")
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
       http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-      http.formLogin(withDefaults());
       http.httpBasic(withDefaults());
       http.csrf(AbstractHttpConfigurer::disable);
       return http.build();
