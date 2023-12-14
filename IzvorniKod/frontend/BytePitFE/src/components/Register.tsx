@@ -49,9 +49,31 @@ const Register: React.FC<RegisterProps> = (props) => {
         }
     }
 
+    function provjeriLozinku(lozinka: string): string | null {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(lozinka);
+        const hasLowerCase = /[a-z]/.test(lozinka);
+        const hasDigit = /\d/.test(lozinka);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(lozinka);
+
+        if (lozinka.length < minLength) {
+            return "Lozinka mora sadržavati barem 8 znakova!";
+        } else if (!hasUpperCase || !hasLowerCase || !hasDigit || !hasSpecialChar) {
+            return "Lozinka mora sadržavati barem jedno veliko slovo, interpunkcijski znak i broj!"
+        }
+
+        return null;
+    }
+
     function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
+
+        const passError = provjeriLozinku(registerForm.lozinka);
+        if (passError) {
+            setError(passError);
+            return;
+        }
 
         if (registerForm.lozinka !== registerForm.confirmLozinka) {
             setError('Lozinke se ne podudaraju!');
