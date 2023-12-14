@@ -114,4 +114,6 @@ public class Zadatak {
   public void setPrivatniZadatak(boolean privatniZadatak) {
     this.privatniZadatak = privatniZadatak;
   }
+  public TezinaZadatka getTezinaZadatka() { return tezinaZadatka; }
+  public void setTezinaZadatka(TezinaZadatka tezinaZadatka) { this.tezinaZadatka = tezinaZadatka; }
 }

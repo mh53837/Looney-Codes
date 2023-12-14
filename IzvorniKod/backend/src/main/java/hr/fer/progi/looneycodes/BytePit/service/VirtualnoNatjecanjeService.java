@@ -60,7 +60,13 @@ public interface VirtualnoNatjecanjeService {
      * @return lista zadataka
      *
      */
-
     List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId);
 
+    /**
+     * Stvara virtualno natjecanje s nasumičnim zadacima i sprema ga u bazu
+     * @param virtualnoNatjecanjeDTO DTO objekt s podacima o virtualnom natjecanju
+     *
+     */
+
+    VirtualnoNatjecanje createVirtualnoNatjecanjeRandom(VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO);
 }

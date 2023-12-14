@@ -174,7 +174,8 @@ public class Korisnik{
   public void setConfirmedEmail(boolean confirmedEmail) {
     this.confirmedEmail = confirmedEmail;
   }
-  
+
+
   private static void copyIfSpecified(RegisterKorisnikDTO dto, Korisnik korisnik, Iterable<String> props) {
 	  BeanWrapper from = PropertyAccessorFactory.forBeanPropertyAccess(dto);
 	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(korisnik);

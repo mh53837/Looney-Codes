@@ -123,4 +123,18 @@ public class VirtualnoNatjecanjeController {
         return virtualnoNatjecanjeService.getZadaci(virtualnoNatjecanjeId);
     }
 
+    /**
+     * Stvara virtualno natjecanje s nasumičnim zadacima
+     * @param natjecateljID identifikator natjecatelja
+     *
+     */
+
+    @PostMapping("/new/random/{natjecateljID}")
+    public VirtualnoNatjecanjeDTO createVirtualnoNatjecanjeRandom(@PathVariable Integer natjecateljID) {
+        VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO = new VirtualnoNatjecanjeDTO();
+        virtualnoNatjecanjeDTO.setNatjecateljId(natjecateljID);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeService.createVirtualnoNatjecanjeRandom(virtualnoNatjecanjeDTO);
+        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), null, virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+    }
+
 }
