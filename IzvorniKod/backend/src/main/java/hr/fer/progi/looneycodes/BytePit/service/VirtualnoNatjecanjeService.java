@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,14 @@ public interface VirtualnoNatjecanjeService {
      * @return lista virtualnih natjecanja
      */
     List<VirtualnoNatjecanje> getByOrigNatId(Integer origNatId);
+
+    /**
+     * Vraća sve zadatke povezane s virtualnim natjecanjem
+     * @param virtualnoNatjecanjeId identifikator virtualnog natjecanja
+     * @return lista zadataka
+     *
+     */
+
+    List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId);
 
 }

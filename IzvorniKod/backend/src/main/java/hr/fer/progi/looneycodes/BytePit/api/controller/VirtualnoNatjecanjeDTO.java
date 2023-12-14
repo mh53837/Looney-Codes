@@ -1,5 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
+
 import java.sql.Timestamp;
 
 public class VirtualnoNatjecanjeDTO {
@@ -16,6 +18,13 @@ public class VirtualnoNatjecanjeDTO {
         this.orginalnoNatjecanjeId = orginalnoNatjecanjeId;
         this.natjecateljId = natjecateljId;
         this.vrijemePocetka = vrijemePocetka;
+    }
+
+    public VirtualnoNatjecanjeDTO(VirtualnoNatjecanje virtualnoNatjecanje){
+        this.virtualnoNatjecanjeId = virtualnoNatjecanje.getVirtualnoNatjecanjeId();
+        this.orginalnoNatjecanjeId = virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId();
+        this.natjecateljId = virtualnoNatjecanje.getNatjecatelj().getKorisnikId();
+        this.vrijemePocetka = virtualnoNatjecanje.getVrijemePocetka();
     }
 
     public Integer getVirtualnoNatjecanjeId() {

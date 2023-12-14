@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.VirtualnoNatjecanjeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,14 @@ public class VirtualnoNatjecanjeController {
      */
     @PostMapping("/new")
     @Secured("NATJECATELJ")
-    public VirtualnoNatjecanje createVirtualnoNatjecanje(@RequestBody VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
+    public VirtualnoNatjecanjeDTO createVirtualnoNatjecanje(@RequestBody VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
         if(Objects.isNull(user))
           throw new AccessDeniedException("You must be logged in for that!");
 
         int natjecateljId = korisnikService.getKorisnik(user.getUsername()).get().getKorisnikId();
         virtualnoNatjecanjeDTO.setNatjecateljId(natjecateljId);
 
-        return virtualnoNatjecanjeService.createVirtualnoNatjecanje(virtualnoNatjecanjeDTO);
+        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanjeService.createVirtualnoNatjecanje(virtualnoNatjecanjeDTO));
     }
 
     /**
@@ -109,6 +110,17 @@ public class VirtualnoNatjecanjeController {
         return virtualnoNatjecanjeService.getByOrigNatId(origNatId).stream().map(virtualnoNatjecanje -> {
             return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId(), virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
         }).toList();
+    }
+
+    /**
+     * Vraća sve zadatke povezane s virtualnim natjecanjem
+     * @param virtualnoNatjecanjeId identifikator virtualnog natjecanja
+     * @return lista zadataka
+     *
+     */
+    @GetMapping("/get/zadaci/{virtualnoNatjecanjeId}")
+    public List<Zadatak> getZadaci(@PathVariable Integer virtualnoNatjecanjeId) {
+        return virtualnoNatjecanjeService.getZadaci(virtualnoNatjecanjeId);
     }
 
 }

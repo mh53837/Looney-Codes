@@ -1,10 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
-import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
-import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
-import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
-import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.*;
 import hr.fer.progi.looneycodes.BytePit.api.repository.VirutalnoNatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
@@ -54,13 +51,12 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         Optional<Korisnik> korisnik = korisnikService.fetch(virtualnoNatjecanjeDTO.getNatjecateljId());
         Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + virtualnoNatjecanjeDTO.getNatjecateljId() + " ne postoji!");
         Assert.isTrue(korisnik.get().getUloga().equals(Uloga.NATJECATELJ), "Korisnik s ID-em " + virtualnoNatjecanjeDTO.getNatjecateljId() + " nije natjecatelj!");
-        Natjecanje orig = null; //pretpostavka da originalno natjecanje moze biti null
-
-        if (virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() != null) {
-            orig = natjecanjeService.getNatjecanje(virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId());
-            Assert.notNull(orig, "Natjecanje s ID-em " + virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() + " ne postoji!");
-        }
-        return virtualnoNatjecanjeRepo.save(new VirtualnoNatjecanje(orig, korisnik.get(), new Timestamp(System.currentTimeMillis())));
+        Natjecanje origNatjecanje = natjecanjeService.getNatjecanje(virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId());
+        Assert.isTrue(natjecanjeService.getFinishedNatjecanja().contains(origNatjecanje), "Natjecanje s ID-em " + virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() + " nije zavrseno!");
+        VirtualnoNatjecanje virtualnoNatjecanje = new VirtualnoNatjecanje(origNatjecanje, korisnik.get(), new Timestamp(System.currentTimeMillis()));
+        virtualnoNatjecanje.setListaZadataka(List.copyOf(origNatjecanje.getZadaci()));
+        virtualnoNatjecanjeRepo.save(virtualnoNatjecanje);
+        return virtualnoNatjecanje;
 
     }
 
@@ -70,5 +66,13 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         Natjecanje orig = natjecanjeService.getNatjecanje(origNatId);
         Assert.notNull(orig, "Natjecanje s ID-em " + origNatId + " ne postoji!");
         return virtualnoNatjecanjeRepo.findByOrigNatId(origNatId);
+    }
+
+    @Override
+    public List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
+        Assert.notNull(virtualnoNatjecanjeId, "Id virtualnog natjecanja ne smije biti null");
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(virtualnoNatjecanjeId);
+        Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + virtualnoNatjecanjeId + " ne postoji!");
+        return virtualnoNatjecanje.getListaZadataka();
     }
 }

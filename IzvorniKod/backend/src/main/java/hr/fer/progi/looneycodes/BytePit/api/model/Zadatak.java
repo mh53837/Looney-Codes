@@ -1,9 +1,12 @@
 package hr.fer.progi.looneycodes.BytePit.api.model;
 
 // spring-boot imports
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
+
+import java.util.List;
 
 /**
  * Entitet koji sprema podatke vezane uz zadatak i reference na testne primjere.
@@ -20,6 +23,7 @@ public class Zadatak {
   /**
    * natjecanje u kojem se pojavljuje zadatak
    */
+  @JsonIgnore
   @ManyToMany(mappedBy = "zadaci")
   private Set<Natjecanje> natjecanje;
   /**
@@ -49,6 +53,12 @@ public class Zadatak {
    * je li zadatak privatni, tj. vidljiv samo voditelju koji ga je napisao
    */
   private boolean privatniZadatak;
+
+  //dodaj vezu izmedju zadatka i virtualnog natjecanja
+
+  @JsonIgnore
+  @ManyToMany(mappedBy = "listaZadataka")
+  List <VirtualnoNatjecanje> virtualnaNatjecanja;
 
   // geteri i seteri
 

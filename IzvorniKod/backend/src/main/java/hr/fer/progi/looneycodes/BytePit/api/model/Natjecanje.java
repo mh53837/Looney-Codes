@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.model;
 
 // spring-boot imports
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 // java imports
@@ -49,10 +50,15 @@ public class Natjecanje {
    */
   private Timestamp krajNatjecanja;
 
+
+  @JsonIgnore
   @ManyToMany
   private Set<Zadatak> zadaci;
 
   // geteri i seteri
+
+  public Set<Zadatak> getZadaci() { return zadaci; }
+  public void setZadaci(Set<Zadatak> zadaci) { this.zadaci = zadaci; }
   public Integer getNatjecanjeId() {
     return natjecanjeId;
   }

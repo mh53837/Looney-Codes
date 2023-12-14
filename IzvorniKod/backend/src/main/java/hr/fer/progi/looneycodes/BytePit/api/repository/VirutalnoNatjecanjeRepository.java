@@ -1,6 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.api.repository;
 
-
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -42,5 +42,7 @@ public interface VirutalnoNatjecanjeRepository extends JpaRepository<VirtualnoNa
     @Query("SELECT v FROM VirtualnoNatjecanje v WHERE v.orginalnoNatjecanje.natjecanjeId = :origNatId")
     List<VirtualnoNatjecanje> findByOrigNatId(@Param("origNatId") Integer origNatId);
 
+    @Query("select z from VirtualnoNatjecanje v join v.listaZadataka z where v.virtualnoNatjecanjeId = :virtualnoNatjecanjeId")
+    List<Zadatak> findZadaciByVirtualnoNatjecanjeId(@Param("virtualnoNatjecanjeId") Integer virtualnoNatjecanjeId);
 
 }
