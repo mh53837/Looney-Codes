@@ -27,7 +27,8 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
     @Query("SELECT r FROM Rjesenje r " +
             "JOIN Zadatak z ON r.rjesenjeId.zadatak.zadatakId = z.zadatakId " +
             "WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
-            "AND z.natjecanje = :natjecanje")
+            "AND z.natjecanje = :natjecanje " +
+            "AND r.rjesenjeId.natjecanje = :natjecanje")
     List<Rjesenje> findByNatjecateljAndNatjecanje(@Param("natjecatelj") Korisnik natjecatelj,
                                                   @Param("natjecanje") Natjecanje natjecanje);
 
@@ -41,7 +42,8 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
     @Query("SELECT r FROM Rjesenje r " +
             "JOIN Zadatak z ON r.rjesenjeId.zadatak.zadatakId = z.zadatakId " +
             "WHERE r.rjesenjeId.zadatak = :zadatak " +
-            "AND z.natjecanje = :natjecanje")
+            "AND z.natjecanje = :natjecanje " +
+            "AND r.rjesenjeId.natjecanje = :natjecanje")
     List<Rjesenje> findByNatjecanjeAndZadatak(@Param("natjecanje") Natjecanje natjecanje,
                                               @Param("zadatak")Zadatak zadatak);
 
