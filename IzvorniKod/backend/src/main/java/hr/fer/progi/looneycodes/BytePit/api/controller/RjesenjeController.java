@@ -1,10 +1,10 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
-import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
-import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
-import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +48,12 @@ public class RjesenjeController {
     @Autowired
     private KorisnikService korisnikService;
 
+    @Autowired
+    private NatjecanjeService natjecanjeService;
+
+    @Autowired
+    private ZadatakService zadatakService;
+
     @Value("${BytePit.rapidApiKey}")
     private String apiKey;
     @Value("${BytePit.rapidApiHost}")
@@ -80,6 +86,53 @@ public class RjesenjeController {
         }
 
         return rjesenjeService.findByRjesenjeIdNatjecatelj(korisnik.get());
+    }
+
+    /*
+     * Ruta za dohvaćanje svih rješenja jednog korisnika u određenom natjecanju.
+     */
+    @GetMapping("get/natjecatelj/{korisnickoIme}/{natjecanjeId}")
+    public List<Rjesenje> getRjesenjeByKorisnikIdAndNatjecanjeId(@PathVariable String korisnickoIme, @PathVariable Integer natjecanjeId, @AuthenticationPrincipal UserDetails user) {
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+        Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
+
+        if(Objects.isNull(user))
+            throw new AccessDeniedException("You must be logged in for that!");
+        if(!korisnickoIme.equals(user.getUsername()) &&
+                !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+            throw new AccessDeniedException("You do not have the authority to access this!");
+
+        if (!korisnik.isPresent()) {
+            throw new RequestDeniedException("Korisnik ne postoji!");
+        }
+
+        return rjesenjeService.findByNatjecateljAndNatjecanje(korisnik.get(), natjecanje);
+    }
+
+    @GetMapping("get/natjecanje/{natjecanjeId}/{zadatakId}")
+    public List<Rjesenje> getRjesenjeByNatjecanjeIdAndZadatakId(@PathVariable Integer natjecanjeId, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
+        Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
+        Zadatak zadatak = zadatakService.fetch(zadatakId);
+
+        return rjesenjeService.findByNatjecanjeAndZadatak(natjecanje, zadatak);
+    }
+
+    @GetMapping("get/natjecatelj/{korisnickoIme}/{zadatakId}")
+    public List<Rjesenje> getRjesenjeByKorisnikIdAndZadatakId(@PathVariable String korisnickoIme, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+        Zadatak zadatak = zadatakService.fetch(zadatakId);
+
+        if(Objects.isNull(user))
+            throw new AccessDeniedException("You must be logged in for that!");
+        if(!korisnickoIme.equals(user.getUsername()) &&
+                !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+            throw new AccessDeniedException("You do not have the authority to access this!");
+
+        if (!korisnik.isPresent()) {
+            throw new RequestDeniedException("Korisnik ne postoji!");
+        }
+
+        return rjesenjeService.findByNatjecateljAndZadatak(korisnik.get(), zadatak);
     }
 
     /*

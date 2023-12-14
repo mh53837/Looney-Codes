@@ -2,11 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
-import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
-import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
-import hr.fer.progi.looneycodes.BytePit.api.model.RjesenjeKey;
-import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
-import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.api.model.*;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.RjesenjeRepository;
 import hr.fer.progi.looneycodes.BytePit.api.repository.TestniPrimjerRepository;
@@ -61,6 +57,21 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     @Override
     public List<Rjesenje> findByRjesenjeIdNatjecatelj(Korisnik natjecatelj) {
         return rjesenjeRepository.findByRjesenjeIdNatjecatelj(natjecatelj);
+    }
+
+    @Override
+    public List<Rjesenje> findByNatjecateljAndNatjecanje(Korisnik natjecatelj, Natjecanje natjecanje){
+        return rjesenjeRepository.findByNatjecateljAndNatjecanje(natjecatelj, natjecanje);
+    }
+
+    @Override
+    public List<Rjesenje> findByNatjecanjeAndZadatak(Natjecanje natjecanje, Zadatak zadatak) {
+        return rjesenjeRepository.findByNatjecanjeAndZadatak(natjecanje, zadatak);
+    }
+
+    @Override
+    public List<Rjesenje> findByNatjecateljAndZadatak(Korisnik natjecatelj, Zadatak zadatak) {
+        return rjesenjeRepository.findByNatjecateljAndZadatak(natjecatelj, zadatak);
     }
 
     @Override
