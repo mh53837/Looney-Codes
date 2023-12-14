@@ -75,15 +75,15 @@ VALUES
 (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, 104, true),
 (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 10, 1, 4, null, true);
 */
-INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak)
+INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak, tezina_zadatka)
 VALUES
-    (nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true),
-    (nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, true),
-    (nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, false),
-    (nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, false),
-    (nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 10, 1, 6, false),
-    (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, true),
-    (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 10, 1, 4, true);
+    (nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true, 'RECRUIT'),
+    (nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, true, 'VETERAN'),
+    (nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, false, 'RECRUIT'),
+    (nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, false, 'REALISM'),
+    (nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 50, 1, 6, false, 'VETERAN'),
+    (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, true, 'REALISM'),
+    (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 100, 1, 4, true, 'REALISM');
 
 ALTER SEQUENCE zadatak_seq RESTART WITH 1001;
 INSERT INTO natjecanje_zadaci (zadaci_zadatak_id, natjecanje_natjecanje_id )

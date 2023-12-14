@@ -54,7 +54,11 @@ public class Zadatak {
    */
   private boolean privatniZadatak;
 
-  //dodaj vezu izmedju zadatka i virtualnog natjecanja
+  /**
+   * tezina zadatka
+   */
+  @Enumerated(EnumType.STRING)
+  private TezinaZadatka tezinaZadatka;
 
   @JsonIgnore
   @ManyToMany(mappedBy = "listaZadataka")
