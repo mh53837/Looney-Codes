@@ -19,6 +19,9 @@ public class RjesenjeKey implements Serializable {
   @ManyToOne
   private Zadatak zadatak;
 
+  @ManyToOne
+  private  Natjecanje natjecanje;
+
   public RjesenjeKey() {
     super();
   }
