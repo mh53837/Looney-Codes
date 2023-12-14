@@ -2,7 +2,12 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
+import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
+import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.AccessDeniedException;
@@ -36,6 +41,9 @@ public class ZadatakController {
 	
 	@Autowired
 	private TestniPrimjerService testService;
+
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	/**
 	 * Ruta za ispis svih javnih zadataka.
@@ -120,6 +128,22 @@ public class ZadatakController {
 	public List<TestniPrimjer> listTests(@PathVariable Integer id){
 		Zadatak zadatak = zadatakService.fetch(id);
 		return testService.listAllByZadatak(zadatak);
+	}
+
+	/**
+	 * Ruta za dohvaćanje svih riješenih zadataka zadanog natjecatelja
+	 * @param id identifikator natjecatelja
+	 * @return lista zadataka
+	 */
+	@GetMapping("/get/{korisnickoIme}/allSolvedTasks")
+	public List<Zadatak> listAllSolvedTasksFromOneNatjecatelj(@PathVariable String korisnickoIme){
+		Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+
+		if (!korisnik.isPresent()) {
+			throw new RequestDeniedException("Korisnik ne postoji!");
+		}
+
+		return zadatakService.findByNatjecateljAllSolved(korisnik.get());
 	}
 	
 	/**

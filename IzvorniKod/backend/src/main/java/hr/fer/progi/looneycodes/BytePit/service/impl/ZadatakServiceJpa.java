@@ -65,6 +65,11 @@ public class ZadatakServiceJpa implements ZadatakService {
 	}
 
 	@Override
+	public List<Zadatak> findByNatjecateljAllSolved(Korisnik natjecatelj) {
+		return zadatakRepo.findByNatjecateljAllSolved(natjecatelj);
+	}
+
+	@Override
 	public List<Zadatak> listAllZadaciNatjecanje(Natjecanje natjecanje) {
 		return zadatakRepo.findByNatjecanje(natjecanje);
 	}

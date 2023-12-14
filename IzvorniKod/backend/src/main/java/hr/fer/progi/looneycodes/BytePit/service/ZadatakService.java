@@ -3,6 +3,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
@@ -61,5 +62,13 @@ public interface ZadatakService {
 	   * @return referenca na instancu zadatak klase s novim zapisom iz baze
 	   */
 	  public Zadatak updateZadatak(Zadatak korisnik);
-	
+
+
+	/**
+	 * Metoda koja pronalazi sve potpuno riješene zadatke zadanog natjecatelja.
+	 * @param natjecatelj - identifikator natjecatelja
+	 * @return listu zadataka zadanog natjecatelja
+	 */
+	List<Zadatak> findByNatjecateljAllSolved(Korisnik natjecatelj);
+
 	}
