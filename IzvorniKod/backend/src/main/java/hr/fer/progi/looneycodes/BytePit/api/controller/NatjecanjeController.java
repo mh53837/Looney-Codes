@@ -160,6 +160,46 @@ public class NatjecanjeController {
         return natjecanjeService.getZadaciByNatjecanjeId(natjecanjeId);
     }
 
+    /**
+     * Metoda koja dodaje zadatak u natjecanje
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+
+    @PostMapping("/add/zadatak/{natjecanjeId}/{zadatakId}")
+    @Secured({"VODITELJ", "ADMIN"})
+    public void addZadatakToNatjecanje(@PathVariable Integer natjecanjeId, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+
+        Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
+        if((voditelj.isEmpty() || !natjecanjeService.getNatjecanje(natjecanjeId).getVoditelj().getKorisnikId().equals(voditelj.get().getKorisnikId()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
+
+
+        natjecanjeService.addZadatakToNatjecanje(natjecanjeId, zadatakId);
+    }
+
+    /**
+     * Metoda koja uklanja zadatak iz natjecanja
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+
+    @PostMapping("/remove/zadatak/{natjecanjeId}/{zadatakId}")
+    @Secured({"VODITELJ", "ADMIN"})
+    public void removeZadatakFromNatjecanje(@PathVariable Integer natjecanjeId, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+
+        Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
+        if((voditelj.isEmpty() || !natjecanjeService.getNatjecanje(natjecanjeId).getVoditelj().getKorisnikId().equals(voditelj.get().getKorisnikId()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
+
+        natjecanjeService.removeZadatakFromNatjecanje(natjecanjeId, zadatakId);
+    }
 
 
 }

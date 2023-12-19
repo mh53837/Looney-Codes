@@ -80,6 +80,21 @@ public interface NatjecanjeService {
      */
     public List<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId);
 
+    /**
+     * Metoda koja dodaje zadatak u natjecanje
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+    public void addZadatakToNatjecanje(Integer natjecanjeId, Integer zadatakId);
+
+    /**
+     * Metoda koja uklanja zadatak iz natjecanja
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+
+    public void removeZadatakFromNatjecanje(Integer natjecanjeId, Integer zadatakId);
+
 
 
 

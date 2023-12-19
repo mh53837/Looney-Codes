@@ -8,6 +8,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
+import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -15,11 +16,15 @@ import org.springframework.util.Assert;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
     private KorisnikService korisnikService;
+
+    @Autowired
+    private ZadatakService zadatakService;
 
     @Autowired
     private NatjecanjeRepository natjecanjeRepo;
@@ -94,4 +99,37 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         return natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
     }
 
+    @Override
+    public void addZadatakToNatjecanje(Integer natjecanjeId, Integer zadatakId) {
+        Assert.notNull(zadatakId, "ID zadatka ne smije biti null!");
+
+        Natjecanje natjecanje = natjecanjeRepo.findByNatjecanjeId(natjecanjeId);
+        Zadatak zadatak = zadatakService.fetch(zadatakId);
+
+        Assert.notNull(zadatak, "Zadatak s ID-em " + zadatakId + " ne postoji!");
+        //za ovo nisam siguran jel treba vrijediti
+        Assert.isTrue(natjecanje.getVoditelj().getKorisnikId().equals(zadatak.getVoditelj().getKorisnikId()), "Zadatak i natjecanje ne pripadaju istom voditelju!");
+
+        Set<Zadatak> zadaci = natjecanje.getZadaci();
+        zadaci.add(zadatak);
+        natjecanje.setZadaci(zadaci);
+        natjecanjeRepo.save(natjecanje);
+
+    }
+
+    @Override
+    public void removeZadatakFromNatjecanje(Integer natjecanjeId, Integer zadatakId) {
+        Assert.notNull(zadatakId, "ID zadatka ne smije biti null!");
+
+        Natjecanje natjecanje = natjecanjeRepo.findByNatjecanjeId(natjecanjeId);
+        Zadatak zadatak = zadatakService.fetch(zadatakId);
+
+        Assert.notNull(zadatak, "Zadatak s ID-em " + zadatakId + " ne postoji!");
+
+        Set<Zadatak> zadaci = natjecanje.getZadaci();
+        zadaci.remove(zadatak);
+        natjecanje.setZadaci(zadaci);
+        natjecanjeRepo.save(natjecanje);
+
+    }
 }
