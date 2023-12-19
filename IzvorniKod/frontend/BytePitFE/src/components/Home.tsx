@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+/* import { Link } from 'react-router-dom'; */
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { UserContext } from '../context/userContext';
-import { useContext } from 'react';
-
-
+/* import { UserContext } from '../context/userContext';
+import { useContext } from 'react'; */
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -20,7 +18,7 @@ const Home: React.FC = () => {
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
 
-    const { user } = useContext(UserContext);
+    /* const { user } = useContext(UserContext); */
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,7 +39,6 @@ const Home: React.FC = () => {
             (natjecanje) =>
                 date >= new Date(natjecanje.pocetakNatjecanja) && date <= new Date(natjecanje.krajNatjecanja)
         );
-
         setOznacenaNatjecanja(natjecanjaZaDatum);
     }, [date, natjecanja]);
 
@@ -68,8 +65,9 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div>
-            {user.korisnickoIme !== '' ? (
+        <div> 
+                        
+{/*             {user.korisnickoIme !== '' ? (      //ovaj dio se moze maknuti posto ce username pisati u navbaru
                 <div>
                     <p>Pozdrav, {user.korisnickoIme}!</p>
                     {user.korisnickoIme === 'admin' ? (
@@ -80,7 +78,8 @@ const Home: React.FC = () => {
                 <div>
                     <p>Pozdrav, nepoznati korisnik!</p>
                 </div>
-            )}
+            )} */} 
+        
 
             <div className="calendar-container">
                 <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />

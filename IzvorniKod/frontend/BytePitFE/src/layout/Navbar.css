@@ -68,3 +68,7 @@
 .loginDiv a:hover{
     border-color: #dd7230;
 }
+
+.korisnikIme{
+    padding-left: 1rem;
+}
