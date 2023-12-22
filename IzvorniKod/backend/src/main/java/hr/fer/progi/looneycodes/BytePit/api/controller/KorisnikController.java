@@ -115,6 +115,20 @@ public class KorisnikController{
   public Optional<Korisnik> getKorisnik(@PathVariable int id){
     return korisnikService.fetch(id);
   }
+  
+  /**
+   * Vrati korisnika na temelju korisnickog imena
+   * @return bilo koji korisnik koji je zapisan u bazi s zadanim korisnickim imenom
+   * @return Optional.empty() ako ne postoji korisnik s tim korisnickim imenom
+   */
+  @GetMapping("/profile/{korisnickoIme}")
+  public Optional<KorisnikInfoDTO> profileKorisnik(@PathVariable String korisnickoIme){
+    Korisnik korisnik = korisnikService.getKorisnik(korisnickoIme)
+    			.orElseThrow(() -> new NotFoundException("Korisnik s korisnickim imenom: " + 
+            korisnickoIme + " ne postoji!"));
+    return Optional.of(new KorisnikInfoDTO(korisnik));
+  }
+  
 
   /**
    * Registriraj novog korisnika, nakon cega on mora potvrditi registraciju
