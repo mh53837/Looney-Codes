@@ -2,6 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
@@ -11,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,13 +82,15 @@ public class NatjecanjeController {
 
     /**
      * Vraća natjecanja povezana s zadanim voditeljem
-     *
-     * @param voditeljId
+     * @param korisnickoIme korisničko ime voditelja
      * @return lista natjecanja
      */
-    @GetMapping("/get/voditelj/{voditeljId}")
-    public List<CreateNatjecanjeDTO> getNatjecanjaByKorisnikId(@PathVariable Integer voditeljId) {
-        return natjecanjeService.getNatjecanjaByKorisnikId(voditeljId).stream().map(natjecanje -> {
+    @GetMapping("/get/voditelj/{korisnickoIme}")
+    public List<CreateNatjecanjeDTO> getNatjecanjaByKorisnickoIme(@PathVariable String korisnickoIme) {
+        Optional<Korisnik> voditelj = korisnikService.getKorisnik(korisnickoIme);
+        Assert.isTrue(voditelj.isPresent(), "Korisnik s tim korisničkim imenom ne postoji!");
+        Assert.isTrue(voditelj.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s tim korisničkim imenom nije voditelj!");
+        return natjecanjeService.getNatjecanjaByKorisnikId(voditelj.get().getKorisnikId()).stream().map(natjecanje -> {
             return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
         }).toList();
     }
