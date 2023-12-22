@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Problems from './Problems';
 import { IUser } from './UserList';
+import '../styles/Table.css'
 
 
 export interface IProblems {
@@ -21,7 +22,7 @@ const ProblemsList: React.FC = () => {
     }, []);
 
     return (
-        <div className="user-info-table">
+        <div className="problem-info-table">
             <table>
                 <thead>
                     <tr>

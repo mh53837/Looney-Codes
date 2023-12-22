@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import './Register.css';
+import '../styles/Register.css';
 
 interface RegisterProps {
     onRegister: () => void;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Problems.css';
+import '../styles/Table.css';
 import { IUser } from './UserList';
 import { Link } from 'react-router-dom';
 interface ProblemsProps {
@@ -15,7 +15,7 @@ const Problems: React.FC<ProblemsProps> = (props) => {
     const { voditelj, nazivZadatka, tekstZadatka, zadatakId } = props.problem;
 
     return (
-        <tr className="user-info-header">
+        <tr className="problem-info-header">
             <td>{voditelj?.korisnickoIme}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>
@@ -24,8 +24,6 @@ const Problems: React.FC<ProblemsProps> = (props) => {
                     Riješi
                 </Link>
             </td>
-
-
         </tr>
     );
 };

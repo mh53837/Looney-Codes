@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './ConfirmRegAdmin.css';
+import '../styles/ConfirmRegAdmin.css';
 
 export interface IUser {
     korisnikId:number;

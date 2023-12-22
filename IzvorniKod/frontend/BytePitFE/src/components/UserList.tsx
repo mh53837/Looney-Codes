@@ -1,10 +1,9 @@
 import React, {useEffect, useState, useContext} from 'react';
 import User from './User';
-import './User.css';
+import '../styles/Table.css';
 import { UserContext } from '../context/userContext';
 
 export interface IUser {
-    korisnik_id: number;
     korisnickoIme:string;
     ime:string;
     prezime:string;
@@ -54,7 +53,7 @@ const UserList: React.FC = () => {
                 ))}
                 </tbody>
             </table>
-            </div>
+        </div>
     );
 };
 

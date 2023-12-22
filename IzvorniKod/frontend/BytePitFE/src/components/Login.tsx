@@ -2,10 +2,10 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-import './Login.css';
+import '../styles/Login.css';
 
 interface LoginProps {
-    onLogin: (korisnik_id: number, korisnickoIme: string, lozinka: string, uloga: string) => void;
+    onLogin: (korisnickoIme: string, lozinka: string, uloga: string) => void;
 }
 
 interface LoginForm {
@@ -54,16 +54,12 @@ const Login: React.FC<LoginProps> = (props) => {
                 throw new Error("Error");
             }
         }).then((data) => {
-            props.onLogin(data.korisnik_id, loginForm.korisnickoIme, loginForm.lozinka, data.uloga);
+            props.onLogin(loginForm.korisnickoIme, loginForm.lozinka, data.uloga);
             setUser({
-                korisnik_id: data.korisnik_id,
                 korisnickoIme: loginForm.korisnickoIme,
                 lozinka: loginForm.lozinka,
-                uloga: data.uloga,
-                
+                uloga: data.uloga, 
             });
-            console.log(data.uloga);
-            console.log(data.korisnik_id);
         }).catch((e) => {
             console.error(e);
         });

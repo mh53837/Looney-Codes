@@ -1,6 +1,6 @@
 import UserList from './components/UserList.tsx';
 import { Link } from 'react-router-dom';
-import './App.css';
+import './styles/App.css';
 import Home from './components/Home';
 import ProblemsList from './components/ProblemsList.tsx';
 import ProblemPage from './components/ProblemPage.tsx';
@@ -21,11 +21,11 @@ const App: React.FC = () => {
     const { user } = useContext(UserContext);
     const { setUser } = useContext(UserContext);
 
-    const handleLogin = ( korisnik_id: number, korisnickoIme: string, lozinka: string, uloga: string ) => {
+    const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string ) => {
 
         setRedirectToHome(true);
 
-        setUser({korisnik_id, korisnickoIme, lozinka, uloga });
+        setUser({korisnickoIme, lozinka, uloga });
 
         setTimeout(() => {
             setRedirectToHome(false);
@@ -34,9 +34,7 @@ const App: React.FC = () => {
 
     const handleLogout = () => {
         setRedirectToHome(true);
-
-        setUser({ korisnik_id: 0, korisnickoIme: '', lozinka: '', uloga: ''});
-
+        setUser({korisnickoIme: '', lozinka: '', uloga: ''});
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
@@ -49,7 +47,7 @@ const App: React.FC = () => {
     return (
         <Router>
             {user && (
-            <Navbar /* user={{ korisnikIme: user.korisnickoIme, korisnik_id: user.korisnik_id }} */ onLogout={handleLogout} />
+            <Navbar onLogout={handleLogout} />
             )}
             {redirectToHome && <Navigate to="/" replace={true} />}
             <Routes>
@@ -77,7 +75,7 @@ const App: React.FC = () => {
                 }
 
                 />
-                <Route path="/user/get/:id" element={<UserProfile />} />
+                <Route path="/user/profile/:korisnickoIme" element={<UserProfile />} />
                 <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
                 <Route path="/user/listRequested" element={
                     <div>

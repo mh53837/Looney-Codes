@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './ProblemPage.css';
+import '../styles/ProblemPage.css';
 import { UserContext } from '../context/userContext';
 
 interface IProblemDetails {

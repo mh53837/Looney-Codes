@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
 
 interface User {
-  korisnik_id: number;
   korisnickoIme: string;
   lozinka: string;
   uloga: string;
@@ -14,7 +13,6 @@ interface UserContextValue {
 
 export const UserContext = createContext<UserContextValue>({
   user: {
-    korisnik_id: 0,
     korisnickoIme: '',
     lozinka: '',
     uloga: '',
@@ -29,7 +27,7 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>(() => {
     const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : {korisnik_id: 0, korisnickoIme: '', lozinka: '',  uloga: '' };
+    return storedUser ? JSON.parse(storedUser) : {korisnickoIme: '', lozinka: '',  uloga: '' };
   });
 
   useEffect(() => {

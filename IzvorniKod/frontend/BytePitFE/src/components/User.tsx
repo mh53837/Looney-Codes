@@ -1,19 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './User.css';
+import '../styles/Table.css';
 interface UserProps {
     user: {
-        korisnik_id: number;
         korisnickoIme: string;
         ime: string;
         prezime: string;
         email: string;
     };
-
 }
 
 const User: React.FC<UserProps> = (props) => {
-    const {korisnik_id, korisnickoIme, ime, prezime, email } = props.user;
+    const {korisnickoIme, ime, prezime, email } = props.user;
 
     return (
         <tr className="user-info-header">
@@ -22,7 +20,7 @@ const User: React.FC<UserProps> = (props) => {
         <td>{prezime}</td>
         <td>{email}</td>
         <td>
-            <Link to = {`/user/get/${korisnik_id}`}>
+            <Link to = {`/user/profile/${korisnickoIme}`}>
                 pogledaj profil
             </Link>
         </td>

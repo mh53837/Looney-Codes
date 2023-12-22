@@ -1,28 +1,20 @@
 import { Link, useLocation } from 'react-router-dom';
-import './Navbar.css';
+import '../styles/Navbar.css';
 import React from 'react';
 import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../context/userContext';
 
 
 interface NavbarProps {
-/*   user:{
-    korisnikIme: string | null;
-    korisnik_id: number;
-  }; */
     onLogout: () => void;
   }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
   const { user } = useContext(UserContext); //podaci ulogiranog korisnika/* 
-    /* const { korisnikIme, korisnik_id } = props.user; */ 
-    const onLogout = props.onLogout;
-    const [imageData, setImageData] = useState<string | null>(null);
-    const location = useLocation();
+  const onLogout = props.onLogout;
+  const [imageData, setImageData] = useState<string | null>(null);
+  const location = useLocation();
 
-    console.log(location.pathname); 
-    console.log(user.korisnik_id); 
-    console.log(user.uloga); 
   
     useEffect(() => {
       const fetchProfilePicture = async () => {
@@ -38,13 +30,13 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         }
       };
       fetchProfilePicture();
-    }, [user.korisnickoIme, user.korisnik_id]);
+    }, [user.korisnickoIme]);
   
     useEffect(() => {
       if (!user.korisnickoIme) {
         setImageData("/slike/bytepit-usericon.png");
       }
-    }, [user.korisnickoIme, user.korisnik_id]
+    }, [user.korisnickoIme]
     );
 
     return (
@@ -71,10 +63,10 @@ const Navbar: React.FC<NavbarProps> = (props) => {
     
         {user.korisnickoIme ? (
         <div className="loginDiv">
-          {location.pathname === `/user/get/${user.korisnik_id}` ? ( //ako je navbar na profilu korisnika nek se prikaze odjavi
+          {location.pathname === `/user/profile/${user.korisnickoIme}` ? ( //ako je navbar na profilu korisnika nek se prikaze odjavi
             <button onClick={onLogout}>odjavi se!</button>
             ) : ( //inace se prikazuje njegov username
-            <Link to = {`/user/get/${user.korisnik_id}`}>
+            <Link to = {`/user/profile/${user.korisnickoIme}`}>
               {imageData ? (
                 <img className="userIconImg" src={imageData} alt="BytePit unregistered user icon" />
               ) : (
