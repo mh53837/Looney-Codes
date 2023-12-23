@@ -15,7 +15,7 @@ const Problems: React.FC<ProblemsProps> = (props) => {
     const { voditelj, nazivZadatka, tekstZadatka, zadatakId } = props.problem;
 
     return (
-        <tr className="problem-info-header">
+        <tr className="info-table">
             <td>{voditelj?.korisnickoIme}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>

@@ -66,21 +66,6 @@ const Home: React.FC = () => {
 
     return (
         <div> 
-                        
-{/*             {user.korisnickoIme !== '' ? (      //ovaj dio se moze maknuti posto ce username pisati u navbaru
-                <div>
-                    <p>Pozdrav, {user.korisnickoIme}!</p>
-                    {user.korisnickoIme === 'admin' ? (
-                        <Link to="/user/listRequested">odobri voditelje</Link>
-                    ) : (<p></p>)}
-                </div>
-            ) : (
-                <div>
-                    <p>Pozdrav, nepoznati korisnik!</p>
-                </div>
-            )} */} 
-        
-
             <div className="calendar-container">
                 <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>

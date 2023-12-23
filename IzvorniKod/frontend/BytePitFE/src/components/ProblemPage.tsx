@@ -128,7 +128,7 @@ const ProblemPage: React.FC = () => {
                                 <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
                         </div>
                         <div className="problem-description">
-                                <h2>Tekst zadatka</h2>
+                                <h2>Tekst zadatka:</h2>
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}

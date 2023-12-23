@@ -1,37 +1,48 @@
-.user-info-table, .competition-info-table, .problem-info-table {
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-.user-info-table table, .competition-info-table table, .problem-info-table table {
+.tableWrapper {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.info-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.info-table table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.user-info-table th, .user-info-table td, .competition-info-table th, .competition-info-table td, .problem-info-table th, .problem-info-table td{
+.info-table th,
+.info-table td {
   border: 1px solid #00000085;
   padding: 10px;
   text-align: left;
+  overflow: hidden;
 }
 
-.user-info-table th, .competition-info-table th, .problem-info-table th{
+.info-table th {
   background-color: #f4c95de7;
 }
 
-.user-info-table tbody tr:hover, .competition-info-table tbody tr:hover, .problem-info-table tbody tr:hover{
+.info-table tbody tr:hover {
   background-color: #f4c95d52;
 }
 
-table.problem-info-header {
+/* table.problem-info-header, table.competition-info-header{
   width: 80%;
   margin: 0 auto;
 }
 
-.problem-info-header td {
+.problem-info-header td, .competition-info-header td  {
   text-align: left;
   padding: 8px;
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
+} */
+

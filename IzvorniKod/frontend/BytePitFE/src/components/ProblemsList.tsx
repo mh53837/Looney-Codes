@@ -22,7 +22,7 @@ const ProblemsList: React.FC = () => {
     }, []);
 
     return (
-        <div className="problem-info-table">
+        <div className="info-table">
             <table>
                 <thead>
                     <tr>

@@ -1,0 +1,19 @@
+.userProfile {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the start (left) */
+    width: 100%;
+}
+
+.userProfileImg {
+    max-width: 25vw;
+}
+
+.userData {
+    text-align: left;
+    margin-left: 15px; /* Add some margin between the image and user details */
+}
+
+.userImg {
+    margin-right: 15px; /* Add some margin between the image and user details */
+}

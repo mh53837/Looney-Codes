@@ -6,11 +6,8 @@ import { Tabs, ConfigProvider } from "antd";
 import Competition from "./Competition";
 import Problems from "./Problems";
 import { fetchData } from "../hooks/usersAPI";
-
-//ne radi jer se id s backenda vraca ko undefined
-//radi kad se rucno unese broj id korisnika u rutu
-//zbog backenda pristup profilima ima samo admin
-
+import '../styles/UserProfile.css'
+import '../styles/Table.css'
 interface UserData {
   korisnickoIme: string;
   ime: string;
@@ -35,6 +32,7 @@ interface ProblemData {
 }
 
 const UserProfile: React.FC = () => {
+  const [imageData, setImageData] = useState<string | null>(null);
   const { user } = useContext(UserContext); //podaci ulogiranog korisnika
   const { korisnickoIme } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null); //podaci korisnika ciji se profil otvara
@@ -42,6 +40,22 @@ const UserProfile: React.FC = () => {
     []
   );
   const [problemsData, setProblemsData] = useState<ProblemData[]>([]);
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        if (korisnickoIme !== ''){
+          const response = await fetch(`/api/user/image/${korisnickoIme}`);
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          setImageData(imageUrl);
+        }
+      } catch (error) {
+        console.error('Error fetching profile picture:', error);
+      }
+    };
+    fetchProfilePicture();
+  }, [korisnickoIme]);
 
   useEffect(() => {
     fetchData(`/api/user/profile/${korisnickoIme}`, user)
@@ -85,28 +99,30 @@ const UserProfile: React.FC = () => {
   }, [user, userData, korisnickoIme]); //voditelj - moji zadaci (javni i privatni)
 
   if (!userData) {
-    return <p>korisnik ne postoji ili mu se ne može pristupiti</p>;
+    return <p>dohvaćanje korisnika</p>;
   }
 
   const renderProblemsTab = () => (
-    <div>
+    <div className="problemContainer">
       {problemsData ? (
-        <div className="competition-info-table">
-          <table>
-            <thead>
-              <tr>
-                <th>korisničko ime</th>
-                <th>naziv</th>
-                <th>tekst</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {problemsData.map((problem, index) => (
-                <Problems key={index} problem={problem} />
-              ))}
-            </tbody>
-          </table>
+        <div className="tableWrapper">
+          <div className="info-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>korisničko ime</th>
+                  <th>naziv</th>
+                  <th>tekst</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {problemsData.map((problem, index) => (
+                  <Problems key={index} problem={problem} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <p>greška prilikom dohvaćanja zadataka</p>
@@ -114,26 +130,27 @@ const UserProfile: React.FC = () => {
     </div>
   );
   const renderCompetitionsTab = () => (
-    <div>
+    <div className="competitionContainer">
       {competitionsData ? (
-        <div className="competition-info-table">
-          <table>
-            <thead>
-              <tr>
-                <th>identifikator</th>
-                <th>voditelj</th>
-                <th>naziv</th>
-                <th>početak</th>
-                <th>kraj</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {competitionsData.map((competition, index) => (
-                <Competition key={index} competition={competition} />
-              ))}
-            </tbody>
-          </table>
+        <div className="tableWrapper">
+          <div className="info-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>voditelj</th>
+                  <th>naziv</th>
+                  <th>početak</th>
+                  <th>kraj</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {competitionsData.map((competition, index) => (
+                  <Competition key={index} competition={competition} />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <p>greška prilikom dohvaćanja natjecanja</p>
@@ -142,14 +159,24 @@ const UserProfile: React.FC = () => {
   );
 
   return (
-    <div>
-      <p>{userData.korisnickoIme}</p>
-      <p>{userData.ime}</p>
-      <p>{userData.prezime}</p>
-      <p>{userData.email}</p>
-
-      {userData.korisnickoIme === user.korisnickoIme && (
-        <div>
+    <div className = "profileContainer">
+      {userData.korisnickoIme === user.korisnickoIme ? (
+        <div className="userProfileContainer">
+          <h2>moj profil</h2>
+            <div className = "userProfile"> 
+              <div className="userImg">
+                {imageData ? (
+                  <img className="userProfileImg" src={imageData} alt="BytePit unregistered user icon" />
+                ) : (
+                  <img className="userProfileImg" src="/slike/bytepit-usericon.png" alt="Default icon" />
+                )}
+              </div>
+              <div className="userData">
+                <p>{userData.korisnickoIme}</p>
+                <p>{userData.ime}&nbsp;{userData.prezime}</p>
+                <p>{userData.email}</p>
+              </div>
+            </div>
           {userData.uloga === "ADMIN" && (
             <Link to="/user/listRequested">odobri voditelje</Link>
           )}
@@ -178,6 +205,58 @@ const UserProfile: React.FC = () => {
                   },
                   {
                     label: <p>moja natjecanja</p>,
+                    key: "2",
+                    children: renderCompetitionsTab(),
+                  },
+                ]}
+              />
+            </ConfigProvider>
+          )}
+        </div>
+      ) : (
+        <div>
+          <h2>profil korisnika</h2>
+          <div className="userProfileWrapper">
+            <div className = "userProfile"> 
+              <div className="userImg">
+                {imageData ? (
+                  
+                  <img className="userProfileImg" src={imageData} alt="BytePit unregistered user icon" />
+                ) : (
+                  <img className="userProfileImg" src="/slike/bytepit-usericon.png" alt="Default icon" />
+                )}
+                </div>
+                <div className="userData">
+                  <p>{userData.korisnickoIme}</p>
+                  <p>{userData.ime}&nbsp;{userData.prezime}</p>
+                  <p>{userData.email}</p>
+                </div>
+              </div>
+          </div>
+          {userData.uloga === "VODITELJ" && (
+            <ConfigProvider
+              theme={{
+                components: {
+                  Tabs: {
+                    inkBarColor: "#dd7236",
+                    itemActiveColor: "#dd7236",
+                    itemSelectedColor: "#dd7236",
+                    itemHoverColor: "#dd7236",
+                  },
+                },
+              }}
+            >
+              <Tabs
+                defaultActiveKey="1"
+                centered
+                items={[
+                  {
+                    label: <p>zadaci</p>,
+                    key: "1",
+                    children: renderProblemsTab(),
+                  },
+                  {
+                    label: <p>natjecanja</p>,
                     key: "2",
                     children: renderCompetitionsTab(),
                   },

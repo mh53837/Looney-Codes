@@ -15,19 +15,21 @@ interface CompetitionProps {
 
 const Competition: React.FC<CompetitionProps> = (props) => {
     const {natjecanjeId, voditelj, nazivNatjecanja, pocetakNatjecanja, krajNatjecanja } = props.competition;
+    const pocetakDatum = new Date(pocetakNatjecanja);
+
+    const krajDatum = new Date(krajNatjecanja);
 
     return (
-        <tr className="competition-info-header">
-        <td>{natjecanjeId}</td>
-        <td>{voditelj}</td>
-        <td>{nazivNatjecanja}</td>
-        <td>{pocetakNatjecanja}</td>
-        <td>{krajNatjecanja}</td>
-        <td>
-            <Link to = {`/user/get/${natjecanjeId}`}>
-                pogledaj natjecanje
-            </Link>
-        </td>
+        <tr className="info-table">
+            <td>{voditelj}</td>
+            <td>{nazivNatjecanja}</td>
+            <td>{pocetakDatum.toDateString()}</td>
+            <td>{krajDatum.toDateString()}</td>
+            <td>
+                <Link to = {`/user/get/${natjecanjeId}`}>
+                    pogledaj natjecanje
+                </Link>
+            </td>
         </tr>
     );
 };

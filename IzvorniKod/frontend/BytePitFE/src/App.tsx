@@ -10,7 +10,7 @@ import ConfirmEmail from './components/ConfirmEmail.tsx';
 import Navbar from './layout/Navbar.tsx';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from "./components/Register.tsx";
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
 import NotFoundPage from "./components/NotFoundPage.tsx"
 import UserProfile from './components/UserProfile.tsx';
@@ -39,10 +39,6 @@ const App: React.FC = () => {
             setRedirectToHome(false);
         }, 100);
     };
-
-    useEffect(() => {
-        console.log("User in App component:", user);
-      }, [user]);
 
     return (
         <Router>

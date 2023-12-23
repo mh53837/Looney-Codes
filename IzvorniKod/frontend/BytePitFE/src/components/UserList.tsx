@@ -36,7 +36,7 @@ const UserList: React.FC = () => {
     [user.korisnickoIme, user.lozinka]);
 
     return (
-        <div className="user-info-table">
+        <div className="info-table">
             <table>
                 <thead>
                 <tr>
