@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sučelje za provođenje upita nad tablicom virtualno_natjecanje u bazi.
@@ -22,7 +23,7 @@ public interface VirutalnoNatjecanjeRepository extends JpaRepository<VirtualnoNa
      * @param virtualnoNatjecanjeId
      * @return virtualno natjecanje
      */
-    VirtualnoNatjecanje findByVirtualnoNatjecanjeId(Integer virtualnoNatjecanjeId);
+    VirtualnoNatjecanje findByNatjecanjeId(Integer virtualnoNatjecanjeId);
 
     /**
      * Metoda koja pronalazi virtualna natjecanja po id-u natjecatelja
@@ -30,7 +31,7 @@ public interface VirutalnoNatjecanjeRepository extends JpaRepository<VirtualnoNa
      * @param natjecateljId
      * @return lista virtualnih natjecanja
      */
-    @Query("SELECT v FROM VirtualnoNatjecanje v WHERE v.natjecatelj.korisnikId = :natjecateljId")
+    @Query("SELECT v FROM VirtualnoNatjecanje v WHERE v.korisnik.korisnikId = :natjecateljId")
     List<VirtualnoNatjecanje> findByNatjtecanteljId(@Param("natjecateljId") Integer natjecateljId);
 
     /**
@@ -42,7 +43,7 @@ public interface VirutalnoNatjecanjeRepository extends JpaRepository<VirtualnoNa
     @Query("SELECT v FROM VirtualnoNatjecanje v WHERE v.orginalnoNatjecanje.natjecanjeId = :origNatId")
     List<VirtualnoNatjecanje> findByOrigNatId(@Param("origNatId") Integer origNatId);
 
-    @Query("select z from VirtualnoNatjecanje v join v.listaZadataka z where v.virtualnoNatjecanjeId = :virtualnoNatjecanjeId")
-    List<Zadatak> findZadaciByVirtualnoNatjecanjeId(@Param("virtualnoNatjecanjeId") Integer virtualnoNatjecanjeId);
+    @Query("select z from VirtualnoNatjecanje v join v.zadaci z where v.natjecanjeId = :virtualnoNatjecanjeId")
+    Set<Zadatak> findZadaciByVirtualnoNatjecanjeId(@Param("virtualnoNatjecanjeId") Integer virtualnoNatjecanjeId);
 
 }

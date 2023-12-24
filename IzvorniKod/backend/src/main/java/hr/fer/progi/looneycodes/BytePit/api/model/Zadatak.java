@@ -61,7 +61,7 @@ public class Zadatak {
   private TezinaZadatka tezinaZadatka;
 
   @JsonIgnore
-  @ManyToMany(mappedBy = "listaZadataka")
+  @ManyToMany(mappedBy = "zadaci")
   List <VirtualnoNatjecanje> virtualnaNatjecanja;
 
   // geteri i seteri

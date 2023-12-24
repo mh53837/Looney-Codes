@@ -33,7 +33,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
 
     @Override
     public VirtualnoNatjecanje getVirtualnoNatjecanje(Integer Id) {
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(Id);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(Id);
         Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + Id + " ne postoji!");
         return virtualnoNatjecanje;
     }
@@ -71,9 +71,9 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     }
 
     @Override
-    public List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
+    public Set<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
         Assert.notNull(virtualnoNatjecanjeId, "Id virtualnog natjecanja ne smije biti null");
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(virtualnoNatjecanjeId);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
         Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + virtualnoNatjecanjeId + " ne postoji!");
         return virtualnoNatjecanje.getListaZadataka();
     }

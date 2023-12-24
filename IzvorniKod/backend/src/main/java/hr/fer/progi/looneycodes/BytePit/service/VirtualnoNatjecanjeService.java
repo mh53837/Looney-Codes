@@ -6,6 +6,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface koje definira komunikaciju s bazom podataka u odnosu na Virtualno_natjecanje entitete
@@ -60,7 +61,7 @@ public interface VirtualnoNatjecanjeService {
      * @return lista zadataka
      *
      */
-    List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId);
+    Set<Zadatak> getZadaci(Integer virtualnoNatjecanjeId);
 
     /**
      * Stvara virtualno natjecanje s nasumičnim zadacima i sprema ga u bazu

@@ -9,7 +9,7 @@ DROP SEQUENCE korisnik_seq;
 DROP SEQUENCE natjecanje_seq;
 DROP SEQUENCE pehar_seq;
 DROP SEQUENCE zadatak_seq;
-DROP SEQUENCE virtualno_natjecanje_seq;
+
 
 CREATE SEQUENCE korisnik_seq
 START 1
@@ -28,9 +28,6 @@ CREATE SEQUENCE pehar_seq
 START 1011
 INCREMENT 10;
 
-CREATE SEQUENCE virtualno_natjecanje_seq
-START 100001
-INCREMENT 1;
 
 INSERT INTO korisnik (korisnik_id, korisnicko_ime, ime, prezime, email, lozinka, uloga, vrijeme_registracije, confirmed_email, fotografija) 
 VALUES
@@ -50,7 +47,7 @@ VALUES
 (nextval('korisnik_seq'), 'missMinutes', 'Miss', 'Minutes', 'miss.minutes@tva.gov', '$2y$10$SkXSgI414ejZLRi9nq5bZeZjgYUA6JjRS1mbspjxrmseFEp.UpOb2', 'VODITELJ', CURRENT_TIMESTAMP, false, './src/main/resources/profilneSlike/placeHolder.png');
 
 
-INSERT INTO natjecanje (natjecanje_id, naziv_natjecanja, voditelj_korisnik_id, pocetak_natjecanja, kraj_natjecanja) 
+INSERT INTO natjecanje (natjecanje_id, naziv_natjecanja, korisnik_korisnik_id, pocetak_natjecanja, kraj_natjecanja) 
 VALUES
 (nextval('natjecanje_seq'), 'Endgame', '4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP+'1 day'::INTERVAL),
 (nextval('natjecanje_seq'), 'Justice League', '6', CURRENT_TIMESTAMP-'3 day'::INTERVAL, CURRENT_TIMESTAMP-'8 hour'::INTERVAL),
@@ -123,7 +120,8 @@ VALUES
 (2, 1005, 'jeka', 'jeka'),
 (1, 1006, '75345', '10000');
 
-INSERT INTO virtualno_natjecanje (virtualno_natjecanje_id, natjecatelj_korisnik_id, orginalno_natjecanje_natjecanje_id, vrijeme_pocetka) 
+INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
 VALUES
-(nextval('virtualno_natjecanje_seq'), 2, 102, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
-(nextval('virtualno_natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
+(nextval('natjecanje_seq'), 2, 102, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
+(nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
+
