@@ -95,7 +95,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     }
 
     @Override
-    public List<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId) {
+    public Set<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId) {
         return natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
     }
 

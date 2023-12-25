@@ -61,17 +61,17 @@ VALUES
 (nextval('pehar_seq'), 1, 102, 3),
 (nextval('pehar_seq'), 1, 103, NULL),
 (nextval('pehar_seq'), 1, 104, NULL);
-/*
-INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, natjecanje_natjecanje_id, privatni_zadatak) 
+
+INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak) 
 VALUES
-(nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, 101, true),
-(nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, 101, true),
-(nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, null, false),
-(nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, 103, false),
-(nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 10, 1, 6, 102, false),
-(nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, 104, true),
-(nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 10, 1, 4, null, true);
-*/
+(nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true),
+(nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, true),
+(nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, false),
+(nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, false),
+(nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 10, 1, 6, false),
+(nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, true),
+(nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 10, 1, 4, true);
+
 INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak, tezina_zadatka)
 VALUES
     (nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true, 'RECRUIT'),
@@ -83,7 +83,7 @@ VALUES
     (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 100, 1, 4, true, 'REALISM');
 
 ALTER SEQUENCE zadatak_seq RESTART WITH 1001;
-INSERT INTO natjecanje_zadaci (zadaci_zadatak_id, natjecanje_natjecanje_id )
+INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
     VALUES
     (nextval('zadatak_seq'), 101),
     (nextval('zadatak_seq'), 102),
@@ -93,7 +93,10 @@ INSERT INTO natjecanje_zadaci (zadaci_zadatak_id, natjecanje_natjecanje_id )
     (nextval('zadatak_seq'), 104),
     (nextval('zadatak_seq'), 102);
 
-
+INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
+VALUES
+(nextval('natjecanje_seq'), 2, 102, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
+(nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
 
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera, natjecanje_natjecanje_id)
 VALUES
@@ -103,10 +106,10 @@ VALUES
 (3, 1005, 5, null, CURRENT_TIMESTAMP-'16 hour'::INTERVAL, 0, 101),
 (4, 1005, 4, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'1 day'::INTERVAL, 1, 101),
 -- syntax error -> ne prolazi
-(5, 1003, 5, '#include<bits/stdc++.h>\n int main() {int a, b; std::cin >> a >> b; std::cout << a*b', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 101),
+(5, 1003, 5, '#include<bits/stdc++.h>\n int main() {int a, b; std::cin >> a >> b; std::cout << a*b', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 105),
 -- syntax error -> ne prolazi
 (6, 1003, 4, '#include<bits/stdc++.h>\n int main() {int x, y; std::cin >> x >> y; std::cout << x*y', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 102),
-(7, 1006, 5, '#include<bits/stdc++.h>\n int main() {int kune; std::cin >> kune; std::cout << (int)kune/7.5345;}', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 102) ;
+(7, 1006, 5, '#include<bits/stdc++.h>\n int main() {int kune; std::cin >> kune; std::cout << (int)kune/7.5345;}', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, NULL) ;
 
 
 
@@ -120,8 +123,5 @@ VALUES
 (2, 1005, 'jeka', 'jeka'),
 (1, 1006, '75345', '10000');
 
-INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
-VALUES
-(nextval('natjecanje_seq'), 2, 102, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
-(nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
+
 

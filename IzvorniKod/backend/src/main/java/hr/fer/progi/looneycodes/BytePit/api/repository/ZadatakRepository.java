@@ -44,7 +44,7 @@ public interface ZadatakRepository extends JpaRepository<Zadatak, Integer> {
 			"JOIN Rjesenje r ON z.zadatakId = r.rjesenjeId.zadatak.zadatakId " +
 			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
 			"AND r.brojTocnihPrimjera = 1" +
-			"AND r.rjesenjeId.natjecanje = z.natjecanje")
+			"AND r.natjecanje = z.natjecanje")
 	List<Zadatak> findByNatjecateljAllSolved(@Param("natjecatelj") Korisnik natjecatelj);
 
 }
