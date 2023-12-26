@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 40px;
 }
 
 .info-table {
@@ -24,11 +25,11 @@
   overflow: hidden;
 }
 
-.info-table th {
+.info-table th{
   background-color: #f4c95de7;
 }
 
-.info-table tbody tr:hover {
+.info-table tbody tr:hover{
   background-color: #f4c95d52;
 }
 

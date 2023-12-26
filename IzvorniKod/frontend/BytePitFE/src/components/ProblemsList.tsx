@@ -9,6 +9,8 @@ export interface IProblems {
     nazivZadatka: string;
     tekstZadatka: string;
     zadatakId: BigInteger;
+    brojBodova: number ;
+    privatniZadatak: boolean;
 }
 
 const ProblemsList: React.FC = () => {
@@ -29,6 +31,7 @@ const ProblemsList: React.FC = () => {
                         <th>korisničko ime</th>
                         <th>naziv</th>
                         <th>tekst</th>
+                        <th>broj bodova</th>
                         <th></th>
                     </tr>
                 </thead>

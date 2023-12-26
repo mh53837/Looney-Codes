@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Table.css'
+import '../styles/Table.css';
+import { IUser } from './UserList';
 
 interface CompetitionProps {
     competition: {
         natjecanjeId: number;
-        voditelj: string;
+        voditelj: IUser ;
         nazivNatjecanja: string;
         pocetakNatjecanja: string;
         krajNatjecanja: string;
     };
-
 }
 
 const Competition: React.FC<CompetitionProps> = (props) => {
@@ -21,7 +21,7 @@ const Competition: React.FC<CompetitionProps> = (props) => {
 
     return (
         <tr className="info-table">
-            <td>{voditelj}</td>
+            <td>{voditelj?.korisnickoIme}</td>
             <td>{nazivNatjecanja}</td>
             <td>{pocetakDatum.toDateString()}</td>
             <td>{krajDatum.toDateString()}</td>

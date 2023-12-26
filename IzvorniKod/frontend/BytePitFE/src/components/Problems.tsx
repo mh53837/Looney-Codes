@@ -8,17 +8,20 @@ interface ProblemsProps {
         nazivZadatka: string;
         tekstZadatka: string;
         zadatakId: BigInteger;
+        brojBodova: number ;
+        privatniZadatak: boolean;
     };
 }
 
 const Problems: React.FC<ProblemsProps> = (props) => {
-    const { voditelj, nazivZadatka, tekstZadatka, zadatakId } = props.problem;
+    const { voditelj, nazivZadatka, tekstZadatka, zadatakId, brojBodova } = props.problem;
 
     return (
         <tr className="info-table">
             <td>{voditelj?.korisnickoIme}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>
+            <td>{brojBodova}</td>
             <td>
                 <Link to={`/problem/${zadatakId}`}>
                     Riješi

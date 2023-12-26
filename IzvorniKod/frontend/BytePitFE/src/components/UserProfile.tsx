@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import { Tabs, ConfigProvider } from "antd";
-import Competition from "./Competition";
-import Problems from "./Problems";
+import { Tabs, ConfigProvider } from "antd";/* 
+import Problems from "./Problems"; */
 import { fetchData } from "../hooks/usersAPI";
-import '../styles/UserProfile.css'
-import '../styles/Table.css'
+import { IUser } from './UserList';
+import CompetitionProfileCalendar from './CompetitionProfileCalendar';
+import ProblemsProfileTab from "./ProblemsProfileTab";
+import '../styles/UserProfile.css';
+import '../styles/Table.css';
+
 interface UserData {
   korisnickoIme: string;
   ime: string;
@@ -18,7 +21,7 @@ interface UserData {
 
 interface CompetitionData {
   natjecanjeId: number;
-  voditelj: string;
+  voditelj: IUser;
   nazivNatjecanja: string;
   pocetakNatjecanja: string;
   krajNatjecanja: string;
@@ -29,6 +32,8 @@ interface ProblemData {
   nazivZadatka: string;
   tekstZadatka: string;
   zadatakId: BigInteger;
+  brojBodova: number ;
+  privatniZadatak: boolean;
 }
 
 const UserProfile: React.FC = () => {
@@ -36,9 +41,7 @@ const UserProfile: React.FC = () => {
   const { user } = useContext(UserContext); //podaci ulogiranog korisnika
   const { korisnickoIme } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null); //podaci korisnika ciji se profil otvara
-  const [competitionsData, setCompetitionsData] = useState<CompetitionData[]>(
-    []
-  );
+  const [competitionsData, setCompetitionsData] = useState<CompetitionData[]>([]);
   const [problemsData, setProblemsData] = useState<ProblemData[]>([]);
 
   useEffect(() => {
@@ -103,33 +106,13 @@ const UserProfile: React.FC = () => {
   }
 
   const renderProblemsTab = () => (
-    <div className="problemContainer">
-      {problemsData ? (
-        <div className="tableWrapper">
-          <div className="info-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>korisničko ime</th>
-                  <th>naziv</th>
-                  <th>tekst</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {problemsData.map((problem, index) => (
-                  <Problems key={index} problem={problem} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ) : (
-        <p>greška prilikom dohvaćanja zadataka</p>
-      )}
-    </div>
+      <ProblemsProfileTab problemsData = {problemsData} />
   );
-  const renderCompetitionsTab = () => (
+  const renderCompetitionsCalendar  = (
+      <CompetitionProfileCalendar competitionsData={competitionsData} />
+  );
+
+/*   const renderCompetitionsTab = () => (
     <div className="competitionContainer">
       {competitionsData ? (
         <div className="tableWrapper">
@@ -155,8 +138,8 @@ const UserProfile: React.FC = () => {
       ) : (
         <p>greška prilikom dohvaćanja natjecanja</p>
       )}
-    </div>
-  );
+    </div> 
+  );*/
 
   return (
     <div className = "profileContainer">
@@ -206,11 +189,18 @@ const UserProfile: React.FC = () => {
                   {
                     label: <p>moja natjecanja</p>,
                     key: "2",
-                    children: renderCompetitionsTab(),
+                    children: renderCompetitionsCalendar
                   },
                 ]}
               />
             </ConfigProvider>
+          )}
+          {userData.uloga === "NATJECATELJ" && (
+            <div>
+              <p>broj točno riješenih zadataka: </p>
+              <p>broj isprobanih zadataka: </p>
+              <p>osvojeni pehari:</p>
+            </div>
           )}
         </div>
       ) : (
@@ -258,11 +248,18 @@ const UserProfile: React.FC = () => {
                   {
                     label: <p>natjecanja</p>,
                     key: "2",
-                    children: renderCompetitionsTab(),
+                    children: renderCompetitionsCalendar
                   },
                 ]}
               />
             </ConfigProvider>
+          )}
+          {userData.uloga === "NATJECATELJ" && (
+            <div>
+              <p>broj točno riješenih zadataka: </p>
+              <p>broj isprobanih zadataka: </p>
+              <p>osvojeni pehari:</p>
+            </div>
           )}
         </div>
       )}
