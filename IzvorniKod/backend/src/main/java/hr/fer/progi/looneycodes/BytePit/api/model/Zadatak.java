@@ -4,6 +4,7 @@ package hr.fer.progi.looneycodes.BytePit.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.ZadatakDTO;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -70,6 +71,20 @@ public class Zadatak {
   @ManyToMany(mappedBy = "listaZadataka")
   List <VirtualnoNatjecanje> virtualnaNatjecanja;
 
+  public Zadatak() {
+	  
+  }
+  
+  public Zadatak(ZadatakDTO zadatak, Korisnik voditelj) {
+	  this.nazivZadatka = zadatak.getNazivZadatka();
+	  this.tezinaZadatka = zadatak.getTezinaZadatka();
+	  this.privatniZadatak = zadatak.isPrivatniZadatak();
+	  this.vremenskoOgranicenje = zadatak.getVremenskoOgranicenje();
+	  this.zadatakId = zadatak.getZadatakId();
+	  this.tekstZadatka = zadatak.getTekstZadatka();
+	  this.voditelj = voditelj;
+  }
+  
   
   /**
    * konstruktor koji se koristi kod azuriranja

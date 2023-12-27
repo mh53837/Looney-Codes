@@ -51,7 +51,7 @@ public class ZadatakController {
 	 * @return lista svih javnih zadataka
 	 */
 	@GetMapping("/all")
-	public List<Zadatak> listAll(){
+	public List<ZadatakDTO> listAll(){
 	    return zadatakService.listAllJavniZadatak();
 	}
 	
@@ -63,7 +63,7 @@ public class ZadatakController {
 	 */
 	@GetMapping("/adminView")
 	@Secured("ADMIN")
-	public List<Zadatak> listAdmin(){
+	public List<ZadatakDTO> listAdmin(){
 	    return zadatakService.listAll();
 	}
 	
@@ -76,9 +76,8 @@ public class ZadatakController {
 	 */
 	@PostMapping("/new")
 	@Secured("VODITELJ")
-	public Zadatak addZadatak(@RequestBody Zadatak zadatak, @AuthenticationPrincipal UserDetails user){
-		zadatak = zadatakService.createZadatak(zadatak, user.getUsername());
-		return zadatak;
+	public Zadatak addZadatak(@RequestBody ZadatakDTO dto, @AuthenticationPrincipal UserDetails user){
+		return zadatakService.createZadatak(dto, user.getUsername());
 	}
 	
 	/**
@@ -90,7 +89,7 @@ public class ZadatakController {
 	 */
 	@GetMapping("/my")
 	@Secured("VODITELJ")
-	public List<Zadatak> listAllFromOneVoditelj(@AuthenticationPrincipal UserDetails user){
+	public List<ZadatakDTO> listAllFromOneVoditelj(@AuthenticationPrincipal UserDetails user){
 		return zadatakService.listAllZadaciVoditelj(user.getUsername());
 	}
 	
@@ -101,7 +100,7 @@ public class ZadatakController {
 	 * @return
 	 */
 	@GetMapping("/author/{korisnickoIme}")
-	public List<Zadatak> listAllFromOneVoditelj(@PathVariable String korisnickoIme){
+	public List<ZadatakDTO> listAllFromOneVoditelj(@PathVariable String korisnickoIme){
 		return zadatakService.listAllJavniZadaciVoditelj(korisnickoIme);
 	}
 	
@@ -147,7 +146,7 @@ public class ZadatakController {
 	 * @return lista zadataka
 	 */
 	@GetMapping("/get/{korisnickoIme}/allSolvedTasks")
-	public List<Zadatak> listAllSolvedTasksFromOneNatjecatelj(@PathVariable String korisnickoIme){
+	public List<ZadatakDTO> listAllSolvedTasksFromOneNatjecatelj(@PathVariable String korisnickoIme){
 		Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
 
 		if (!korisnik.isPresent()) {

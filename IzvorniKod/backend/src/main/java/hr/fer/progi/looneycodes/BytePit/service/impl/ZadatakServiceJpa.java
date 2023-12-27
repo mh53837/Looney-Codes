@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
+import hr.fer.progi.looneycodes.BytePit.api.controller.ZadatakDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
@@ -31,8 +32,8 @@ public class ZadatakServiceJpa implements ZadatakService {
 	ZadatakRepository testniPrimjerRepo;
 	
 	@Override
-	public List<Zadatak> listAllJavniZadatak() {
-		return zadatakRepo.findAllJavniZadatak();
+	public List<ZadatakDTO> listAllJavniZadatak() {
+		return zadatakRepo.findAllJavniZadatak().stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
 	@Override
@@ -44,14 +45,13 @@ public class ZadatakServiceJpa implements ZadatakService {
 	}
 
 	@Override
-	public Zadatak createZadatak(Zadatak zadatak, String username) {
+	public Zadatak createZadatak(ZadatakDTO zadatak, String username) {
 		Assert.isNull(zadatak.getZadatakId(), "ZadatakId mora biti null prilikom stvaranja zadatka");
 		Assert.isNull(zadatak.getVoditelj(), "Voditelj se definira prema korisniku koji je postavio zahtjev!");
 		Optional<Korisnik> voditelj = korisnikRepo.findByKorisnickoIme(username);
 		if (voditelj.isEmpty())
 			throw new IllegalArgumentException("Voditelj < " + username + " > ne postoji!");
-		zadatak.setVoditelj(voditelj.get());
-		return zadatakRepo.save(zadatak);
+		return zadatakRepo.save(new Zadatak(zadatak, voditelj.get()));
 	}
 
 	@Override
@@ -64,30 +64,30 @@ public class ZadatakServiceJpa implements ZadatakService {
 	}
 
 	@Override
-	public List<Zadatak> findByNatjecateljAllSolved(Korisnik natjecatelj) {
-		return zadatakRepo.findByNatjecateljAllSolved(natjecatelj);
+	public List<ZadatakDTO> findByNatjecateljAllSolved(Korisnik natjecatelj) {
+		return zadatakRepo.findByNatjecateljAllSolved(natjecatelj).stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
 	@Override
-	public List<Zadatak> listAllZadaciNatjecanje(Natjecanje natjecanje) {
-		return zadatakRepo.findByNatjecanje(natjecanje);
+	public List<ZadatakDTO> listAllZadaciNatjecanje(Natjecanje natjecanje) {
+		return zadatakRepo.findByNatjecanje(natjecanje).stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
 	@Override
-	public List<Zadatak> listAllZadaciVoditelj(String korisnickoIme) {
+	public List<ZadatakDTO> listAllZadaciVoditelj(String korisnickoIme) {
 		Optional<Korisnik> voditelj = korisnikRepo.findByKorisnickoIme(korisnickoIme);
 		if(voditelj.isEmpty()) 
 			throw new IllegalArgumentException("Voditelj " + korisnickoIme + " ne postoji!");
-		return zadatakRepo.findByVoditelj(voditelj.get());
+		return zadatakRepo.findByVoditelj(voditelj.get()).stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
 	@Override
-	public List<Zadatak> listAll() {
-		return zadatakRepo.findAll();
+	public List<ZadatakDTO> listAll() {
+		return zadatakRepo.findAll().stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
 	@Override
-	public List<Zadatak> listAllJavniZadaciVoditelj(String voditeljId) {
+	public List<ZadatakDTO> listAllJavniZadaciVoditelj(String voditeljId) {
 		return listAllZadaciVoditelj(voditeljId).stream().filter(zad -> !zad.isPrivatniZadatak()).toList();
 	}
 
