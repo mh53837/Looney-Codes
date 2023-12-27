@@ -1,9 +1,9 @@
-import UserList from './components/UserList.tsx';
+import UserList from './components/User/UserList.tsx';
 import { Link } from 'react-router-dom';
 import './styles/App.css';
 import Home from './components/Home';
-import ProblemsList from './components/ProblemsList.tsx';
-import ProblemPage from './components/ProblemPage.tsx';
+import ProblemsList from './components/Problems/ProblemsList.tsx';
+import ProblemPage from './components/Problems/ProblemPage.tsx';
 import Login from './components/Login.tsx';
 import ConfirmRegAdmin from './components/ConfirmRegAdmin.tsx';
 import ConfirmEmail from './components/ConfirmEmail.tsx';
@@ -13,7 +13,7 @@ import Register from "./components/Register.tsx";
 import { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
 import NotFoundPage from "./components/NotFoundPage.tsx"
-import UserProfile from './components/UserProfile.tsx';
+import UserProfile from './components/UserProfile/UserProfile.tsx';
 
 const App: React.FC = () => {
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);

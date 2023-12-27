@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import Competition from "./Competition";
-import { IUser } from "./UserList";
-import "../styles/Table.css";
-import "../styles/UserProfile.css";
+import Competition from "../Competition";
+import { IUser } from "../User/UserList";
+import "../../styles/Table.css";
+import "../../styles/UserProfile.css";
 
 interface CompetitionData {
   natjecanjeId: number;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Table.css';
+import '../../styles/Table.css';
 interface UserProps {
     user: {
         korisnickoIme: string;

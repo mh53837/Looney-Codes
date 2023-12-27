@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Table.css';
-import { IUser } from './UserList';
+import { IUser } from './User/UserList';
 
 interface CompetitionProps {
     competition: {

@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/Table.css';
-import { IUser } from './UserList';
+import '../../styles/Table.css';
+import { IUser } from '../User/UserList';
 import { Link } from 'react-router-dom';
 interface ProblemsProps {
     problem: {
@@ -24,7 +24,7 @@ const Problems: React.FC<ProblemsProps> = (props) => {
             <td>{brojBodova}</td>
             <td>
                 <Link to={`/problem/${zadatakId}`}>
-                    Riješi
+                    riješi zadatak
                 </Link>
             </td>
         </tr>

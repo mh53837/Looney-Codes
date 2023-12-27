@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ConfigProvider } from 'antd';
-import { IUser } from './UserList';
-import '../styles/Table.css';
+import { IUser } from '../User/UserList';
+import '../../styles/Table.css';
 
 interface ProblemData {
   voditelj: IUser;
@@ -21,7 +21,10 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData }) => {
   return (
     <div className="problemContainer">
       {problemsData ? (
-        <div className="tableWrapper">
+        problemsData.length === 0 ? ( 
+        <div>nema zadataka</div> 
+        ) : (
+          <div className="tableWrapper">
           <div className="info-table">
           <ConfigProvider
               theme={{
@@ -74,7 +77,7 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData }) => {
                   dataIndex: 'zadatakId',
                   key: 'action',
                   className: "th-td",
-                  render: (zadatakId) => <Link to={`/problem/${zadatakId}`}>Riješi</Link>,
+                  render: (zadatakId) => <Link to={`/problem/${zadatakId}`}>riješi zadatak</Link>,
                 },
               ]}
               pagination={false}
@@ -85,8 +88,9 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData }) => {
             </ConfigProvider>
           </div>
         </div>
-      ) : (
+      )) : (
         <p>greška prilikom dohvaćanja zadataka</p>
+      
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import User from './User';
-import '../styles/Table.css';
-import { UserContext } from '../context/userContext';
+import '../../styles/Table.css';
+import { UserContext } from '../../context/userContext';
 
 export interface IUser {
     korisnickoIme:string;

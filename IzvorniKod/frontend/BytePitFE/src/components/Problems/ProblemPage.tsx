@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import '../styles/ProblemPage.css';
-import { UserContext } from '../context/userContext';
+import '../../styles/ProblemPage.css';
+import { UserContext } from '../../context/userContext';
 
 interface IProblemDetails {
         zadatakId: string;
