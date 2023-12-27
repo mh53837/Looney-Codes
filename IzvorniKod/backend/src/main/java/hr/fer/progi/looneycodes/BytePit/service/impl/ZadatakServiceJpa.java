@@ -55,12 +55,11 @@ public class ZadatakServiceJpa implements ZadatakService {
 	}
 
 	@Override
-	public Zadatak updateZadatak(Zadatak zadatak) {
-		Integer zadatakId = Objects.requireNonNull(zadatak.getZadatakId());
-
-		Optional<Zadatak> stariZadatak = zadatakRepo.findById(zadatakId);
+	public Zadatak updateZadatak(Integer id, Zadatak dto) {
+		Optional<Zadatak> stariZadatak = zadatakRepo.findById(id);
 		if(stariZadatak.isEmpty())
-		      throw new IllegalArgumentException("Zadatak s id-em: " + zadatakId + " ne postoji!");
+		      throw new IllegalArgumentException("Zadatak s id-em: " + id + " ne postoji!");
+		Zadatak zadatak = Zadatak.update(stariZadatak.get(), dto);
 		return zadatakRepo.save(zadatak);
 	}
 
@@ -92,6 +91,13 @@ public class ZadatakServiceJpa implements ZadatakService {
 		return listAllZadaciVoditelj(voditeljId).stream().filter(zad -> !zad.isPrivatniZadatak()).toList();
 	}
 
+	@Override
+	public boolean deleteZadatak(Integer id) {
+		zadatakRepo.deleteById(id);
+		return true;
+	}
+
+	
 
 
 }

@@ -2,10 +2,16 @@ package hr.fer.progi.looneycodes.BytePit.api.model;
 
 // spring-boot imports
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +30,7 @@ public class Zadatak {
    * natjecanje u kojem se pojavljuje zadatak
    */
   @JsonIgnore
-  @ManyToMany(mappedBy = "zadaci")
+  @ManyToMany(mappedBy = "zadaci", cascade = CascadeType.REMOVE)
   private Set<Natjecanje> natjecanje;
   /**
    * autor/voditelj koji je napisao zadatak
@@ -64,6 +70,16 @@ public class Zadatak {
   @ManyToMany(mappedBy = "listaZadataka")
   List <VirtualnoNatjecanje> virtualnaNatjecanja;
 
+  
+  /**
+   * konstruktor koji se koristi kod azuriranja
+   */
+  public static Zadatak update(Zadatak zadatak, Zadatak dto){   
+    Iterable<String> properties = Arrays.asList("nazivZadatka", "tekstZadatka", "tezinaZadatka", "vremenskoOgranicenje", "privatniZadatak");
+    copyIfSpecified(dto, zadatak, properties);
+    return zadatak;
+  }
+  
   // geteri i seteri
 
   public Integer getZadatakId() {
@@ -116,4 +132,10 @@ public class Zadatak {
   }
   public TezinaZadatka getTezinaZadatka() { return tezinaZadatka; }
   public void setTezinaZadatka(TezinaZadatka tezinaZadatka) { this.tezinaZadatka = tezinaZadatka; }
+  
+  private static void copyIfSpecified(Zadatak dto, Zadatak zadatak, Iterable<String> props) {
+	  BeanWrapper from = PropertyAccessorFactory.forBeanPropertyAccess(dto);
+	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(zadatak);
+	  props.forEach(p -> to.setPropertyValue(p, from.getPropertyValue(p) != null ? from.getPropertyValue(p) : to.getPropertyValue(p)));
+  }
 }

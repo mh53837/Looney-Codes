@@ -57,12 +57,20 @@ public interface ZadatakService {
 	  public Zadatak createZadatak(Zadatak zadatak, String korisnickoIme);
 	  /**
 	   * Azuriraj podatke o zdadatku sa zadanim id-em
+	 * @param id 
 	   * @param zadatak instanca u kojoj su pohranjeni azurirani podaci
 	   * @exception IllegalArgumentException u slucaju da je id nepostojeci
 	   * @return referenca na instancu zadatak klase s novim zapisom iz baze
 	   */
-	  public Zadatak updateZadatak(Zadatak korisnik);
-
+	  public Zadatak updateZadatak(Integer id, Zadatak zadatak);
+	  
+	  /**
+	   * Izbriši zadatak iz baze.
+	   * @param id zadatka koji se treba izbrisati iz baze
+	   * @return true ako je uspješno, inače false
+	   */
+	  public boolean deleteZadatak(Integer id);
+	  
 
 	/**
 	 * Metoda koja pronalazi sve potpuno riješene zadatke zadanog natjecatelja.

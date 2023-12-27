@@ -109,12 +109,23 @@ public class ZadatakController {
 	/**
 	 * Ruta za dohvaćanje jednog zadatka.
 	 * 
-	 * @param user
+	 * @param id
 	 * @return
 	 */
 	@GetMapping("/get/{id}")
 	public Zadatak listAllFromOneVoditelj(@PathVariable Integer id){
 		return zadatakService.fetch(id);
+	}
+	
+	/**
+	 * Ruta za brisanje jednog zadatka.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/delete/{id}")
+	public boolean deleteZadatakById(@PathVariable Integer id){
+		return zadatakService.deleteZadatak(id);
 	}
 	
 	/**
@@ -153,7 +164,7 @@ public class ZadatakController {
 	 * @return postavljeni testni primjer
 	 */
 	@PostMapping("/get/{id}/addTest")
-  @Secured({"ADMIN", "VODITELJ"})
+	@Secured({"ADMIN", "VODITELJ"})
 	public TestniPrimjer addTest(@PathVariable Integer id, @RequestBody TestniPrimjer test, @AuthenticationPrincipal UserDetails user){
     if(Objects.isNull(user))
       throw new AccessDeniedException("You must be logged in for that!");
@@ -167,6 +178,28 @@ public class ZadatakController {
 		test.setTestniPrimjerId(new TestniPrimjerKey(null, zadatak));
 		return testService.add(test);
 	}
+	
+	/**
+	   * Azuriraj podatke za odredeni zadatak.
+	   * @param id salje se kao path variable
+	   * @param dto samo atributi koje zelimo mijenjati se postave u dto, ostalo se ignorira automatski
+	   * @param user trenutno autentificirani korisnik, radi sigurnosti provjeravamo da ne mijenja tude zadatke
+	   * @exception IllegalArgumentException u slucaju da pokusavamo mijenjati tude podatke (a da nismo ADMIN!)
+	   * @exception AccessDeniedException u slucaju da nismo ulogirani
+	   * @return referenca na azurirani zapis u bazi
+	   */
+	  @PostMapping("/update/{id}")
+	  @Secured({"VODITELJ", "ADMIN"})
+	  public Zadatak updateKorisnik(@PathVariable Integer id, @RequestBody Zadatak dto, @AuthenticationPrincipal UserDetails user){
+	    if(Objects.isNull(user))
+	      throw new AccessDeniedException("You must be logged in for that!");
+	    	    
+	    if(!user.getUsername().equals(zadatakService.fetch(id))
+	        && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+	      throw new IllegalStateException("Krivi korisnik!");
+
+	    return zadatakService.updateZadatak(id, dto);
+	  }
 	
 	//TODO dodati rute za zadatke po natjecanju nakon što se slože servisi i rute za natjecanje
 }
