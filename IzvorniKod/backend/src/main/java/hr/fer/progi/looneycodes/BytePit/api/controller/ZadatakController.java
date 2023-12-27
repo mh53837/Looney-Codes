@@ -194,7 +194,7 @@ public class ZadatakController {
 	    if(Objects.isNull(user))
 	      throw new AccessDeniedException("You must be logged in for that!");
 	    	    
-	    if(!user.getUsername().equals(zadatakService.fetch(id))
+	    if(!user.getUsername().equals(zadatakService.fetch(id).getVoditelj().getKorisnickoIme())
 	        && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
 	      throw new IllegalStateException("Krivi korisnik!");
 
