@@ -1,10 +1,9 @@
 import React from 'react';
 import '../../styles/Table.css';
-import { IUser } from '../User/UserList';
 import { Link } from 'react-router-dom';
 interface ProblemsProps {
     problem: {
-        voditelj: IUser;
+        voditelj: string;
         nazivZadatka: string;
         tekstZadatka: string;
         zadatakId: BigInteger;
@@ -18,7 +17,7 @@ const Problems: React.FC<ProblemsProps> = (props) => {
 
     return (
         <tr className="info-table">
-            <td>{voditelj?.korisnickoIme}</td>
+            <td>{voditelj}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>
             <td>{brojBodova}</td>

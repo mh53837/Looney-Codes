@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Problems from './Problems';
-import { IUser } from '../User/UserList';
 import '../../styles/Table.css'
 
 
 export interface IProblems {
-    voditelj: IUser;
+    voditelj: string;
     nazivZadatka: string;
     tekstZadatka: string;
     zadatakId: BigInteger;
