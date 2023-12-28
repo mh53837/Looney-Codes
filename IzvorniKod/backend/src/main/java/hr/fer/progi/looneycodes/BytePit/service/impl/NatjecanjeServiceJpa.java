@@ -31,22 +31,23 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
     private RjesenjeService rjesenjeService;
 
-    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId) {
+    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, String korisnickoIme) {
+
         Assert.notNull(nazivNatjecanja, "Naziv natjecanja ne smije biti null!");
         Assert.notNull(pocetakNatjecanja, "Pocetak natjecanja ne smije biti null!");
         Assert.notNull(krajNatjecanja, "Kraj natjecanja ne smije biti null!");
-        Assert.notNull(korisnikId, "ID voditelja ne smije biti null!");
+        Assert.notNull(korisnickoIme, "Korisnicko ime voditelja ne smije biti null!");
         Assert.isTrue(pocetakNatjecanja.before(krajNatjecanja), "Pocetak natjecanja mora biti prije kraja natjecanja!");
         // Assert.isTrue(pocetakNatjecanja.after(Timestamp.from(Instant.now())), "Pocetak natjecanja mora biti u buducnosti!");
-        Optional<Korisnik> korisnik = korisnikService.fetch(korisnikId);
-        Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + korisnikId + " ne postoji!");
-        Assert.isTrue(korisnik.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s ID-em " + korisnikId + " nije voditelj!");
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+        Assert.isTrue(korisnik.isPresent(), "Korisnik s korisnickim imenom " + korisnickoIme + " ne postoji!");
+        Assert.isTrue(korisnik.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s korisnickim imenom " + korisnickoIme + " nije voditelj!");
         return korisnik;
     }
 
     @Override
     public Natjecanje createNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
-        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getVoditeljId());
+        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getKorisnickoImeVoditelja());
         Natjecanje natjecanje = new Natjecanje(korisnik.get(), natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja());
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
@@ -57,11 +58,13 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     public Natjecanje updateNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
         Natjecanje natjecanje = natjecanjeRepo.findByNatjecanjeId(natjecanjeDTO.getNatjecanjeId());
         Assert.notNull(natjecanje, "Natjecanje s ID-em " + natjecanjeDTO.getNatjecanjeId() + " ne postoji!");
-        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getVoditeljId());
+        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getKorisnickoImeVoditelja());
+
         natjecanje.setNazivNatjecanja(natjecanjeDTO.getNazivNatjecanja());
         natjecanje.setPocetakNatjecanja(natjecanjeDTO.getPocetakNatjecanja());
         natjecanje.setKrajNatjecanja(natjecanjeDTO.getKrajNatjecanja());
         natjecanje.setVoditelj(korisnik.get());
+
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
     }

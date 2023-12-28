@@ -1,5 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+
 import java.sql.Timestamp;
 
 public class CreateNatjecanjeDTO {
@@ -7,17 +9,24 @@ public class CreateNatjecanjeDTO {
     private String nazivNatjecanja;
     private Timestamp pocetakNatjecanja;
     private Timestamp krajNatjecanja;
-    private Integer voditeljId;
+    private String korisnickoImeVoditelja;
 
     public CreateNatjecanjeDTO() {
     }
 
-    public CreateNatjecanjeDTO(Integer natjecanjeId, String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer voditeljId) {
+    public CreateNatjecanjeDTO(Integer natjecanjeId, String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, String korisnickoImeVoditelja) {
         this.natjecanjeId = natjecanjeId;
         this.nazivNatjecanja = nazivNatjecanja;
         this.pocetakNatjecanja = pocetakNatjecanja;
         this.krajNatjecanja = krajNatjecanja;
-        this.voditeljId = voditeljId;
+        this.korisnickoImeVoditelja = korisnickoImeVoditelja;
+    }
+    public CreateNatjecanjeDTO(Natjecanje natjecanje){
+        this.natjecanjeId = natjecanje.getNatjecanjeId();
+        this.nazivNatjecanja = natjecanje.getNazivNatjecanja();
+        this.pocetakNatjecanja = natjecanje.getPocetakNatjecanja();
+        this.krajNatjecanja = natjecanje.getKrajNatjecanja();
+        this.korisnickoImeVoditelja = natjecanje.getVoditelj().getKorisnickoIme();
     }
 
     public Integer getNatjecanjeId() {
@@ -52,11 +61,11 @@ public class CreateNatjecanjeDTO {
         this.krajNatjecanja = krajNatjecanja;
     }
 
-    public Integer getVoditeljId() {
-        return voditeljId;
+    public String getKorisnickoImeVoditelja() {
+        return korisnickoImeVoditelja;
+    }
+    public void setKorisnickoImeVoditelja(String korisnickoImeVoditelja) {
+        this.korisnickoImeVoditelja = korisnickoImeVoditelja;
     }
 
-    public void setVoditeljId(Integer voditeljId) {
-        this.voditeljId = voditeljId;
-    }
 }

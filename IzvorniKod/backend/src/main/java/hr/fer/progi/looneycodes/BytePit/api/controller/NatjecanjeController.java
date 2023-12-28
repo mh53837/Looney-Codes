@@ -43,17 +43,18 @@ public class NatjecanjeController {
      */
     @PostMapping("/new")
     @Secured({"VODITELJ", "ADMIN"})
-    public Natjecanje createNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
+    public CreateNatjecanjeDTO createNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
         if(Objects.isNull(user))
           throw new AccessDeniedException("You must be logged in for that!");
 
         Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
-
-        if((voditelj.isEmpty() || !natjecanjeDTO.getVoditeljId().equals(voditelj.get().getKorisnikId()))
+        if((voditelj.isEmpty() || !natjecanjeDTO.getKorisnickoImeVoditelja().equals(voditelj.get().getKorisnickoIme()))
             && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
+
     
-        return natjecanjeService.createNatjecanje(natjecanjeDTO);
+        return new CreateNatjecanjeDTO(natjecanjeService.createNatjecanje(natjecanjeDTO));
+
     }
 
     /**
@@ -65,7 +66,7 @@ public class NatjecanjeController {
     @GetMapping("/get/{natjecanjeId}")
     public CreateNatjecanjeDTO getNatjecanje(@PathVariable Integer natjecanjeId) {
         Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
-        return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+        return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
     }
 
     /**
@@ -76,7 +77,7 @@ public class NatjecanjeController {
     @GetMapping("/all")
     public List<CreateNatjecanjeDTO> listAll() {
         return natjecanjeService.listAllNatjecanja().stream().map(natjecanje -> {
-            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
         }).toList();
     }
 
@@ -91,7 +92,7 @@ public class NatjecanjeController {
         Assert.isTrue(voditelj.isPresent(), "Korisnik s tim korisničkim imenom ne postoji!");
         Assert.isTrue(voditelj.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s tim korisničkim imenom nije voditelj!");
         return natjecanjeService.getNatjecanjaByKorisnikId(voditelj.get().getKorisnikId()).stream().map(natjecanje -> {
-            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
         }).toList();
     }
 
@@ -103,16 +104,21 @@ public class NatjecanjeController {
      */
     @PostMapping("/update")
     @Secured({"VODITELJ", "ADMIN"})
-    public Natjecanje updateNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
+    public CreateNatjecanjeDTO updateNatjecanje(@RequestBody CreateNatjecanjeDTO natjecanjeDTO, @AuthenticationPrincipal UserDetails user) {
         if(Objects.isNull(user))
           throw new AccessDeniedException("You must be logged in for that!");
 
         Optional<Korisnik> voditelj = korisnikService.getKorisnik(user.getUsername());
-        if((voditelj.isEmpty() || !natjecanjeDTO.getVoditeljId().equals(voditelj.get().getKorisnikId()))
+        Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeDTO.getNatjecanjeId());
+
+        if(Objects.isNull(natjecanje))
+          throw new IllegalStateException("Natjecanje s ID-em " + natjecanjeDTO.getNatjecanjeId() + " ne postoji!");
+
+        if((voditelj.isEmpty() || !natjecanje.getVoditelj().getKorisnikId().equals(voditelj.get().getKorisnikId()))
             && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
 
-        return natjecanjeService.updateNatjecanje(natjecanjeDTO);
+        return new CreateNatjecanjeDTO(natjecanjeService.updateNatjecanje(natjecanjeDTO));
     }
 
     /**
@@ -124,7 +130,7 @@ public class NatjecanjeController {
     @GetMapping("/get/upcoming")
     public List<CreateNatjecanjeDTO> getUpcomingNatjecanja() {
         return natjecanjeService.getUpcomingNatjecanja().stream().map(natjecanje -> {
-            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
         }).toList();
     }
 
@@ -137,7 +143,7 @@ public class NatjecanjeController {
     @GetMapping("/get/ongoing")
     public List<CreateNatjecanjeDTO> getOngoingNatjecanja() {
         return natjecanjeService.getOngoingNatjecanja().stream().map(natjecanje -> {
-            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
         }).toList();
     }
 
@@ -150,7 +156,7 @@ public class NatjecanjeController {
     @GetMapping("/get/finished")
     public List<CreateNatjecanjeDTO> getFinishedNatjecanja() {
         return natjecanjeService.getFinishedNatjecanja().stream().map(natjecanje -> {
-            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnikId());
+            return new CreateNatjecanjeDTO(natjecanje.getNatjecanjeId(), natjecanje.getNazivNatjecanja(), natjecanje.getPocetakNatjecanja(), natjecanje.getKrajNatjecanja(), natjecanje.getVoditelj().getKorisnickoIme());
         }).toList();
     }
 
