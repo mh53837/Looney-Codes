@@ -15,7 +15,7 @@ import java.util.Set;
  * @see VirtualnoNatjecanje
  */
 
-public interface VirutalnoNatjecanjeRepository extends JpaRepository<VirtualnoNatjecanje, Integer> {
+public interface VirtualnoNatjecanjeRepository extends JpaRepository<VirtualnoNatjecanje, Integer> {
 
     /**
      * Metoda koja pronalazi virtualno natjecanje po id-u

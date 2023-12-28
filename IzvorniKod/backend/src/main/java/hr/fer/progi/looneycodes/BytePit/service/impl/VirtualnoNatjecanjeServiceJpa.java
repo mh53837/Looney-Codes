@@ -2,7 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.*;
-import hr.fer.progi.looneycodes.BytePit.api.repository.VirutalnoNatjecanjeRepository;
+import hr.fer.progi.looneycodes.BytePit.api.repository.VirtualnoNatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.VirtualnoNatjecanjeService;
@@ -23,7 +23,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     @Autowired
     NatjecanjeService natjecanjeService;
     @Autowired
-    private VirutalnoNatjecanjeRepository virtualnoNatjecanjeRepo;
+    private VirtualnoNatjecanjeRepository virtualnoNatjecanjeRepo;
 
 
     @Override

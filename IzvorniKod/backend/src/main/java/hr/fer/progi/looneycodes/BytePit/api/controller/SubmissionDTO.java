@@ -1,11 +1,10 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
-import java.sql.Timestamp;
-
-import hr.fer.progi.looneycodes.BytePit.api.model.RjesenjeKey;
-import jakarta.persistence.EmbeddedId;
-
 public class SubmissionDTO {
+  /**
+   * identifikator nadmetanja
+   */
+  private Integer nadmetanjeId;
 	/**
 	 * identifikator zadatka
 	 */
@@ -20,6 +19,12 @@ public class SubmissionDTO {
 	private String programskiKod;
 	
 	//getteri i setteri
+	public Integer getNadmetanjeId() {
+	return nadmetanjeId;
+  }
+  public void setNadmetanjeId(Integer nadmetanjeId) {
+    this.nadmetanjeId = nadmetanjeId;
+  }
 	public Integer getZadatakId() {
 		return zadatakId;
 	}
