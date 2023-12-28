@@ -1,5 +1,4 @@
 import React, {useEffect, useState, useContext} from 'react';
-import User from './User';
 import '../../styles/Table.css';
 import { UserContext } from '../../context/userContext';
 
@@ -9,6 +8,8 @@ export interface IUser {
     prezime:string;
     email: string
 }
+
+const User = React.lazy(() => import('./User'));
 
 const UserList: React.FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
@@ -49,7 +50,9 @@ const UserList: React.FC = () => {
                 </thead>
                 <tbody>
                 {users.map((user, index) => (
-                    <User key={index} user={user} />
+                    <React.Suspense fallback={<div>učitavanje...</div>}>
+                        <User key={index} user={user} />
+                    </React.Suspense>
                 ))}
                 </tbody>
             </table>

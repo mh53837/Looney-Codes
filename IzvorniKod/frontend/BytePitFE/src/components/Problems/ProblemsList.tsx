@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Problems from './Problems';
 import '../../styles/Table.css'
 
 
@@ -11,6 +10,8 @@ export interface IProblems {
     brojBodova: number ;
     privatniZadatak: boolean;
 }
+
+const Problems = React.lazy(() => import('./Problems'));
 
 const ProblemsList: React.FC = () => {
     const [problem, setProblems] = useState<IProblems[]>([]);
@@ -37,7 +38,9 @@ const ProblemsList: React.FC = () => {
                 </thead>
                 <tbody>
                     {problem.map((problem, index) => (
-                        <Problems key={index} problem={problem} />
+                        <React.Suspense fallback={<div>učitavanje...</div>}>
+                            <Problems key={index} problem={problem} />
+                        </React.Suspense>
                     ))}
                 </tbody>
             </table>

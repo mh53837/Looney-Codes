@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-/* import { Link } from 'react-router-dom'; */
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-/* import { UserContext } from '../context/userContext';
-import { useContext } from 'react'; */
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -17,8 +14,6 @@ const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
-
-    /* const { user } = useContext(UserContext); */
 
     useEffect(() => {
         const fetchData = async () => {

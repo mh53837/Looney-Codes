@@ -1,6 +1,5 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import '../styles/Login.css';
 
