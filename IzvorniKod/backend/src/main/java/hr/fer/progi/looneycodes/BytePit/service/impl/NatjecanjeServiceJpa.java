@@ -1,23 +1,22 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
-import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
-import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
-import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
-import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
+import hr.fer.progi.looneycodes.BytePit.api.model.*;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
+import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
 import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import java.time.Duration;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.time.Instant;
 @Service
 public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
@@ -29,22 +28,26 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
     private NatjecanjeRepository natjecanjeRepo;
 
-    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, Integer korisnikId) {
+    @Autowired
+    private RjesenjeService rjesenjeService;
+
+    public Optional<Korisnik> validacija(String nazivNatjecanja, Timestamp pocetakNatjecanja, Timestamp krajNatjecanja, String korisnickoIme) {
+
         Assert.notNull(nazivNatjecanja, "Naziv natjecanja ne smije biti null!");
         Assert.notNull(pocetakNatjecanja, "Pocetak natjecanja ne smije biti null!");
         Assert.notNull(krajNatjecanja, "Kraj natjecanja ne smije biti null!");
-        Assert.notNull(korisnikId, "ID voditelja ne smije biti null!");
+        Assert.notNull(korisnickoIme, "Korisnicko ime voditelja ne smije biti null!");
         Assert.isTrue(pocetakNatjecanja.before(krajNatjecanja), "Pocetak natjecanja mora biti prije kraja natjecanja!");
         // Assert.isTrue(pocetakNatjecanja.after(Timestamp.from(Instant.now())), "Pocetak natjecanja mora biti u buducnosti!");
-        Optional<Korisnik> korisnik = korisnikService.fetch(korisnikId);
-        Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + korisnikId + " ne postoji!");
-        Assert.isTrue(korisnik.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s ID-em " + korisnikId + " nije voditelj!");
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+        Assert.isTrue(korisnik.isPresent(), "Korisnik s korisnickim imenom " + korisnickoIme + " ne postoji!");
+        Assert.isTrue(korisnik.get().getUloga().equals(Uloga.VODITELJ), "Korisnik s korisnickim imenom " + korisnickoIme + " nije voditelj!");
         return korisnik;
     }
 
     @Override
     public Natjecanje createNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
-        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getVoditeljId());
+        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getKorisnickoImeVoditelja());
         Natjecanje natjecanje = new Natjecanje(korisnik.get(), natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja());
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
@@ -55,11 +58,13 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     public Natjecanje updateNatjecanje(CreateNatjecanjeDTO natjecanjeDTO) {
         Natjecanje natjecanje = natjecanjeRepo.findByNatjecanjeId(natjecanjeDTO.getNatjecanjeId());
         Assert.notNull(natjecanje, "Natjecanje s ID-em " + natjecanjeDTO.getNatjecanjeId() + " ne postoji!");
-        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getVoditeljId());
+        Optional<Korisnik> korisnik = validacija(natjecanjeDTO.getNazivNatjecanja(), natjecanjeDTO.getPocetakNatjecanja(), natjecanjeDTO.getKrajNatjecanja(), natjecanjeDTO.getKorisnickoImeVoditelja());
+
         natjecanje.setNazivNatjecanja(natjecanjeDTO.getNazivNatjecanja());
         natjecanje.setPocetakNatjecanja(natjecanjeDTO.getPocetakNatjecanja());
         natjecanje.setKrajNatjecanja(natjecanjeDTO.getKrajNatjecanja());
         natjecanje.setVoditelj(korisnik.get());
+
         natjecanje = natjecanjeRepo.save(natjecanje);
         return natjecanje;
     }
@@ -79,6 +84,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
     public List<Natjecanje> getNatjecanjaByKorisnikId(Integer korisnikId) {
         return natjecanjeRepo.findByKorisnikId(korisnikId);
     }
+
     @Override
     public List<Natjecanje> getUpcomingNatjecanja() {
         return natjecanjeRepo.findUpcomingNatjecanja();
@@ -132,4 +138,65 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         natjecanjeRepo.save(natjecanje);
 
     }
+
+    @Override
+    public List<RangDTO> getRangList(Integer natjecanjeId) {
+        Natjecanje natjecanje = natjecanjeRepo.findByNatjecanjeId(natjecanjeId);
+        Assert.notNull(natjecanje, "Natjecanje s ID-em " + natjecanjeId + " ne postoji!");
+        Assert.isTrue(natjecanje.getKrajNatjecanja().before(new Timestamp(System.currentTimeMillis())), "Natjecanje nije zavrsilo!");
+
+
+        List<Zadatak> zadaci = natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
+
+        //ne postoji metoda za dohvat svih rjesenja pa filtriramo po natjecanju
+        List<Rjesenje> rjesenjaNatjecanje= rjesenjeService.listAll().stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecanje().getNatjecanjeId().equals(natjecanjeId)).collect(Collectors.toList());
+
+        //lista natjecatelja bi trebali biti atribut kod natjecanja, jer mozda netko nije nista predao?
+        List<Korisnik> listaNatjecatelja = rjesenjaNatjecanje.stream().map(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj()).distinct().collect(Collectors.toList());
+
+        List<RangDTO> rangList = listaNatjecatelja.stream().map(natjecatelj -> {
+            Map<Integer, Double> zadatakBodovi = new HashMap<>();
+            Double ukupniBodovi = 0.0;
+            // ne radi rjesenjeService.findByNatjecateljAndNatjecanje, pa filtriramo ovde
+            List<Rjesenje> rjesenja =  rjesenjaNatjecanje.stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj().getKorisnikId().equals(natjecatelj.getKorisnikId())).collect(Collectors.toList());
+            for (Zadatak zadatak : zadaci) {
+                Optional<Rjesenje> rjesenje = rjesenja.stream().filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId())).findFirst();
+                if (rjesenje.isPresent()) {
+                    zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera());
+                    ukupniBodovi += rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova();
+                } else {
+                    zadatakBodovi.put(zadatak.getZadatakId(), 0.0);
+                }
+            }
+            Duration vrijemeRjesavanja = Duration.between(natjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
+            return new RangDTO(natjecatelj.getKorisnickoIme(), ukupniBodovi, 0, zadatakBodovi, vrijemeRjesavanja);
+        }).collect(Collectors.toList());
+
+        //prvo sortiramo po ukupnim bodovima, a onda po vremenu rjesavanja
+        rangList.sort(Comparator.comparing(RangDTO::getUkupniBodovi).thenComparing(RangDTO::getVrijemeRjesavanja).reversed());
+        int rang = 1;
+
+        for (RangDTO rangDTO : rangList) {
+            rangDTO.setRang(rang++);
+        }
+
+        /*
+        int rang = 1;
+        double prethodniBodovi;
+        try {
+             prethodniBodovi = rangList.get(0).getUkupniBodovi();
+        } catch (IndexOutOfBoundsException e) {
+            return rangList;
+        }
+        for (RangDTO rangDTO : rangList) {
+            if (!(rangDTO.getUkupniBodovi() == (prethodniBodovi))) {
+                rang++;
+            }
+            rangDTO.setRank(rang);
+            prethodniBodovi = rangDTO.getUkupniBodovi();
+        }*/
+
+        return rangList;
+    }
 }
+

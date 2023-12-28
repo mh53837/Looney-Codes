@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.ZadatakDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.TestniPrimjer;
@@ -20,27 +21,27 @@ public interface ZadatakService {
 	   * Vrati listu svih zadataka.
 	   * @return lista svih zadataka ili null ako nema zadataka u sustavu
 	   */
-	  public List<Zadatak> listAll();
+	  public List<ZadatakDTO> listAll();
 	  /**
 	   * Vrati listu svih javnih zadataka. Zadatak je javni ako mu je privatniZadatak = false
 	   * @return lista svih javnih zadataka ili null ako nema zadataka u sustavu
 	   */
-	  public List<Zadatak> listAllJavniZadatak();
+	  public List<ZadatakDTO> listAllJavniZadatak();
 	  /**
 	   * Vrati listu svih zadataka s jednog natjecanja.
 	   * @return lista svih zadataka s jednog natjecanja ili null ako nema zadataka u sustavu
 	   */
-	  public List<Zadatak> listAllZadaciNatjecanje(Natjecanje natjecanje);
+	  public List<ZadatakDTO> listAllZadaciNatjecanje(Natjecanje natjecanje);
 	  /**
 	   * Vrati listu svih zadataka jednog voditelja.
 	   * @return lista svih zadataka jednog voditelja ili null ako nema zadataka u sustavu
 	   */
-	  public List<Zadatak> listAllZadaciVoditelj(String voditeljId);
+	  public List<ZadatakDTO> listAllZadaciVoditelj(String voditeljId);
 	  /**
 	   * Vrati listu svih zadataka jednog voditelja.
 	   * @return lista svih zadataka jednog voditelja ili null ako nema zadataka u sustavu
 	   */
-	  public List<Zadatak> listAllJavniZadaciVoditelj(String voditeljId);
+	  public List<ZadatakDTO> listAllJavniZadaciVoditelj(String voditeljId);
 	  /**
 	   * Vrati referencu na zadatak s zadanim id-em.
 	   * @param Id id zadatka kojeg trazimo
@@ -54,21 +55,29 @@ public interface ZadatakService {
 	   * @return referenca na napravljenog korisnika s postavljenim id-em
 	   * @exception IllegalArgumentException u slucaju da je frontend team krivo stvorio objekt
 	   */
-	  public Zadatak createZadatak(Zadatak zadatak, String korisnickoIme);
+	  public Zadatak createZadatak(ZadatakDTO zadatak, String korisnickoIme);
 	  /**
 	   * Azuriraj podatke o zdadatku sa zadanim id-em
+	 * @param id 
 	   * @param zadatak instanca u kojoj su pohranjeni azurirani podaci
 	   * @exception IllegalArgumentException u slucaju da je id nepostojeci
 	   * @return referenca na instancu zadatak klase s novim zapisom iz baze
 	   */
-	  public Zadatak updateZadatak(Zadatak korisnik);
-
+	  public Zadatak updateZadatak(Integer id, Zadatak zadatak);
+	  
+	  /**
+	   * Izbriši zadatak iz baze.
+	   * @param id zadatka koji se treba izbrisati iz baze
+	   * @return true ako je uspješno, inače false
+	   */
+	  public boolean deleteZadatak(Integer id);
+	  
 
 	/**
 	 * Metoda koja pronalazi sve potpuno riješene zadatke zadanog natjecatelja.
 	 * @param natjecatelj - identifikator natjecatelja
 	 * @return listu zadataka zadanog natjecatelja
 	 */
-	List<Zadatak> findByNatjecateljAllSolved(Korisnik natjecatelj);
+	List<ZadatakDTO> findByNatjecateljAllSolved(Korisnik natjecatelj);
 
 	}

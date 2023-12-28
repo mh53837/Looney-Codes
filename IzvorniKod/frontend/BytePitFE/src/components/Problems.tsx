@@ -1,10 +1,9 @@
 import React from 'react';
 import './Problems.css';
-import { IUser } from './UserList';
 import { Link } from 'react-router-dom';
 interface ProblemsProps {
     problem: {
-        voditelj: IUser;
+        voditelj: string;
         nazivZadatka: string;
         tekstZadatka: string;
         zadatakId: BigInteger;
@@ -16,7 +15,7 @@ const Problems: React.FC<ProblemsProps> = (props) => {
 
     return (
         <tr className="user-info-header">
-            <td>{voditelj?.korisnickoIme}</td>
+            <td>{voditelj}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>
             <td>

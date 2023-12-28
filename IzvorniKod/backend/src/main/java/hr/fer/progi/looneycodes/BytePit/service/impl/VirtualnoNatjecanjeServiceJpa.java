@@ -84,7 +84,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         Optional<Korisnik> korisnik = korisnikService.fetch(virtualnoNatjecanjeDTO.getNatjecateljId());
         Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + virtualnoNatjecanjeDTO.getNatjecateljId() + " ne postoji!");
 
-        List<Zadatak> allJavniZadaci = zadatakService.listAllJavniZadatak();
+        List<Zadatak> allJavniZadaci = zadatakService.listAllJavniZadatak().stream().map((zad) -> zadatakService.fetch(zad.getZadatakId())).toList();
         List<Zadatak> randomZadaci = new ArrayList<>();
 
         Arrays.asList(TezinaZadatka.values()).forEach(tezinaZadatka -> {
