@@ -121,11 +121,20 @@ public class Zadatak {
   public int getBrojBodova() {
     return brojBodova;
   }
-  public void setBrojBodova(int brojBodova) {
-    if(brojBodova <= 0)
-      throw new IllegalArgumentException();
-
-    this.brojBodova = brojBodova;
+  public void setBrojBodova() {
+	  switch(this.tezinaZadatka) {
+	  case RECRUIT:
+		this.brojBodova = 10;
+	    break;
+	  case VETERAN:
+		this.brojBodova = 20;
+	    break;
+	  case REALISM:
+		this.brojBodova = 50;
+	    break;
+	  default:
+	    this.brojBodova = 0;
+	}
   }
   public int getVremenskoOgranicenje() {
     return vremenskoOgranicenje;

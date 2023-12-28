@@ -51,7 +51,9 @@ public class ZadatakServiceJpa implements ZadatakService {
 		Optional<Korisnik> voditelj = korisnikRepo.findByKorisnickoIme(username);
 		if (voditelj.isEmpty())
 			throw new IllegalArgumentException("Voditelj < " + username + " > ne postoji!");
-		return zadatakRepo.save(new Zadatak(zadatak, voditelj.get()));
+		Zadatak novi = new Zadatak(zadatak, voditelj.get());
+		novi.setBrojBodova();
+		return zadatakRepo.save(novi);
 	}
 
 	@Override
@@ -60,6 +62,7 @@ public class ZadatakServiceJpa implements ZadatakService {
 		if(stariZadatak.isEmpty())
 		      throw new IllegalArgumentException("Zadatak s id-em: " + id + " ne postoji!");
 		Zadatak zadatak = Zadatak.update(stariZadatak.get(), dto);
+		zadatak.setBrojBodova();
 		return zadatakRepo.save(zadatak);
 	}
 
