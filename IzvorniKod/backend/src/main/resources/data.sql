@@ -62,25 +62,17 @@ VALUES
 (nextval('pehar_seq'), 1, 103, NULL),
 (nextval('pehar_seq'), 1, 104, NULL);
 
-INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak) 
-VALUES
-(nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true),
-(nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, true),
-(nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, false),
-(nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, false),
-(nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 10, 1, 6, false),
-(nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, true),
-(nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 10, 1, 4, true);
+
 
 INSERT INTO zadatak (zadatak_id, naziv_zadatka, tekst_zadatka, broj_bodova, vremensko_ogranicenje, voditelj_korisnik_id, privatni_zadatak, tezina_zadatka)
 VALUES
     (nextval('zadatak_seq'), 'Hello world', 'Napiši program koji ispisuje Hello world.', 10, 1, 4, true, 'RECRUIT'),
     (nextval('zadatak_seq'), 'Brojilica', 'Napiši program koji ispisuje sve prirodne brojeve do broja N.', 20, 1, 4, true, 'VETERAN'),
     (nextval('zadatak_seq'), 'Množilica', 'Napiši program koji množi dva upisana cijela broja.', 10, 1, 6, false, 'RECRUIT'),
-    (nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 100, 2, 4, false, 'REALISM'),
-    (nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 50, 1, 6, false, 'VETERAN'),
-    (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 10, 1, 6, true, 'REALISM'),
-    (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 100, 1, 4, true, 'REALISM');
+    (nextval('zadatak_seq'), 'Fibbonaci', 'Ispiši prvih N brojeva iz Fibbonacijevog niza', 50, 2, 4, false, 'REALISM'),
+    (nextval('zadatak_seq'), 'Jeka', 'Ispiši ono što je korisnik unio.', 20, 1, 6, false, 'VETERAN'),
+    (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 50, 1, 6, true, 'REALISM'),
+    (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 50, 1, 4, true, 'REALISM');
 
 ALTER SEQUENCE zadatak_seq RESTART WITH 1001;
 INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
@@ -95,7 +87,7 @@ INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
 
 INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
 VALUES
-(nextval('natjecanje_seq'), 2, 102, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
+(nextval('natjecanje_seq'), 2, NULL, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
 (nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
 
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera, natjecanje_natjecanje_id)

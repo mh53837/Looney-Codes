@@ -146,10 +146,10 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
         Assert.isTrue(natjecanje.getKrajNatjecanja().before(new Timestamp(System.currentTimeMillis())), "Natjecanje nije zavrsilo!");
 
 
-        List<Zadatak> zadaci = natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
+        Set<Zadatak> zadaci = natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
 
         //ne postoji metoda za dohvat svih rjesenja pa filtriramo po natjecanju
-        List<Rjesenje> rjesenjaNatjecanje= rjesenjeService.listAll().stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecanje().getNatjecanjeId().equals(natjecanjeId)).collect(Collectors.toList());
+        List<Rjesenje> rjesenjaNatjecanje= rjesenjeService.listAll().stream().filter(rjesenje -> rjesenje.getNatjecanje().getNatjecanjeId().equals(natjecanjeId)).collect(Collectors.toList());
 
         //lista natjecatelja bi trebali biti atribut kod natjecanja, jer mozda netko nije nista predao?
         List<Korisnik> listaNatjecatelja = rjesenjaNatjecanje.stream().map(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj()).distinct().collect(Collectors.toList());
