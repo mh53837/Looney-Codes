@@ -31,6 +31,11 @@ public class Rjesenje {
    * tekst programskog koda je bio evaluiran
    */
   private String programskiKod;
+  /**
+   * povezano nadmetanje
+   */
+  @ManyToOne
+  private Nadmetanje natjecanje;
 
   /**
    * Defaultni Konstruktor (da nebi sql tulil)
@@ -40,13 +45,23 @@ public class Rjesenje {
   /**
    * Konstruktor za stvaranje rjesenja
    */
-  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, double brojTocnihPrimjera, String programskiKod) {
+  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, double brojTocnihPrimjera, String programskiKod, Nadmetanje natjecanje) {
     this.rjesenjeId = rjesenjeId;
     this.vrijemeOdgovora = vrijemeOdgovora;
     this.brojTocnihPrimjera = brojTocnihPrimjera;
     this.programskiKod = programskiKod;
+    this.natjecanje = natjecanje;
   }
 
+  /**
+   * Konstruktor za stvaranje rjesenja povezanog s (virtualnim) natjecanjem
+   */
+//  public Rjesenje(RjesenjeKey rjesenjeId, Timestamp vrijemeOdgovora, double brojTocnihPrimjera, String programskiKod, Nadmetanje nadmetanje) {
+//    this.rjesenjeId = rjesenjeId;
+//    this.vrijemeOdgovora = vrijemeOdgovora;
+//    this.brojTocnihPrimjera = brojTocnihPrimjera;
+//    this.programskiKod = programskiKod;
+//  }
   // geteri i seteri
   public RjesenjeKey getRjesenjeId() { return rjesenjeId; }
   public void setRjesenjeId(RjesenjeKey rjesenjeId) { this.rjesenjeId = rjesenjeId; }
@@ -58,6 +73,12 @@ public class Rjesenje {
   }
   public String getProgramskiKod() {
     return programskiKod;
+  }
+  public Nadmetanje getNatjecanje() {
+	return natjecanje;
+  }
+  public void setNatjecanje(Nadmetanje natjecanje) {
+	this.natjecanje = natjecanje;
   }
 }
 

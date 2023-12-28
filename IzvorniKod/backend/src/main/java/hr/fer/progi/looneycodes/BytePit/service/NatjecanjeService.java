@@ -7,6 +7,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface koje definira komunikaciju s bazom podataka u odnosu na Natjecanje entitete
@@ -79,7 +80,7 @@ public interface NatjecanjeService {
      * @param natjecanjeId
      * @return lista zadataka
      */
-    public List<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId);
+    public Set<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId);
 
     /**
      * Metoda koja dodaje zadatak u natjecanje

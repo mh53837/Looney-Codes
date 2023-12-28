@@ -97,7 +97,8 @@ public class RjesenjeServiceJpa implements RjesenjeService {
       Rjesenje rjesenje = new Rjesenje(rjesenjeId,
                                       Timestamp.from(Instant.now()),
                                       dto.getRezultat(),
-                                      programskiKod
+                                      programskiKod,
+                                      null
                                       );
   
       return rjesenjeRepository.save(rjesenje);

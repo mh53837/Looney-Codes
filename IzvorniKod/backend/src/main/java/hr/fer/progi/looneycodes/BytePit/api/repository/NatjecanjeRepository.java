@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sučelje za provođenje upita nad tablicom natjecanje u bazi.
@@ -28,7 +29,7 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
      * @param korisnikId
      * @return lista natjecanja
      */
-    @Query("SELECT n FROM Natjecanje n WHERE n.voditelj.korisnikId = :korisnikId")
+    @Query("SELECT n FROM Natjecanje n WHERE n.korisnik.korisnikId = :korisnikId")
     List<Natjecanje> findByKorisnikId(@Param("korisnikId") Integer korisnikId);
 
     /**
@@ -62,7 +63,7 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
      */
 
     @Query("select z from Natjecanje n join n.zadaci z where n.natjecanjeId = :natjecanjeId")
-    List<Zadatak> findZadaciByNatjecanjeId(@Param("natjecanjeId") Integer natjecanjeId);
+    Set<Zadatak> findZadaciByNatjecanjeId(@Param("natjecanjeId") Integer natjecanjeId);
 
 
 }

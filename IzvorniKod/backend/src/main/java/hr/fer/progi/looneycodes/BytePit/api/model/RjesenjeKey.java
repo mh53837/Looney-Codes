@@ -19,8 +19,7 @@ public class RjesenjeKey implements Serializable {
   @ManyToOne
   private Zadatak zadatak;
 
-  @ManyToOne
-  private  Natjecanje natjecanje;
+
 
   public RjesenjeKey() {
     super();
@@ -57,10 +56,4 @@ public class RjesenjeKey implements Serializable {
 
   public void setZadatak(Zadatak zadatak) { this.zadatak = zadatak; }
 
-  public Natjecanje getNatjecanje() {
-    return natjecanje;
-  }
-  public void setNatjecanje(Natjecanje natjecanje) {
-    this.natjecanje = natjecanje;
-  }
 }
