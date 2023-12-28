@@ -49,6 +49,12 @@ public class ZadatakDTO {
 	   */
 	  private boolean privatniZadatak;
 
+	  
+	  /**
+	   * broj bodova koje nosi zadatak
+	   */
+	  private int brojBodova;
+	  
 	  public ZadatakDTO() {
 		  super();
 	  }
@@ -61,6 +67,7 @@ public class ZadatakDTO {
 		  this.vremenskoOgranicenje = zadatak.getVremenskoOgranicenje();
 		  this.zadatakId = zadatak.getZadatakId();
 		  this.tekstZadatka = zadatak.getTekstZadatka();
+		  setBrojBodova();
 	  }
 
 	public ZadatakDTO(Integer zadatakId, String voditelj, String nazivZadatka, TezinaZadatka tezinaZadatka,
@@ -73,6 +80,7 @@ public class ZadatakDTO {
 		this.vremenskoOgranicenje = vremenskoOgranicenje;
 		this.tekstZadatka = tekstZadatka;
 		this.privatniZadatak = privatniZadatak;
+		setBrojBodova();
 	}
 	
 	public ZadatakDTO(String voditelj, String nazivZadatka, TezinaZadatka tezinaZadatka,
@@ -84,6 +92,7 @@ public class ZadatakDTO {
 		this.vremenskoOgranicenje = vremenskoOgranicenje;
 		this.tekstZadatka = tekstZadatka;
 		this.privatniZadatak = privatniZadatak;
+		setBrojBodova();
 	}
 
 	//geteri i seteri
@@ -144,6 +153,23 @@ public class ZadatakDTO {
 		this.privatniZadatak = privatniZadatak;
 	}
 	  
-	
+	 public int getBrojBodova() {
+		    return brojBodova;
+		  }
+  public void setBrojBodova() {
+	  switch(this.tezinaZadatka) {
+	  case RECRUIT:
+		this.brojBodova = 10;
+	    break;
+	  case VETERAN:
+		this.brojBodova = 20;
+	    break;
+	  case REALISM:
+		this.brojBodova = 50;
+	    break;
+	  default:
+	    this.brojBodova = 0;
+	}
+  }
 	  
 }

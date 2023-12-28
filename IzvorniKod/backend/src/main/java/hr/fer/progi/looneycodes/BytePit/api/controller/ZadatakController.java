@@ -196,7 +196,6 @@ public class ZadatakController {
 	    if(!user.getUsername().equals(zadatakService.fetch(id).getVoditelj().getKorisnickoIme())
 	        && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
 	      throw new IllegalStateException("Krivi korisnik!");
-
 	    return zadatakService.updateZadatak(id, dto);
 	  }
 	
