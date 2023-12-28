@@ -56,4 +56,11 @@ public class RjesenjeKey implements Serializable {
   public Zadatak getZadatak() { return zadatak; }
 
   public void setZadatak(Zadatak zadatak) { this.zadatak = zadatak; }
+
+  public Natjecanje getNatjecanje() {
+    return natjecanje;
+  }
+  public void setNatjecanje(Natjecanje natjecanje) {
+    this.natjecanje = natjecanje;
+  }
 }
