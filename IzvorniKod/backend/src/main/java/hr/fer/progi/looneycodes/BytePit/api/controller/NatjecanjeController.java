@@ -205,6 +205,15 @@ public class NatjecanjeController {
         natjecanjeService.removeZadatakFromNatjecanje(natjecanjeId, zadatakId);
     }
 
+    /**
+     * Metoda koja vraća rang listu za zadano natjecanje
+     * @param natjecanjeId
+     * @return lista rangova
+     */
+    @GetMapping("/get/rang/{natjecanjeId}")
+    public List<RangDTO> getRangList(@PathVariable Integer natjecanjeId) {
+        return natjecanjeService.getRangList(natjecanjeId);
+    }
 
 }
 

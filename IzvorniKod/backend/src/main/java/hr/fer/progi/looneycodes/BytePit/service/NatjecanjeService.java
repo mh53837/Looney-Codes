@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,13 @@ public interface NatjecanjeService {
 
     public void removeZadatakFromNatjecanje(Integer natjecanjeId, Integer zadatakId);
 
+    /**
+     * Metoda koja dohvaća rang listu za zadano natjecanje
+     * @param natjecanjeId
+     * @return lista rangova
+     */
+
+    public List<RangDTO> getRangList(Integer natjecanjeId);
 
 
 
