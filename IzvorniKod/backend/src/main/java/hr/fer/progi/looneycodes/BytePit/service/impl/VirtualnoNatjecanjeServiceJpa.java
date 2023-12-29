@@ -2,7 +2,7 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.*;
-import hr.fer.progi.looneycodes.BytePit.api.repository.VirutalnoNatjecanjeRepository;
+import hr.fer.progi.looneycodes.BytePit.api.repository.VirtualnoNatjecanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.VirtualnoNatjecanjeService;
@@ -23,7 +23,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     @Autowired
     NatjecanjeService natjecanjeService;
     @Autowired
-    private VirutalnoNatjecanjeRepository virtualnoNatjecanjeRepo;
+    private VirtualnoNatjecanjeRepository virtualnoNatjecanjeRepo;
 
 
     @Override
@@ -33,7 +33,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
 
     @Override
     public VirtualnoNatjecanje getVirtualnoNatjecanje(Integer Id) {
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(Id);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(Id);
         Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + Id + " ne postoji!");
         return virtualnoNatjecanje;
     }
@@ -71,9 +71,9 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     }
 
     @Override
-    public List<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
+    public Set<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
         Assert.notNull(virtualnoNatjecanjeId, "Id virtualnog natjecanja ne smije biti null");
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(virtualnoNatjecanjeId);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
         Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + virtualnoNatjecanjeId + " ne postoji!");
         return virtualnoNatjecanje.getListaZadataka();
     }

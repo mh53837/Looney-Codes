@@ -3,10 +3,7 @@ package hr.fer.progi.looneycodes.BytePit.service.impl;
 import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.*;
-import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
-import hr.fer.progi.looneycodes.BytePit.api.repository.RjesenjeRepository;
-import hr.fer.progi.looneycodes.BytePit.api.repository.TestniPrimjerRepository;
-import hr.fer.progi.looneycodes.BytePit.api.repository.ZadatakRepository;
+import hr.fer.progi.looneycodes.BytePit.api.repository.*;
 import hr.fer.progi.looneycodes.BytePit.service.RjesenjeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +41,11 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     @Autowired
     KorisnikRepository korisnikRepository;
 
+    @Autowired
+    VirtualnoNatjecanjeRepository virtualnoNatjecanjeRepository;
+    @Autowired
+    NatjecanjeRepository natjecanjeRepository;
+
     @Value("${BytePit.rapidApiKey}")
     private String apiKey;
     @Value("${BytePit.rapidApiHost}")
@@ -75,7 +77,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     @Override
-    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod) {
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, Integer nadmetanjeId) {
       Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
       Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
 
@@ -94,10 +96,19 @@ public class RjesenjeServiceJpa implements RjesenjeService {
         rjesenjeRb = max.getAsInt() + 1;
 
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
+      Nadmetanje nadmetanje;
+      if(natjecanjeRepository.findById(nadmetanjeId).isPresent())
+        nadmetanje = natjecanjeRepository.findById(nadmetanjeId).get();
+      else if(virtualnoNatjecanjeRepository.findById(nadmetanjeId).isPresent())
+        nadmetanje = virtualnoNatjecanjeRepository.findById(nadmetanjeId).get();
+      else
+        throw new IllegalArgumentException("Traženo nadmetanje ne postoji!");
+
       Rjesenje rjesenje = new Rjesenje(rjesenjeId,
                                       Timestamp.from(Instant.now()),
                                       dto.getRezultat(),
-                                      programskiKod
+                                      programskiKod,
+                                      nadmetanje
                                       );
   
       return rjesenjeRepository.save(rjesenje);

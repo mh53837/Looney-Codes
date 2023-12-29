@@ -156,7 +156,7 @@ public class RjesenjeController {
       if(resultDTO.getCompilerOutput().isPresent())
         return resultDTO;
 
-      rjesenjeService.add(resultDTO, dto.getKorisnickoIme(), dto.getZadatakId(), dto.getProgramskiKod());
+      rjesenjeService.add(resultDTO, dto.getKorisnickoIme(), dto.getZadatakId(), dto.getProgramskiKod(), dto.getNadmetanjeId());
 
       // vrati resultDTO nakon kaj si ga spremil
       return resultDTO;

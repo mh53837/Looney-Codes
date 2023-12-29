@@ -62,9 +62,10 @@ public interface RjesenjeService {
      * @param korisnickoIme
      * @param zadatakId
      * @param programskiKod
+     * @param nadmetanjeId
      * @return stvoreno Rjesenje
      */
-    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod);
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, Integer nadmetanjeId);
 
     /**
      * Vrati evaluirano rješenje s brojem točnih odgovora.

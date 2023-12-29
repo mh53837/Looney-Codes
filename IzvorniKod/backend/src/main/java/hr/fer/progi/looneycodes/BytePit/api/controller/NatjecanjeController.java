@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Kontroler koji se koristi za pristup metodama vezanim uz Natjecanje entitet
@@ -166,7 +167,7 @@ public class NatjecanjeController {
      * @return lista zadataka
      */
     @GetMapping("/get/zadaci/{natjecanjeId}")
-    public List<Zadatak> getZadaciByNatjecanjeId(@PathVariable Integer natjecanjeId) {
+    public Set<Zadatak> getZadaciByNatjecanjeId(@PathVariable Integer natjecanjeId) {
         return natjecanjeService.getZadaciByNatjecanjeId(natjecanjeId);
     }
 

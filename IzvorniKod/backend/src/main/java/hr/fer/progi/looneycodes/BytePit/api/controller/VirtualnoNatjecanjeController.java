@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -119,7 +120,7 @@ public class VirtualnoNatjecanjeController {
      *
      */
     @GetMapping("/get/zadaci/{virtualnoNatjecanjeId}")
-    public List<Zadatak> getZadaci(@PathVariable Integer virtualnoNatjecanjeId) {
+    public Set<Zadatak> getZadaci(@PathVariable Integer virtualnoNatjecanjeId) {
         return virtualnoNatjecanjeService.getZadaci(virtualnoNatjecanjeId);
     }
 
