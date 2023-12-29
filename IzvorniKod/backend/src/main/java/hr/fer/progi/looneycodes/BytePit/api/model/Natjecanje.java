@@ -56,7 +56,7 @@ public class Natjecanje extends Nadmetanje{
         if(pocetakNatjecanja.compareTo(this.krajNatjecanja) >= 0)
           throw new IllegalArgumentException();
 
-        setPocetakNatjecanja(pocetakNatjecanja);
+        super.setPocetakNatjecanja(pocetakNatjecanja);
     }
     public String getNazivNatjecanja() {
       return nazivNatjecanja;
