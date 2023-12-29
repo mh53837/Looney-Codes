@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ConfigProvider } from 'antd';
 import '../../styles/Table.css';
+import { UserContext } from '../../context/userContext';
 
 interface ProblemData {
   voditelj: string;
@@ -14,14 +15,24 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
+interface UserData {
+  korisnickoIme: string;
+  ime: string;
+  prezime: string;
+  email: string;
+  uloga: string;
+}
+
 interface ProblemsTabProps {
   problemsData: ProblemData[];
   onUpdate: () => void;
+  userData: UserData;
 }
 
 const ProblemUpdateForm = React.lazy(() => import("./ProblemUpdateForm"));
 
-const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate }) => {
+const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate, userData}) => {
+  const {user} = useContext(UserContext);
 
   const handleUpdateSuccess = () => {
     onUpdate();
@@ -88,25 +99,36 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
                   className: "th-td",
                   sorter: (a, b) => a.vremenskoOgranicenje - b.vremenskoOgranicenje,
                 },
-                {
-                  title: '',
-                  dataIndex: 'zadatakId',
-                  key: 'action',
-                  className: "th-td",
-                  render: (zadatakId) => <Link to={`/problem/${zadatakId}`}>riješi</Link>,
-                },
+                ...( (user.uloga === "NATJECATELJ" )   ? [
+                  {
+                    title: '',
+                    dataIndex: 'zadatakId',
+                    key: 'action',
+                    className: "th-td",
+                    render: (zadatakId : BigInteger) => 
+                    (
+                        <Link to={`/problem/${zadatakId}`}>
+                          riješi
+                        </Link>
+                    )
+                  },
+                ] :[] ),
+                ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
                 {
                   title: '',
                   key: 'edit',
                   className: 'th-td',
-                  render: (data) => (
+                  render: (data : ProblemData) => (
                     <span>
-                      {<React.Suspense fallback={<div>učitavanje...</div>}>
-                        <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
-                      </React.Suspense>}
+                      {
+                          <React.Suspense fallback={<div>učitavanje...</div>}>
+                            <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
+                          </React.Suspense>
+                      }
                     </span>
                   ),
-                },
+                }
+              ] : [] ),
               ]}
               pagination={false}
               rowKey="zadatakId"

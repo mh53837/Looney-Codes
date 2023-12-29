@@ -155,7 +155,7 @@ const UserProfile: React.FC = () => {
 
   const renderProblemsTab = () => (
     <React.Suspense fallback={<div>učitavanje...</div>}>
-      <ProblemsProfileTab problemsData={problemsData} onUpdate={handleProblemUpdate}/>
+      <ProblemsProfileTab problemsData={problemsData} onUpdate={handleProblemUpdate} userData = {userData}/>
     </React.Suspense>
   );
   const renderCompetitionsCalendar = () => {
@@ -167,6 +167,7 @@ const UserProfile: React.FC = () => {
         <CompetitionProfileCalendar
           competitionsData={competitionsData}
           onUpdate={handleCompetitionUpdate}
+          userData={userData}
         />
       </React.Suspense>
     );
@@ -182,7 +183,7 @@ const UserProfile: React.FC = () => {
         </h2>
         <UserProfileHeader imageData={imageData} userData={userData} />
 
-        {userData.uloga === "ADMIN" && (
+        {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
           <Link to="/user/listRequested">odobri voditelje</Link>
         )}
 
@@ -204,12 +205,12 @@ const UserProfile: React.FC = () => {
               centered
               items={[
                 {
-                  label: <p>moji zadaci</p>,
+                  label: <p> {userData.korisnickoIme === user.korisnickoIme ? "moji zadaci" : "zadaci"} </p>,
                   key: "1",
                   children: renderProblemsTab(),
                 },
                 {
-                  label: <p>moja natjecanja</p>,
+                  label: <p>{userData.korisnickoIme === user.korisnickoIme ? "moja natjecanja" : "natjecanja"}</p>,
                   key: "2",
                   children: renderCompetitionsCalendar(),
                 },

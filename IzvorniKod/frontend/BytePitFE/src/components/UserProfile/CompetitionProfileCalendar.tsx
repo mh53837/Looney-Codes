@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../../context/userContext";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Table, ConfigProvider } from "antd";
@@ -17,13 +18,23 @@ interface CompetitionData {
   krajNatjecanja: string;
 }
 
+interface UserData {
+  korisnickoIme: string;
+  ime: string;
+  prezime: string;
+  email: string;
+  uloga: string;
+}
+
+
 interface CompetitionProfileCalendarProps {
   competitionsData: CompetitionData[];
   onUpdate: () => void;
+  userData: UserData;
 }
-const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({competitionsData, onUpdate,}) => {
+const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({competitionsData, onUpdate, userData}) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
+  const {user} = useContext(UserContext); //podaci ulogiranog korisnika
   const handleUpdateSuccess = () => {
     onUpdate();
   };
@@ -124,25 +135,25 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
                               className: "th-td",
                               render: (date) => new Date(date).toDateString(),
                             },
-                            {
-                              title: "",
-                              key: "edit",
-                              className: "th-td",
-                              render: (data) => (
-                                <span>
-                                  {
-                                    <React.Suspense
-                                      fallback={<div>učitavanje...</div>}
-                                    >
-                                      <CompetitonUpdateForm
-                                        natjecanjeId={data.natjecanjeId ?? 0}
-                                        onUpdateSuccess={handleUpdateSuccess}
-                                      />
-                                    </React.Suspense>
-                                  }
-                                </span>
-                              ),
-                            },
+                            ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
+                              {
+                                title: "",
+                                key: "edit",
+                                className: "th-td",
+                                render: (data : CompetitionData) => (
+                                  <span>
+                                        <React.Suspense
+                                          fallback={<div>učitavanje...</div>}
+                                        >
+                                          <CompetitonUpdateForm
+                                            natjecanjeId={data.natjecanjeId ?? 0}
+                                            onUpdateSuccess={handleUpdateSuccess}
+                                          />
+                                        </React.Suspense>
+                                  </span>
+                                ),
+                              },
+                             ] : []),
                           ]}
                           pagination={false}
                           rowKey="natjecanjeId"

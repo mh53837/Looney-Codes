@@ -4,7 +4,7 @@ import { UserContext } from "../../context/userContext";
 import "../../styles/CompetitionUpdateForm.css";
 
 interface ProblemUpdateFormProps {
-  zadatakId: number;
+  zadatakId: BigInteger;
   onUpdateSuccess: () => void;
 }
 interface ProblemData {
@@ -87,7 +87,7 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
   };
 
 
-  const HandleEdit = async (zadatakId: number) => {
+  const HandleEdit = async (zadatakId: BigInteger) => {
     try {
       const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
 
