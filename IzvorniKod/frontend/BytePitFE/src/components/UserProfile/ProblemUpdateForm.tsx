@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Select } from "antd";
 import { UserContext } from "../../context/userContext";
 import "../../styles/CompetitionUpdateForm.css";
 
@@ -28,8 +28,21 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [updatedNaziv, setUpdatedNaziv] = useState<string>("");
-	const [updatedTekst, setUpdatedTekst] = useState<string>("");/* 
-  const [updatedBrojBodova, setUpdatedBrojBodova] = useState<number>(10); */
+	const [updatedTekst, setUpdatedTekst] = useState<string>("");
+  const [updatedTezinaZadatka, setUpdatedTezinaZadatka] = useState<string>("");
+  const [updatedBrojBodova, setUpdatedBrojBodova] = useState<number>(0);
+
+  const handleBrojBodovaChange = (value: string) => {
+    const broj = parseInt(value, 10);
+    if (broj == 10){
+      setUpdatedTezinaZadatka("RECRUIT")
+    } else if( broj == 20) {
+      setUpdatedTezinaZadatka("VETERAN")
+    } else if (broj == 50) {
+      setUpdatedTezinaZadatka("REALISM")
+    }
+    setUpdatedBrojBodova(broj);
+  }
 
 	useEffect(() => {
     const fetchInitialData = async () => {
@@ -39,8 +52,9 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
         setProblemData(data);
 
         setUpdatedNaziv(data.nazivZadatka);
-        setUpdatedTekst(data.tekstZadatka);/* 
-        setUpdatedBrojBodova(data.brojBodova); */
+        setUpdatedTekst(data.tekstZadatka);
+        setUpdatedBrojBodova(data.brojBodova);
+        setUpdatedTezinaZadatka(data.tezinaZadatka);
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -82,9 +96,9 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
         nazivZadatka: updatedNaziv ? updatedNaziv : problemData?.nazivZadatka,
 				tekstZadatka: updatedTekst ? updatedTekst : problemData?.tekstZadatka,
         voditelj: problemData?.voditelj,
-        brojBodova: problemData?.brojBodova,
+        brojBodova: updatedBrojBodova ? updatedBrojBodova : problemData?.brojBodova,
         privatniZadatak: problemData?.privatniZadatak,
-        tezinaZadatka: problemData?.tezinaZadatka,
+        tezinaZadatka: updatedTezinaZadatka ? updatedTezinaZadatka : problemData?.tezinaZadatka,
         vremenskoOgranicenje: problemData?.vremenskoOgranicenje,
       };
       console.log("updated data:", updatedData);
@@ -157,13 +171,19 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
               value={updatedTekst}
               onChange={(e) => setUpdatedTekst(e.target.value)}
             />
- {/*            <input
-              className="problemUpdateForm"
-              type="text"
-              placeholder="broj bodova"
-              value={updatedBrojBodova}
-              onChange={(e) => setUpdatedBrojBodova(e.target.value)}
-            /> */}
+            <p>broj bodova: </p>
+            <Select 
+              defaultValue= {problemData?.brojBodova.toString() || "10"  }
+              style={{ width: 120 }}
+              onChange={ handleBrojBodovaChange}
+              options={[
+                { value:"10", label: "10" },
+                { value:"20", label: "20" },
+                { value:"50", label: "50" },
+              ]}
+            />
+
+           
           </div>
         </DynamicModal>
         </React.Suspense>
