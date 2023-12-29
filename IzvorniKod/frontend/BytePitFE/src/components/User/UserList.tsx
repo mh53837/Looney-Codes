@@ -16,16 +16,8 @@ const UserList: React.FC = () => {
     const {user} = useContext(UserContext);
 
     useEffect(() => {
-        const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
         try {
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Basic ${credentials}`,
-                    'Content-Type': 'application/json'
-                },
-            };
-            fetch('/api/user/allAdmin', options)
+            fetch('/api/user/all')
                 .then(response => response.json())
                 .then((data: IUser[]) => setUsers(data))
                 .catch(error => console.error('Error fetching users:', error));

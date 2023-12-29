@@ -48,7 +48,7 @@ const App: React.FC = () => {
             {redirectToHome && <Navigate to="/" replace={true} />}
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/user/allAdmin" element={<UserList />} />
+                <Route path="/user/all" element={<UserList />} />
                 <Route path="/problems/all" element={<ProblemsList />} />
                 <Route
                     path="/login"

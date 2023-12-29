@@ -48,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             <Link to="/">
               <button>kalendar</button>
             </Link>
-            <Link to="/user/allAdmin">
+            <Link to="/user/all">
               <button>korisnici</button>
             </Link>
             <Link to="/problems/all">
