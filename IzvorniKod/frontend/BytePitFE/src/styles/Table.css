@@ -1,0 +1,49 @@
+.tableWrapper {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.info-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.info-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+  border: 1px solid #00000085;
+  padding: 10px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.info-table th{
+  background-color: #f4c95de7;
+}
+
+.info-table tbody tr:hover{
+  background-color: #f4c95d52;
+}
+
+/* table.problem-info-header, table.competition-info-header{
+  width: 80%;
+  margin: 0 auto;
+}
+
+.problem-info-header td, .competition-info-header td  {
+  text-align: left;
+  padding: 8px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} */
+

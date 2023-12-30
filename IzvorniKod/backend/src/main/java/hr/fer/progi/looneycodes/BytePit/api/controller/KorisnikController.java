@@ -123,10 +123,9 @@ public class KorisnikController{
    */
   @GetMapping("/profile/{korisnickoIme}")
   public Optional<KorisnikInfoDTO> profileKorisnik(@PathVariable String korisnickoIme){
-    Korisnik korisnik = korisnikService.getKorisnik(korisnickoIme)
-    			.orElseThrow(() -> new NotFoundException("Korisnik s korisnickim imenom: " + 
-            korisnickoIme + " ne postoji!"));
-    return Optional.of(new KorisnikInfoDTO(korisnik));
+    Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+
+    return korisnik.isPresent()? Optional.of(new KorisnikInfoDTO(korisnik.get())) : Optional.empty();
   }
   
 

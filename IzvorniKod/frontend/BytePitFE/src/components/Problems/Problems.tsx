@@ -1,5 +1,5 @@
 import React from 'react';
-import './Problems.css';
+import '../../styles/Table.css';
 import { Link } from 'react-router-dom';
 interface ProblemsProps {
     problem: {
@@ -7,24 +7,25 @@ interface ProblemsProps {
         nazivZadatka: string;
         tekstZadatka: string;
         zadatakId: BigInteger;
+        brojBodova: number ;
+        privatniZadatak: boolean;
     };
 }
 
 const Problems: React.FC<ProblemsProps> = (props) => {
-    const { voditelj, nazivZadatka, tekstZadatka, zadatakId } = props.problem;
+    const { voditelj, nazivZadatka, tekstZadatka, zadatakId, brojBodova } = props.problem;
 
     return (
-        <tr className="user-info-header">
+        <tr className="info-table">
             <td>{voditelj}</td>
             <td>{nazivZadatka}</td>
             <td>{tekstZadatka}</td>
+            <td>{brojBodova}</td>
             <td>
                 <Link to={`/problem/${zadatakId}`}>
-                    Riješi
+                    riješi zadatak
                 </Link>
             </td>
-
-
         </tr>
     );
 };

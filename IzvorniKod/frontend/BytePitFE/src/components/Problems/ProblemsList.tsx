@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Problems from './Problems';
+import '../../styles/Table.css'
 
 
 export interface IProblems {
@@ -7,10 +7,15 @@ export interface IProblems {
     nazivZadatka: string;
     tekstZadatka: string;
     zadatakId: BigInteger;
+    brojBodova: number ;
+    privatniZadatak: boolean;
 }
+
+const Problems = React.lazy(() => import('./Problems'));
 
 const ProblemsList: React.FC = () => {
     const [problem, setProblems] = useState<IProblems[]>([]);
+    
 
     useEffect(() => {
         fetch('/api/problems/all')
@@ -20,19 +25,22 @@ const ProblemsList: React.FC = () => {
     }, []);
 
     return (
-        <div className="user-info-table">
+        <div className="info-table">
             <table>
                 <thead>
                     <tr>
                         <th>korisničko ime</th>
                         <th>naziv</th>
                         <th>tekst</th>
+                        <th>broj bodova</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {problem.map((problem, index) => (
-                        <Problems key={index} problem={problem} />
+                        <React.Suspense fallback={<div>učitavanje...</div>}>
+                            <Problems key={index} problem={problem} />
+                        </React.Suspense>
                     ))}
                 </tbody>
             </table>

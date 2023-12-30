@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { UserContext } from '../context/userContext';
-import { useContext } from 'react';
-
-
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -19,8 +14,6 @@ const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
-
-    const { user } = useContext(UserContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,7 +34,6 @@ const Home: React.FC = () => {
             (natjecanje) =>
                 date >= new Date(natjecanje.pocetakNatjecanja) && date <= new Date(natjecanje.krajNatjecanja)
         );
-
         setOznacenaNatjecanja(natjecanjaZaDatum);
     }, [date, natjecanja]);
 
@@ -68,20 +60,7 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div>
-            {user.korisnickoIme !== '' ? (
-                <div>
-                    <p>Pozdrav, {user.korisnickoIme}!</p>
-                    {user.korisnickoIme === 'admin' ? (
-                        <Link to="/user/listRequested">odobri voditelje</Link>
-                    ) : (<p></p>)}
-                </div>
-            ) : (
-                <div>
-                    <p>Pozdrav, nepoznati korisnik!</p>
-                </div>
-            )}
-
+        <div> 
             <div className="calendar-container">
                 <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>

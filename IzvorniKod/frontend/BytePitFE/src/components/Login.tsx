@@ -1,8 +1,7 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-import './Login.css';
+import '../styles/Login.css';
 
 interface LoginProps {
     onLogin: (korisnickoIme: string, lozinka: string, uloga: string) => void;
@@ -58,7 +57,7 @@ const Login: React.FC<LoginProps> = (props) => {
             setUser({
                 korisnickoIme: loginForm.korisnickoIme,
                 lozinka: loginForm.lozinka,
-                uloga: data.uloga
+                uloga: data.uloga, 
             });
         }).catch((e) => {
             console.error(e);

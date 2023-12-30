@@ -15,7 +15,7 @@ export const UserContext = createContext<UserContextValue>({
   user: {
     korisnickoIme: '',
     lozinka: '',
-    uloga: ''
+    uloga: '',
   },
   setUser: () => { },
 });
@@ -27,7 +27,7 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>(() => {
     const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : { korisnickoIme: '', lozinka: '' };
+    return storedUser ? JSON.parse(storedUser) : {korisnickoIme: '', lozinka: '',  uloga: '' };
   });
 
   useEffect(() => {

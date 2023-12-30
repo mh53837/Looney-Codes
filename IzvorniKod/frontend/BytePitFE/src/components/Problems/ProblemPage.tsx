@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './ProblemPage.css';
-import { UserContext } from '../context/userContext';
+import '../../styles/ProblemPage.css';
+import { UserContext } from '../../context/userContext';
 
 interface IProblemDetails {
         zadatakId: string;
@@ -128,7 +128,7 @@ const ProblemPage: React.FC = () => {
                                 <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
                         </div>
                         <div className="problem-description">
-                                <h2>Tekst zadatka</h2>
+                                <h2>Tekst zadatka:</h2>
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}

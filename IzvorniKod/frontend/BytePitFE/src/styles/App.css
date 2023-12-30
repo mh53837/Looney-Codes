@@ -1,5 +1,7 @@
 body {
   box-sizing: inherit;
+  max-width: 100%;
+  margin:0;
 }
 #root {
   max-width: 1280px;
@@ -13,6 +15,7 @@ body {
 
 .calendar-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-top: 40px;
@@ -21,7 +24,6 @@ body {
 
 .react-calendar {
   width: 100vh !important;
-
 }
 
 .naziv-natjecanje {
