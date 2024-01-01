@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,9 +49,13 @@ public class VirtualnoNatjecanjeController {
         if(Objects.isNull(user))
           throw new AccessDeniedException("You must be logged in for that!");
 
-        int natjecateljId = korisnikService.getKorisnik(user.getUsername()).get().getKorisnikId();
-        virtualnoNatjecanjeDTO.setNatjecateljId(natjecateljId);
+        Optional<Korisnik> natjecatelj = korisnikService.getKorisnik(virtualnoNatjecanjeDTO.getKorisnickoImeNatjecatelja());
+        if((natjecatelj.isEmpty() || !virtualnoNatjecanjeDTO.getKorisnickoImeNatjecatelja().equals(user.getUsername()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti taj natjecatelj ili admin!");
 
+
+        virtualnoNatjecanjeDTO.setKorisnickoImeNatjecatelja(natjecatelj.get().getKorisnickoIme());
         return new VirtualnoNatjecanjeDTO(virtualnoNatjecanjeService.createVirtualnoNatjecanje(virtualnoNatjecanjeDTO));
     }
 
@@ -61,7 +68,7 @@ public class VirtualnoNatjecanjeController {
     @Secured("ADMIN")
     public List<VirtualnoNatjecanjeDTO> listAll() {
         return virtualnoNatjecanjeService.findAll().stream().map(virtualnoNatjecanje -> {
-            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId(), virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje);
         }).toList();
     }
 
@@ -74,28 +81,27 @@ public class VirtualnoNatjecanjeController {
     @GetMapping("/get/{Id}")
     @Secured("ADMIN")
     public VirtualnoNatjecanjeDTO getVirtualnoNatjecanje(@PathVariable Integer Id) {
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeService.getVirtualnoNatjecanje(Id);
-        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId(), virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanjeService.getVirtualnoNatjecanje(Id));
     }
 
     /**
      * Vraća virtualna natjecanja povezana s zadanim natjecateljem
      *
-     * @param natjecateljId identifikator natjecatelja
+     * @param korisnickoImeNatjecatelja korisničko ime natjecatelja
      * @return lista virtualnih natjecanja
      */
-    @GetMapping("/get/natjecatelj/{natjecateljId}")
-    public List<VirtualnoNatjecanjeDTO> getVirtualnoNatjecanjeByKorisnikId(@PathVariable Integer natjecateljId, @AuthenticationPrincipal UserDetails user) {
+    @GetMapping("/get/natjecatelj/{korisnickoImeNatjecatelja}")
+    public List<VirtualnoNatjecanjeDTO> getVirtualnoNatjecanjeByKorisnikI(@PathVariable String korisnickoImeNatjecatelja, @AuthenticationPrincipal UserDetails user) {
         if(Objects.isNull(user))
           throw new AccessDeniedException("You must be logged in for that!");
 
-        int korisnikId = korisnikService.getKorisnik(user.getUsername()).get().getKorisnikId();
-        if(!user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))
-            && korisnikId != natjecateljId)
-          throw new AccessDeniedException("Niste taj natjecatelj ni admin!");
+        Optional<Korisnik> natjecatelj = korisnikService.getKorisnik(korisnickoImeNatjecatelja);
+        if((natjecatelj.isEmpty() || !korisnickoImeNatjecatelja.equals(user.getUsername()))
+                && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+            throw new IllegalStateException("Morate biti taj natjecatelj ili admin!");
 
-        return virtualnoNatjecanjeService.getByKorisnikId(natjecateljId).stream().map(virtualnoNatjecanje -> {
-            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId(), virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+        return virtualnoNatjecanjeService.getByKorisnikId(natjecatelj.get().getKorisnikId()).stream().map(virtualnoNatjecanje -> {
+            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje);
         }).toList();
     }
 
@@ -109,7 +115,7 @@ public class VirtualnoNatjecanjeController {
     @Secured("ADMIN")
     public List<VirtualnoNatjecanjeDTO> getVirtualnoNatjecanjeByOrigNatId(@PathVariable Integer origNatId) {
         return virtualnoNatjecanjeService.getByOrigNatId(origNatId).stream().map(virtualnoNatjecanje -> {
-            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId(), virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+            return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje);
         }).toList();
     }
 
@@ -120,22 +126,29 @@ public class VirtualnoNatjecanjeController {
      *
      */
     @GetMapping("/get/zadaci/{virtualnoNatjecanjeId}")
-    public Set<Zadatak> getZadaci(@PathVariable Integer virtualnoNatjecanjeId) {
-        return virtualnoNatjecanjeService.getZadaci(virtualnoNatjecanjeId);
+    public Set<ZadatakDTO> getZadaci(@PathVariable Integer virtualnoNatjecanjeId) {
+        return virtualnoNatjecanjeService.getZadaci(virtualnoNatjecanjeId).stream().map(zadatak -> {
+            return new ZadatakDTO(zadatak);
+        }).collect(Collectors.toSet());
     }
 
     /**
      * Stvara virtualno natjecanje s nasumičnim zadacima
-     * @param natjecateljID identifikator natjecatelja
+     * @param korisnickoImeNatjecatelja korisničko ime natjecatelja
      *
      */
 
-    @PostMapping("/new/random/{natjecateljID}")
-    public VirtualnoNatjecanjeDTO createVirtualnoNatjecanjeRandom(@PathVariable Integer natjecateljID) {
-        VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO = new VirtualnoNatjecanjeDTO();
-        virtualnoNatjecanjeDTO.setNatjecateljId(natjecateljID);
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeService.createVirtualnoNatjecanjeRandom(virtualnoNatjecanjeDTO);
-        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanje.getVirtualnoNatjecanjeId(), null, virtualnoNatjecanje.getNatjecatelj().getKorisnikId(), virtualnoNatjecanje.getVrijemePocetka());
+    @PostMapping("/new/random/{korisnickoImeNatjecatelja}")
+    public VirtualnoNatjecanjeDTO createVirtualnoNatjecanjeRandom(@PathVariable String korisnickoImeNatjecatelja, @AuthenticationPrincipal UserDetails user) {
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+
+        Optional<Korisnik> natjecatelj = korisnikService.getKorisnik(korisnickoImeNatjecatelja);
+        if((natjecatelj.isEmpty() || !korisnickoImeNatjecatelja.equals(user.getUsername()))
+            && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new IllegalStateException("Morate biti taj natjecatelj ili admin!");
+
+        return new VirtualnoNatjecanjeDTO(virtualnoNatjecanjeService.createVirtualnoNatjecanjeRandom(korisnickoImeNatjecatelja));
     }
 
 }

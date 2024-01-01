@@ -65,9 +65,9 @@ public interface VirtualnoNatjecanjeService {
 
     /**
      * Stvara virtualno natjecanje s nasumičnim zadacima i sprema ga u bazu
-     * @param virtualnoNatjecanjeDTO DTO objekt s podacima o virtualnom natjecanju
+     * @param korisnickoImeNatjecatelja korisničko ime natjecatelja
      *
      */
 
-    VirtualnoNatjecanje createVirtualnoNatjecanjeRandom(VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO);
+    VirtualnoNatjecanje createVirtualnoNatjecanjeRandom(String korisnickoImeNatjecatelja);
 }
