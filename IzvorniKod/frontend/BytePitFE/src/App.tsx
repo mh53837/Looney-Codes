@@ -22,11 +22,8 @@ const App: React.FC = () => {
     const { setUser } = useContext(UserContext);
 
     const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string ) => {
-
         setRedirectToHome(true);
-
         setUser({korisnickoIme, lozinka, uloga });
-
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
@@ -38,6 +35,8 @@ const App: React.FC = () => {
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
+        
+        
     };
 
     return (

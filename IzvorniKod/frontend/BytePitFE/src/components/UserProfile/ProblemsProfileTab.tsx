@@ -27,7 +27,7 @@ interface ProblemsTabProps {
   problemsData: ProblemData[];
   onUpdate: () => void;
   userData: UserData;
-}
+} 
 
 const ProblemUpdateForm = React.lazy(() => import("./ProblemUpdateForm"));
 
@@ -114,20 +114,34 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
                   },
                 ] :[] ),
                 ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
-                {
-                  title: '',
-                  key: 'edit',
-                  className: 'th-td',
-                  render: (data : ProblemData) => (
-                    <span>
-                      {
-                          <React.Suspense fallback={<div>učitavanje...</div>}>
-                            <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
-                          </React.Suspense>
-                      }
-                    </span>
-                  ),
-                }
+                  {
+                    title: 'status',
+                    dataIndex: 'privatniZadatak',
+                    key: 'status',
+                    className: 'th-td',
+                    sorter:   (a: { privatniZadatak: boolean }, b: { privatniZadatak: boolean }) =>
+                    (a.privatniZadatak ? 1 : -1) - (b.privatniZadatak ? 1 : -1),
+                    render: (privatniZadatak : boolean) => (
+                    <div>
+                      { privatniZadatak && <p>privatni</p> }
+                      {!privatniZadatak && <p>javni</p> }
+                    </div>
+                    ),
+                  },
+                  {
+                    title: '',
+                    key: 'edit',
+                    className: 'th-td',
+                    render: (data : ProblemData) => (
+                      <span>
+                        {
+                            <React.Suspense fallback={<div>učitavanje...</div>}>
+                              <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
+                            </React.Suspense>
+                        }
+                      </span>
+                    ),
+                  }
               ] : [] ),
               ]}
               pagination={false}

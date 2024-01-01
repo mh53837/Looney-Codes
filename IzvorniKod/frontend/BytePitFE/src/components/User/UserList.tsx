@@ -16,17 +16,39 @@ const UserList: React.FC = () => {
     const {user} = useContext(UserContext);
 
     useEffect(() => {
-        try {
-            fetch('/api/user/all')
-                .then(response => response.json())
-                .then((data: IUser[]) => setUsers(data))
-                .catch(error => console.error('Error fetching users:', error));
-        
-        } catch (error) {
-            console.error('Error:', error);
+        if(user.uloga === "ADMIN"){
+            try {
+                const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+                const options = {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Basic ${credentials}`,
+                      "Content-Type": "application/json",
+                    },
+                  };
+                fetch('/api/user/allAdmin', options)
+                    .then(response => response.json())
+                    .then((data: IUser[]) => setUsers(data))
+                    .catch(error => console.error('Error fetching users:', error));
+            
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
+        else {
+            try {
+                fetch('/api/user/all')
+                    .then(response => response.json())
+                    .then((data: IUser[]) => setUsers(data))
+                    .catch(error => console.error('Error fetching users:', error));
+            
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
     },   
-    [user.korisnickoIme, user.lozinka]);
+    [user]);
 
     return (
         <div className="info-table">

@@ -32,6 +32,16 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
   const [updatedTezinaZadatka, setUpdatedTezinaZadatka] = useState<string>("");
   const [updatedBrojBodova, setUpdatedBrojBodova] = useState<number>(0);
 
+  const [selectedOption, setSelectedOption] = useState<boolean>(true);
+
+  const handlePrivateOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    if(event.target.value === 'true')
+      setSelectedOption(true);
+    else if (event.target.value === 'false')
+      setSelectedOption(false);
+  };
+
   const handleBrojBodovaChange = (value: string) => {
     const broj = parseInt(value, 10);
     if (broj == 10){
@@ -55,6 +65,7 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
         setUpdatedTekst(data.tekstZadatka);
         setUpdatedBrojBodova(data.brojBodova);
         setUpdatedTezinaZadatka(data.tezinaZadatka);
+        setSelectedOption(data.privatniZadatak);
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -97,7 +108,7 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
 				tekstZadatka: updatedTekst ? updatedTekst : problemData?.tekstZadatka,
         voditelj: problemData?.voditelj,
         brojBodova: updatedBrojBodova ? updatedBrojBodova : problemData?.brojBodova,
-        privatniZadatak: problemData?.privatniZadatak,
+        privatniZadatak: selectedOption,
         tezinaZadatka: updatedTezinaZadatka ? updatedTezinaZadatka : problemData?.tezinaZadatka,
         vremenskoOgranicenje: problemData?.vremenskoOgranicenje,
       };
@@ -182,6 +193,27 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
                 { value:"50", label: "50" },
               ]}
             />
+            <p>status zadatka:</p>
+            <label>
+            <input
+              type="radio"
+              value="true"
+              checked={selectedOption === true}
+              onChange={handlePrivateOptionChange}
+            />
+            privatni
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              value="false"
+              checked={selectedOption === false}
+              onChange={handlePrivateOptionChange}
+            />
+            javni
+          </label>
+            
 
            
           </div>

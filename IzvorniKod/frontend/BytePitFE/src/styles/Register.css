@@ -18,7 +18,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 
 .Register .FormRow:first-child {
@@ -53,7 +52,8 @@
 }
 
 .Register .error {
-    color: red;
+    font-weight: 500;
+    color: rgb(161, 0, 0);
     margin-bottom: 8px;
 }
 

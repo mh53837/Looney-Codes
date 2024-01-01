@@ -34,8 +34,12 @@ interface ProblemData {
   tezinaZadatka: string;
   vremenskoOgranicenje: number;
 }
+
+
 const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
 const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
+const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
+
 
 const UserProfile: React.FC = () => {
   const [imageData, setImageData] = useState<string | null>(null);
@@ -47,7 +51,8 @@ const UserProfile: React.FC = () => {
 
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
-      fetchData(`/api/natjecanja/get/voditelj/${korisnickoIme}`, user)
+      if(user && user.korisnickoIme){
+        fetchData(`/api/natjecanja/get/voditelj/${korisnickoIme}`, user)
         .then((data: CompetitionData[]) => {
           console.log("Competition data:", data);
           setCompetitionsData(data);
@@ -55,7 +60,31 @@ const UserProfile: React.FC = () => {
         .catch((error) => {
           console.error("error fetching competition data:", error);
         });
+      }
     }
+  };
+  const handleProfileUpdate = () => {
+    fetchData(`/api/user/profile/${korisnickoIme}`, user)
+      .then((data: UserData) => setUserData(data))
+      .catch((error) => {
+        console.error("error fetching user profile data:", error);
+      });
+
+
+      const fetchProfilePicture = async () => {
+        try {
+          if (korisnickoIme !== "") {
+            const response = await fetch(`/api/user/image/${korisnickoIme}`);
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            setImageData(imageUrl);
+          }
+        } catch (error) {
+          console.error("Error fetching profile picture:", error);
+        }
+      };
+      fetchProfilePicture();
+    
   };
 
   const handleProblemUpdate = () => {
@@ -100,15 +129,18 @@ const UserProfile: React.FC = () => {
   }, [korisnickoIme]);
 
   useEffect(() => {
-    fetchData(`/api/user/profile/${korisnickoIme}`, user)
-      .then((data: UserData) => setUserData(data))
-      .catch((error) => {
-        console.error("error fetching user profile data:", error);
-      });
+    fetch(`/api/user/profile/${korisnickoIme}`)
+    .then((response) => response.json())
+    .then((data: UserData) => {
+      console.log("User data:", data);
+      setUserData(data); })
+    .catch((error) => {
+      console.error("error fetching user profile data:", error);
+    });
   }, [korisnickoIme, user]);
 
   useEffect(() => {
-    if (userData?.uloga === "VODITELJ") {
+    if (userData?.uloga === "VODITELJ" && user && user.korisnickoIme) {
       fetchData(`/api/natjecanja/get/voditelj/${korisnickoIme}`, user)
         .then((data: CompetitionData[]) => {
           console.log("Competition data:", data);
@@ -122,10 +154,10 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     if (
-      korisnickoIme === user.korisnickoIme &&
-      userData &&
+      user && user.korisnickoIme && userData && 
       userData.uloga === "VODITELJ"
     ) {
+      if(korisnickoIme === user.korisnickoIme)
       fetchData(`/api/problems/my`, user)
         .then((data: ProblemData[]) => {
           console.log("Problems data:", data);
@@ -133,10 +165,8 @@ const UserProfile: React.FC = () => {
         .catch((error) => {
           console.error("error fetching problem data:", error);
         });
-    } else if (
-      korisnickoIme !== user.korisnickoIme &&
-      userData &&
-      userData.uloga === "VODITELJ"
+     else if (
+      korisnickoIme !== user.korisnickoIme
     ) {
       fetch(`/api/problems/author/${korisnickoIme}`)
         .then((response) => response.json())
@@ -146,6 +176,7 @@ const UserProfile: React.FC = () => {
         .catch((error) => {
           console.error("error fetching problem data:", error);
         });
+      }
     }
   }, [user, userData, korisnickoIme]); //voditelj - moji zadaci (javni i privatni)
 
@@ -182,6 +213,16 @@ const UserProfile: React.FC = () => {
             : "profil korisnika"}
         </h2>
         <UserProfileHeader imageData={imageData} userData={userData} />
+
+        {user.uloga === "ADMIN" && (
+          <div>
+          {
+              <React.Suspense fallback={<div>učitavanje...</div>}>
+                <UserProfileUpdateForm korisnickoIme={userData.korisnickoIme ?? ""} onUpdateSuccess={handleProfileUpdate}/>
+              </React.Suspense>
+          }
+          </div>
+        )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
           <Link to="/user/listRequested">odobri voditelje</Link>
