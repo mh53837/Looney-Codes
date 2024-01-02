@@ -40,10 +40,13 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
 
   return (
     <div className="problemContainer">
-      <Link to = "/problems/new">
-        <button>novi zadatak</button>
-      </Link>
-
+      {(
+        user.korisnickoIme === userData.korisnickoIme &&
+        <Link to = "/problems/new">
+          <button>novi zadatak</button>
+        </Link>
+      )}
+      
       {problemsData ? (
         problemsData.length === 0 ? ( 
         <div>nema zadataka</div> 

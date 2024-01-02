@@ -63,9 +63,13 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
 
   return (
     <div className="calendar-container">
-      <Link to = "/natjecanja/new">
-        <button>novo natjecanje</button>
-      </Link>
+      {(
+        user.korisnickoIme === userData.korisnickoIme &&
+        <Link to = "/natjecanja/new">
+          <button>novo natjecanje</button>
+        </Link>
+      )}
+      
 
       <Calendar
         value={selectedDate}

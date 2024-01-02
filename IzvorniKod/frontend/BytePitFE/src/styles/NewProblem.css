@@ -1,4 +1,4 @@
-.newProblem-container .FormRow {
+.newProblem-container .FormRow, .newProblem-container .FormRowDate{
     margin: 10px 0;
 }
 .newProblem-container form{
@@ -42,6 +42,20 @@
     border: 2px solid #aaa;
     box-sizing: border-box;
     width: 100%;
+}
+.newProblem-container .FormRowDate input {
+    font-size: 14px;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    display: inline;
+}
+.newProblem-container .FormRowDate label {
+    display: inline;
+    padding: 1rem 0;
+    margin-bottom: 2px;
+    margin-right: 1rem;
+    font-weight: 500;
 }
 
 .tekstZadatka{
