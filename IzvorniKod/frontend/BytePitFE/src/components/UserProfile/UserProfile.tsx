@@ -48,19 +48,19 @@ const UserProfile: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null); //podaci korisnika ciji se profil otvara
   const [problemsData, setProblemsData] = useState<ProblemData[]>([]);
   const [competitionsData, setCompetitionsData] = useState<CompetitionData[]>([]);
+  const [attempted, setAttempted] = useState<number>(0);
 
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
-      if(user && user.korisnickoIme){
-        fetchData(`/api/natjecanja/get/voditelj/${korisnickoIme}`, user)
-        .then((data: CompetitionData[]) => {
-          console.log("Competition data:", data);
-          setCompetitionsData(data);
-        })
-        .catch((error) => {
-          console.error("error fetching competition data:", error);
-        });
-      }
+      fetch(`/api/natjecanja/get/voditelj/${korisnickoIme}`)
+      .then((response) => response.json() )
+      .then((data: CompetitionData[]) => {
+        console.log("Competition data:", data);
+        setCompetitionsData(data);
+      })
+      .catch((error) => {
+        console.error("error fetching competition data:", error);
+      });
     }
   };
   const handleProfileUpdate = () => {
@@ -113,6 +113,25 @@ const UserProfile: React.FC = () => {
   }
 
   useEffect(() => {
+    if(userData?.uloga === "NATJECATELJ"){
+      const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+      const options = {
+          method: "GET",
+          headers: {
+            Authorization: `Basic ${credentials}`,
+            "Content-Type": "application/json",
+          },
+        };
+      fetch(`/api/solutions/get/natjecatelj/${korisnickoIme}`, options)
+        .then((response) => response.json())
+        .then((data) => {setAttempted(data.length), console.log(data) })
+        .catch((error) => {
+          console.error("error fetching attempted data:", error);
+        });
+    }
+  })
+
+  useEffect(() => {
     const fetchProfilePicture = async () => {
       try {
         if (korisnickoIme !== "") {
@@ -140,8 +159,9 @@ const UserProfile: React.FC = () => {
   }, [korisnickoIme, user]);
 
   useEffect(() => {
-    if (userData?.uloga === "VODITELJ" && user && user.korisnickoIme) {
-      fetchData(`/api/natjecanja/get/voditelj/${korisnickoIme}`, user)
+    if (userData?.uloga === "VODITELJ") {
+      fetch(`/api/natjecanja/get/voditelj/${korisnickoIme}`)
+        .then((response) => response.json())
         .then((data: CompetitionData[]) => {
           console.log("Competition data:", data);
           setCompetitionsData(data);
@@ -150,31 +170,27 @@ const UserProfile: React.FC = () => {
           console.error("error fetching competition data:", error);
         });
     }
-  }, [korisnickoIme, user, userData]); //voditelj - natjecanja / moja natjecanja
+  }, [korisnickoIme, userData]);
 
   useEffect(() => {
-    if (
-      user && user.korisnickoIme && userData && 
-      userData.uloga === "VODITELJ"
-    ) {
-      if(korisnickoIme === user.korisnickoIme)
-      fetchData(`/api/problems/my`, user)
-        .then((data: ProblemData[]) => {
-          console.log("Problems data:", data);
-          setProblemsData(data)})
-        .catch((error) => {
-          console.error("error fetching problem data:", error);
+    if ( userData && userData.uloga === "VODITELJ") {
+      if(user && korisnickoIme === user.korisnickoIme) {
+        fetchData(`/api/problems/my`, user)
+          .then((data: ProblemData[]) => {
+            console.log("Problems data:", data);
+            setProblemsData(data)})
+          .catch((error) => {
+            console.error("error fetching problem data:", error);
         });
-     else if (
-      korisnickoIme !== user.korisnickoIme
-    ) {
-      fetch(`/api/problems/author/${korisnickoIme}`)
-        .then((response) => response.json())
-        .then((data: ProblemData[]) => {
-          console.log("Problems data:", data);
-          setProblemsData(data)})
-        .catch((error) => {
-          console.error("error fetching problem data:", error);
+      }
+      else if (korisnickoIme !== user.korisnickoIme ) {
+        fetch(`/api/problems/author/${korisnickoIme}`)
+          .then((response) => response.json())
+          .then((data: ProblemData[]) => {
+            console.log("Problems data:", data);
+            setProblemsData(data)})
+          .catch((error) => {
+            console.error("error fetching problem data:", error);
         });
       }
     }
@@ -263,7 +279,7 @@ const UserProfile: React.FC = () => {
         {userData.uloga === "NATJECATELJ" && (
           <div>
             <p>broj točno riješenih zadataka: </p>
-            <p>broj isprobanih zadataka: </p>
+            <p>broj isprobanih zadataka: {attempted} </p>
             <p>osvojeni pehari:</p>
           </div>
         )}

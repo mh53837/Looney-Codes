@@ -6,7 +6,8 @@ export interface IUser {
     korisnickoIme:string;
     ime:string;
     prezime:string;
-    email: string
+    email: string;
+    uloga: string;
 }
 
 const User = React.lazy(() => import('./User'));
@@ -59,13 +60,14 @@ const UserList: React.FC = () => {
                     <th>ime</th>
                     <th>prezime</th>
                     <th>email</th>
+                    <th>uloga</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user, index) => (
+                {users.map((userList, index) => (
                     <React.Suspense fallback={<div>učitavanje...</div>}>
-                        <User key={index} user={user} />
+                        <User key={index} user={userList} />
                     </React.Suspense>
                 ))}
                 </tbody>
