@@ -195,13 +195,13 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
             />
             <p>status zadatka:</p>
             <label>
-            <input
-              type="radio"
-              value="true"
-              checked={selectedOption === true}
-              onChange={handlePrivateOptionChange}
-            />
-            privatni
+              <input
+                type="radio"
+                value="true"
+                checked={selectedOption === true}
+                onChange={handlePrivateOptionChange}
+              />
+              privatni
           </label>
 
           <label>

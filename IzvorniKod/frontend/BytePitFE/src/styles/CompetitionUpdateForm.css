@@ -31,6 +31,15 @@ input{
     padding: 2rem;
 }
 
+input[type="radio"] {
+    accent-color:#000000;
+    padding: 1rem;
+}
+
+.updateFormContainer label {
+    padding:1rem;
+    font-weight: normal;
+}
 .error {
     padding-top: 1rem;
     font-weight: 500;

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from 'react-router-dom';
 import { UserContext } from "../../context/userContext";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -62,6 +63,10 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
 
   return (
     <div className="calendar-container">
+      <Link to = "/natjecanja/new">
+        <button>novo natjecanje</button>
+      </Link>
+
       <Calendar
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate as Date)}

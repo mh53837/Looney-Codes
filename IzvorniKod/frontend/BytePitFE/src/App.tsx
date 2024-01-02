@@ -14,6 +14,7 @@ import { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
 import NotFoundPage from "./components/NotFoundPage.tsx"
 import UserProfile from './components/UserProfile/UserProfile.tsx';
+import NewProblem from './components/Problems/NewProblem.tsx';
 
 const App: React.FC = () => {
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
@@ -35,7 +36,6 @@ const App: React.FC = () => {
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
-        
         
     };
 
@@ -83,6 +83,7 @@ const App: React.FC = () => {
                     </div>
                 } />
                 <Route path="/problem/:id" element={<ProblemPage />} />
+                <Route path="/problems/new" element={<NewProblem onNewProblemCreated={() => console.log('kreiran je novi zadatak!')} />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </Router>
