@@ -80,4 +80,11 @@ public interface ZadatakService {
 	 */
 	List<ZadatakDTO> findByNatjecateljAllSolved(Korisnik natjecatelj);
 
+	/**
+	 * Metoda koja pronalazi sve isprobane zadatke zadanog natjecatelja.
+	 * @param natjecatelj - identifikator natjecatelja
+	 * @return listu zadataka zadanog natjecatelja
+	 */
+	List<ZadatakDTO> findByNatjecateljAll(Korisnik natjecatelj);
+
 	}

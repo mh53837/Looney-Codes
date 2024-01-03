@@ -142,7 +142,7 @@ public class ZadatakController {
 
 	/**
 	 * Ruta za dohvaćanje svih riješenih zadataka zadanog natjecatelja
-	 * @param id identifikator natjecatelja
+	 * @param korisnickoIme identifikator natjecatelja
 	 * @return lista zadataka
 	 */
 	@GetMapping("/get/{korisnickoIme}/allSolvedTasks")
@@ -154,6 +154,22 @@ public class ZadatakController {
 		}
 
 		return zadatakService.findByNatjecateljAllSolved(korisnik.get());
+	}
+
+	/**
+	 * Ruta za dohvaćanje svih riješenih zadataka zadanog natjecatelja
+	 * @param korisnickoIme identifikator natjecatelja
+	 * @return lista zadataka
+	 */
+	@GetMapping("/get/{korisnickoIme}/allTasks")
+	public List<ZadatakDTO> listAllTasksFromOneNatjecatelj(@PathVariable String korisnickoIme){
+		Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+
+		if (!korisnik.isPresent()) {
+			throw new RequestDeniedException("Korisnik ne postoji!");
+		}
+
+		return zadatakService.findByNatjecateljAll(korisnik.get());
 	}
 	
 	/**
