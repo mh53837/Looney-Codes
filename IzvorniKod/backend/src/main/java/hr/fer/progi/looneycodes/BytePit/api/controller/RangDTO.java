@@ -13,11 +13,10 @@ public class RangDTO {
     private Duration vrijemeRjesavanja;
 
 
-    public RangDTO(String username, double ukupniBodovi, int rang, Map<Integer, Double> zadatakBodovi, Duration vrijemeRjesavanja) {
+    public RangDTO(String username, Map<Integer, Double> zadatakBodovi, Duration vrijemeRjesavanja) {
         this.username = username;
-        this.ukupniBodovi = ukupniBodovi;
-        this.rang = rang;
         this.zadatakBodovi = zadatakBodovi;
+        this.ukupniBodovi = izracunajUkupneBodove();
         this.vrijemeRjesavanja = vrijemeRjesavanja;
     }
 
@@ -59,5 +58,23 @@ public class RangDTO {
     public void setVrijemeRjesavanja(Duration vrijemeRjesavanja) {
         this.vrijemeRjesavanja = vrijemeRjesavanja;
     }
+    private double izracunajUkupneBodove() {
+        double ukupniBodovi = 0;
+        for (Map.Entry<Integer, Double> entry : zadatakBodovi.entrySet()) {
+            ukupniBodovi += entry.getValue();
+        }
+        return ukupniBodovi;
 
+    }
+    @Override
+    public boolean equals(Object o){
+        if (o == this) return true;
+        if (!(o instanceof RangDTO)) return false;
+        RangDTO rangDTO = (RangDTO) o;
+        return rangDTO.getUsername().equals(this.username)
+                && rangDTO.getUkupniBodovi() == this.ukupniBodovi
+                && rangDTO.getRang() == this.rang
+                && rangDTO.getZadatakBodovi().equals(this.zadatakBodovi)
+                && rangDTO.getVrijemeRjesavanja().equals(this.vrijemeRjesavanja);
+    }
 }
