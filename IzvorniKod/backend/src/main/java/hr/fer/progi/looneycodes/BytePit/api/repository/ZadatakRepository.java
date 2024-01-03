@@ -43,8 +43,7 @@ public interface ZadatakRepository extends JpaRepository<Zadatak, Integer> {
 	@Query("SELECT z FROM Zadatak z " +
 			"JOIN Rjesenje r ON z.zadatakId = r.rjesenjeId.zadatak.zadatakId " +
 			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
-			"AND r.brojTocnihPrimjera = 1" +
-			"AND r.natjecanje = z.natjecanje")
+			"AND r.brojTocnihPrimjera = 1")
 	List<Zadatak> findByNatjecateljAllSolved(@Param("natjecatelj") Korisnik natjecatelj);
 
 	/**
@@ -54,8 +53,7 @@ public interface ZadatakRepository extends JpaRepository<Zadatak, Integer> {
 	 */
 	@Query("SELECT z FROM Zadatak z " +
 			"JOIN Rjesenje r ON z.zadatakId = r.rjesenjeId.zadatak.zadatakId " +
-			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
-			"AND r.natjecanje = z.natjecanje")
+			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj ")
 	List<Zadatak> findByNatjecateljAll(@Param("natjecatelj") Korisnik natjecatelj);
 
 }
