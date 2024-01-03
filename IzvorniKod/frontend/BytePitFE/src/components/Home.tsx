@@ -60,7 +60,7 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div> 
+        <div>
             <div className="calendar-container">
                 <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
@@ -76,6 +76,32 @@ const Home: React.FC = () => {
                 )}
             </div>
 
+            {/* Dodajte tablicu ispod ovog dijela */}
+            <div>
+                <h2>Sva natjecanja:</h2>
+                <table className="info-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Naziv natjecanja</th>
+                        <th>Početak natjecanja</th>
+                        <th>Kraj natjecanja</th>
+                        <th>Voditelj ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {natjecanja.map((natjecanje) => (
+                        <tr key={natjecanje.natjecanjeId}>
+                            <td>{natjecanje.natjecanjeId}</td>
+                            <td>{natjecanje.nazivNatjecanja}</td>
+                            <td>{natjecanje.pocetakNatjecanja}</td>
+                            <td>{natjecanje.krajNatjecanja}</td>
+                            <td>{natjecanje.voditeljId}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
