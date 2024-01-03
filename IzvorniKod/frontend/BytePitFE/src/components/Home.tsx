@@ -7,7 +7,7 @@ interface Natjecanje {
     nazivNatjecanja: string;
     pocetakNatjecanja: string;
     krajNatjecanja: string;
-    voditeljId: number;
+    korisnickoImeVoditelja: string;
 }
 
 const Home: React.FC = () => {
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                         <th>Naziv natjecanja</th>
                         <th>Početak natjecanja</th>
                         <th>Kraj natjecanja</th>
-                        <th>Voditelj ID</th>
+                        <th>Voditelj</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
                             <td>{natjecanje.nazivNatjecanja}</td>
                             <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                             <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                            <td>{natjecanje.voditeljId}</td>
+                            <td>{natjecanje.korisnickoImeVoditelja}</td>
                         </tr>
                     ))}
                     </tbody>
