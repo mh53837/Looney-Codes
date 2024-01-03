@@ -59,13 +59,25 @@ const Home: React.FC = () => {
         return null;
     };
 
+    // Funkcija za formatiranje datuma i vremena
+    const formatirajDatumVrijeme = (datumVrijeme: string) => {
+        const options: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        };
+        return new Date(datumVrijeme).toLocaleString('en-GB', options);
+    };
+
     return (
         <div>
             <div className="calendar-container">
                 <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
             <div className="selected-date-container">
-                Označeni datum: {date.toDateString()}
+                Označeni datum: {date.toLocaleDateString()} {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 <br />
                 {oznacenaNatjecanja.length > 0 ? (
                     <div>
@@ -76,8 +88,7 @@ const Home: React.FC = () => {
                 )}
             </div>
 
-            {/* Dodajte tablicu ispod ovog dijela */}
-            <div>
+            <div className="tablica-natjecanja">
                 <h2>Sva natjecanja:</h2>
                 <table className="info-table">
                     <thead>
@@ -94,8 +105,8 @@ const Home: React.FC = () => {
                         <tr key={natjecanje.natjecanjeId}>
                             <td>{natjecanje.natjecanjeId}</td>
                             <td>{natjecanje.nazivNatjecanja}</td>
-                            <td>{natjecanje.pocetakNatjecanja}</td>
-                            <td>{natjecanje.krajNatjecanja}</td>
+                            <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                            <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
                             <td>{natjecanje.voditeljId}</td>
                         </tr>
                     ))}

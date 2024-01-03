@@ -1,7 +1,7 @@
 body {
   box-sizing: inherit;
   max-width: 100%;
-  margin:0;
+  margin:0 0 40px 0;
 }
 #root {
   max-width: 1280px;
@@ -31,4 +31,6 @@ body {
   margin: 2px;
 }
 
-
+.tablica-natjecanja {
+  padding-bottom: 40px;
+}
