@@ -96,7 +96,7 @@ public class Korisnik{
    * konstruktor koji se koristi kod azuriranja
    */
   public static Korisnik update(Korisnik stariKorisnik, RegisterKorisnikDTO dto){   
-    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija");
+    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija", "requestedUloga");
     copyIfSpecified(dto, stariKorisnik, properties);
     return stariKorisnik;
   }
