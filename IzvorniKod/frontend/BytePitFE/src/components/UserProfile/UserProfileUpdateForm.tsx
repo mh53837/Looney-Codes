@@ -11,7 +11,7 @@ interface UserData {
   ime: string;
   prezime: string;
   email: string;
-  fotografija: string;
+  uloga: string;
 }
 
 const DynamicModal = React.lazy(() => import("antd/lib/modal"));
@@ -27,9 +27,14 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
   const [updatedPrezime, setUpdatedPrezime] = useState<string>("");
   const [updatedEmail, setUpdatedEmail] = useState<string>("");
   const [updatedLozinka, setUpdatedLozinka] = useState<string>(""); 
-  const [confirmUpdatedLozinka, setConfirmUpdatedLozinka] = useState<string>(""); 
-  const [updatedFotografija, setUpdatedFotografija] = useState<string>("");
+  const [confirmUpdatedLozinka, setConfirmUpdatedLozinka] = useState<string>("");
+  const [updatedUloga, setUpdatedUloga] = useState<string>("");
+
   const [error, setError] = useState<string>("");
+
+  const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdatedUloga(event.target.value);
+  }
 
   const handleUpdatedLozinka = () => {
     setError("");
@@ -44,12 +49,12 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
       setError('Lozinke se ne podudaraju!');
         return false;
     }
-
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(updatedLozinka);
     const hasLowerCase = /[a-z]/.test(updatedLozinka);
     const hasDigit = /\d/.test(updatedLozinka);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(updatedLozinka);
+
     if (updatedLozinka.length < minLength) {
       setUpdatedLozinka("");
       setConfirmUpdatedLozinka("");
@@ -63,8 +68,7 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
     }
     return true;
   }
-
-	useEffect(() => {
+  useEffect(() => {
     const fetchInitialData = async () => {
       try {
         const fetchResponse = await fetch(`/api/user/profile/${korisnickoIme}`);
@@ -74,14 +78,14 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
         setUpdatedIme(data.ime);
         setUpdatedPrezime(data.prezime);
         setUpdatedEmail(data.email);
-        setUpdatedFotografija(data.fotografija);
+        setUpdatedUloga(data.uloga);
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
     };
 
     fetchInitialData();
-  }, [korisnickoIme]);
+  }, [korisnickoIme]); 
 
   const showModal = () => {
     setOpen(true);
@@ -117,7 +121,7 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
     setUpdatedEmail(userData?.email || "");
     setUpdatedLozinka("");
     setConfirmUpdatedLozinka("");
-    setUpdatedFotografija(userData?.fotografija || "");
+    setUpdatedUloga("");
   };
 
 
@@ -127,13 +131,13 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
       console.log(`credentials:${user.korisnickoIme} : ${user.lozinka}`);
       const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
       const updatedData = {
-        ime: updatedIme ? updatedIme : userData?.ime,
-        prezime: updatedPrezime ? updatedPrezime : userData?.prezime,
-        email: updatedEmail ? updatedEmail : userData?.email,
-        fotografija: updatedFotografija ? updatedFotografija : userData?.fotografija,
+        ...(updatedIme !== "" && { ime: updatedIme }),
+        ...(updatedPrezime !== "" && { prezime: updatedPrezime }),
+        ...(updatedEmail !== "" && { email: updatedEmail }),
+        ...(updatedUloga !== "" && { requestedUloga: updatedUloga }),
         ...(updatedLozinka !== "" && { lozinka: updatedLozinka })
       }
-      
+
       console.log("updated data:", updatedData);
 
       const response = await fetch(`/api/user/update/${korisnickoIme}`, {
@@ -227,6 +231,30 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
               value={confirmUpdatedLozinka}
               onChange={(e) => setConfirmUpdatedLozinka(e.target.value)}
             />
+            <div className="FormRow">
+              <p>uloga: </p>
+              <div className="RoleOptions">
+                  <label className="RadioLbl">
+                      <input
+                          type="radio"
+                          value="VODITELJ"
+                          checked={updatedUloga === 'VODITELJ'}
+                          onChange={handleUlogaChange}
+                      />
+                      voditelj
+                  </label>
+                  <label className="RadioLbl">
+                      <input
+                          type="radio"
+                          value="NATJECATELJ"
+                          checked={updatedUloga === 'NATJECATELJ'}
+                          onChange={handleUlogaChange}
+                      />
+                      natjecatelj
+                  </label>
+              </div>
+            </div>
+            
             <div className="error">{error}</div>
 
           </div>

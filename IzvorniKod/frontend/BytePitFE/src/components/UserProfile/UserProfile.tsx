@@ -49,6 +49,7 @@ const UserProfile: React.FC = () => {
   const [problemsData, setProblemsData] = useState<ProblemData[]>([]);
   const [competitionsData, setCompetitionsData] = useState<CompetitionData[]>([]);
   const [attempted, setAttempted] = useState<number>(0);
+  const [solved, setSolved] = useState<number>(0);
 
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
@@ -112,23 +113,30 @@ const UserProfile: React.FC = () => {
     }
   }
 
-  useEffect(() => {
+useEffect(() => {
     if(userData?.uloga === "NATJECATELJ"){
-      const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
-      const options = {
-          method: "GET",
-          headers: {
-            Authorization: `Basic ${credentials}`,
-            "Content-Type": "application/json",
-          },
-        };
-      fetch(`/api/solutions/get/natjecatelj/${korisnickoIme}`, options)
+      fetch(`/api/problems/get/${korisnickoIme}/allTasks`)
         .then((response) => response.json())
         .then((data) => {setAttempted(data.length), console.log(data) })
         .catch((error) => {
           console.error("error fetching attempted data:", error);
-        });
+        }
+      );
+
     }
+  })
+  useEffect(() => {
+    if(userData?.uloga === "NATJECATELJ"){
+      
+      fetch(`/api/problems/get/${korisnickoIme}/allSolvedTasks`)
+        .then((response) => response.json())
+        .then((data) => {setSolved(data.length), console.log(data) })
+        .catch((error) => {
+          console.error("error fetching attempted data:", error);
+        }
+      );
+
+    } 
   })
 
   useEffect(() => {
@@ -241,7 +249,7 @@ const UserProfile: React.FC = () => {
         )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
-          <Link to="/user/listRequested">odobri voditelje</Link>
+          <Link to="/user/listRequested"><button>odobri voditelje</button></Link>
         )}
 
         {userData.uloga === "VODITELJ" && (
@@ -278,8 +286,8 @@ const UserProfile: React.FC = () => {
 
         {userData.uloga === "NATJECATELJ" && (
           <div>
-            <p>broj točno riješenih zadataka: </p>
-            <p>broj isprobanih zadataka: {attempted} </p>
+            <p>broj točno riješenih zadataka: {solved } </p>
+            <p>broj isprobanih zadataka: { attempted } </p>
             <p>osvojeni pehari:</p>
           </div>
         )}
