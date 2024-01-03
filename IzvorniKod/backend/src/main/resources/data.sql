@@ -79,11 +79,15 @@ INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
     VALUES
     (nextval('zadatak_seq'), 101),
     (nextval('zadatak_seq'), 102),
+    (currval('zadatak_seq'), 106),
     (nextval('zadatak_seq'), 103),
     (nextval('zadatak_seq'), 103),
     (nextval('zadatak_seq'), 102),
+    (currval('zadatak_seq'), 106),
     (nextval('zadatak_seq'), 104),
-    (nextval('zadatak_seq'), 102);
+    (nextval('zadatak_seq'), 102),
+    (currval('zadatak_seq'), 106);
+
 
 INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
 VALUES
@@ -93,7 +97,7 @@ VALUES
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera, natjecanje_natjecanje_id)
 VALUES
 (1, 1005, 3, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'2 day'::INTERVAL, 1, 101),
-(2, 1005, 3, '#include<bits/stdc++.h>\n using namespace std;\n int main() {string s;\n cin >> s;\n cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 2, 102),
+(2, 1005, 3, '#include<bits/stdc++.h>\n using namespace std;\n int main() {string s;\n cin >> s;\n cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 0.5, 102),
 -- syntax error (prazno rjesenje) -> ne prolaz
 (3, 1005, 5, null, CURRENT_TIMESTAMP-'16 hour'::INTERVAL, 0, 101),
 (4, 1005, 4, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'1 day'::INTERVAL, 1, 101),
@@ -101,7 +105,8 @@ VALUES
 (5, 1003, 5, '#include<bits/stdc++.h>\n int main() {int a, b; std::cin >> a >> b; std::cout << a*b', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 105),
 -- syntax error -> ne prolazi
 (6, 1003, 4, '#include<bits/stdc++.h>\n int main() {int x, y; std::cin >> x >> y; std::cout << x*y', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 102),
-(7, 1006, 5, '#include<bits/stdc++.h>\n int main() {int kune; std::cin >> kune; std::cout << (int)kune/7.5345;}', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, NULL) ;
+(7, 1006, 5, '#include<bits/stdc++.h>\n int main() {int kune; std::cin >> kune; std::cout << (int)kune/7.5345;}', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, NULL),
+(8, 1005, 5, '#include<bits/stdc++.h>\n using namespace std;\n int main() {string s;\n cin >> s;\n cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 1, 106);
 
 
 

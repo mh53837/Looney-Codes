@@ -14,9 +14,10 @@ import org.springframework.util.Assert;
 
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.Instant;
+
 @Service
 public class NatjecanjeServiceJpa implements NatjecanjeService {
     @Autowired
@@ -147,9 +148,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
 
 
         Set<Zadatak> zadaci = natjecanjeRepo.findZadaciByNatjecanjeId(natjecanjeId);
-
-        //ne postoji metoda za dohvat svih rjesenja pa filtriramo po natjecanju
-        List<Rjesenje> rjesenjaNatjecanje= rjesenjeService.listAll().stream().filter(rjesenje -> rjesenje.getNatjecanje().getNatjecanjeId().equals(natjecanjeId)).collect(Collectors.toList());
+        List<Rjesenje> rjesenjaNatjecanje = rjesenjeService.findByNatjecanjeId(natjecanjeId);
 
         //lista natjecatelja bi trebali biti atribut kod natjecanja, jer mozda netko nije nista predao?
         List<Korisnik> listaNatjecatelja = rjesenjaNatjecanje.stream().map(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj()).distinct().collect(Collectors.toList());
@@ -158,18 +157,17 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
             Map<Integer, Double> zadatakBodovi = new HashMap<>();
             Double ukupniBodovi = 0.0;
             // ne radi rjesenjeService.findByNatjecateljAndNatjecanje, pa filtriramo ovde
-            List<Rjesenje> rjesenja =  rjesenjaNatjecanje.stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj().getKorisnikId().equals(natjecatelj.getKorisnikId())).collect(Collectors.toList());
+            List<Rjesenje> rjesenja = rjesenjaNatjecanje.stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj().getKorisnikId().equals(natjecatelj.getKorisnikId())).collect(Collectors.toList());
             for (Zadatak zadatak : zadaci) {
                 Optional<Rjesenje> rjesenje = rjesenja.stream().filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId())).findFirst();
                 if (rjesenje.isPresent()) {
-                    zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera());
-                    ukupniBodovi += rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova();
+                    zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova());
                 } else {
                     zadatakBodovi.put(zadatak.getZadatakId(), 0.0);
                 }
             }
             Duration vrijemeRjesavanja = Duration.between(natjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
-            return new RangDTO(natjecatelj.getKorisnickoIme(), ukupniBodovi, 0, zadatakBodovi, vrijemeRjesavanja);
+            return new RangDTO(natjecatelj.getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
         }).collect(Collectors.toList());
 
         //prvo sortiramo po ukupnim bodovima, a onda po vremenu rjesavanja

@@ -77,6 +77,10 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     @Override
+    public List<Rjesenje> findByNatjecanjeId(Integer natjecanjeId) {
+        return rjesenjeRepository.findByNatjecanjeId(natjecanjeId);
+    }
+    @Override
     public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, Integer nadmetanjeId) {
       Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
       Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
