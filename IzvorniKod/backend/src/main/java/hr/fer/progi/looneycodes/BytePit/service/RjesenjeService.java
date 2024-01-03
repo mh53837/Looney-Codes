@@ -76,4 +76,11 @@ public interface RjesenjeService {
      */
 	public EvaluationResultDTO evaluate(SubmissionDTO dto);
 
+    /**
+     * Vrati listu svih rješenja za zadano natjecanja.
+     * @param natjecanjeId identifikator natjecanja
+     * @return lista svih rješenja za zadano natjecanje ili null ako nema rješenja u sustavu
+     */
+    public List<Rjesenje> findByNatjecanjeId(Integer natjecanjeId);
+
 }

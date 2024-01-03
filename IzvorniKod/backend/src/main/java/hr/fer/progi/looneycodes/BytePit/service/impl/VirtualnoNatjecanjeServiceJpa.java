@@ -1,17 +1,17 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.*;
 import hr.fer.progi.looneycodes.BytePit.api.repository.VirtualnoNatjecanjeRepository;
-import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
-import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
-import hr.fer.progi.looneycodes.BytePit.service.VirtualnoNatjecanjeService;
-import hr.fer.progi.looneycodes.BytePit.service.ZadatakService;
+import hr.fer.progi.looneycodes.BytePit.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -22,6 +22,8 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     private KorisnikService korisnikService;
     @Autowired
     private NatjecanjeService natjecanjeService;
+    @Autowired
+    private RjesenjeService rjesenjeService;
     @Autowired
     private VirtualnoNatjecanjeRepository virtualnoNatjecanjeRepo;
 
@@ -94,5 +96,40 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         VirtualnoNatjecanje virtualnoNatjecanje = new VirtualnoNatjecanje(null, korisnik, new Timestamp(System.currentTimeMillis()));
         virtualnoNatjecanje.setListaZadataka(randomZadaci);
         return virtualnoNatjecanjeRepo.save(virtualnoNatjecanje);
+    }
+
+    @Override
+    public RangDTO getRang(Integer virtualnoNatjecanjeId) {
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
+
+        if (virtualnoNatjecanje == null || virtualnoNatjecanje.getOrginalnoNatjecanje() == null) {
+            throw new IllegalArgumentException("Pogrešan ID ili nasumično generirano virtualno natjecanje!");
+        }
+
+        Integer origNatId = virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId();
+        List<RangDTO> rangLista = natjecanjeService.getRangList(origNatId);
+        List<Rjesenje> rjesenja = rjesenjeService.findByNatjecanjeId(virtualnoNatjecanjeId);
+        Map<Integer, Double> zadatakBodovi = new HashMap<>();
+
+        virtualnoNatjecanje.getZadaci().forEach(
+                zadatak -> {
+                    Optional<Rjesenje> rjesenje = rjesenja.stream().filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId())).findFirst();
+                    if (rjesenje.isPresent()){
+                        zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova());
+                    }
+                    else{
+                        zadatakBodovi.put(zadatak.getZadatakId(), 0.0);
+                    }
+                }
+        );
+
+        Duration vrijemeRjesavanja = Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
+        RangDTO rang = new RangDTO(virtualnoNatjecanje.getNatjecatelj().getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
+        rangLista.add(rang);
+        rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).thenComparing(RangDTO::getVrijemeRjesavanja).reversed());
+        int index = rangLista.indexOf(rang);
+        rang.setRang(index + 1);
+        return rang;
+
     }
 }
