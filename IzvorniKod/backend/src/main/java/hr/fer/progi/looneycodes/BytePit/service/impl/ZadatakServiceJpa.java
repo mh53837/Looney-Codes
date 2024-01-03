@@ -71,6 +71,10 @@ public class ZadatakServiceJpa implements ZadatakService {
 		return zadatakRepo.findByNatjecateljAllSolved(natjecatelj).stream().map((x) -> new ZadatakDTO(x)).toList();
 	}
 
+	public List<ZadatakDTO> findByNatjecateljAll(Korisnik natjecatelj) {
+		return zadatakRepo.findByNatjecateljAll(natjecatelj).stream().map((x) -> new ZadatakDTO(x)).toList();
+	}
+
 	@Override
 	public List<ZadatakDTO> listAllZadaciNatjecanje(Natjecanje natjecanje) {
 		return zadatakRepo.findByNatjecanje(natjecanje).stream().map((x) -> new ZadatakDTO(x)).toList();
