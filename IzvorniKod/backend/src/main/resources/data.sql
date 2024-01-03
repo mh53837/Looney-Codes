@@ -55,12 +55,12 @@ VALUES
 (nextval('natjecanje_seq'), 'Hunger Games', '6', CURRENT_TIMESTAMP-'1 day'::INTERVAL, CURRENT_TIMESTAMP+'1 day'::INTERVAL);
 
 
-INSERT INTO pehar (pehar_id, mjesto, natjecanje_natjecanje_id, natjecatelj_korisnik_id) 
+INSERT INTO pehar (pehar_id, mjesto, natjecanje_natjecanje_id, natjecatelj_korisnik_id, slika_pehara)
 VALUES
-(nextval('pehar_seq'), 1, 101, NULL),
-(nextval('pehar_seq'), 1, 102, 3),
-(nextval('pehar_seq'), 1, 103, NULL),
-(nextval('pehar_seq'), 1, 104, NULL);
+(nextval('pehar_seq'), 1, 101, NULL, './src/main/resources/trophyPlaceholder.png'),
+(nextval('pehar_seq'), 1, 102, 3, './src/main/resources/trophyPlaceholder.png'),
+(nextval('pehar_seq'), 1, 103, NULL, './src/main/resources/trophyPlaceholder.png'),
+(nextval('pehar_seq'), 1, 104, NULL, './src/main/resources/trophyPlaceholder.png');
 
 
 
