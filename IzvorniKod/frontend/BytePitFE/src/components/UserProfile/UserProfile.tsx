@@ -35,11 +35,10 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
-
 const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
 const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
-
+const UserTrophies = React.lazy(() => import("./UserTrophies"));
 
 const UserProfile: React.FC = () => {
   const [imageData, setImageData] = useState<string | null>(null);
@@ -70,8 +69,6 @@ const UserProfile: React.FC = () => {
       .catch((error) => {
         console.error("error fetching user profile data:", error);
       });
-
-
       const fetchProfilePicture = async () => {
         try {
           if (korisnickoIme !== "") {
@@ -85,7 +82,6 @@ const UserProfile: React.FC = () => {
         }
       };
       fetchProfilePicture();
-    
   };
 
   const handleProblemUpdate = () => {
@@ -127,7 +123,6 @@ useEffect(() => {
   })
   useEffect(() => {
     if(userData?.uloga === "NATJECATELJ"){
-      
       fetch(`/api/problems/get/${korisnickoIme}/allSolvedTasks`)
         .then((response) => response.json())
         .then((data) => {setSolved(data.length), console.log(data) })
@@ -135,7 +130,6 @@ useEffect(() => {
           console.error("error fetching attempted data:", error);
         }
       );
-
     } 
   })
 
@@ -144,6 +138,7 @@ useEffect(() => {
       try {
         if (korisnickoIme !== "") {
           const response = await fetch(`/api/user/image/${korisnickoIme}`);
+          console.log("img:" ,response);
           const blob = await response.blob();
           const imageUrl = URL.createObjectURL(blob);
           setImageData(imageUrl);
@@ -207,6 +202,12 @@ useEffect(() => {
   if (!userData) {
     return <p>dohvaćanje korisnika</p>;
   }
+
+  const renderUserTrophies = () => (
+    <React.Suspense fallback={<div>učitavanje...</div>}>
+      <UserTrophies userData = {userData}/>
+    </React.Suspense>
+  );
 
   const renderProblemsTab = () => (
     <React.Suspense fallback={<div>učitavanje...</div>}>
@@ -288,7 +289,7 @@ useEffect(() => {
           <div>
             <p>broj točno riješenih zadataka: {solved } </p>
             <p>broj isprobanih zadataka: { attempted } </p>
-            <p>osvojeni pehari:</p>
+            <p>osvojeni pehari: {renderUserTrophies()} </p>
           </div>
         )}
       </div>

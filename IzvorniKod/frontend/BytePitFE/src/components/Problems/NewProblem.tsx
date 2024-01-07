@@ -27,6 +27,8 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
         privatniZadatak: true,
         tezinaZadatka: "RECRUIT",
     });
+
+
     const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProblemForm({
             ...problemForm,
@@ -115,6 +117,8 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
           });
     }
 
+    
+
 
     return (
         <div className="newProblem-container">
@@ -176,6 +180,7 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
                             </label>
                         </div>
                     </div>
+
                     <div className="error">{error}</div>
                     <div className="poruka">{poruka}</div>
                     <button type="submit">stvori zadatak!</button>

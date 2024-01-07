@@ -30,6 +30,7 @@ interface ProblemsTabProps {
 } 
 
 const ProblemUpdateForm = React.lazy(() => import("./ProblemUpdateForm"));
+const EvaluationTests = React.lazy(() => import("../Problems/EvaluationTests"));
 
 const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate, userData}) => {
   const {user} = useContext(UserContext);
@@ -142,9 +143,23 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
                     render: (data : ProblemData) => (
                       <span>
                         {
-                            <React.Suspense fallback={<div>učitavanje...</div>}>
-                              <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
-                            </React.Suspense>
+                          <React.Suspense fallback={<div>učitavanje...</div>}>
+                            <ProblemUpdateForm zadatakId={data.zadatakId ?? 0} onUpdateSuccess={handleUpdateSuccess}/>
+                          </React.Suspense>
+                        }
+                      </span>
+                    ),
+                  },
+                  {
+                    title: '',
+                    key: 'tests',
+                    className: 'th-td',
+                    render: (data : ProblemData) => (
+                      <span>
+                        {
+                          <React.Suspense fallback={<div>učitavanje...</div>}>
+                            <EvaluationTests zadatakId={data.zadatakId ?? 0} />
+                          </React.Suspense>
                         }
                       </span>
                     ),

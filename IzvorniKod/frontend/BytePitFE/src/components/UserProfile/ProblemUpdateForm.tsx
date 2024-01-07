@@ -19,6 +19,7 @@ interface ProblemData {
 }
 
 const DynamicModal = React.lazy(() => import("antd/lib/modal"));
+/* const NewEvaluationTest = React.lazy(() => import("../Problems/NewEvaluationTest") ); */
 
 const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpdateSuccess }) => {
   const [problemData, setProblemData] = useState<ProblemData | null>(null);
@@ -97,7 +98,6 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
     setOpen(false);
   };
 
-
   const HandleEdit = async (zadatakId: BigInteger) => {
     try {
       const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
@@ -114,7 +114,6 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
       };
       console.log("updated data:", updatedData);
       
-
       const response = await fetch(`/api/problems/update/${zadatakId}`, {
         method: "POST",
         headers: {
@@ -213,9 +212,11 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
             />
             javni
           </label>
-            
 
-           
+{/*           <React.Suspense fallback={<div>učitavanje...</div>}>
+            <NewEvaluationTest zadatakId={zadatakId} /> 
+          </React.Suspense> */}
+
           </div>
         </DynamicModal>
         </React.Suspense>
