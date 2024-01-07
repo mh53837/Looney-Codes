@@ -1,5 +1,6 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
@@ -36,6 +37,8 @@ public class NatjecanjeController {
     @Autowired
     private KorisnikService korisnikService;
 
+    @Autowired
+    private ScheduledTasks scheduledTasks;
     /**
      * Stvara natjecanje i sprema ga u bazu
      *
@@ -53,8 +56,11 @@ public class NatjecanjeController {
             && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
 
-    
-        return new CreateNatjecanjeDTO(natjecanjeService.createNatjecanje(natjecanjeDTO));
+
+        CreateNatjecanjeDTO dto = new CreateNatjecanjeDTO(natjecanjeService.createNatjecanje(natjecanjeDTO));
+        scheduledTasks.scheduleTask(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+        return dto;
+
 
     }
 
@@ -119,7 +125,9 @@ public class NatjecanjeController {
             && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
 
-        return new CreateNatjecanjeDTO(natjecanjeService.updateNatjecanje(natjecanjeDTO));
+        CreateNatjecanjeDTO dto = new CreateNatjecanjeDTO(natjecanjeService.updateNatjecanje(natjecanjeDTO));
+        scheduledTasks.scheduleTask(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+        return dto;
     }
 
     /**
