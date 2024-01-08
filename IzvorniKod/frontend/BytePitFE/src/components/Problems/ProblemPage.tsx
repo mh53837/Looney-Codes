@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../styles/ProblemPage.css';
 import { UserContext } from '../../context/userContext';
@@ -59,15 +59,17 @@ const ProblemPage: React.FC = () => {
         // pozivanje evaluacije na backendu
         const handleSubmitClick = async () => {
                 try {
-                        if (!sourceCode) {
-                          
+                        // ako nema fajla, onda citamo sadrzaj editora!
+                        if (!sourceCode && !code) {
+                          setErrorMessage("Greška kod uploadanja!");
+                          return;
                         }
 
                         // konstrukcija JSON-a
                         const solutionData = {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
-                                programskiKod: sourceCode,
+                                programskiKod: sourceCode? sourceCode : code, // salji sadrzaj editora ako nema fajla
                         };
 
                         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
@@ -111,7 +113,8 @@ const ProblemPage: React.FC = () => {
 
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
-        let codeEditor = null;
+        let codeEditor : ReactElement | null = null;
+        let code : string | null = null;
         if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
@@ -121,7 +124,7 @@ const ProblemPage: React.FC = () => {
                         </div>
                 );
                 
-                const cppLang = `#define <bits/stdc++.h>
+                code = `#define <bits/stdc++.h>
 using namespace std;
 int main() {
 
@@ -129,7 +132,7 @@ int main() {
 }`;
                 codeEditor = (
                     <div className="code-editor">
-                      <CodeMirror value={cppLang} height="30rem" theme = { dracula } extensions={[cpp()]} />
+                      <CodeMirror value={code} onChange={(value, _) => code = value} height="30rem" theme = { dracula } extensions={[cpp()]} />
                     </div>
                 );
         }
