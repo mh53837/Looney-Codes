@@ -144,7 +144,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
             "cpu_time_limit" : %d
           }
           """,
-          dto.getProgramskiKod().replace("\n", "\\n"),
+          dto.getProgramskiKod().replace("\n", "\\n").replace("\"", "\\\""),
           test.getUlazniPodaci(), test.getIzlazniPodaci(),
           zadatak.getVremenskoOgranicenje()
       );
