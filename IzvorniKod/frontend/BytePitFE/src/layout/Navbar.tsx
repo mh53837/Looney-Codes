@@ -13,6 +13,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const onLogout = props.onLogout;
   const [imageData, setImageData] = useState<string | null>(null);
   const location = useLocation();
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -36,6 +37,10 @@ const Navbar: React.FC<NavbarProps> = (props) => {
     }
   }, [user.korisnickoIme]);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", isDark? "dark" : "light");
+  }, [isDark]);
+
   return (
       <div className="navbar-container">
         <div className="logo-container">
@@ -54,6 +59,10 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             <Link to="/problems/all">
               <button>zadaci</button>
             </Link>
+            
+            <button onClick={() => setIsDark(!isDark)}>
+              {isDark ? "☀️" : "🌙"}
+            </button>
           </div>
         </div>
 
