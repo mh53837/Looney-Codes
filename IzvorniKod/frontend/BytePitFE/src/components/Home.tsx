@@ -14,7 +14,6 @@ const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
-    const [trenutnaNatjecanja, setTrenutnaNatjecanja] = useState<Natjecanje[]>([]);
     const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla' | 'trenutna'>('trenutna');
 
     useEffect(() => {
@@ -39,19 +38,6 @@ const Home: React.FC = () => {
         setOznacenaNatjecanja(natjecanjaZaDatum);
     }, [date, natjecanja]);
 
-    useEffect(() => {
-        const fetchTrenutnaNatjecanja = async () => {
-            try {
-                const response = await fetch('/api/natjecanja/trenutna');
-                const data = await response.json();
-                setTrenutnaNatjecanja(data);
-            } catch (error) {
-                console.error('Greška prilikom dohvaćanja trenutnih natjecanja:', error);
-            }
-        };
-
-        fetchTrenutnaNatjecanja();
-    }, []);
 
     const tileContent = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month') {
@@ -90,6 +76,12 @@ const Home: React.FC = () => {
         (natjecanje) => date > new Date(natjecanje.krajNatjecanja)
     );
 
+    const trenutnoNatjecanja = natjecanja.filter(
+        (natjecanje) => date.toDateString() === new Date(natjecanje.pocetakNatjecanja).toDateString()
+    );
+
+
+
     return (
         <div>
             <div className="calendar-container">
@@ -111,6 +103,10 @@ const Home: React.FC = () => {
                 <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('nadolazeca')}>Nadolazeća natjecanja</button>
                 <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('prosla')}>Prošla natjecanja</button>
                 <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('trenutna')}>Trenutna natjecanja</button>
+
+                {/*<button className={"generiraj-natjecanje-button"} onClick={handleGenerirajNatjecanje}>*/}
+                {/*    Generiraj natjecanje*/}
+                {/*</button>*/}
             </div>
 
             {selectedTable === 'trenutna' && (
@@ -127,7 +123,7 @@ const Home: React.FC = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {trenutnaNatjecanja.map((natjecanje) => (
+                        {trenutnoNatjecanja.map((natjecanje) => (
                             <tr key={natjecanje.natjecanjeId}>
                                 <td>{natjecanje.natjecanjeId}</td>
                                 <td>{natjecanje.nazivNatjecanja}</td>
