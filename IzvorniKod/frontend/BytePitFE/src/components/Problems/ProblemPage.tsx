@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../styles/ProblemPage.css';
 import { UserContext } from '../../context/userContext';
+import CodeMirror from '@uiw/react-codemirror';
+import { cpp } from '@codemirror/lang-cpp';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 
 interface IProblemDetails {
         zadatakId: string;
@@ -56,9 +59,8 @@ const ProblemPage: React.FC = () => {
         // pozivanje evaluacije na backendu
         const handleSubmitClick = async () => {
                 try {
-                        if (!user.korisnickoIme || !sourceCode) {
-                                setErrorMessage('Niste postavili datoteku ili niste ulogirani!');
-                                return;
+                        if (!sourceCode) {
+                          
                         }
 
                         // konstrukcija JSON-a
@@ -109,6 +111,7 @@ const ProblemPage: React.FC = () => {
 
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
+        let codeEditor = null;
         if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
@@ -117,8 +120,20 @@ const ProblemPage: React.FC = () => {
                                 <button onClick={handleSubmitClick}>Provjeri</button>
                         </div>
                 );
-        }
+                
+                const cppLang = `#define <bits/stdc++.h>
+using namespace std;
+int main() {
 
+  return 0;
+}`;
+                codeEditor = (
+                    <div className="code-editor">
+                      <CodeMirror value={cppLang} height="30rem" theme = { dracula } extensions={[cpp()]} />
+                    </div>
+                );
+        }
+    
         // vraćanje stranice
         return (
                 <div className="problem-details-container">
@@ -132,6 +147,7 @@ const ProblemPage: React.FC = () => {
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        {codeEditor}
                         {uploadButton}
                         {testResults.length > 0 && (
                                 <div className="test-results">
