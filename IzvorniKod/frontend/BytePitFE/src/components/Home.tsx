@@ -14,7 +14,8 @@ const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
-    const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla'>('nadolazeca'); // Dodano stanje za praćenje odabrane tablice
+    const [trenutnaNatjecanja, setTrenutnaNatjecanja] = useState<Natjecanje[]>([]);
+    const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla' | 'trenutna'>('trenutna');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +39,20 @@ const Home: React.FC = () => {
         setOznacenaNatjecanja(natjecanjaZaDatum);
     }, [date, natjecanja]);
 
+    useEffect(() => {
+        const fetchTrenutnaNatjecanja = async () => {
+            try {
+                const response = await fetch('/api/natjecanja/trenutna');
+                const data = await response.json();
+                setTrenutnaNatjecanja(data);
+            } catch (error) {
+                console.error('Greška prilikom dohvaćanja trenutnih natjecanja:', error);
+            }
+        };
+
+        fetchTrenutnaNatjecanja();
+    }, []);
+
     const tileContent = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month') {
             const natjecanjaZaDatum = natjecanja.filter(
@@ -60,7 +75,6 @@ const Home: React.FC = () => {
         return null;
     };
 
-    // Funkcija za formatiranje datuma i vremena
     const formatirajDatumVrijeme = (datumVrijeme: string) => {
         const options: Intl.DateTimeFormatOptions = {
             day: '2-digit',
@@ -72,7 +86,6 @@ const Home: React.FC = () => {
         return new Date(datumVrijeme).toLocaleString('en-GB', options);
     };
 
-    // funkcija koja filtrira koja natjecanja su prije trenutnog datuma (prošla natjecanja)
     const proslaNatjecanja = natjecanja.filter(
         (natjecanje) => date > new Date(natjecanje.krajNatjecanja)
     );
@@ -97,11 +110,40 @@ const Home: React.FC = () => {
             <div className="table-switch-buttons">
                 <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('nadolazeca')}>Nadolazeća natjecanja</button>
                 <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('prosla')}>Prošla natjecanja</button>
+                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('trenutna')}>Trenutna natjecanja</button>
             </div>
+
+            {selectedTable === 'trenutna' && (
+                <div className="tablica-trenutna-natjecanja">
+                    <table className="info-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naziv natjecanja</th>
+                            <th>Početak natjecanja</th>
+                            <th>Kraj natjecanja</th>
+                            <th>Voditelj</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {trenutnaNatjecanja.map((natjecanje) => (
+                            <tr key={natjecanje.natjecanjeId}>
+                                <td>{natjecanje.natjecanjeId}</td>
+                                <td>{natjecanje.nazivNatjecanja}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                <td>Pokreni natjecanje</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
             {selectedTable === 'nadolazeca' && (
                 <div className="tablica-natjecanja">
-                    {/*<h2>Nadolazeća natjecanja:</h2>*/}
                     <table className="info-table">
                         <thead>
                         <tr>
@@ -129,7 +171,6 @@ const Home: React.FC = () => {
 
             {selectedTable === 'prosla' && (
                 <div className="tablica-prosla-natjecanja">
-                    {/*<h2>Prošla natjecanja:</h2>*/}
                     <table className="info-table">
                         <thead>
                         <tr>
@@ -156,6 +197,7 @@ const Home: React.FC = () => {
                     </table>
                 </div>
             )}
+
         </div>
     );
 };
