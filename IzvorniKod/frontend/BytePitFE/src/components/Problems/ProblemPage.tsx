@@ -70,6 +70,7 @@ const ProblemPage: React.FC = () => {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
                                 programskiKod: sourceCode? sourceCode : code, // salji sadrzaj editora ako nema fajla
+                                nadmetanjeId: 105, // placeholder za sad!
                         };
 
                         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
@@ -124,7 +125,7 @@ const ProblemPage: React.FC = () => {
                         </div>
                 );
                 
-                code = `#define <bits/stdc++.h>
+                code = `#include <bits/stdc++.h>
 using namespace std;
 int main() {
 
