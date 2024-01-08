@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ConfigProvider } from 'antd';
 import '../../styles/Table.css';
@@ -34,9 +34,21 @@ const EvaluationTests = React.lazy(() => import("../Problems/EvaluationTests"));
 
 const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate, userData}) => {
   const {user} = useContext(UserContext);
-
+  const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
+  const [selectedZadatakId, setSelectedZadatakId] = useState<BigInteger | null>(null);
+  
   const handleUpdateSuccess = () => {
     onUpdate();
+  };
+
+  const handleEvaluationTests = (zadatakId: BigInteger) => {
+    setSelectedZadatakId(zadatakId);
+    setEvaluationTestsVisible(true);
+  };
+
+  const onCloseEvaluationTests = () => {
+    setEvaluationTestsVisible(false);
+    setSelectedZadatakId(null);
   };
 
   return (
@@ -156,12 +168,12 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
                     className: 'th-td',
                     render: (data : ProblemData) => (
                       <span>
-                        {
-                          <React.Suspense fallback={<div>učitavanje...</div>}>
-                            <EvaluationTests zadatakId={data.zadatakId ?? 0} />
-                          </React.Suspense>
-                        }
-                      </span>
+                      {
+                        <React.Suspense fallback={<div>učitavanje...</div>}>
+                          <button onClick={() => handleEvaluationTests(data.zadatakId)}>prikaži testove</button>
+                        </React.Suspense>
+                      }
+                    </span>
                     ),
                   }
               ] : [] ),
@@ -177,6 +189,17 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
       )) : (
         <p>greška prilikom dohvaćanja zadataka</p>
       
+      )}
+
+
+      {evaluationTestsVisible && selectedZadatakId && (
+        <React.Suspense fallback={<div>učitavanje...</div>}>
+          <EvaluationTests
+            zadatakId={selectedZadatakId}
+            visible={evaluationTestsVisible}
+            onClose={onCloseEvaluationTests}
+          />
+        </React.Suspense>
       )}
     </div>
   );

@@ -6,6 +6,8 @@ import {UserContext} from '../../context/userContext';
 
 interface EvaluationTestProps {
     zadatakId: BigInteger;
+    visible: boolean;
+    onClose: () => void;
 }
 
 interface ProblemData {
@@ -38,7 +40,7 @@ interface EvaluationTestsData{
 
 const DynamicModal = React.lazy(() => import("antd/lib/modal"));
 const NewEvaluationTest = React.lazy(() => import("../Problems/NewEvaluationTest") );
-const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId}) => {
+const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onClose}) => {
 
     const [testsData, setTestsData] = useState<EvaluationTestsData[] | null>(null);
     const {user} = useContext(UserContext);
@@ -64,6 +66,7 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId}) => {
     
 
     const handleOk = async () => {
+        onClose();
         setConfirmLoading(true);
         try {
           setOpen(false);
@@ -74,13 +77,27 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId}) => {
         }
     };
 
+    const handleClose = () => {
+        handleCancel();
+        onClose();
+    }
+
     const handleCancel = () => {
         console.log("Clicked cancel button");
         setOpen(false);
+        visible=false;
     };
     const showModal = () => {
-        setOpen(true);
+        if (!open) {
+            setOpen(true);
+        }
     };
+
+    useEffect(() => {
+        if (!open) {
+            setOpen(true);
+        }
+    }, [visible, open]);
 
     const handleTestAdded = () => {
         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
@@ -100,7 +117,8 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId}) => {
 
     return(
         <>
-        <button onClick={showModal}>testni primjeri</button>
+        {visible && showModal()}
+        { !visible && (<button onClick={showModal}>testni primjeri</button>)}
         <ConfigProvider
             theme={{
             components: {
@@ -115,9 +133,9 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId}) => {
         >
             <React.Suspense fallback={<div>učitavanje...</div>}>
             <DynamicModal
-            title="testni primjeri"
+            title="testni primjeri" 
             open={open}
-            onCancel={handleCancel}
+            onCancel={handleClose}
             confirmLoading={confirmLoading}
             footer={        
             <div>

@@ -2,9 +2,6 @@ import React, {useState, ChangeEvent, FormEvent, useContext} from 'react';
 import '../../styles/NewProblem.css';
 import { Select, InputNumber } from "antd";
 import { UserContext } from '../../context/userContext';
-interface NewProblemProps {
-    onNewProblemCreated: () => void;
-}
 
 interface ProblemForm {
     nazivZadatka : string;
@@ -14,8 +11,9 @@ interface ProblemForm {
     privatniZadatak: boolean;
     tezinaZadatka: string;
 }
+const EvaluationTests = React.lazy(() => import("../Problems/EvaluationTests"));
 
-const NewProblem: React.FC<NewProblemProps> = (props) => { 
+const NewProblem: React.FC = () => { 
     const {user } = useContext(UserContext);
     const [error, setError] = useState<string>('');
     const [poruka, setPoruka] = useState<string>('');
@@ -28,6 +26,8 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
         tezinaZadatka: "RECRUIT",
     });
 
+    const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
+    const [zadatakId, setZadatakId] = useState<BigInteger | null>(null);
 
     const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProblemForm({
@@ -72,7 +72,27 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
 
     }
 
-    function onSubmit(e: FormEvent<HTMLFormElement>) {
+    const onNewProblemCreated = (zadatakId: BigInteger) => {
+        setProblemForm({
+            nazivZadatka : "",
+            brojBodova: 10,
+            vremenskoOgranicenje: 3,
+            tekstZadatka: "",
+            privatniZadatak: true,
+            tezinaZadatka: "RECRUIT",
+        });
+        setPoruka('');
+        setError('');
+        console.log('new problem id:', zadatakId);
+        setZadatakId(zadatakId);
+        setEvaluationTestsVisible(true);
+    };
+    const onCloseEvaluationTests = () => {
+        setEvaluationTestsVisible(false);
+        setZadatakId(null);
+    };
+
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
 
@@ -100,25 +120,22 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
             body: JSON.stringify(jsonPart),
         };
 
-        fetch('/api/problems/new', options).then((response) => {
+        try {
+            const response = await fetch('/api/problems/new', options);
+        
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            setPoruka("uspješno ste kreirali novi zadatak");
-            props.onNewProblemCreated();
-            return response.json();
-          })
-          .then((data) => {
+        
+            const data = await response.json();
+            setPoruka('uspješno ste kreirali novi zadatak');
+            onNewProblemCreated(data.zadatakId);
             console.log('Server response:', data);
-          })
-          .catch((error) => {
+          } catch (error) {
             console.error('Fetch error:', error);
             setError('Došlo je do pogreške, pokušajte ponovno!');
-          });
+          }
     }
-
-    
-
 
     return (
         <div className="newProblem-container">
@@ -186,10 +203,14 @@ const NewProblem: React.FC<NewProblemProps> = (props) => {
                     <button type="submit">stvori zadatak!</button>
                 </form>
             </div>
+
+            {evaluationTestsVisible && zadatakId !== null && (
+                <React.Suspense fallback={<div>učitavanje...</div>}>
+                    <EvaluationTests zadatakId={zadatakId} visible={true} onClose={onCloseEvaluationTests} />
+                </React.Suspense>
+            )}
         </div>
     )
 }
-
-
 
 export default NewProblem;

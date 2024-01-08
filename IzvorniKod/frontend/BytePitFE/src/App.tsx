@@ -19,6 +19,7 @@ const Login = React.lazy(() => import('./components/Login.tsx'));
 const ProblemPage = React.lazy(() => import('./components/Problems/ProblemPage.tsx'));
 const ProblemsList = React.lazy(() => import('./components/Problems/ProblemsList.tsx'));
 
+
 const App: React.FC = () => {
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
 
@@ -41,6 +42,7 @@ const App: React.FC = () => {
         }, 100);
         
     };
+
 
     return (
         <Router>
@@ -87,7 +89,7 @@ const App: React.FC = () => {
                     </div>
                 } />
                 <Route path="/problem/:id" element={<ProblemPage />} />
-                <Route path="/problems/new" element={<NewProblem onNewProblemCreated={() => {}} />} />
+                <Route path="/problems/new" element={<NewProblem /> } />
                 <Route path="/natjecanja/new" element={<NewCompetition onNewCompetitionCreated={() => console.log('kreirano je novo natjecanje!')} />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
