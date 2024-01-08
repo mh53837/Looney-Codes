@@ -14,6 +14,7 @@ const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
+    const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla'>('nadolazeca'); // Dodano stanje za praćenje odabrane tablice
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,6 +72,11 @@ const Home: React.FC = () => {
         return new Date(datumVrijeme).toLocaleString('en-GB', options);
     };
 
+    // funkcija koja filtrira koja natjecanja su prije trenutnog datuma (prošla natjecanja)
+    const proslaNatjecanja = natjecanja.filter(
+        (natjecanje) => date > new Date(natjecanje.krajNatjecanja)
+    );
+
     return (
         <div>
             <div className="calendar-container">
@@ -88,31 +94,68 @@ const Home: React.FC = () => {
                 )}
             </div>
 
-            <div className="tablica-natjecanja">
-                <h2>Sva natjecanja:</h2>
-                <table className="info-table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Naziv natjecanja</th>
-                        <th>Početak natjecanja</th>
-                        <th>Kraj natjecanja</th>
-                        <th>Voditelj</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {natjecanja.map((natjecanje) => (
-                        <tr key={natjecanje.natjecanjeId}>
-                            <td>{natjecanje.natjecanjeId}</td>
-                            <td>{natjecanje.nazivNatjecanja}</td>
-                            <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                            <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                            <td>{natjecanje.korisnickoImeVoditelja}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+            <div className="table-switch-buttons">
+                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('nadolazeca')}>Nadolazeća natjecanja</button>
+                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('prosla')}>Prošla natjecanja</button>
             </div>
+
+            {selectedTable === 'nadolazeca' && (
+                <div className="tablica-natjecanja">
+                    {/*<h2>Nadolazeća natjecanja:</h2>*/}
+                    <table className="info-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naziv natjecanja</th>
+                            <th>Početak natjecanja</th>
+                            <th>Kraj natjecanja</th>
+                            <th>Voditelj</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {natjecanja.map((natjecanje) => (
+                            <tr key={natjecanje.natjecanjeId}>
+                                <td>{natjecanje.natjecanjeId}</td>
+                                <td>{natjecanje.nazivNatjecanja}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                <td>{natjecanje.korisnickoImeVoditelja}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {selectedTable === 'prosla' && (
+                <div className="tablica-prosla-natjecanja">
+                    {/*<h2>Prošla natjecanja:</h2>*/}
+                    <table className="info-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naziv natjecanja</th>
+                            <th>Početak natjecanja</th>
+                            <th>Kraj natjecanja</th>
+                            <th>Voditelj</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {proslaNatjecanja.map((natjecanje) => (
+                            <tr key={natjecanje.natjecanjeId}>
+                                <td>{natjecanje.natjecanjeId}</td>
+                                <td>{natjecanje.nazivNatjecanja}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                <td>Pokreni natjecanje</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };

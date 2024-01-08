@@ -4,13 +4,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 40px;
 }
 
 .info-table {
   width: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
+  padding-bottom: 60px;
 }
 
 .info-table table {
