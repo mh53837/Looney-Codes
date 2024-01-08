@@ -1,4 +1,5 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import LoadingOverlay from 'react-loading-overlay-nextgen';
 import { useParams } from 'react-router-dom';
 import '../../styles/ProblemPage.css';
 import { UserContext } from '../../context/userContext';
@@ -23,6 +24,7 @@ const ProblemPage: React.FC = () => {
         const [sourceCode, setSourceCode] = useState<string>('');       //programski kod iščitan iz datoteke
         const [testResults, setTestResults] = useState<number[]>([]);   //rezultati testova
         const [errorMessage, setErrorMessage] = useState<string | null>(null);  //poruka ukoliko nije ulogiran natjecatelj
+        const [isLoading, setLoading] = useState<boolean>(false); // za loading overlay...
 
         // izvuci podatke o zadatku na temelju id-a
         useEffect(() => {
@@ -69,11 +71,16 @@ const ProblemPage: React.FC = () => {
                         const solutionData = {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
-                                programskiKod: sourceCode? sourceCode : code, // salji sadrzaj editora ako nema fajla
+                                programskiKod: sourceCode? sourceCode : code?.valueOf(), // salji sadrzaj editora ako nema fajla
                                 nadmetanjeId: 105, // placeholder za sad!
                         };
 
+                        // zamijeni navodnike u programskom kodu
+                        solutionData.programskiKod = solutionData.programskiKod?.replace(`/"/g`, `\"`);
+
                         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+
+                        setLoading(true);
                         fetch('/api/solutions/upload', {
                                 method: 'POST',
                                 headers: {
@@ -104,8 +111,10 @@ const ProblemPage: React.FC = () => {
                                 })
                                 .catch((error) => {
                                         console.error('Error uploading solution:', error);
+                                })
+                                .finally(() => {
+                                        setLoading(false);
                                 });
-
                 } catch (error) {
                         console.error('Error uploading solution:', error);
                 }
@@ -151,7 +160,11 @@ int main() {
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        <LoadingOverlay
+                        active={isLoading} spinner text='Provjeravamo rješenje...'
+                        >
                         {codeEditor}
+                        </LoadingOverlay>
                         {uploadButton}
                         {testResults.length > 0 && (
                                 <div className="test-results">
