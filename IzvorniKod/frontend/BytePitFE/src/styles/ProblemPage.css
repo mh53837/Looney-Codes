@@ -20,3 +20,7 @@
 .error-message {
         color: red;
 }
+
+.code-editor {
+  text-align: left;
+}
