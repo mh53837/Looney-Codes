@@ -71,9 +71,9 @@ const ConfirmRegAdmin: React.FC<ConfirmRegAdminProps> = ({loggedInUser, loggedIn
     return (
             <div className='tableWrapper'>
                 <div className="info-table">
-                    <p>korisnici kojima treba potvrditi ulogu voditelja:</p>
+                    <p>korisnici kojima treba odobriti zatraženu ulogu:</p>
                     {users.length === 0 ? (
-                        <p>trenutno nema korisnika kojima treba treba potvrditi ulogu voditelja!</p>
+                        <p>trenutno nema korisnika kojima treba odobriti zatraženu ulogu</p>
                         ) : (
                             <table>
                                 <thead>

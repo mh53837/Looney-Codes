@@ -46,3 +46,12 @@ input[type="radio"] {
     color: rgb(161, 0, 0);
     margin-bottom: 8px;
 }
+
+.RoleOptions .RadioLbl{
+    display: inline;
+}
+
+.RadioLbl input {
+    padding: 0.1rem;
+    width: 2rem;
+}

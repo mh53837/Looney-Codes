@@ -250,7 +250,7 @@ useEffect(() => {
         )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
-          <Link to="/user/listRequested"><button>odobri voditelje</button></Link>
+          <Link to="/user/listRequested"><button>odobri korisnike</button></Link>
         )}
 
         {userData.uloga === "VODITELJ" && (
