@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import ProblemPage from '../Problems/ProblemPage';
 import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import CountDown from 'react-countdown';
 
 interface ProblemInfo {
   zadatakId : BigInt;
@@ -10,6 +11,7 @@ interface ProblemInfo {
 
 interface CompetitionInfo {
   virtualno : boolean;
+  krajNatjecanja : Date;
   zadaci : Array<ProblemInfo>;
 }
 
@@ -47,6 +49,7 @@ const CompetitionPage : React.FC = () => {
 
   return  (
       <div>
+        {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} /> }
         {zadatakStranica != null && zadatakStranica}
         <span>
           <h3> Odaberite zadatak: </h3>

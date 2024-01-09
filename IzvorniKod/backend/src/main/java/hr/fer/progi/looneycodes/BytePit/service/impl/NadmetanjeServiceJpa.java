@@ -1,13 +1,15 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.NadmetanjeInfoDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Nadmetanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NadmetanjeRepository;
 import hr.fer.progi.looneycodes.BytePit.service.NadmetanjeService;
@@ -35,6 +37,10 @@ public class NadmetanjeServiceJpa implements NadmetanjeService {
     Set<NadmetanjeInfoDTO.ZadatakInfo> zadaci = new HashSet<>();
     nadmetanje.getZadaci().forEach(zadatak -> zadaci.add(new NadmetanjeInfoDTO.ZadatakInfo(zadatak)));
     out.setZadaci(zadaci);
+
+    if(nadmetanje instanceof Natjecanje) {
+      out.setKrajNatjecanja(Optional.of(((Natjecanje) nadmetanje).getKrajNatjecanja()));
+    }
 
     return out;
   }
