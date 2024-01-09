@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import ProblemPage from '../Problems/ProblemPage';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 interface ProblemInfo {
@@ -16,13 +16,11 @@ interface CompetitionInfo {
 const CompetitionPage : React.FC = () => {
   const { nadmetanjeId, zadatakId } = useParams();
   const [ info, setInfo ] = useState<CompetitionInfo>();
-  const [ zadatakStranica, setZadatakStranica ] = useState<ReactNode | undefined>();
-
-  useEffect(() => {
+  const zadatakStranica = useMemo(() => {
       if(zadatakId != undefined && nadmetanjeId != undefined)
-        setZadatakStranica(<ProblemPage />);
+        return (<ProblemPage />);
       else
-        setZadatakStranica((<h3> Odaberite zadatak. Sretno! </h3>))
+        return ((<h3> Odaberite zadatak. Sretno! </h3>))
     }, [zadatakId]);
 
   useEffect(() => {
@@ -30,12 +28,12 @@ const CompetitionPage : React.FC = () => {
     .then((data) => data.json())
     .then(data => setInfo(data))
     .catch(() => {
-      console.log("Greška!")
-    });
+      return (<h3> Greška: natjecanje ne postoji! </h3>);
+    })
   }, [nadmetanjeId]);
 
   if(info === undefined) 
-    return;
+    return (<h3> Greška: natjecanje ne postoji! </h3>);
 
   const zadaci = [];
   for(const zadatak of info?.zadaci.values()) {
@@ -51,7 +49,7 @@ const CompetitionPage : React.FC = () => {
       <div>
         {zadatakStranica != null && zadatakStranica}
         <span>
-          <h3> Lista zadataka... </h3>
+          <h3> Odaberite zadatak: </h3>
           {zadaci}
         </span>
       </div>

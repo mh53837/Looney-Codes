@@ -15,8 +15,8 @@ interface IProblemDetails {
         tekstZadatka: string;
 }
 
-const ProblemPage: React.FC<string | {}> = () => {
-        const { zadatakId, nadmetanjeId } = useParams();     //id zadatka preuzet iz url-a
+const ProblemPage: React.FC = () => {
+        const { zadatakId, nadmetanjeId } = useParams();     //id zadatka preuzet iz url-a (opcionalno i id nadmetanja)
         const { user } = useContext(UserContext); //podaci ulogiranog korisnika
 
         const [problemDetails, setProblemDetails] = useState<IProblemDetails | null>(null); //atributi problema
@@ -24,13 +24,26 @@ const ProblemPage: React.FC<string | {}> = () => {
         const [testResults, setTestResults] = useState<number[]>([]);   //rezultati testova
         const [errorMessage, setErrorMessage] = useState<string | null>(null);  //poruka ukoliko nije ulogiran natjecatelj
         const [isLoading, setLoading] = useState<boolean>(false); // za loading overlay...
+        const [code, setCode] = useState<string>(`#include <bits/stdc++.h>
+using namespace std;
+int main() {
 
+  return 0;
+}`);
         // izvuci podatke o zadatku na temelju id-a
         useEffect(() => {
-                fetch(`/api/problems/get/${zadatakId}`)
-                        .then((response) => response.json())
-                        .then((data: IProblemDetails) => setProblemDetails(data))
-                        .catch((error) => console.error('Error fetching problem details:', error));
+            fetch(`/api/problems/get/${zadatakId}`)
+                    .then((response) => response.json())
+                    .then((data: IProblemDetails) => setProblemDetails(data))
+                    .catch((error) => console.error('Error fetching problem details:', error));
+
+          setTestResults([]);
+          setErrorMessage(null);
+          if(zadatakId) {
+            let backup = localStorage.getItem(zadatakId);
+            if(backup)
+              setCode(backup);
+          }
         }, [zadatakId]);
 
         if (!problemDetails) {
@@ -123,25 +136,20 @@ const ProblemPage: React.FC<string | {}> = () => {
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
         let codeEditor : ReactElement | null = null;
-        let code : string | null = null;
         if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
                                 <input type="file" accept=".cpp" onChange={handleFileChange} />
                                 <br />
-                                <button onClick={handleSubmitClick}>Provjeri</button>
+                                <button disabled={isLoading} style={isLoading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+                                  onClick={handleSubmitClick}>Provjeri</button>
                         </div>
                 );
-                
-                code = `#include <bits/stdc++.h>
-using namespace std;
-int main() {
 
-  return 0;
-}`;
                 codeEditor = (
                     <div className="code-editor">
-                      <CodeMirror value={code} onChange={(value, _) => code = value} height="30rem" theme = { dracula } extensions={[cpp()]} />
+                      <CodeMirror value={code} onChange={(value, _) => { setCode(value); if(zadatakId) localStorage.setItem(zadatakId, code);}}
+                        height="30rem" theme = { dracula } extensions={[cpp()]} />
                     </div>
                 );
         }
