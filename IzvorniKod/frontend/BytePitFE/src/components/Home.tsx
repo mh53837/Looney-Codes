@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { Link } from 'react-router-dom';
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -123,16 +124,20 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {trenutnoNatjecanja.map((natjecanje) => (
-                                <tr key={natjecanje.natjecanjeId}>
-                                    <td>{natjecanje.natjecanjeId}</td>
-                                    <td>{natjecanje.nazivNatjecanja}</td>
-                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                    <td>Pokreni natjecanje</td>
-                                </tr>
-                            ))}
+                        {trenutnoNatjecanja.map((natjecanje) => (
+                            <tr key={natjecanje.natjecanjeId}>
+                                <td>{natjecanje.natjecanjeId}</td>
+                                <td>{natjecanje.nazivNatjecanja}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                <td>
+                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                  Pokreni natjecanje
+                                </Link>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
@@ -179,6 +184,7 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
+<<<<<<< HEAD
                             {proslaNatjecanja.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
                                     <td>{natjecanje.natjecanjeId}</td>
@@ -189,6 +195,22 @@ const Home: React.FC = () => {
                                     <td>Pokreni natjecanje</td>
                                 </tr>
                             ))}
+=======
+                        {proslaNatjecanja.map((natjecanje) => (
+                            <tr key={natjecanje.natjecanjeId}>
+                                <td>{natjecanje.natjecanjeId}</td>
+                                <td>{natjecanje.nazivNatjecanja}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                <td>
+                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                  Pokreni natjecanje
+                                </Link>
+                                </td>
+                            </tr>
+                        ))}
+>>>>>>> a6467d6 (dodana osnovna podrska za rjesavanje nadmetanja)
                         </tbody>
                     </table>
                 </div>
