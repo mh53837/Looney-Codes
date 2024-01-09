@@ -15,7 +15,7 @@ interface CompetitionForm {
 
 const NewCompetition: React.FC = () => { 
     const today = dayjs();
-    const [natjecanjeId, setNatjecanjeId] = useState<BigInteger | null>(null);
+    const [natjecanjeId, setNatjecanjeId] = useState<number | null>(null);
     const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
     const {user } = useContext(UserContext);
     const [error, setError] = useState<string>('');
@@ -46,7 +46,7 @@ const NewCompetition: React.FC = () => {
 
       };
 
-      const onNewCompetitionCreated = (natjecanjeId: BigInteger) => {
+      const onNewCompetitionCreated = (natjecanjeId: number) => {
         setCompetitionForm({
             nazivNatjecanja : "",
             pocetakNatjecanja: "",

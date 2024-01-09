@@ -7,6 +7,7 @@ import "react-calendar/dist/Calendar.css";
 import { Table, ConfigProvider } from "antd";
 import "../../styles/Table.css";
 import "../../styles/UserProfile.css";
+import AddProblemsToCompetition from "../Competition/AddProblemsToCompetition";
 
 const CompetitonUpdateForm = React.lazy(
   () => import("./CompetitionUpdateForm")
@@ -36,12 +37,26 @@ interface CompetitionProfileCalendarProps {
 }
 const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({competitionsData, onUpdate, userData}) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const [addProblemsVisible, setAddProblemsVisible] = useState(false);
+  const [selectedCompetitionId, setSelectedCompetitionId] = useState<number | null>(null);
+  
   const {user} = useContext(UserContext); //podaci ulogiranog korisnika
   const handleUpdateSuccess = () => {
     onUpdate();
   };
 
   const {theme} = useContext(ThemeContext);
+
+  const handleAddProblems = (natjecanjeId: number) => {
+    setSelectedCompetitionId(natjecanjeId);
+    setAddProblemsVisible(true);
+  };
+
+  const onCloseAddProblems = () => {
+    setAddProblemsVisible(false);
+    setSelectedCompetitionId(null);
+  }
 
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
@@ -116,6 +131,20 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
                         natjecanjeId={data.natjecanjeId ?? 0}
                         onUpdateSuccess={handleUpdateSuccess}
                       />
+                    </React.Suspense>
+              </span>
+            ),
+          },
+          {
+            title: "",
+            key: "problems",
+            className: "th-td",
+            render: (data : CompetitionData) => (
+              <span>
+                    <React.Suspense
+                      fallback={<div>učitavanje...</div>}
+                    >
+                      <button onClick = { () => handleAddProblems(data.natjecanjeId)}>zadaci</button>
                     </React.Suspense>
               </span>
             ),
@@ -222,6 +251,16 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
           <p>odaberite datum</p>
         )}
       </div>
+
+      {addProblemsVisible && selectedCompetitionId && (
+        <React.Suspense fallback={<div>učitavanje...</div>}>
+          <AddProblemsToCompetition
+            natjecanjeId={selectedCompetitionId}
+            visible={addProblemsVisible}
+            onClose={onCloseAddProblems}
+          />
+        </React.Suspense>
+      )}
     </div>
   );
 };
