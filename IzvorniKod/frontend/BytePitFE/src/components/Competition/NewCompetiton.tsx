@@ -5,10 +5,7 @@ import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { DatePicker, Space} from "antd";
 import { UserContext } from '../../context/userContext';
-
-interface NewCompetitionProps {
-    onNewCompetitionCreated: () => void;
-}
+import AddProblemsToCompetition from './AddProblemsToCompetition';
 
 interface CompetitionForm {
     nazivNatjecanja: string;
@@ -16,8 +13,10 @@ interface CompetitionForm {
     krajNatjecanja: string;
 }
 
-const NewCompetition: React.FC<NewCompetitionProps> = (props) => { 
+const NewCompetition: React.FC = () => { 
     const today = dayjs();
+    const [natjecanjeId, setNatjecanjeId] = useState<BigInteger | null>(null);
+    const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
     const {user } = useContext(UserContext);
     const [error, setError] = useState<string>('');
     const [poruka, setPoruka] = useState<string>('');
@@ -46,6 +45,23 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
         }
 
       };
+
+      const onNewCompetitionCreated = (natjecanjeId: BigInteger) => {
+        setCompetitionForm({
+            nazivNatjecanja : "",
+            pocetakNatjecanja: "",
+            krajNatjecanja: "",
+        });
+        setPoruka('');
+        setError('');
+        console.log('new competition id:', natjecanjeId);
+        setNatjecanjeId(natjecanjeId);
+        setEvaluationTestsVisible(true);
+    };
+    const onCloseAddProblems = () => {
+        setEvaluationTestsVisible(false);
+        setNatjecanjeId(null);
+    };
     
       const onKrajChange: DatePickerProps["onChange"] = (date, dateString) => {
         console.log(date, dateString);
@@ -60,7 +76,7 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
         }
       };
 
-    function onSubmit(e: FormEvent<HTMLFormElement>) {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
 
@@ -74,7 +90,6 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
             pocetakNatjecanja: competitionForm.pocetakNatjecanja,
             krajNatjecanja: competitionForm.krajNatjecanja,
             korisnickoImeVoditelja: user.korisnickoIme
-
         }
         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
         const options = {
@@ -86,21 +101,21 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
             body: JSON.stringify(jsonPart),
         };
 
-        fetch('/api/natjecanja/new', options).then((response) => {
+        try {
+            const response = await fetch('/api/natjecanja/new', options);
+        
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            const data = await response.json();
             setPoruka("uspješno ste kreirali novo natjecanje");
-            props.onNewCompetitionCreated();
-            return response.json();
-          })
-          .then((data) => {
+            onNewCompetitionCreated(data.natjecanjeId);
             console.log('Server response:', data);
-          })
-          .catch((error) => {
+        } catch (error) {
             console.error('Fetch error:', error);
             setError('Došlo je do pogreške, pokušajte ponovno!');
-          });
+        }
+
     }
 
 
@@ -121,6 +136,7 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
                             defaultValue={today}
                             value={updatedPocetak}
                             onChange={onPocetakChange}
+                            size={"small"}
                         />
                     </div>
                     <div className="FormRowDate">
@@ -131,6 +147,7 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
                             defaultValue={today}
                             value={updatedKraj}
                             onChange={onKrajChange}
+                            size={"small"}
                         />
                     </div>
                     </Space>
@@ -141,6 +158,12 @@ const NewCompetition: React.FC<NewCompetitionProps> = (props) => {
                     <button type="submit">stvori natjecanje!</button>
                 </form>
             </div>
+
+            {evaluationTestsVisible && natjecanjeId !== null && (
+                <React.Suspense fallback={<div>učitavanje...</div>}>
+                    <AddProblemsToCompetition natjecanjeId={natjecanjeId} visible={true} onClose={onCloseAddProblems} />
+                </React.Suspense>
+            )}
         </div>
     )
 }
