@@ -24,13 +24,18 @@
   padding: 10px;
   text-align: left;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 30rem;
 }
 
-.info-table th{
+
+
+.info-table th {
   background-color: #f4c95de7;
 }
 
-.info-table tbody tr:hover{
+.info-table tbody tr:hover {
   background-color: #f4c95d52;
 }
 
@@ -49,7 +54,7 @@
 } */
 
 
-[data-theme="dark"] .info-table{
+[data-theme="dark"] .info-table {
   color: #ECDCC9;
   background-color: #2A2D34;
   border-color: #ECDCC9;
@@ -60,14 +65,15 @@
   background-color: #dd7230e0;
 }
 
-[data-theme="dark"] button, [data-theme="dark"] a {
+[data-theme="dark"] button,
+[data-theme="dark"] a {
   color: #ECDCC9;
 }
 
-[data-theme="dark"] .info-table th{
+[data-theme="dark"] .info-table th {
   background-color: #dd7230e0;
 }
 
-[data-theme="dark"] .info-table tbody tr:hover{
+[data-theme="dark"] .info-table tbody tr:hover {
   background-color: #dcdcdc34;
 }

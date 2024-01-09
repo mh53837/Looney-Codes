@@ -7,28 +7,25 @@ interface UserProps {
         ime: string;
         prezime: string;
         email: string;
-        uloga:string;
+        uloga: string;
     };
 }
 
 const User: React.FC<UserProps> = (props) => {
-    const {korisnickoIme, ime, prezime, email, uloga } = props.user;
+    const { korisnickoIme, ime, prezime, email, uloga } = props.user;
 
     return (
         <tr className="user-info-header">
-        <td>{korisnickoIme}</td>
-        <td>{ime}</td>
-        <td>{prezime}</td>
-        <td>{email}</td>
-        {(uloga === "ADMIN" && <td>admin</td>)}
-        {(uloga === "VODITELJ" && <td>voditelj</td>)}
-        {(uloga === "NATJECATELJ" && <td>natjecatelj</td>)}
-        
-        <td>
-            <Link to = {`/user/profile/${korisnickoIme}`}>
-                pogledaj profil
-            </Link>
-        </td>
+            <td>
+                <Link to={`/user/profile/${korisnickoIme}`}>
+                    {korisnickoIme}
+                </Link></td>
+            <td>{ime}</td>
+            <td>{prezime}</td>
+            <td>{email}</td>
+            {(uloga === "ADMIN" && <td>admin</td>)}
+            {(uloga === "VODITELJ" && <td>voditelj</td>)}
+            {(uloga === "NATJECATELJ" && <td>natjecatelj</td>)}
         </tr>
     );
 };

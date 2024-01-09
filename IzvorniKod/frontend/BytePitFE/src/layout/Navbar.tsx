@@ -63,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         </Link>
 
         <button onClick={() => { setTheme({ isThemeDark: !theme.isThemeDark }) }}>
-          {theme ? "☀️" : "🌙"}
+          {theme.isThemeDark ? "☀️" : "🌙"}
         </button>
       </div>
 

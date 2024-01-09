@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../../styles/Table.css'
-import {UserContext} from '../../context/userContext';
+import { UserContext } from '../../context/userContext';
 
 
 export interface IProblems {
@@ -8,7 +8,7 @@ export interface IProblems {
     nazivZadatka: string;
     tekstZadatka: string;
     zadatakId: BigInteger;
-    brojBodova: number ;
+    brojBodova: number;
     privatniZadatak: boolean;
 }
 
@@ -16,17 +16,17 @@ const Problems = React.lazy(() => import('./Problems'));
 
 const ProblemsList: React.FC = () => {
     const [problem, setProblems] = useState<IProblems[]>([]);
-    const {user} = useContext(UserContext);
-    
+    const { user } = useContext(UserContext);
+
     useEffect(() => {
-        if (user && user.uloga === "ADMIN" ){
+        if (user && user.uloga === "ADMIN") {
             const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
             const options = {
-            method: "GET",
-            headers: {
-                Authorization: `Basic ${credentials}`,
-                "Content-Type": "application/json",
-            },
+                method: "GET",
+                headers: {
+                    Authorization: `Basic ${credentials}`,
+                    "Content-Type": "application/json",
+                },
             };
             fetch('/api/problems/adminView', options)
                 .then(response => response.json())
@@ -34,10 +34,10 @@ const ProblemsList: React.FC = () => {
                 .catch(error => console.error('Error fetching problems:', error));
         } else {
             fetch('/api/problems/all')
-            .then(response => response.json())
-            .then((data: IProblems[]) => setProblems(data))
-            .catch(error => console.error('Error fetching problems:', error));
-    }
+                .then(response => response.json())
+                .then((data: IProblems[]) => setProblems(data))
+                .catch(error => console.error('Error fetching problems:', error));
+        }
     }, [user]);
 
     return (
@@ -45,13 +45,11 @@ const ProblemsList: React.FC = () => {
             <table>
                 <thead>
                     <tr>
-                        <th>korisničko ime</th>
+                        <th>voditelj</th>
                         <th>naziv</th>
                         <th>tekst</th>
                         <th>broj bodova</th>
                         <th>status</th>
-                        {user.uloga === "NATJECATELJ" && <th></th>}
-                        
                     </tr>
                 </thead>
                 <tbody>

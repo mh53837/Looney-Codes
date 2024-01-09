@@ -7,11 +7,12 @@
 
 .userProfileImg {
     max-width: 25vw;
+    border-radius: 50%;
 }
 
 .userData {
     text-align: left;
-    margin-left: 15px; 
+    margin-left: 15px;
 }
 
 .userImg {
@@ -21,15 +22,15 @@
 .confirm-container {
     position: relative;
     display: inline-block;
-  }
-  
+}
+
 .confirm-badge {
     position: absolute;
     top: -8px;
     right: -8px;
     background-color: #dd7230;
     color: rgb(0, 0, 0);
-    border-radius: 50% ;
+    border-radius: 50%;
     /* padding: 5px 5px; */
     font-size: 14px;
     width: 21px;
