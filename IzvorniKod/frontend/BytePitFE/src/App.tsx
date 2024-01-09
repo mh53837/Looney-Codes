@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense } from 'react';
 import UserList from './components/User/UserList.tsx';
 import { Link } from 'react-router-dom';
 import './styles/App.css';
@@ -26,9 +26,9 @@ const App: React.FC = () => {
     const { user } = useContext(UserContext);
     const { setUser } = useContext(UserContext);
 
-    const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string ) => {
+    const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string) => {
         setRedirectToHome(true);
-        setUser({korisnickoIme, lozinka, uloga });
+        setUser({ korisnickoIme, lozinka, uloga });
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
@@ -36,63 +36,63 @@ const App: React.FC = () => {
 
     const handleLogout = () => {
         setRedirectToHome(true);
-        setUser({korisnickoIme: '', lozinka: '', uloga: ''});
+        setUser({ korisnickoIme: '', lozinka: '', uloga: '' });
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
-        
+
     };
 
 
     return (
         <Router>
             {user && (
-            <Navbar onLogout={handleLogout} />
+                <Navbar onLogout={handleLogout} />
             )}
             {redirectToHome && <Navigate to="/" replace={true} />}
             <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/user/all" element={<UserList />} />
-                <Route path="/problems/all" element={<ProblemsList />} />
-                <Route
-                    path="/login"
-                    element={
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/user/all" element={<UserList />} />
+                    <Route path="/problems/all" element={<ProblemsList />} />
+                    <Route
+                        path="/login"
+                        element={
+                            <div>
+                                {user.korisnickoIme !== '' ? (
+                                    <div>
+                                        <Link to="/"></Link>
+                                    </div>
+                                ) : (
+                                    <Login onLogin={handleLogin} />
+                                )}
+                            </div>
+                        }
+                    />
+                    <Route path="/register" element={
                         <div>
-                            {user.korisnickoIme !== '' ? (
-                                <div>
-                                    <Link to="/"></Link>
-                                </div>
-                            ) : (
-                                <Login onLogin={handleLogin} />
-                            )}
+                            <Register onRegister={() => console.log('User registered!')} />
                         </div>
                     }
-                />
-                <Route path="/register" element={
-                    <div>
-                        <Register onRegister={() => console.log('User registered!')} />
-                    </div>
-                }
 
-                />
-                <Route path="/user/profile/:korisnickoIme" element={<UserProfile />} />
-                <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
-                <Route path="/user/listRequested" element={
-                    <div>
-                        {user ? (
-                            <div>
-                                <ConfirmRegAdmin loggedInUser={user.korisnickoIme} loggedInUserPass={user.lozinka} />
-                            </div>
-                        ) : (
-                            <p>moras biti prijavljen kao admin</p>)}
-                    </div>
-                } />
-                <Route path="/problem/:id" element={<ProblemPage />} />
-                <Route path="/problems/new" element={<NewProblem /> } />
-                <Route path="/natjecanja/new" element={<NewCompetition onNewCompetitionCreated={() => console.log('kreirano je novo natjecanje!')} />} />
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+                    />
+                    <Route path="/user/profile/:korisnickoIme" element={<UserProfile />} />
+                    <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
+                    <Route path="/user/listRequested" element={
+                        <div>
+                            {user ? (
+                                <div>
+                                    <ConfirmRegAdmin loggedInUser={user.korisnickoIme} loggedInUserPass={user.lozinka} />
+                                </div>
+                            ) : (
+                                <p>moras biti prijavljen kao admin</p>)}
+                        </div>
+                    } />
+                    <Route path="/problem/:id" element={<ProblemPage />} />
+                    <Route path="/problems/new" element={<NewProblem />} />
+                    <Route path="/natjecanja/new" element={<NewCompetition onNewCompetitionCreated={() => console.log('kreirano je novo natjecanje!')} />} />
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
             </Suspense>
         </Router>
     );

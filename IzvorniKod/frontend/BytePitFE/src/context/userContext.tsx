@@ -27,7 +27,7 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>(() => {
     const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : {korisnickoIme: '', lozinka: '',  uloga: '' };
+    return storedUser ? JSON.parse(storedUser) : { korisnickoIme: '', lozinka: '', uloga: '' };
   });
 
   useEffect(() => {

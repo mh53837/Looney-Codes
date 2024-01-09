@@ -38,73 +38,71 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   }, [user.korisnickoIme]);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", isDark? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
   }, [isDark]);
 
   return (
-      <div className="navbar-container">
-        <div className="logo-container">
-          <Link to="/">
-            <img src="/slike/logo-bytepit.png" alt="BytePit logo" />
+    <div className="navbar-container">
+      <div className="logo-container">
+        <Link to="/">
+          <img src="/slike/logo-bytepit.png" alt="BytePit logo" />
+        </Link>
+      </div>
+      <div className="navbar-options-container">
+        <Link to="/">
+          <button>kalendar</button>
+        </Link>
+        <Link to="/user/all">
+          <button>korisnici</button>
+        </Link>
+        <Link to="/problems/all">
+          <button>zadaci</button>
+        </Link>
+
+        <button onClick={() => setIsDark(!isDark)}>
+          {isDark ? "☀️" : "🌙"}
+        </button>
+      </div>
+
+      {user.korisnickoIme ? (
+        <div className="loginDiv">
+          {location.pathname === `/user/profile/${user.korisnickoIme}` ? ( //ako je navbar na profilu korisnika nek se prikaze odjavi
+            <button onClick={onLogout}>odjavi se!</button>
+          ) : (
+            //inace se prikazuje njegov username
+            <Link to={`/user/profile/${user.korisnickoIme}`}>
+              {imageData ? (
+                <img
+                  className="userIconImg"
+                  src={imageData}
+                  alt="BytePit unregistered user icon"
+                />
+              ) : (
+                <img
+                  className="userIconImg"
+                  src="/slike/bytepit-usericon.png"
+                  alt="Default icon"
+                />
+              )}
+              <p className="korisnikIme"> {user.korisnickoIme}</p>
+              <button onClick={onLogout}>odjavi se!</button>
+            </Link>
+          )}
+        </div>
+      ) : (
+        <div className="loginDiv">
+          <Link to="/login">
+            <img
+              className="userIconImg"
+              src="/slike/bytepit-usericon.png"
+              alt="BytePit unregistered user icon"
+            />
+            <button>prijavi se!</button>
           </Link>
         </div>
-        <div className="navbar-options-container">
-          <div className="nav-item">
-            <Link to="/">
-              <button>kalendar</button>
-            </Link>
-            <Link to="/user/all">
-              <button>korisnici</button>
-            </Link>
-            <Link to="/problems/all">
-              <button>zadaci</button>
-            </Link>
-            
-            <button onClick={() => setIsDark(!isDark)}>
-              {isDark ? "☀️" : "🌙"}
-            </button>
-          </div>
-        </div>
+      )}
+    </div>
 
-        {user.korisnickoIme ? (
-          <div className="loginDiv">
-            {location.pathname === `/user/profile/${user.korisnickoIme}` ? ( //ako je navbar na profilu korisnika nek se prikaze odjavi
-              <button onClick={onLogout}>odjavi se!</button>
-            ) : (
-              //inace se prikazuje njegov username
-              <Link to={`/user/profile/${user.korisnickoIme}`}>
-                {imageData ? (
-                  <img
-                    className="userIconImg"
-                    src={imageData}
-                    alt="BytePit unregistered user icon"
-                  />
-                ) : (
-                  <img
-                    className="userIconImg"
-                    src="/slike/bytepit-usericon.png"
-                    alt="Default icon"
-                  />
-                )}
-                <p className="korisnikIme"> {user.korisnickoIme}</p>
-                <button onClick={onLogout}>odjavi se!</button>
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="loginDiv">
-            <Link to="/login">
-              <img
-                className="userIconImg"
-                src="/slike/bytepit-usericon.png"
-                alt="BytePit unregistered user icon"
-              />
-              <button>prijavi se!</button>
-            </Link>
-          </div>
-        )}
-      </div>
-  
   );
 };
 
