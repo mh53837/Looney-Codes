@@ -22,11 +22,12 @@
 .info-table td {
   border: 1px solid #00000085;
   padding: 10px;
-  text-align: left;
+  text-align: center;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 30rem;
+
 }
 
 

@@ -48,8 +48,7 @@ const ProblemsList: React.FC = () => {
                         <th>voditelj</th>
                         <th>naziv</th>
                         <th>tekst</th>
-                        <th>broj bodova</th>
-                        <th>status</th>
+                        <th>težina</th>
                     </tr>
                 </thead>
                 <tbody>

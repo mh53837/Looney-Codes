@@ -12,6 +12,7 @@
 
 .userData {
     text-align: left;
+    font-size: 1.5rem;
     margin-left: 15px;
 }
 
@@ -36,4 +37,12 @@
     width: 21px;
     height: 21px;
     text-align: center;
+}
+
+.userTrophy {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }

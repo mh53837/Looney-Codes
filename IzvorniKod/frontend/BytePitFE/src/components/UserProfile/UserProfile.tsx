@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
-import { ThemeContext } from "../../context/themeContext"; 
+import { ThemeContext } from "../../context/themeContext";
 import { Tabs, ConfigProvider } from "antd";
 import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
@@ -52,23 +52,23 @@ const UserProfile: React.FC = () => {
   const [attempted, setAttempted] = useState<number>(0);
   const [solved, setSolved] = useState<number>(0);
 
-  const {theme} = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
-  useEffect (() => {
+  useEffect(() => {
 
   }, [theme.isThemeDark]);
 
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
       fetch(`/api/natjecanja/get/voditelj/${korisnickoIme}`)
-      .then((response) => response.json() )
-      .then((data: CompetitionData[]) => {
-        console.log("Competition data:", data);
-        setCompetitionsData(data);
-      })
-      .catch((error) => {
-        console.error("error fetching competition data:", error);
-      });
+        .then((response) => response.json())
+        .then((data: CompetitionData[]) => {
+          console.log("Competition data:", data);
+          setCompetitionsData(data);
+        })
+        .catch((error) => {
+          console.error("error fetching competition data:", error);
+        });
     }
   };
   const handleProfileUpdate = () => {
@@ -77,19 +77,19 @@ const UserProfile: React.FC = () => {
       .catch((error) => {
         console.error("error fetching user profile data:", error);
       });
-      const fetchProfilePicture = async () => {
-        try {
-          if (korisnickoIme !== "") {
-            const response = await fetch(`/api/user/image/${korisnickoIme}`);
-            const blob = await response.blob();
-            const imageUrl = URL.createObjectURL(blob);
-            setImageData(imageUrl);
-          }
-        } catch (error) {
-          console.error("Error fetching profile picture:", error);
+    const fetchProfilePicture = async () => {
+      try {
+        if (korisnickoIme !== "") {
+          const response = await fetch(`/api/user/image/${korisnickoIme}`);
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          setImageData(imageUrl);
         }
-      };
-      fetchProfilePicture();
+      } catch (error) {
+        console.error("Error fetching profile picture:", error);
+      }
+    };
+    fetchProfilePicture();
   };
 
   const handleProblemUpdate = () => {
@@ -117,28 +117,28 @@ const UserProfile: React.FC = () => {
     }
   }
 
-useEffect(() => {
-    if(userData?.uloga === "NATJECATELJ"){
+  useEffect(() => {
+    if (userData?.uloga === "NATJECATELJ") {
       fetch(`/api/problems/get/${korisnickoIme}/allTasks`)
         .then((response) => response.json())
-        .then((data) => {setAttempted(data.length), console.log(data) })
+        .then((data) => { setAttempted(data.length), console.log(data) })
         .catch((error) => {
           console.error("error fetching attempted data:", error);
         }
-      );
+        );
 
     }
   })
   useEffect(() => {
-    if(userData?.uloga === "NATJECATELJ"){
+    if (userData?.uloga === "NATJECATELJ") {
       fetch(`/api/problems/get/${korisnickoIme}/allSolvedTasks`)
         .then((response) => response.json())
-        .then((data) => {setSolved(data.length), console.log(data) })
+        .then((data) => { setSolved(data.length), console.log(data) })
         .catch((error) => {
           console.error("error fetching attempted data:", error);
         }
-      );
-    } 
+        );
+    }
   })
 
   useEffect(() => {
@@ -146,7 +146,7 @@ useEffect(() => {
       try {
         if (korisnickoIme !== "") {
           const response = await fetch(`/api/user/image/${korisnickoIme}`);
-          console.log("img:" ,response);
+          console.log("img:", response);
           const blob = await response.blob();
           const imageUrl = URL.createObjectURL(blob);
           setImageData(imageUrl);
@@ -160,13 +160,14 @@ useEffect(() => {
 
   useEffect(() => {
     fetch(`/api/user/profile/${korisnickoIme}`)
-    .then((response) => response.json())
-    .then((data: UserData) => {
-      console.log("User data:", data);
-      setUserData(data); })
-    .catch((error) => {
-      console.error("error fetching user profile data:", error);
-    });
+      .then((response) => response.json())
+      .then((data: UserData) => {
+        console.log("User data:", data);
+        setUserData(data);
+      })
+      .catch((error) => {
+        console.error("error fetching user profile data:", error);
+      });
   }, [korisnickoIme, user]);
 
   useEffect(() => {
@@ -184,25 +185,27 @@ useEffect(() => {
   }, [korisnickoIme, userData]);
 
   useEffect(() => {
-    if ( userData && userData.uloga === "VODITELJ") {
-      if(user && korisnickoIme === user.korisnickoIme) {
+    if (userData && userData.uloga === "VODITELJ") {
+      if (user && korisnickoIme === user.korisnickoIme) {
         fetchData(`/api/problems/my`, user)
           .then((data: ProblemData[]) => {
             console.log("Problems data:", data);
-            setProblemsData(data)})
+            setProblemsData(data)
+          })
           .catch((error) => {
             console.error("error fetching problem data:", error);
-        });
+          });
       }
-      else if (korisnickoIme !== user.korisnickoIme ) {
+      else if (korisnickoIme !== user.korisnickoIme) {
         fetch(`/api/problems/author/${korisnickoIme}`)
           .then((response) => response.json())
           .then((data: ProblemData[]) => {
             console.log("Problems data:", data);
-            setProblemsData(data)})
+            setProblemsData(data)
+          })
           .catch((error) => {
             console.error("error fetching problem data:", error);
-        });
+          });
       }
     }
   }, [user, userData, korisnickoIme]); //voditelj - moji zadaci (javni i privatni)
@@ -213,13 +216,13 @@ useEffect(() => {
 
   const renderUserTrophies = () => (
     <React.Suspense fallback={<div>učitavanje...</div>}>
-      <UserTrophies userData = {userData}/>
+      <UserTrophies userData={userData} />
     </React.Suspense>
   );
 
   const renderProblemsTab = () => (
     <React.Suspense fallback={<div>učitavanje...</div>}>
-      <ProblemsProfileTab problemsData={problemsData} onUpdate={handleProblemUpdate} userData = {userData}/>
+      <ProblemsProfileTab problemsData={problemsData} onUpdate={handleProblemUpdate} userData={userData} />
     </React.Suspense>
   );
   const renderCompetitionsCalendar = () => {
@@ -249,11 +252,11 @@ useEffect(() => {
 
         {user.uloga === "ADMIN" && (
           <div>
-          {
+            {
               <React.Suspense fallback={<div>učitavanje...</div>}>
-                <UserProfileUpdateForm korisnickoIme={userData.korisnickoIme ?? ""} onUpdateSuccess={handleProfileUpdate}/>
+                <UserProfileUpdateForm korisnickoIme={userData.korisnickoIme ?? ""} onUpdateSuccess={handleProfileUpdate} />
               </React.Suspense>
-          }
+            }
           </div>
         )}
 
@@ -295,9 +298,10 @@ useEffect(() => {
 
         {userData.uloga === "NATJECATELJ" && (
           <div>
-            <p>broj točno riješenih zadataka: {solved } </p>
-            <p>broj isprobanih zadataka: { attempted } </p>
-            <p>osvojeni pehari: {renderUserTrophies()} </p>
+            <h3>broj točno riješenih zadataka: {solved} </h3>
+            <h3>broj isprobanih zadataka: {attempted} </h3>
+            <h3>osvojeni pehari:</h3>
+            {renderUserTrophies()}
           </div>
         )}
       </div>

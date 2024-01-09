@@ -110,85 +110,85 @@ const Home: React.FC = () => {
             </div>
 
             {selectedTable === 'trenutna' && (
-                <div className="tablica-trenutna-natjecanja">
-                    <table className="info-table">
+                <div className="info-table">
+                    <table>
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Naziv natjecanja</th>
-                            <th>Početak natjecanja</th>
-                            <th>Kraj natjecanja</th>
-                            <th>Voditelj</th>
-                            <th></th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Naziv natjecanja</th>
+                                <th>Početak natjecanja</th>
+                                <th>Kraj natjecanja</th>
+                                <th>Voditelj</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {trenutnoNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>Pokreni natjecanje</td>
-                            </tr>
-                        ))}
+                            {trenutnoNatjecanja.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>Pokreni natjecanje</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             )}
 
             {selectedTable === 'nadolazeca' && (
-                <div className="tablica-natjecanja">
-                    <table className="info-table">
+                <div className="info-table">
+                    <table>
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Naziv natjecanja</th>
-                            <th>Početak natjecanja</th>
-                            <th>Kraj natjecanja</th>
-                            <th>Voditelj</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Naziv natjecanja</th>
+                                <th>Početak natjecanja</th>
+                                <th>Kraj natjecanja</th>
+                                <th>Voditelj</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {natjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                            </tr>
-                        ))}
+                            {natjecanja.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             )}
 
             {selectedTable === 'prosla' && (
-                <div className="tablica-prosla-natjecanja">
-                    <table className="info-table">
+                <div className="info-table">
+                    <table>
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Naziv natjecanja</th>
-                            <th>Početak natjecanja</th>
-                            <th>Kraj natjecanja</th>
-                            <th>Voditelj</th>
-                            <th></th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Naziv natjecanja</th>
+                                <th>Početak natjecanja</th>
+                                <th>Kraj natjecanja</th>
+                                <th>Voditelj</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {proslaNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>Pokreni natjecanje</td>
-                            </tr>
-                        ))}
+                            {proslaNatjecanja.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>Pokreni natjecanje</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

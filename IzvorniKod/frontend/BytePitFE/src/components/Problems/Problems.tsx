@@ -13,19 +13,20 @@ interface ProblemsProps {
 }
 
 const Problems: React.FC<ProblemsProps> = (props) => {
-    const { voditelj, nazivZadatka, tekstZadatka, zadatakId, brojBodova, privatniZadatak } = props.problem;
+    const { voditelj, nazivZadatka, tekstZadatka, zadatakId, brojBodova } = props.problem;
     return (
         <tr className="info-table">
-            <td>{voditelj}</td>
+            <td>
+                <Link to={`/user/profile/${voditelj}`}>
+                    {voditelj}
+                </Link></td>
             <td>
                 <Link to={`/problem/${zadatakId}`}>
                     {nazivZadatka}
                 </Link>
             </td>
             <td><span>{tekstZadatka}</span></td>
-            <td>{brojBodova}</td>
-            <td>{privatniZadatak && <p>privatni</p>}
-                {!privatniZadatak && <p>javni</p>}</td>
+            <td>{brojBodova == 10 ? '⭐' : brojBodova == 20 ? "⭐⭐" : "⭐⭐⭐"}</td>
         </tr>
     );
 };
