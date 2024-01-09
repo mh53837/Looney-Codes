@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       <div className="navbar-container">
         <div className="logo-container">
           <Link to="/">
-            <img src="/slike/logo-bytepit3.png" alt="BytePit logo" />
+            <img src="/slike/logo-bytepit.png" alt="BytePit logo" />
           </Link>
         </div>
         <div className="navbar-options-container">

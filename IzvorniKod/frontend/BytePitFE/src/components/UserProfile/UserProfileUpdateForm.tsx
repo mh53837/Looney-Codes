@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, ChangeEvent } from "react";
 import { ConfigProvider } from "antd";
 import { UserContext } from "../../context/userContext";
 import "../../styles/CompetitionUpdateForm.css";
@@ -29,12 +29,19 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
   const [updatedLozinka, setUpdatedLozinka] = useState<string>(""); 
   const [confirmUpdatedLozinka, setConfirmUpdatedLozinka] = useState<string>("");
   const [updatedUloga, setUpdatedUloga] = useState<string>("");
-
+  const [updatedSlika, setUpdatedSlika] = useState<File | null>(null);
   const [error, setError] = useState<string>("");
 
   const handleUlogaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatedUloga(event.target.value);
   }
+
+  const onSlikaChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+        const slika = event.target.files[0];
+        setUpdatedSlika( slika );
+    }
+}
 
   const handleUpdatedLozinka = () => {
     setError("");
@@ -137,17 +144,34 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
         ...(updatedUloga !== "" && { requestedUloga: updatedUloga }),
         ...(updatedLozinka !== "" && { lozinka: updatedLozinka })
       }
+      let options;
+      if(updatedSlika){
+        const userData = new FormData();
+        userData.append('image', updatedSlika, updatedSlika.name);
+        userData.append('userData', new Blob([JSON.stringify(updatedData)], { type: 'application/json' }), 'userData.json');
+        options = {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${credentials}`,
+          },
+          body: userData,
+        };
+      
+      }
+      else{
+        options = {
+          method: "POST",
+          headers: {
+            Authorization: `Basic ${credentials}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        };
+      }
 
       console.log("updated data:", updatedData);
 
-      const response = await fetch(`/api/user/update/${korisnickoIme}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
+      const response = await fetch(`/api/user/update/${korisnickoIme}`, options);
       if (response.ok) {
         console.log(
           `successfully updated korisnik data for: ${korisnickoIme}`
@@ -231,6 +255,11 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
               value={confirmUpdatedLozinka}
               onChange={(e) => setConfirmUpdatedLozinka(e.target.value)}
             />
+
+          <div className="FormRow">
+              <label>slika profila</label>
+              <input name="slika" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
+          </div>
             <div className="FormRow">
               <p>uloga: </p>
               <div className="RoleOptions">

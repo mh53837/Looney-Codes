@@ -99,8 +99,6 @@ const Register: React.FC<RegisterProps> = (props) => {
 
         formData.append('userData', new Blob([JSON.stringify(jsonPart)], { type: 'application/json' }), 'userData.json');
 
-
-
         const options = {
             method: 'POST',
             body: formData,

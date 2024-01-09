@@ -76,6 +76,18 @@
     padding-left: 1rem;
 }
 
+[data-theme="dark"] a:hover, [data-theme="dark"] button:hover {
+    color: #854d27;
+  }
+  
+[data-theme="dark"] button, [data-theme="dark"] a {
+    color: #ECDCC9;
+}
+
+[data-theme="dark"]  .logo-container{
+    background-color: #2A2D34;
+}
+
 @media screen and (max-width: 768px) {
     .logo-container {
       display: none;

@@ -19,18 +19,12 @@ body {
   width: 100%;
   height: 100%;
   color: #213547;
-  background-color: #fff;
   box-sizing: border-box;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
-
-[data-theme="dark"] {
-  color: gray;
-  background-color: #222;
 }
 
 h1 {
@@ -70,3 +64,33 @@ a:hover {
   color: #dd7230;
 }
 
+[data-theme="dark"] body{
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="dark"] a:hover {
+  color: #dd7230e0;
+}
+
+[data-theme="dark"] button:hover {
+  background-color: #dd7230e0;
+}
+
+[data-theme="dark"] #root {
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="light"] #root {
+  background-color: #fff;
+}
+
+[data-theme="dark"] :root {
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="light"] :root {
+  background-color: #fff;
+}

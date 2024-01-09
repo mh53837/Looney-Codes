@@ -53,7 +53,7 @@ const UserTrophies: React.FC<TrophyProps> = ({userData}) => {
         <div key={trophy.peharId}>
           <h3>{trophy.natjecanje.nazivNatjecanja}</h3>
           <p>Mjesto: {trophy.mjesto}</p>
-          <img src={trophy.slikaPehara} alt={`slika pehara`} />
+          <img src={ trophy.slikaPehara.replace(/^\./, '') } alt={`slika pehara`} />
         </div>
       ))}
     </div>

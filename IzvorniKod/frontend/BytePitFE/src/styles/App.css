@@ -72,3 +72,37 @@ body {
   width: 100%;
   left: 0;
 }
+
+[data-theme="dark"] body{
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="dark"] a:hover {
+  color: #dd7230e0;
+  color: #2A2D34;
+}
+
+[data-theme="dark"] button:hover {
+  background-color: #dd7230e0;
+  color: #2A2D34;
+}
+
+[data-theme="dark"] .react-calendar {
+  background-color: #2A2D34;
+  color: #ECDCC9;
+}
+
+[data-theme="dark"] .table-switch-buttons{
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="dark"]  .react-calendar__tile--now:enabled:hover, [data-theme="dark"] .react-calendar__tile--now:enabled:focus, [data-theme="dark"] .react-calendar__tile--now {
+  background: #dd7230e0;
+}
+
+[data-theme="dark"]  .tablica-natjecanje-button, [data-theme="dark"] .tablica-natjecanje-button:hover {
+  background-color: #2A2D34;
+  color: #ECDCC9;
+}
