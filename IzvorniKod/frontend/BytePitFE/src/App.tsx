@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useContext, useState, useEffect } from 'react';
 import { UserContext } from './context/userContext';
 import { ThemeContext } from './context/themeContext';
+import CompetitionPage from './components/Competition/CompetitionPage.tsx';
 
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
@@ -94,9 +95,10 @@ const App: React.FC = () => {
                                 <p>moras biti prijavljen kao admin</p>)}
                         </div>
                     } />
-                    <Route path="/problem/:id" element={<ProblemPage />} />
+                    <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
                     <Route path="/problems/new" element={<NewProblem />} />
-                    <Route path="/natjecanja/new" element={<NewCompetition />} />
+                    <Route path="/natjecanja/new" element={<NewCompetition onNewCompetitionCreated={() => console.log('kreirano je novo natjecanje!')} />} />
+                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />}/>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

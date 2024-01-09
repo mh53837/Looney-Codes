@@ -15,9 +15,8 @@ interface IProblemDetails {
         tekstZadatka: string;
 }
 
-const ProblemPage: React.FC = () => {
-
-        const { id } = useParams();     //id zadatka preuzet iz url-a
+const ProblemPage: React.FC<string | {}> = () => {
+        const { zadatakId, nadmetanjeId } = useParams();     //id zadatka preuzet iz url-a
         const { user } = useContext(UserContext); //podaci ulogiranog korisnika
 
         const [problemDetails, setProblemDetails] = useState<IProblemDetails | null>(null); //atributi problema
@@ -28,11 +27,11 @@ const ProblemPage: React.FC = () => {
 
         // izvuci podatke o zadatku na temelju id-a
         useEffect(() => {
-                fetch(`/api/problems/get/${id}`)
+                fetch(`/api/problems/get/${zadatakId}`)
                         .then((response) => response.json())
                         .then((data: IProblemDetails) => setProblemDetails(data))
                         .catch((error) => console.error('Error fetching problem details:', error));
-        }, [id]);
+        }, [zadatakId]);
 
         if (!problemDetails) {
                 return (<div>Zadatak ne postoji ili mu ne možete pristupiti</div>);
@@ -72,7 +71,7 @@ const ProblemPage: React.FC = () => {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
                                 programskiKod: sourceCode? sourceCode : code?.valueOf(), // salji sadrzaj editora ako nema fajla
-                                nadmetanjeId: 105, // placeholder za sad!
+                                nadmetanjeId: nadmetanjeId,
                         };
 
                         // zamijeni navodnike u programskom kodu
