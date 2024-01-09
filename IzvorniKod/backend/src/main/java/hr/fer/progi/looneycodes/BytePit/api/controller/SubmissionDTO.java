@@ -1,10 +1,12 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import java.util.OptionalInt;
+
 public class SubmissionDTO {
   /**
    * identifikator nadmetanja
    */
-  private Integer nadmetanjeId;
+  private OptionalInt nadmetanjeId;
 	/**
 	 * identifikator zadatka
 	 */
@@ -19,10 +21,10 @@ public class SubmissionDTO {
 	private String programskiKod;
 	
 	//getteri i setteri
-	public Integer getNadmetanjeId() {
+	public OptionalInt getNadmetanjeId() {
 	return nadmetanjeId;
   }
-  public void setNadmetanjeId(Integer nadmetanjeId) {
+  public void setNadmetanjeId(OptionalInt nadmetanjeId) {
     this.nadmetanjeId = nadmetanjeId;
   }
 	public Integer getZadatakId() {

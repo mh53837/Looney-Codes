@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Kontroler koji se koristi za pristup metodama vezanim uz Natjecanje entitet
@@ -175,8 +176,10 @@ public class NatjecanjeController {
      * @return lista zadataka
      */
     @GetMapping("/get/zadaci/{natjecanjeId}")
-    public Set<Zadatak> getZadaciByNatjecanjeId(@PathVariable Integer natjecanjeId) {
-        return natjecanjeService.getZadaciByNatjecanjeId(natjecanjeId);
+    public Set<ZadatakDTO> getZadaciByNatjecanjeId(@PathVariable Integer natjecanjeId) {
+        return natjecanjeService.getZadaciByNatjecanjeId(natjecanjeId)
+                                .stream().map(ZadatakDTO::new)
+                                .collect(Collectors.toSet());
     }
 
     /**
