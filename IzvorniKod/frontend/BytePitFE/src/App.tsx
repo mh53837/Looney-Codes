@@ -97,7 +97,7 @@ const App: React.FC = () => {
                     } />
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
                     <Route path="/problems/new" element={<NewProblem />} />
-                    <Route path="/natjecanja/new" element={<NewCompetition onNewCompetitionCreated={() => console.log('kreirano je novo natjecanje!')} />} />
+                    <Route path="/natjecanja/new" element={<NewCompetition />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />}/>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
