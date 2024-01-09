@@ -164,9 +164,10 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
                   <div className="tableWrapper">
                     <div className="info-table">
                       {
-                        theme.isThemeDark ? (
+                        theme.isThemeDark == false ? (
                         <ConfigProvider
                           theme={{
+                            
                             components: {
                               Table: {
                                 headerBg: "#f4c95de7",
@@ -178,37 +179,39 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
                                 headerBorderRadius: 0,
                                 colorPrimary: "#dd7230",
                                 headerSplitColor: "transparent",
+                                colorBgContainer: "#fff",
+                                colorText:"#000"
                               },
                             },
                           }}
                         > 
                         {renderTable(filteredData)}
                         
-                      </ConfigProvider>
-                        ):(
+                        </ConfigProvider>
+                      ):(
                         <ConfigProvider
                           theme={{
                             components: {
                               Table: {
-                                headerBg: "#dd7230e0",
-                                rowHoverBg: "#f4c95da1",
+                                headerBg: "#dd7230",
+                                rowHoverBg: "#dcdcdc34",
                                 borderColor: "#00000085",
                                 headerFilterHoverBg: "#dd7230e0",
                                 headerSortActiveBg: "#dd7230e0",
-                                headerSortHoverBg: "#f4c95da9",
+                                headerSortHoverBg: "#dd7230",
                                 headerBorderRadius: 0,
-                                colorPrimary: "#dd7230",
+                                colorPrimary: "#f4c95d",
                                 headerSplitColor: "transparent",
+                                colorBgContainer: "#2A2D34",
+                                colorText:" #ECDCC9",
                               },
                             },
                           }}
                         > 
                         {renderTable(filteredData)}
                         
-                      </ConfigProvider>
-                        )
-                      }
-                        
+                        </ConfigProvider>
+                      )}
                     </div>
                   </div>
                 );

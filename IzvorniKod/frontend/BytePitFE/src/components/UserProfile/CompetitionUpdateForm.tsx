@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { DatePicker, Space, ConfigProvider } from "antd";
+import { DatePicker, Space, ConfigProvider, Modal } from "antd";
 import type { DatePickerProps } from "antd/es/date-picker";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { UserContext } from "../../context/userContext";
+import { ThemeContext } from "../../context/themeContext";
 import "../../styles/CompetitionUpdateForm.css";
 
 interface CompetitionUpdateFormProps {
@@ -17,7 +18,8 @@ interface CompetitionData {
   pocetakNatjecanja: string;
   krajNatjecanja: string;
 }
-const DynamicModal = React.lazy(() => import("antd/lib/modal"));
+
+
 const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeId, onUpdateSuccess}) => {
   const { user } = useContext(UserContext);
   const [competitionData, setCompetitionData] = useState<CompetitionData | null>(null);
@@ -27,6 +29,8 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
   const [updatedNaziv, setUpdatedNaziv] = useState<string>("");
   const [updatedPocetak, setUpdatedPocetak] = useState<Dayjs | null>(null);
   const [updatedKraj, setUpdatedKraj] = useState<Dayjs | null>(null);
+
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -47,6 +51,51 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
 
     fetchInitialData();
   }, [natjecanjeId]);
+
+  const renderModal = () => {
+
+    return (
+      <React.Suspense fallback={<div>učitavanje...</div>}>
+      <Modal
+        title="uredi natjecanje"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        cancelText="odustani"
+        okText="spremi promjene"
+        okButtonProps={{ style: { color: "#2A2D34" } }}
+        cancelButtonProps={{ style: { color: "#2A2D34" } }}
+      >
+        <div className="updateFormContainer">
+          <input
+            className="competitionUpdateForm"
+            type="text"
+            placeholder="naziv natjecanja"
+            value={updatedNaziv}
+            onChange={(e) => setUpdatedNaziv(e.target.value)}
+          />
+
+          <Space direction="vertical">
+            <DatePicker
+              showTime
+              placeholder="početak natjecanja"
+              value={updatedPocetak}
+              onChange={onPocetakChange}
+            />
+
+            <DatePicker
+              showTime
+              placeholder="kraj natjecanja"
+              value={updatedKraj}
+              onChange={onKrajChange}
+            />
+          </Space>
+        </div>
+      </Modal>
+      </React.Suspense>
+    );
+  }
 
   const showModal = () => {
     setOpen(true);
@@ -127,56 +176,55 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
   return (
     <>
       <button onClick={showModal}>uredi</button>
-      <ConfigProvider
-        theme={{
-          components: {
-            Modal: {},
-            Button: {
-              colorPrimary: "#dd7230",
-              colorPrimaryHover: "#dd723081",
-              colorPrimaryActive: "#dd723081",
-            },
-          },
-        }}
-      >
-        <React.Suspense fallback={<div>učitavanje...</div>}>
-        <DynamicModal
-          title="uredi natjecanje"
-          open={open}
-          onOk={handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-          cancelText="odustani"
-          okText="spremi promjene"
+      {
+        theme.isThemeDark == false ? (
+          <ConfigProvider
+            theme={{
+              components: {
+                Modal: {
+                  contentBg: "#fff",
+                  
+                },
+                Button: {
+                  colorPrimary: "#dd7230",
+                  colorPrimaryHover: "#dd723081",
+                  colorPrimaryActive: "#dd723081",
+                },
+              }, 
+            }}
+          >
+            { renderModal() }
+          </ConfigProvider>
+        ) : (
+          <ConfigProvider
+          theme={{
+            components: {
+              Modal: {
+                contentBg: "#2A2D34",
+                headerBg: "#2A2D34",
+                footerBg: "#2A2D34",
+                titleColor: "#ECDCC9",
+                colorPrimary: "#2A2D34",
+                colorPrimaryText: "#2A2D34",
+                colorText: "#ECDCC9",
+              },
+              Button: {
+                colorPrimary: "#dd7230e0",
+                colorPrimaryHover: "#ECDCC9",
+                colorPrimaryActive: "#2A2D34",
+                colorLinkHover: "#000",
+                
+                textHoverBg:"#2A2D34",
+                colorText: "#2A2D34",
+                colorPrimaryText: "#2A2D34",
+              },
+            }, 
+          }}
         >
-          <div className="updateFormContainer">
-            <input
-              className="competitionUpdateForm"
-              type="text"
-              placeholder="naziv natjecanja"
-              value={updatedNaziv}
-              onChange={(e) => setUpdatedNaziv(e.target.value)}
-            />
-
-            <Space direction="vertical">
-              <DatePicker
-                showTime
-                placeholder="početak natjecanja"
-                value={updatedPocetak}
-                onChange={onPocetakChange}
-              />
-
-              <DatePicker
-                showTime
-                placeholder="kraj natjecanja"
-                value={updatedKraj}
-                onChange={onKrajChange}
-              />
-            </Space>
-          </div>
-        </DynamicModal>
-        </React.Suspense>
-      </ConfigProvider>
+          { renderModal() }
+        </ConfigProvider>
+        )
+      }
     </>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext} from "react";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Modal } from "antd";
 import "../../styles/CompetitionUpdateForm.css";
 import {UserContext} from '../../context/userContext';
-
+import { ThemeContext } from "../../context/themeContext";
 
 interface EvaluationTestProps {
     zadatakId: BigInteger;
@@ -38,12 +38,12 @@ interface EvaluationTestsData{
     izlazniPodaci: string | null;
 }
 
-const DynamicModal = React.lazy(() => import("antd/lib/modal"));
 const NewEvaluationTest = React.lazy(() => import("../Problems/NewEvaluationTest") );
 const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onClose}) => {
 
     const [testsData, setTestsData] = useState<EvaluationTestsData[] | null>(null);
     const {user} = useContext(UserContext);
+    const {theme} = useContext(ThemeContext);
 
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -63,6 +63,54 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
         console.log("test data: ", data)})
         .catch(error => console.error('Error fetching problems:', error));
     }, [zadatakId, user] );
+
+    const renderModal = () => {
+
+        return (
+            <React.Suspense fallback={<div>učitavanje...</div>}>
+            <Modal
+            title="testni primjeri" 
+            open={open}
+            onCancel={handleClose}
+            confirmLoading={confirmLoading}
+            footer={        
+            <div>
+                <button key="ok" onClick={handleOk}>
+                    ok
+                </button>
+            </div>
+            }
+            >
+
+            <div className="info-table">
+                {testsData?.length == 0 ? <div><p>ovaj zadatak nema testnih primjera</p></div> :
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ulaz</th>
+                            <th>izlaz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {testsData?.map((test, index) => (
+                        <tr className="info-table" key={index}>
+                            <td>{test?.ulazniPodaci ? test.ulazniPodaci : ""}</td>
+                            <td>{test?.izlazniPodaci ? test.izlazniPodaci : ""}</td>
+                        </tr>
+                    )) 
+                    }
+                    </tbody>
+                </table>
+                }
+
+            </div>
+                <React.Suspense fallback={<div>učitavanje...</div>}>
+                    <NewEvaluationTest zadatakId={zadatakId} onTestAdded={handleTestAdded} /> 
+                </React.Suspense> 
+            </Modal>
+            </React.Suspense>
+        );
+    }
     
 
     const handleOk = async () => {
@@ -119,65 +167,50 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
         <>
         {visible && showModal()}
         { !visible && (<button onClick={showModal}>testni primjeri</button>)}
-        <ConfigProvider
-            theme={{
-            components: {
-                Modal: {},
-                Button: {
-                colorPrimary: "#dd7230",
-                colorPrimaryHover: "#dd723081",
-                colorPrimaryActive: "#dd723081"
-                },
-            },
-            }}
-        >
-            <React.Suspense fallback={<div>učitavanje...</div>}>
-            <DynamicModal
-            title="testni primjeri" 
-            open={open}
-            onCancel={handleClose}
-            confirmLoading={confirmLoading}
-            footer={        
-            <div>
-                <button key="ok" onClick={handleOk}>
-                    ok
-                </button>
-            </div>
-            }
+        {
+        theme.isThemeDark == false ? (
+            <ConfigProvider
+                theme={{
+                components: {
+                    Modal: {
+                    contentBg: "#fff",
+                    
+                    },
+                    Button: {
+                    colorPrimary: "#dd7230",
+                    colorPrimaryHover: "#dd723081",
+                    colorPrimaryActive: "#dd723081",
+                    },
+                }, 
+                }}
             >
-
-            <div className="info-table">
-                {testsData?.length == 0 ? <div><p>ovaj zadatak nema testnih primjera</p></div> :
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ulaz</th>
-                            <th>izlaz</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {testsData?.map((test, index) => (
-                        <tr className="info-table" key={index}>
-                            <td>{test?.ulazniPodaci ? test.ulazniPodaci : ""}</td>
-                            <td>{test?.izlazniPodaci ? test.izlazniPodaci : ""}</td>
-                        </tr>
-                    )) 
-                    }
-                    </tbody>
-                </table>
-                }
-
-            </div>
-            
- 
-            <React.Suspense fallback={<div>učitavanje...</div>}>
-                <NewEvaluationTest zadatakId={zadatakId} onTestAdded={handleTestAdded} /> 
-            </React.Suspense> 
-
-            
-            </DynamicModal>
-            </React.Suspense>
-        </ConfigProvider>
+                { renderModal() }
+            </ConfigProvider>
+            ) : (
+            <ConfigProvider
+            theme={{
+                components: {
+                Modal: {
+                    contentBg: "#2A2D34",
+                    headerBg: "#2A2D34",
+                    footerBg: "#2A2D34",
+                    titleColor: "#ECDCC9",
+                    colorPrimary: "#ECDCC9",
+                    colorText: "#ECDCC9",
+                },
+                Button: {
+                    colorPrimary: "#dd7230",
+                    colorPrimaryHover: "#dd723081",
+                    colorPrimaryActive: "#dd723081",
+                    textHoverBg:"#2A2D34",
+                },
+                }, 
+            }}
+            >
+            { renderModal() }
+            </ConfigProvider>
+            )
+        }
         </>
     )
 }
