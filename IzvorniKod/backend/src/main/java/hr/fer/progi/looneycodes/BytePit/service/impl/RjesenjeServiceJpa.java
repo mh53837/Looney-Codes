@@ -101,7 +101,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
       Nadmetanje nadmetanje = null;
-      if (nadmetanjeId.isPresent()) {
+      if (nadmetanjeId != null && nadmetanjeId.isPresent()) {
         if(natjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
           nadmetanje = natjecanjeRepository.findById(nadmetanjeId.getAsInt()).get();
         else if(virtualnoNatjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
