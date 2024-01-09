@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import './styles/App.css';
 import Home from './components/Home';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { UserContext } from './context/userContext';
+import { ThemeContext } from './context/themeContext';
 
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
@@ -21,8 +22,10 @@ const ProblemsList = React.lazy(() => import('./components/Problems/ProblemsList
 
 
 const App: React.FC = () => {
+
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
 
+    const { theme } = useContext(ThemeContext); //!theme-light
     const { user } = useContext(UserContext);
     const { setUser } = useContext(UserContext);
 
@@ -42,6 +45,9 @@ const App: React.FC = () => {
         }, 100);
         
     };
+
+    useEffect ( () => {
+    }, [theme.isThemeDark]);
 
 
     return (

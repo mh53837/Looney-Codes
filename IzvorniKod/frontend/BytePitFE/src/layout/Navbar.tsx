@@ -3,6 +3,7 @@ import "../styles/Navbar.css";
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { ThemeContext } from "../context/themeContext";
 
 interface NavbarProps {
   onLogout: () => void;
@@ -13,7 +14,9 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const onLogout = props.onLogout;
   const [imageData, setImageData] = useState<string | null>(null);
   const location = useLocation();
-  const [isDark, setIsDark] = useState(false);
+
+  const {theme, setTheme} = useContext(ThemeContext);
+
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -38,8 +41,8 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   }, [user.korisnickoIme]);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", isDark? "dark" : "light");
-  }, [isDark]);
+    document.documentElement.setAttribute("data-theme", theme.isThemeDark? "dark" : "light");
+  }, [theme.isThemeDark]); 
 
   return (
       <div className="navbar-container">
@@ -60,8 +63,8 @@ const Navbar: React.FC<NavbarProps> = (props) => {
               <button>zadaci</button>
             </Link>
             
-            <button onClick={() => setIsDark(!isDark)}>
-              {isDark ? "☀️" : "🌙"}
+            <button onClick={() => {setTheme( {isThemeDark: !theme.isThemeDark} ) }}>
+              {theme ? "☀️" : "🌙"}
             </button>
           </div>
         </div>

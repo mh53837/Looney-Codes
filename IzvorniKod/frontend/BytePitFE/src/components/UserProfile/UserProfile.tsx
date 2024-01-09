@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
+import { ThemeContext } from "../../context/themeContext"; 
 import { Tabs, ConfigProvider } from "antd";
 import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
@@ -35,6 +36,7 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
+
 const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
 const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
@@ -49,6 +51,12 @@ const UserProfile: React.FC = () => {
   const [competitionsData, setCompetitionsData] = useState<CompetitionData[]>([]);
   const [attempted, setAttempted] = useState<number>(0);
   const [solved, setSolved] = useState<number>(0);
+
+  const {theme} = useContext(ThemeContext);
+
+  useEffect (() => {
+
+  }, [theme.isThemeDark]);
 
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
