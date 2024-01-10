@@ -16,6 +16,26 @@ const Home: React.FC = () => {
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
     const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla' | 'trenutna'>('trenutna');
+    const [nadolazeca, setUpcomingData] = useState<Natjecanje[]>([]);
+    const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
+    const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
+
+    useEffect(() => {
+        fetch(`/api/natjecanja/get/finished`)
+            .then(response => response.json())
+            .then(data => setFinishedData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+
+        fetch(`/api/natjecanja/get/ongoing`)
+            .then(response => response.json())
+            .then(data => setOngoingData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+
+        fetch(`/api/natjecanja/get/upcoming`)
+            .then(response => response.json())
+            .then(data => setUpcomingData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,26 +90,20 @@ const Home: React.FC = () => {
             hour: '2-digit',
             minute: '2-digit',
         };
-        return new Date(datumVrijeme).toLocaleString('en-GB', options);
+        return new Date(datumVrijeme).toLocaleString('hr-HR', options);
     };
 
-    const proslaNatjecanja = natjecanja.filter(
-        (natjecanje) => date > new Date(natjecanje.krajNatjecanja)
-    );
 
-    const trenutnoNatjecanja = natjecanja.filter(
-        (natjecanje) => date.toDateString() === new Date(natjecanje.pocetakNatjecanja).toDateString()
-    );
 
 
 
     return (
         <div>
             <div className="calendar-container">
-                <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
+                <Calendar value={date} locale='hr-HR' onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
             <div className="selected-date-container">
-                Označeni datum: {date.toLocaleDateString()} {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                Označeni datum: {formatirajDatumVrijeme(date.toUTCString())}
                 <br />
                 {oznacenaNatjecanja.length > 0 ? (
                     <div>
@@ -124,20 +138,20 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {trenutnoNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>
-                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                  Pokreni natjecanje
-                                </Link>
-                                </td>
-                            </tr>
-                        ))}
+                            {trenutna.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>
+                                        <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                            Pokreni natjecanje
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -156,7 +170,7 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {natjecanja.map((natjecanje) => (
+                            {nadolazeca.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
                                     <td>{natjecanje.natjecanjeId}</td>
                                     <td>{natjecanje.nazivNatjecanja}</td>
@@ -184,20 +198,20 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {proslaNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>
-                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                  Pokreni natjecanje
-                                </Link>
-                                </td>
-                            </tr>
-                        ))}
+                            {zavrsena.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>
+                                        <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                            Pokreni natjecanje
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
