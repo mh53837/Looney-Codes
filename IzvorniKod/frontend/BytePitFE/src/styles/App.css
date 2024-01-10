@@ -1,8 +1,9 @@
 body {
   box-sizing: inherit;
   max-width: 100%;
-  margin:0 0 40px 0;
+  margin: 0 0 40px 0;
 }
+
 #root {
   max-width: 1280px;
   margin: 0;
@@ -73,7 +74,44 @@ body {
   left: 0;
 }
 
-[data-theme="dark"] body{
+.competitionPageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.countDown {
+  font-size: x-large;
+  border: #213547 3px solid;
+  border-radius: 10px;
+  padding: 10px;
+  width: fit-content;
+  align-self: center;
+}
+
+
+.problemMenu {
+  gap: 10px;
+  padding: 10px;
+  border: #213547 3px solid;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 1fr;
+  align-items: center;
+  min-width: fit-content;
+  text-align: center;
+  grid-auto-flow: column;
+  max-width: fit-content;
+  justify-content: center;
+  align-self: center;
+}
+
+[data-theme="dark"] .countDown,
+[data-theme="dark"] .problemMenu {
+  border: #dd7230e0 3px solid;
+}
+
+[data-theme="dark"] body {
   color: #ECDCC9;
   background-color: #2A2D34;
 }
@@ -93,16 +131,19 @@ body {
   color: #ECDCC9;
 }
 
-[data-theme="dark"] .table-switch-buttons{
+[data-theme="dark"] .table-switch-buttons {
   color: #ECDCC9;
   background-color: #2A2D34;
 }
 
-[data-theme="dark"]  .react-calendar__tile--now:enabled:hover, [data-theme="dark"] .react-calendar__tile--now:enabled:focus, [data-theme="dark"] .react-calendar__tile--now {
+[data-theme="dark"] .react-calendar__tile--now:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--now:enabled:focus,
+[data-theme="dark"] .react-calendar__tile--now {
   background: #dd7230e0;
 }
 
-[data-theme="dark"]  .tablica-natjecanje-button, [data-theme="dark"] .tablica-natjecanje-button:hover {
+[data-theme="dark"] .tablica-natjecanje-button,
+[data-theme="dark"] .tablica-natjecanje-button:hover {
   background-color: #2A2D34;
   color: #ECDCC9;
 }
