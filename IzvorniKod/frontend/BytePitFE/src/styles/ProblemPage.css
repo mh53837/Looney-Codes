@@ -10,6 +10,10 @@
         align-self: center;
 }
 
+.problem-description {
+        text-align: justify;
+}
+
 .test-results {
         text-align: center;
         display: flex;

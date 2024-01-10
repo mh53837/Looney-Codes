@@ -31,18 +31,18 @@ int main() {
 }`);
         // izvuci podatke o zadatku na temelju id-a
         useEffect(() => {
-            fetch(`/api/problems/get/${zadatakId}`)
-                    .then((response) => response.json())
-                    .then((data: IProblemDetails) => setProblemDetails(data))
-                    .catch((error) => console.error('Error fetching problem details:', error));
+                fetch(`/api/problems/get/${zadatakId}`)
+                        .then((response) => response.json())
+                        .then((data: IProblemDetails) => setProblemDetails(data))
+                        .catch((error) => console.error('Error fetching problem details:', error));
 
-          setTestResults([]);
-          setErrorMessage(null);
-          if(zadatakId) {
-            let backup = localStorage.getItem(zadatakId);
-            if(backup)
-              setCode(backup);
-          }
+                setTestResults([]);
+                setErrorMessage(null);
+                if (zadatakId) {
+                        let backup = localStorage.getItem(zadatakId);
+                        if (backup)
+                                setCode(backup);
+                }
         }, [zadatakId]);
 
         if (!problemDetails) {
@@ -74,8 +74,8 @@ int main() {
                 try {
                         // ako nema fajla, onda citamo sadrzaj editora!
                         if (!code) {
-                          setErrorMessage("Greška kod uploadanja!");
-                          return;
+                                setErrorMessage("Greška kod uploadanja!");
+                                return;
                         }
 
                         // konstrukcija JSON-a
@@ -134,25 +134,25 @@ int main() {
 
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
-        let codeEditor : ReactElement | null = null;
+        let codeEditor: ReactElement | null = null;
         if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
                                 <input type="file" accept=".cpp" onChange={handleFileChange} />
                                 <br />
                                 <button disabled={isLoading} style={isLoading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
-                                  onClick={handleSubmitClick}>Provjeri</button>
+                                        onClick={handleSubmitClick}>Provjeri</button>
                         </div>
                 );
 
                 codeEditor = (
-                    <div className="code-editor">
-                      <CodeMirror value={code} onChange={(value, _) => { setCode(value); if(zadatakId) localStorage.setItem(zadatakId, code);}}
-                        height="30rem" theme = { dracula } extensions={[cpp()]} />
-                    </div>
+                        <div className="code-editor">
+                                <CodeMirror value={code} onChange={(value, _) => { setCode(value); if (zadatakId) localStorage.setItem(zadatakId, code); }}
+                                        height="30rem" theme={dracula} extensions={[cpp()]} />
+                        </div>
                 );
         }
-    
+
         // vraćanje stranice
         return (
                 <div className="problem-details-container">
@@ -166,10 +166,11 @@ int main() {
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        <br />
                         <LoadingOverlay
-                        active={isLoading} spinner text='Provjeravamo rješenje...'
+                                active={isLoading} spinner text='Provjeravamo rješenje...'
                         >
-                        {codeEditor}
+                                {codeEditor}
                         </LoadingOverlay>
                         {uploadButton}
                         {testResults.length > 0 && (

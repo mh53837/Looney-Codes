@@ -40,6 +40,7 @@ public class NadmetanjeServiceJpa implements NadmetanjeService {
 
     if(nadmetanje instanceof Natjecanje) {
       out.setKrajNatjecanja(Optional.of(((Natjecanje) nadmetanje).getKrajNatjecanja()));
+      out.setIme(Optional.of(((Natjecanje) nadmetanje).getNazivNatjecanja()));
     }
 
     return out;

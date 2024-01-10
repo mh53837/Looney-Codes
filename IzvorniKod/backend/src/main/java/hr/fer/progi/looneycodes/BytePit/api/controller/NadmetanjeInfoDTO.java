@@ -12,13 +12,14 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 public class NadmetanjeInfoDTO {
   private boolean virtualno;
   private Optional<Timestamp> krajNatjecanja;
+  private Optional<String> ime;
 
 private Set<ZadatakInfo> zadaci;
 
   public static class ZadatakInfo {
       private int zadatakId;
       private String zadatakIme;
-
+      
       public ZadatakInfo(Zadatak zad) {
         this.zadatakId = zad.getZadatakId();
         this.zadatakIme = zad.getNazivZadatka();
@@ -36,6 +37,7 @@ private Set<ZadatakInfo> zadaci;
       public void setZadatakIme(String zadatakIme) {
         this.zadatakIme = zadatakIme;
       }
+      
     };
 
   public boolean isVirtualno() {
@@ -60,5 +62,11 @@ private Set<ZadatakInfo> zadaci;
 
   public void setKrajNatjecanja(Optional<Timestamp> krajNatjecanja) {
     this.krajNatjecanja = krajNatjecanja;
+  }
+  public Optional<String> getIme() {
+    return ime;
+  }
+  public void setIme(Optional<String> ime) {
+    this.ime = ime;
   }
 }

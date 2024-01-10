@@ -14,6 +14,7 @@ interface ProblemInfo {
 };
 
 interface CompetitionInfo {
+  ime: string;
   virtualno: boolean;
   krajNatjecanja: Date;
   zadaci: Array<ProblemInfo>;
@@ -61,11 +62,14 @@ const CompetitionPage: React.FC = () => {
   return (
     <div className='competitionPageWrapper'>
       <div className='competitionHeader'>
-        {zadatakId != undefined && <Link to={`/natjecanja/rjesi/${nadmetanjeId}`}>
-          ⮈
-        </Link>}
+
+        {zadatakId != undefined && <span><Link to={`/natjecanja/rjesi/${nadmetanjeId}`}>
+          <h2>{info.ime}</h2>
+        </Link></span>}
+
         {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to="/" replace={true} /></CountDown>}
       </div>
+      {zadatakId === undefined && <h1>{info.ime}</h1>}
       {zadatakStranica != null && zadatakStranica}
       <div className="problemMenu">
         <h4> Odaberite zadatak: </h4>
