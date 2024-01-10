@@ -20,7 +20,6 @@ const ProblemPage: React.FC = () => {
         const { user } = useContext(UserContext); //podaci ulogiranog korisnika
 
         const [problemDetails, setProblemDetails] = useState<IProblemDetails | null>(null); //atributi problema
-        const [sourceCode, setSourceCode] = useState<string>('');       //programski kod iščitan iz datoteke
         const [testResults, setTestResults] = useState<number[]>([]);   //rezultati testova
         const [errorMessage, setErrorMessage] = useState<string | null>(null);  //poruka ukoliko nije ulogiran natjecatelj
         const [isLoading, setLoading] = useState<boolean>(false); // za loading overlay...
@@ -61,7 +60,7 @@ int main() {
                         reader.onload = (event) => {
                                 if (event.target && event.target.result) {
                                         const fileContent = event.target.result as string;
-                                        setSourceCode(fileContent);
+                                        setCode(fileContent);
                                         console.log(fileContent);
                                 }
                         };
@@ -74,7 +73,7 @@ int main() {
         const handleSubmitClick = async () => {
                 try {
                         // ako nema fajla, onda citamo sadrzaj editora!
-                        if (!sourceCode && !code) {
+                        if (!code) {
                           setErrorMessage("Greška kod uploadanja!");
                           return;
                         }
@@ -83,7 +82,7 @@ int main() {
                         const solutionData = {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
-                                programskiKod: sourceCode? sourceCode : code?.valueOf(), // salji sadrzaj editora ako nema fajla
+                                programskiKod: code?.valueOf(), // salji sadrzaj editora ako nema fajla
                                 nadmetanjeId: nadmetanjeId,
                         };
 
