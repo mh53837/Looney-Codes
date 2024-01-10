@@ -70,11 +70,9 @@ const Home: React.FC = () => {
 
             return natjecanjaZaDatum.length > 0 ? (
                 <div>
-                    {natjecanjaZaDatum.map((natjecanje) => (
-                        <p key={natjecanje.natjecanjeId} className="naziv-natjecanje">
-                            {natjecanje.nazivNatjecanja}
-                        </p>
-                    ))}
+                    <p className="naziv-natjecanje">
+                        &#9733;
+                    </p>
                 </div>
             ) : null;
         }
@@ -103,11 +101,13 @@ const Home: React.FC = () => {
                 <Calendar value={date} locale='hr-HR' onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
             <div className="selected-date-container">
-                Označeni datum: {formatirajDatumVrijeme(date.toUTCString())}
+                Označeni datum:
+                <br />
+                {formatirajDatumVrijeme(date.toUTCString())}
                 <br />
                 {oznacenaNatjecanja.length > 0 ? (
-                    <div>
-                        Označena natjecanja: {oznacenaNatjecanja.map(natjecanje => natjecanje.nazivNatjecanja).join(', ')}
+                    <div className='oznacenaNatjecanja'>
+                        {oznacenaNatjecanja.map(natjecanje => natjecanje.nazivNatjecanja).join(' | ')}
                     </div>
                 ) : (
                     <div>Ovog datuma se ne održava natjecanje.</div>
@@ -115,9 +115,24 @@ const Home: React.FC = () => {
             </div>
 
             <div className="table-switch-buttons">
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('nadolazeca')}>Nadolazeća natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('prosla')}>Prošla natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('trenutna')}>Trenutna natjecanja</button>
+                <button className={"tablica-natjecanje-button"} onClick={() => {
+                    setSelectedTable('prosla');
+                    const element = document.getElementById("tablica");
+                    if (element != null)
+                        element.scrollIntoView({ behavior: 'smooth' });
+                }}>Prošla natjecanja</button>
+                <button className={"tablica-natjecanje-button"} onClick={() => {
+                    setSelectedTable('trenutna');
+                    const element = document.getElementById("tablica");
+                    if (element != null)
+                        element.scrollIntoView({ behavior: 'smooth' });
+                }}>Trenutna natjecanja</button>
+                <button className={"tablica-natjecanje-button"} onClick={() => {
+                    setSelectedTable('nadolazeca');
+                    const element = document.getElementById("tablica");
+                    if (element != null)
+                        element.scrollIntoView({ behavior: 'smooth' });
+                }}>Nadolazeća natjecanja</button>
 
                 {/*<button className={"generiraj-natjecanje-button"} onClick={handleGenerirajNatjecanje}>*/}
                 {/*    Generiraj natjecanje*/}
@@ -126,7 +141,7 @@ const Home: React.FC = () => {
 
             {selectedTable === 'trenutna' && (
                 <div className="info-table">
-                    <table>
+                    <table id="tablica">
                         <thead>
                             <tr>
                                 <th>ID</th>
