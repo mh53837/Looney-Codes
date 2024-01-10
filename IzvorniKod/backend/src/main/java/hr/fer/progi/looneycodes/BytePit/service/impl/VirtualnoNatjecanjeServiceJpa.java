@@ -126,7 +126,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         Duration vrijemeRjesavanja = Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
         RangDTO rang = new RangDTO(virtualnoNatjecanje.getNatjecatelj().getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
         rangLista.add(rang);
-        rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).thenComparing(RangDTO::getVrijemeRjesavanja).reversed());
+        rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
         int index = rangLista.indexOf(rang);
         rang.setRang(index + 1);
         return rang;
