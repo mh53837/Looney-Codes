@@ -52,8 +52,8 @@ VALUES
 (nextval('natjecanje_seq'), 'Endgame', '4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP+'1 day'::INTERVAL),
 (nextval('natjecanje_seq'), 'Justice League', '6', CURRENT_TIMESTAMP-'3 day'::INTERVAL, CURRENT_TIMESTAMP-'8 hour'::INTERVAL),
 (nextval('natjecanje_seq'), 'Secret Wars', '4', CURRENT_TIMESTAMP+'2 day'::INTERVAL, CURRENT_TIMESTAMP+'4 day'::INTERVAL),
-(nextval('natjecanje_seq'), 'Hunger Games', '6', CURRENT_TIMESTAMP-'1 day'::INTERVAL, CURRENT_TIMESTAMP+'1 day'::INTERVAL);
-
+(nextval('natjecanje_seq'), 'Hunger Games', '6', CURRENT_TIMESTAMP-'1 day'::INTERVAL, CURRENT_TIMESTAMP+'1 day'::INTERVAL),
+(nextval('natjecanje_seq'), 'Sprint', '6', CURRENT_TIMESTAMP-'1 day'::INTERVAL, CURRENT_TIMESTAMP+'1 minute'::INTERVAL);
 
 INSERT INTO pehar (pehar_id, mjesto, natjecanje_natjecanje_id, natjecatelj_korisnik_id, slika_pehara)
 VALUES
@@ -74,6 +74,12 @@ VALUES
     (nextval('zadatak_seq'), 'Konvertor', 'Za zadani iznos u kunama ispiši ekvivalentni iznos u eurima zaokružen na cijeli broj', 50, 1, 6, true, 'REALISM'),
     (nextval('zadatak_seq'), 'Kvadrat', 'Ispiši površinu kvadarata stranice a.', 50, 1, 4, true, 'REALISM');
 
+INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
+VALUES
+(nextval('natjecanje_seq'), 2, NULL, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
+(nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
+
+
 ALTER SEQUENCE zadatak_seq RESTART WITH 1001;
 INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
     VALUES
@@ -86,13 +92,13 @@ INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
     (currval('zadatak_seq'), 106),
     (nextval('zadatak_seq'), 104),
     (nextval('zadatak_seq'), 102),
-    (currval('zadatak_seq'), 106);
+    (currval('zadatak_seq'), 106),
+    (1003, 105),
+    (1005, 105),
+    (1006, 105);
 
 
-INSERT INTO virtualno_natjecanje (natjecanje_id, korisnik_korisnik_id, orginalno_natjecanje_natjecanje_id, pocetak_natjecanja) 
-VALUES
-(nextval('natjecanje_seq'), 2, NULL, CURRENT_TIMESTAMP-'1 hour'::INTERVAL),
-(nextval('natjecanje_seq'), 5, 102, CURRENT_TIMESTAMP-'1 minute'::INTERVAL);
+
 
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera, natjecanje_natjecanje_id)
 VALUES

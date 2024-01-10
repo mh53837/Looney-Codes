@@ -8,6 +8,7 @@ import { useContext, useState, useEffect } from 'react';
 import { UserContext } from './context/userContext';
 import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
+import CompetitionResults from './components/Competition/CompetitionResults.tsx';
 
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
@@ -47,7 +48,7 @@ const App: React.FC = () => {
 
     };
 
-    useEffect ( () => {
+    useEffect(() => {
     }, [theme.isThemeDark]);
 
 
@@ -98,7 +99,8 @@ const App: React.FC = () => {
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
                     <Route path="/problems/new" element={<NewProblem />} />
                     <Route path="/natjecanja/new" element={<NewCompetition />} />
-                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />}/>
+                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
+                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

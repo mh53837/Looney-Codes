@@ -156,6 +156,7 @@ int main() {
         // vraćanje stranice
         return (
                 <div className="problem-details-container">
+
                         <h1 className="problem-title">{problemDetails.nazivZadatka}</h1>
                         <div className="problem-info">
                                 <p>Broj bodova: {problemDetails.brojBodova}</p>
@@ -171,29 +172,30 @@ int main() {
                                 active={isLoading} spinner text='Provjeravamo rješenje...'
                         >
                                 {codeEditor}
-                        </LoadingOverlay>
-                        {uploadButton}
-                        {testResults.length > 0 && (
-                                <div className="test-results">
-                                        <h2>Rezultati testiranja</h2>
-                                        <table>
-                                                <thead>
-                                                        <tr>
-                                                                <th>Redni broj testa</th>
-                                                                <th>Status</th>
-                                                        </tr>
-                                                </thead>
-                                                <tbody>
-                                                        {testResults.map((status, index) => (
-                                                                <tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{getStatusMessage(status)}</td>
+                                {uploadButton}
+                                {testResults.length > 0 && (
+                                        <div className="test-results">
+                                                <h2>Rezultati testiranja</h2>
+                                                <table>
+                                                        <thead>
+                                                                <tr>
+                                                                        <th>Redni broj testa</th>
+                                                                        <th>Status</th>
                                                                 </tr>
-                                                        ))}
-                                                </tbody>
-                                        </table>
-                                </div>
-                        )}
+                                                        </thead>
+                                                        <tbody>
+                                                                {testResults.map((status, index) => (
+                                                                        <tr key={index}>
+                                                                                <td>{index + 1}</td>
+                                                                                <td>{getStatusMessage(status)}</td>
+                                                                        </tr>
+                                                                ))}
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                )}
+                                <br />
+                        </LoadingOverlay>
                 </div>
         );
 };

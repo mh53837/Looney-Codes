@@ -216,7 +216,11 @@ const Home: React.FC = () => {
                             {zavrsena.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
                                     <td>{natjecanje.natjecanjeId}</td>
-                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>
+                                        <Link to={`/natjecanja/rezultati/${natjecanje.natjecanjeId}/`}>
+                                            {natjecanje.nazivNatjecanja}
+                                        </Link>
+                                    </td>
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
                                     <td>{natjecanje.korisnickoImeVoditelja}</td>

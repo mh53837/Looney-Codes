@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState, useMemo, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import CountDown from 'react-countdown';
-//import Home from '../Home';
 import { Navigate } from "react-router-dom";
 import '../../styles/CompetitionPage.css';
 
@@ -68,7 +67,7 @@ const CompetitionPage: React.FC = () => {
           <h2>{info.ime}</h2>
         </Link></span>}
 
-        {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to="/" replace={true} /></CountDown>}
+        {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>}
       </div>
       {zadatakId === undefined && <h1>{info.ime}</h1>}
       {zadatakStranica != null && zadatakStranica}
