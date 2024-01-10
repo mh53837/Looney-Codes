@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@codemirror/lang-cpp": "^6.0.2",
     "@codemirror/language": "^6.10.0",
     "@types/react-router-dom": "^5.3.3",
     "@uiw/codemirror-theme-dracula": "^4.21.21",
     "@uiw/react-codemirror": "^4.21.21",
-    "antd": "^5.12.5",
+    "antd": "^5.12.8",
     "axios": "^1.6.2",
     "big-integer": "^1.6.52",
     "dayjs": "^1.11.10",

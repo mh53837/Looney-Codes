@@ -54,6 +54,13 @@
   white-space: nowrap;
 } */
 
+button.addBtn{
+  border: 2px solid #f4c95de7;
+}
+
+[data-theme="dark"] button.addBtn{
+  border: 2px solid #dd7230e0;
+}
 
 [data-theme="dark"] .info-table {
   color: #ECDCC9;

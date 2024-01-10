@@ -167,7 +167,7 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
       {(
         user.korisnickoIme === userData.korisnickoIme &&
         <Link to = "/problems/new">
-          <button>novi zadatak</button>
+          <button className="addBtn">novi zadatak</button>
         </Link>
       )}
       

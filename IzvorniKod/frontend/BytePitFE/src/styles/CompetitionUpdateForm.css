@@ -41,6 +41,7 @@ input[type="radio"] {
     font-weight: normal;
 }
 .error {
+    font-size: 13px;
     padding-top: 1rem;
     font-weight: 500;
     color: rgb(161, 0, 0);
@@ -55,3 +56,12 @@ input[type="radio"] {
     padding: 0.1rem;
     width: 2rem;
 }
+
+button.addBtn{
+    border: 2px solid #f4c95de7;
+}
+
+[data-theme="dark"] button.addBtn{
+    border: 2px solid #dd7230e0;
+}
+  

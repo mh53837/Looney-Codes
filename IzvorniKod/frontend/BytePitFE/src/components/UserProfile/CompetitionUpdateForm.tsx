@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { DatePicker, Space, ConfigProvider, Modal } from "antd";
 import type { DatePickerProps } from "antd/es/date-picker";
+import hrHR from 'antd/lib/locale/hr_HR'; 
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+import 'dayjs/locale/hr';
 import { UserContext } from "../../context/userContext";
 import { ThemeContext } from "../../context/themeContext";
 import "../../styles/CompetitionUpdateForm.css";
@@ -55,6 +57,7 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
   const renderModal = () => {
 
     return (
+      <ConfigProvider locale={hrHR}>
       <React.Suspense fallback={<div>učitavanje...</div>}>
       <Modal
         title="uredi natjecanje"
@@ -77,6 +80,7 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
           />
 
           <Space direction="vertical">
+            
             <DatePicker
               showTime
               placeholder="početak natjecanja"
@@ -90,10 +94,12 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
               value={updatedKraj}
               onChange={onKrajChange}
             />
+            
           </Space>
         </div>
       </Modal>
       </React.Suspense>
+      </ConfigProvider>
     );
   }
 
@@ -179,6 +185,7 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
       {
         theme.isThemeDark == false ? (
           <ConfigProvider
+            locale={hrHR}
             theme={{
               components: {
                 Modal: {
@@ -197,6 +204,7 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
           </ConfigProvider>
         ) : (
           <ConfigProvider
+          
           theme={{
             components: {
               Modal: {

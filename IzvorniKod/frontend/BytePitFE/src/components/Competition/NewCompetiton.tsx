@@ -1,9 +1,11 @@
 import React, {useState, ChangeEvent, FormEvent, useContext} from 'react';
 import '../../styles/NewProblem.css';
 import type { DatePickerProps } from "antd/es/date-picker";
+import hrHR from 'antd/lib/locale/hr_HR'; 
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { DatePicker, Space} from "antd";
+import 'dayjs/locale/hr';
+import { DatePicker, Space, ConfigProvider} from "antd";
 import { UserContext } from '../../context/userContext';
 import AddProblemsToCompetition from './AddProblemsToCompetition';
 
@@ -127,9 +129,11 @@ const NewCompetition: React.FC = () => {
                         <label>naziv natjecanja</label>
                         <input name="nazivNatjecanja" placeholder='naziv natjecanja' onChange={onChange} value={competitionForm.nazivNatjecanja} />
                     </div>
+                    <ConfigProvider locale={hrHR}>
                     <Space direction="vertical">
                     <div className="FormRowDate" >
                         <label>početak natjecanja </label>
+                        
                         <DatePicker
                             showTime
                             placeholder="početak natjecanja"
@@ -138,6 +142,7 @@ const NewCompetition: React.FC = () => {
                             onChange={onPocetakChange}
                             size={"small"}
                         />
+                        
                     </div>
                     <div className="FormRowDate">
                         <label> kraj natjecanja</label>
@@ -149,8 +154,10 @@ const NewCompetition: React.FC = () => {
                             onChange={onKrajChange}
                             size={"small"}
                         />
+                        
                     </div>
                     </Space>
+                    </ConfigProvider>
                     
                     
                     <div className="error">{error}</div>

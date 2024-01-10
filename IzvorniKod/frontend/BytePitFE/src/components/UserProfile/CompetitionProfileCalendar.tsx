@@ -42,6 +42,18 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
   const [selectedCompetitionId, setSelectedCompetitionId] = useState<number | null>(null);
   
   const {user} = useContext(UserContext); //podaci ulogiranog korisnika
+
+  const formatirajDatumVrijeme = (datumVrijeme: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+    return new Date(datumVrijeme).toLocaleString('hr-HR', options);
+};
+
   const handleUpdateSuccess = () => {
     onUpdate();
   };
@@ -61,16 +73,14 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
       const filteredCompetitions = competitionsData.filter(
-        (competition) =>
+        (competition: CompetitionData) =>
         new Date(competition.pocetakNatjecanja).toDateString() ===
         date?.toDateString()
       )
         return filteredCompetitions.length > 0 ? (
             <div>
-                {filteredCompetitions.map((competition) => (
-                    <p key={competition.natjecanjeId} className="naziv-natjecanje">
-                        &#9733;
-                    </p>
+                {filteredCompetitions.map((competition: CompetitionData) => (
+                    <p style={{fontSize: 15}} key={competition.natjecanjeId} className="naziv-natjecanje">⭐</p>
                 ))}
             </div>
         ) : null;
@@ -98,24 +108,22 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
           dataIndex: "nazivNatjecanja",
           key: "nazivNatjecanja",
           className: "th-td",
-          sorter: (a, b) =>
-            a.nazivNatjecanja.localeCompare(
-              b.nazivNatjecanja
-            ),
+          sorter: (a: CompetitionData, b: CompetitionData) =>
+              a.nazivNatjecanja.localeCompare(b.nazivNatjecanja),
         },
         {
           title: "početak",
           dataIndex: "pocetakNatjecanja",
           key: "pocetakNatjecanja",
           className: "th-td",
-          render: (date) => new Date(date).toDateString(),
+          render: (date: string) => formatirajDatumVrijeme(date),
         },
         {
           title: "kraj",
           dataIndex: "krajNatjecanja",
           key: "krajNatjecanja",
           className: "th-td",
-          render: (date) => new Date(date).toDateString(),
+          render: (date: string) => formatirajDatumVrijeme(date),
         },
         ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
           {
@@ -164,21 +172,21 @@ const renderTable = (filteredData : CompetitionData[] | undefined) => {
       {(
         user.korisnickoIme === userData.korisnickoIme &&
         <Link to = "/natjecanja/new">
-          <button>novo natjecanje</button>
+          <button className="addBtn">novo natjecanje</button>
         </Link>
       )}
       
-
       <Calendar
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate as Date)}
         tileContent={tileContent}
+        locale="hr-HR"
       />
 
       <div className="info-table">
         {selectedDate !== null ? (
           <div>
-            <p>označeni datum: {selectedDate.toDateString()}</p>
+            <p>označeni datum: {formatirajDatumVrijeme(selectedDate.toUTCString())}</p>
             {(() => {
               const filteredData = competitionsData?.filter(
                 (competition) =>

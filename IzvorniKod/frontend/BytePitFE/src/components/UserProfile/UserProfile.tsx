@@ -282,12 +282,12 @@ const UserProfile: React.FC = () => {
               centered
               items={[
                 {
-                  label: <p> {userData.korisnickoIme === user.korisnickoIme ? "moji zadaci" : "zadaci"} </p>,
+                  label: <p style={{fontSize: 18}}> {userData.korisnickoIme === user.korisnickoIme ? "moji zadaci" : "zadaci"} </p>,
                   key: "1",
                   children: renderProblemsTab(),
                 },
                 {
-                  label: <p>{userData.korisnickoIme === user.korisnickoIme ? "moja natjecanja" : "natjecanja"}</p>,
+                  label: <p style={{fontSize: 18}}>{userData.korisnickoIme === user.korisnickoIme ? "moja natjecanja" : "natjecanja"}</p>,
                   key: "2",
                   children: renderCompetitionsCalendar(),
                 },
