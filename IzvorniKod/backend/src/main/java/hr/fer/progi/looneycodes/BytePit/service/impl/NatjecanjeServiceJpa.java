@@ -170,8 +170,7 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
             return new RangDTO(natjecatelj.getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
         }).collect(Collectors.toList());
 
-        //prvo sortiramo po ukupnim bodovima, a onda po vremenu rjesavanja
-        rangList.sort(Comparator.comparing(RangDTO::getUkupniBodovi).thenComparing(RangDTO::getVrijemeRjesavanja).reversed());
+        rangList.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
         int rang = 1;
 
         for (RangDTO rangDTO : rangList) {

@@ -1,5 +1,8 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.AddPeharDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
+import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +31,16 @@ public interface PeharService {
      * @return lista svih pehara jednog korisnika ili null ako nema pehara u sustavu
      */
     public List<Pehar> listAllFromOneNatjecatelj(String korisnickoIme);
+
+    /**
+     * Stvori novi Pehar i spremi ga u bazu.
+     * @param dto instanca AddPeharDTO objekta
+     * @return referenca na napravljeni pehar s postavljenim id-em
+     * @exception RequestDeniedException
+     * @exception IllegalArgumentException
+     * @see Pehar
+     * @see AddPeharDTO
+     */
+    public Pehar createPehar(AddPeharDTO dto);
 
 }
