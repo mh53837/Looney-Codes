@@ -181,7 +181,7 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
           <div className="tableWrapper">
           <div className="info-table">
             {
-              theme.isThemeDark == false ? (
+              theme.isThemeDark === false ? (
                 <ConfigProvider
                   theme={{
                     components: {

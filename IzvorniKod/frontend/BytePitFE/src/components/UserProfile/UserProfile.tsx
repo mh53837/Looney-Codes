@@ -7,6 +7,8 @@ import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
 import "../../styles/UserProfile.css";
 import "../../styles/Table.css";
+import ProblemsProfileTab from "./ProblemsProfileTab";
+import CompetitionProfileCalendar from "./CompetitionProfileCalendar";
 
 interface UserData {
   korisnickoIme: string;
@@ -35,9 +37,6 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
-
-const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
-const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
 const UserTrophies = React.lazy(() => import("./UserTrophies"));
 const UserList = React.lazy(() => import("../User/UserList"));
