@@ -4,6 +4,8 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.AddPeharDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.RegisterKorisnikDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
+import org.springframework.data.util.Pair;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,4 +45,10 @@ public interface PeharService {
      */
     public Pehar createPehar(AddPeharDTO dto);
 
+    /**
+     * Dohvati sliku pehara
+     * @param peharId pehara za kojeg trazimo sliku
+     * @return Pair<byte[], MediaType> slika i njen tip
+     */
+    Pair<byte[], MediaType> getImage(Integer peharId);
 }
