@@ -17,6 +17,7 @@ const UserList: React.FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const { user } = useContext(UserContext);
 
+
     useEffect(() => {
         if (user.uloga === "ADMIN") {
             try {
@@ -66,6 +67,9 @@ const UserList: React.FC = () => {
                         <th>prezime</th>
                         <th>email</th>
                         <th>uloga</th>
+                        {(user.uloga === "ADMIN" &&
+                            <th></th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>

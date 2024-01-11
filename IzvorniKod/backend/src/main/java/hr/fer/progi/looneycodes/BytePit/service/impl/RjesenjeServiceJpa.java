@@ -267,4 +267,12 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 			Korisnik natjecatelj) {
 		return null;
 	}
+
+	@Override
+	public Optional<Rjesenje> fetch(Integer redniBroj, Integer zadatakId, String korisnickoIme) {
+		RjesenjeKey id = new RjesenjeKey(redniBroj, 
+				korisnikRepository.findByKorisnickoIme(korisnickoIme).get(),
+				zadatakRepository.findById(zadatakId).get());
+		return rjesenjeRepository.findById(id);
+	}
 }

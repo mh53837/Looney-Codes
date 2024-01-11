@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { UserContext } from "../../context/userContext";
 import { ThemeContext } from "../../context/themeContext";
@@ -168,6 +168,10 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
       />
     )
   }
+
+  useEffect(() => {
+
+  }, [theme.isThemeDark]);
 
   return (
     <div className="calendar-container">

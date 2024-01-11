@@ -150,7 +150,7 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
                     <thead>
                         <tr>
                             <th>naziv</th>
-                            <th>tekst</th>
+                            <th>vremensko ograničenje</th>
                             <th>težina</th>
                             <th></th>
                         </tr>
@@ -159,8 +159,8 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
                     {competitionProblems?.map((problem, index) => (
                         <tr className="info-table" key={index}>
                             <td>{problem?.nazivZadatka ? problem.nazivZadatka : ""}</td>
-                            <td>{problem?.tekstZadatka ? problem.tekstZadatka : ""}</td>
-                            <td>{problem?.brojBodova == 10 ? '⭐' : problem.brojBodova == 20 ? "⭐⭐" : "⭐⭐⭐"}</td>
+                            <td>{problem?.vremenskoOgranicenje ? problem.vremenskoOgranicenje : ""}</td>
+                            <td>{problem?.brojBodova == 10 ? "★" : problem.brojBodova == 20 ? "★★" : "★★★"}</td>
                             <td><button style={{ fontSize: 18, margin: 2 }}onClick= { () => handleRemoveProblem(problem.zadatakId)}>-</button></td>
                         </tr>
                     )) 
@@ -178,7 +178,7 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
                         <thead>
                             <tr>
                                 <th>naziv</th>
-                                <th>tekst</th>
+                                <th>vremensko ograničenje</th>
                                 <th>težina</th>
                                 <th></th>
                             </tr>
@@ -187,8 +187,8 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
                             {problemsToAdd?.map((problem, index) => (
                             <tr className="info-table" key={index}>
                                 <td>{problem?.nazivZadatka ? problem.nazivZadatka : ""}</td>
-                                <td>{problem?.tekstZadatka ? problem.tekstZadatka : ""}</td>
-                                <td>{problem?.brojBodova == 10 ? '⭐' : problem.brojBodova == 20 ? "⭐⭐" : "⭐⭐⭐"}</td>
+                                <td>{problem?.vremenskoOgranicenje ? problem.vremenskoOgranicenje : ""}</td>
+                                <td>{problem?.brojBodova == 10 ? '★' : problem.brojBodova == 20 ? "★★" : "★★★"}</td>
                                 <td><button style={{ fontSize: 16 }} onClick = { () => handleAddProblem(problem.zadatakId)}>+</button></td>
                             </tr>
                             ))}

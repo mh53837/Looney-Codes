@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay-nextgen';
+import { Modal } from 'antd';
 
 interface RangDTO {
         username: string;
@@ -21,11 +22,17 @@ interface ProblemDetails {
         privatniZadatak: boolean;
 }
 
+const ProblemSolutions = React.lazy(() => import("../Problems/ProblemSolutions"));
+
 const CompetitionResults: React.FC = () => {
         const { nadmetanjeId } = useParams<{ nadmetanjeId: string }>();
         const [loading, setLoading] = useState(true);
         const [rankResults, setRankResults] = useState<RangDTO[]>([]);
         const [taskDetails, setTaskDetails] = useState<Record<number, ProblemDetails>>({});
+        const [selectedTask, setSelectedTask] = useState<number | undefined>(); // Added state for selected task
+        const [competitor, setCompetitor] = useState<string>("");
+        const [open, setOpen] = useState<boolean>(false);
+
 
         useEffect(() => {
                 const fetchData = async () => {
@@ -65,10 +72,26 @@ const CompetitionResults: React.FC = () => {
 
         // formatiranje ispisa vremena
         const formatDuration = (seconds: number) => {
-                return (seconds / 3600).toString() + "h "
-                        + (seconds % 3600 / 60).toString() + "min "
+                return Math.floor(seconds / 3600).toString() + "h "
+                        + Math.floor(seconds % 3600 / 60).toString() + "min "
                         + (seconds % 60).toString() + "s";
         };
+
+        const openResult = (zadatakId: number, korisnickoIme: string) => {
+                setSelectedTask(zadatakId); // Set the selected task
+                setCompetitor(korisnickoIme);
+                setOpen(true);
+
+        };
+
+        const handleClose = () => {
+                setOpen(false);
+                setCompetitor("");
+                setSelectedTask(-1);
+        }
+
+
+
 
         return (
                 <div>
@@ -95,7 +118,11 @@ const CompetitionResults: React.FC = () => {
                                                                                 <td>{result.username}</td>
                                                                                 <td>{formatDuration(result.vrijemeRjesavanja)}</td>
                                                                                 {Object.keys(result.zadatakBodovi).map((taskId) => (
-                                                                                        <td key={taskId}>{result.zadatakBodovi[parseInt(taskId)]}</td>
+                                                                                        <td key={taskId}>
+                                                                                                <button onClick={() => openResult(parseInt(taskId), result.username)}>
+                                                                                                        {result.zadatakBodovi[parseInt(taskId)]}
+                                                                                                </button>
+                                                                                        </td>
                                                                                 ))}
                                                                                 <td>{result.ukupniBodovi}</td>
                                                                         </tr>
@@ -105,7 +132,23 @@ const CompetitionResults: React.FC = () => {
                                         </div>
                                 </div>
                         </LoadingOverlay>
-                </div>
+                        {selectedTask !== undefined && (
+
+                                <Modal
+                                        open={open}
+                                        onCancel={handleClose}
+                                        footer={null}
+                                >
+                                        <div>
+                                                <React.Suspense fallback={<div>učitavanje...</div>}>
+                                                        <br />
+                                                        <ProblemSolutions zadatakId={selectedTask} natjecatelj={competitor} />
+                                                </React.Suspense>
+                                        </div>
+                                </Modal>
+
+                        )}
+                </div >
         );
 };
 

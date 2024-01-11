@@ -89,11 +89,28 @@ public class RjesenjeController {
 //        return rjesenjeService.findByRjesenjeIdNatjecatelj(korisnik.get());
 //    }
 
+    @GetMapping("/code")
+    public Optional<String> getRjesenje(@RequestParam(value = "rbr", required=true) Integer redniBroj, 
+    								  @RequestParam(value = "zadatak", required=true) Integer zadatakId, 
+    								  @RequestParam(value = "natjecatelj", required=true) String korisnickoIme,
+    								  @AuthenticationPrincipal UserDetails user){
+    	Optional<Rjesenje> rj = rjesenjeService.fetch(redniBroj, zadatakId, korisnickoIme);
+    	if(rj.isPresent()) {
+    		Rjesenje rjesenje = rj.get();
+    		return Optional.of(rjesenje.getProgramskiKod());
+    	}
+    	return Optional.empty();
+
+    }
+    
     /*
      * Ruta za dohvaćanje svih rješenja zadatka u jednom natjecanju + opcionalni filter na korisnika.
      */
     @GetMapping("/get/competition/{natjecanjeId}")
-    public List<RjesenjeDTO> getRjesenjeByKorisnikIdAndNatjecanjeId(@PathVariable Integer natjecanjeId, @RequestParam(value = "zadatak", required=true) Integer zadatakId, @RequestParam(value = "natjecatelj") Optional<String> korisnickoIme, @AuthenticationPrincipal UserDetails user) {
+    public List<RjesenjeDTO> getRjesenjeByKorisnikIdAndNatjecanjeId(@PathVariable Integer natjecanjeId, 
+																@RequestParam(value = "zadatak", required=true) Integer zadatakId, 
+																@RequestParam(value = "natjecatelj") Optional<String> korisnickoIme,
+																@AuthenticationPrincipal UserDetails user) {
         Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
         Zadatak zadatak = zadatakService.fetch(zadatakId);
         

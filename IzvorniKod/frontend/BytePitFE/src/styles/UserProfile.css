@@ -46,3 +46,7 @@
     align-items: center;
     gap: 20px;
 }
+.trophyImg{
+    max-width: 12rem;
+    padding: 1rem;
+}

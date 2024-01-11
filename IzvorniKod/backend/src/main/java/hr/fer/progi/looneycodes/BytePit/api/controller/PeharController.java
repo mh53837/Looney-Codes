@@ -6,6 +6,9 @@ import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.PeharService;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,5 +83,16 @@ public class PeharController {
         Pehar pehar = peharService.createPehar(dto);
         return pehar;
     }
-
+    /**
+     * Dohvati sliku pehara
+     * @param peharId id pehara za kojeg trazimo sliku
+     * @return slika pehara
+     */
+    @GetMapping("/image/{peharId}")
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable("peharId") Integer peharId) {
+        Pair<byte[], MediaType> image = peharService.getImage(peharId);
+        return ResponseEntity.ok()
+                .contentType(image.getSecond())
+                .body(image.getFirst());
+    }
 }

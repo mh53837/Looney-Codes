@@ -78,10 +78,41 @@ body {
   font-size: large;
 }
 
+.download,
+.download>span {
+  border: none;
+  color: #213547;
+  background-color: transparent;
+}
+
+.download:hover,
+.download:hover>span {
+  border: none;
+  background-color: #dd7230e0;
+  color: #213547;
+}
+
+.download:hover>span {
+  background-color: transparent;
+}
+
+
+[data-theme="dark"].download:hover>span {
+  background-color: transparent;
+  color: #213547;
+}
+
+[data-theme="dark"] .download>span {
+  color: #dd7230e0;
+}
+
+[data-theme="dark"] .download,
+[data-theme="dark"] .ant-modal-content,
 [data-theme="dark"] body {
   color: #ECDCC9;
   background-color: #2A2D34;
 }
+
 
 [data-theme="dark"] a:hover {
   color: #dd7230e0;

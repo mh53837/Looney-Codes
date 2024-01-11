@@ -106,15 +106,15 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
             value={updatedTekst}
             onChange={(e) => setUpdatedTekst(e.target.value)}
           />
-          <p>broj bodova: </p>
+          <p>težina (broj bodova): </p>
           <Select 
             defaultValue= {problemData?.brojBodova.toString() || "10"  }
-            style={{ width: 120 }}
+            style={{ width: 160 }}
             onChange={ handleBrojBodovaChange}
             options={[
-              { value:"10", label: "10" },
-              { value:"20", label: "20" },
-              { value:"50", label: "50" },
+              { value:"10", label: "★ (10 bodova)" },
+              { value:"20", label: "★★ (20 bodova)" },
+              { value:"50", label: "★★★ (50 bodova)" },
             ]}
           />
           <p>status zadatka:</p>

@@ -162,15 +162,15 @@ const NewProblem: React.FC<NewProbProps> = ({handleOk}) => {
                         <input className= "tekstZadatka" name="tekstZadatka" placeholder='tekst zadatka' onChange={onChange} value={problemForm.tekstZadatka} />
                     </div>
                     <div className="FormRow" id="brBodova">
-                        <label>broj bodova</label>
+                        <label>težina (broj bodova) </label>
                         <Select 
                             defaultValue= { "10"  }
-                            style={{ width: 120 }}
+                            style={{ width: 160 }}
                             onChange={ handleBrojBodovaChange}
                             options={[
-                                { value:"10", label: "10" },
-                                { value:"20", label: "20" },
-                                { value:"50", label: "50" },
+                                { value:"10", label: "★ (10 bodova)" },
+                                { value:"20", label: "★★ (20 bodova)" },
+                                { value:"50", label: "★★★ (50 bodova)" },
                             ]}
                         />
                     </div>
