@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/userContext';
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -19,6 +20,7 @@ const Home: React.FC = () => {
     const [nadolazeca, setUpcomingData] = useState<Natjecanje[]>([]);
     const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
     const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
+    const {user} = useContext(UserContext);
 
     useEffect(() => {
         fetch(`/api/natjecanja/get/finished`)
@@ -97,6 +99,12 @@ const Home: React.FC = () => {
 
     return (
         <div>
+            {(
+                user.uloga === "VODITELJ" &&
+                <Link to="/natjecanja/new">
+                <button className="addBtn">novo natjecanje</button>
+                </Link>
+            )}
             <div className="calendar-container">
                 <Calendar value={date} locale='hr-HR' onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>

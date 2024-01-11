@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../../styles/Table.css'
 import { UserContext } from '../../context/userContext';
-
+import { Link } from 'react-router-dom';
 
 export interface IProblems {
     voditelj: string;
@@ -40,7 +40,15 @@ const ProblemsList: React.FC = () => {
         }
     }, [user]);
 
+
     return (
+        <div>
+        {(user.uloga === "VODITELJ" &&
+        <Link to = "/problems/new">
+          <button className="addBtn">novi zadatak</button>
+        </Link>
+      )}
+        
         <div className="info-table">
             <table>
                 <thead>
@@ -59,6 +67,7 @@ const ProblemsList: React.FC = () => {
                     ))}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 };

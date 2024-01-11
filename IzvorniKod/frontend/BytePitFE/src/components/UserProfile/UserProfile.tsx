@@ -261,7 +261,7 @@ const UserProfile: React.FC = () => {
         )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
-          <Link to="/user/listRequested"><button>odobri korisnike</button></Link>
+          <Link to="/user/listRequested"><button>odobri uloge</button></Link>
         )}
 
         {userData.uloga === "VODITELJ" && (

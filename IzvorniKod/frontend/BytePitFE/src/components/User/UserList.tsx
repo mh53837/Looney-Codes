@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import '../../styles/Table.css';
 import { UserContext } from '../../context/userContext';
+import { Link } from 'react-router-dom';
 
 export interface IUser {
     korisnickoIme: string;
@@ -52,6 +53,10 @@ const UserList: React.FC = () => {
         [user]);
 
     return (
+        <div>
+        {user.uloga === "ADMIN" && (
+            <Link to="/user/listRequested"><button>odobri uloge</button></Link>
+          )}
         <div className="info-table">
             <table>
                 <thead>
@@ -71,6 +76,7 @@ const UserList: React.FC = () => {
                     ))}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 };
