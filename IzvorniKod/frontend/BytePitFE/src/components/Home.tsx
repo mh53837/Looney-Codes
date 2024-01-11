@@ -20,31 +20,7 @@ const Home: React.FC = () => {
     const [nadolazeca, setUpcomingData] = useState<Natjecanje[]>([]);
     const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
     const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
-    const {user} = useContext(UserContext);
-
-    const generirajNatjecanje = async () => {
-        try {
-            // treba napraviti rutu generiraj
-            const response = await fetch('/api/natjecanja/generiraj', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const novoNatjecanjeId = data.natjecanjeId;
-
-                return <Link to={`/natjecanja/rjesi/${novoNatjecanjeId}`}>Generiraj natjecanje</Link>;
-            } else {
-                console.error('Greška prilikom generiranja natjecanja:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Greška prilikom generiranja natjecanja:', error);
-        }
-    };
-
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         fetch(`/api/natjecanja/get/finished`)
@@ -118,12 +94,15 @@ const Home: React.FC = () => {
     };
 
 
+
+
+
     return (
         <div>
             {(
                 user.uloga === "VODITELJ" &&
                 <Link to="/natjecanja/new">
-                <button className="addBtn">novo natjecanje</button>
+                    <button className="addBtn">novo natjecanje</button>
                 </Link>
             )}
             <div className="calendar-container">
@@ -163,10 +142,9 @@ const Home: React.FC = () => {
                         element.scrollIntoView({ behavior: 'smooth' });
                 }}>Nadolazeća natjecanja</button>
 
-                <button className={"generiraj-natjecanje-button"} onClick={generirajNatjecanje}>
-                    Generiraj natjecanje
-                </button>
-
+                {/*<button className={"generiraj-natjecanje-button"} onClick={handleGenerirajNatjecanje}>*/}
+                {/*    Generiraj natjecanje*/}
+                {/*</button>*/}
             </div>
 
             {selectedTable === 'trenutna' && (

@@ -10,6 +10,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
@@ -86,5 +87,7 @@ public interface RjesenjeService {
 
 	public List<Rjesenje> findByNatjecanjeAndZadatakAndNatjecatelj(Natjecanje natjecanje, Zadatak zadatak,
 			Korisnik natjecatelj);
+
+	public Optional<Rjesenje> fetch(Integer redniBroj, Integer zadatakId, String korisnickoIme);
 
 }
