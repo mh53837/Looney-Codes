@@ -5,11 +5,10 @@ import CountDown from 'react-countdown';
 import { Navigate } from "react-router-dom";
 import '../../styles/CompetitionPage.css';
 
-
 interface ProblemInfo {
-  zadatakId: BigInt;
+  zadatakId: bigint;
   zadatakIme: string;
-};
+}
 
 interface CompetitionInfo {
   ime: string;
@@ -54,9 +53,6 @@ const CompetitionPage: React.FC = () => {
 
     ));
   }
-
-
-
 
 
   return (
