@@ -22,6 +22,30 @@ const Home: React.FC = () => {
     const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
     const {user} = useContext(UserContext);
 
+    const generirajNatjecanje = async () => {
+        try {
+            // treba napraviti rutu generiraj
+            const response = await fetch('/api/natjecanja/generiraj', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const novoNatjecanjeId = data.natjecanjeId;
+
+                return <Link to={`/natjecanja/rjesi/${novoNatjecanjeId}`}>Generiraj natjecanje</Link>;
+            } else {
+                console.error('Greška prilikom generiranja natjecanja:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Greška prilikom generiranja natjecanja:', error);
+        }
+    };
+
+
     useEffect(() => {
         fetch(`/api/natjecanja/get/finished`)
             .then(response => response.json())
@@ -94,9 +118,6 @@ const Home: React.FC = () => {
     };
 
 
-
-
-
     return (
         <div>
             {(
@@ -142,9 +163,10 @@ const Home: React.FC = () => {
                         element.scrollIntoView({ behavior: 'smooth' });
                 }}>Nadolazeća natjecanja</button>
 
-                {/*<button className={"generiraj-natjecanje-button"} onClick={handleGenerirajNatjecanje}>*/}
-                {/*    Generiraj natjecanje*/}
-                {/*</button>*/}
+                <button className={"generiraj-natjecanje-button"} onClick={generirajNatjecanje}>
+                    Generiraj natjecanje
+                </button>
+
             </div>
 
             {selectedTable === 'trenutna' && (
