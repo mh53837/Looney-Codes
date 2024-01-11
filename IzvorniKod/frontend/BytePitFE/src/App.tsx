@@ -65,8 +65,8 @@ const App: React.FC = () => {
                 <Navbar onLogout={handleLogout} />
             )}
             {redirectToHome && <Navigate to="/" replace={true} />}
-            {redirectToUserProfile &&  <Navigate to={`/user/profile/${user.korisnickoIme}`} replace={true}/>}
-            
+            {redirectToUserProfile && <Navigate to={`/user/profile/${user.korisnickoIme}`} replace={true} />}
+
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -106,7 +106,7 @@ const App: React.FC = () => {
                         </div>
                     } />
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
-                    <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile}/>} />
+                    <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
                     <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults />} />

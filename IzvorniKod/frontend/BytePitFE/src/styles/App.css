@@ -78,6 +78,7 @@ body {
   font-size: large;
 }
 
+[data-theme="dark"] .ant-modal-content,
 [data-theme="dark"] body {
   color: #ECDCC9;
   background-color: #2A2D34;
