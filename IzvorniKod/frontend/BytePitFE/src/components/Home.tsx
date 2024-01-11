@@ -24,14 +24,27 @@ const Home: React.FC = () => {
     const {user} = useContext(UserContext);
     const navigate = useNavigate();
 
-    const generirajNatjecanje = async () => {
+    const generirajNasumicno = async () => {
+      const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+      const options = {
+              method: 'POST',
+              headers: { Authorization: `Basic ${credentials}` }
+            };
+      await fetch(`/api/virtualnaNatjecanja/new/random/${user.korisnickoIme}`, options)
+              .then(response => response.json())
+              .then(data => {
+                  navigate(`/natjecanja/rjesi/${data.virtualnoNatjecanjeId}`);
+              })
+              .catch(() => {
+                  console.error('Greška prilikom generiranja natjecanja!');
+              });
+    }
+    const generirajNatjecanje = async (originalId : number) => {
         try {
             // stavljeno je da se dohvati random natjecanje iz proslih natjecanja
-            const originalnoNatjecanje = zavrsena[Math.floor(Math.random() * zavrsena.length)];
-
             const virtualnoNatjecanjeDTO = {
                 virtualnoNatjecanjeId: null,
-                orginalnoNatjecanjeId: originalnoNatjecanje.natjecanjeId,
+                orginalnoNatjecanjeId: originalId,
                 korisnickoImeNatjecatelja: user.korisnickoIme,
                 vrijemePocetka: new Date(),
             };
@@ -177,9 +190,11 @@ const Home: React.FC = () => {
                         element.scrollIntoView({ behavior: 'smooth' });
                 }}>Nadolazeća natjecanja</button>
 
-                <button className={"generiraj-natjecanje-button"} onClick={generirajNatjecanje}>
-                    Generiraj natjecanje i pokreni ga!
-                </button>
+                {user.uloga == "NATJECATELJ" &&
+                  <button className={"generiraj-natjecanje-button"} onClick={generirajNasumicno}>
+                      Generiraj nasumično natjecanje i pokreni ga!
+                  </button>
+                }
 
             </div>
 
@@ -253,7 +268,7 @@ const Home: React.FC = () => {
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
                                 <th>Voditelj</th>
-                                <th></th>
+                                {user.uloga == "NATJECATELJ" && <th></th> }
                             </tr>
                         </thead>
                         <tbody>
@@ -268,11 +283,13 @@ const Home: React.FC = () => {
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
                                     <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                    <td>
-                                        <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                            Pokreni natjecanje
-                                        </Link>
-                                    </td>
+                                    {user.uloga == "NATJECATELJ" &&
+                                      <td>
+                                          <button onClick={() => generirajNatjecanje(natjecanje.natjecanjeId)}>
+                                              Pokreni natjecanje kao virtualno
+                                          </button>
+                                      </td>
+                                    }
                                 </tr>
                             ))}
                         </tbody>
