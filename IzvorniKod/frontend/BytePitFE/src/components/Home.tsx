@@ -24,17 +24,28 @@ const Home: React.FC = () => {
 
     const generirajNatjecanje = async () => {
         try {
-            // treba napraviti rutu generiraj
-            const response = await fetch('/api/natjecanja/generiraj', {
+            // stavljeno je da se dohvati random natjecanje iz proslih natjecanja
+            const originalnoNatjecanje = zavrsena[Math.floor(Math.random() * zavrsena.length)];
+
+            const virtualnoNatjecanjeDTO = {
+                virtualnoNatjecanjeId: null,
+                orginalnoNatjecanjeId: originalnoNatjecanje.natjecanjeId,
+                korisnickoImeNatjecatelja: user.korisnickoIme,
+                vrijemePocetka: new Date(),
+            };
+
+            // request body
+            const response = await fetch('/api/virtualnaNatjecanja/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify(virtualnoNatjecanjeDTO),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                const novoNatjecanjeId = data.natjecanjeId;
+                const novoNatjecanjeId = data.virtualnoNatjecanjeId;
 
                 return <Link to={`/natjecanja/rjesi/${novoNatjecanjeId}`}>Generiraj natjecanje</Link>;
             } else {
@@ -44,7 +55,6 @@ const Home: React.FC = () => {
             console.error('Greška prilikom generiranja natjecanja:', error);
         }
     };
-
 
     useEffect(() => {
         fetch(`/api/natjecanja/get/finished`)
