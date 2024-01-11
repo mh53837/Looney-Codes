@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import { ThemeContext } from "../../context/themeContext";
@@ -41,6 +40,7 @@ const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
 const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
 const UserTrophies = React.lazy(() => import("./UserTrophies"));
+const UserList = React.lazy(() => import("../User/UserList"));
 
 const UserProfile: React.FC = () => {
   const [imageData, setImageData] = useState<string | null>(null);
@@ -261,7 +261,9 @@ const UserProfile: React.FC = () => {
         )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
-          <Link to="/user/listRequested"><button>odobri uloge</button></Link>
+          <div>
+            <UserList />
+          </div>
         )}
 
         {userData.uloga === "VODITELJ" && (
