@@ -5,7 +5,7 @@ import hrHR from 'antd/lib/locale/hr_HR';
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import 'dayjs/locale/hr';
-import { DatePicker, Space, ConfigProvider} from "antd";
+import { DatePicker, Space, ConfigProvider, message} from "antd";
 import { UserContext } from '../../context/userContext';
 import AddProblemsToCompetition from './AddProblemsToCompetition';
 
@@ -15,7 +15,10 @@ interface CompetitionForm {
     krajNatjecanja: string;
 }
 
-const NewCompetition: React.FC = () => { 
+interface NewCompProps{
+    handleOk: () => void
+}
+const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => { 
     const today = dayjs();
     const [natjecanjeId, setNatjecanjeId] = useState<number | null>(null);
     const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
@@ -24,6 +27,9 @@ const NewCompetition: React.FC = () => {
     const [poruka, setPoruka] = useState<string>('');
     const [updatedPocetak, setUpdatedPocetak] = useState<Dayjs | null>(null);
     const [updatedKraj, setUpdatedKraj] = useState<Dayjs | null>(null);
+
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [competitionForm, setCompetitionForm] = useState<CompetitionForm>({
         nazivNatjecanja : "",
         pocetakNatjecanja: "",
@@ -63,8 +69,9 @@ const NewCompetition: React.FC = () => {
     const onCloseAddProblems = () => {
         setEvaluationTestsVisible(false);
         setNatjecanjeId(null);
+        handleOk();
     };
-    
+     
       const onKrajChange: DatePickerProps["onChange"] = (date, dateString) => {
         console.log(date, dateString);
         setUpdatedKraj(date);
@@ -110,6 +117,10 @@ const NewCompetition: React.FC = () => {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            messageApi.open({
+                type: 'success',
+                content: 'uspješno ste kreirali novo natjecanje',
+              });
             setPoruka("uspješno ste kreirali novo natjecanje");
             onNewCompetitionCreated(data.natjecanjeId);
             console.log('Server response:', data);
@@ -123,6 +134,7 @@ const NewCompetition: React.FC = () => {
 
     return (
         <div className="newProblem-container">
+            {contextHolder}
             <div className="NewProblem">
                 <form onSubmit={onSubmit}>
                     <div className="FormRow">

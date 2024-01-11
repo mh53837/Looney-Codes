@@ -134,11 +134,12 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
             title="zadaci na natjecanju" 
             open={open}
             onCancel={handleClose}
+            okText={"spremi promjene"}
             confirmLoading={confirmLoading}
             footer={        
             <div>
                 <button key="ok" onClick={handleOk}>
-                    ok
+                    spremi promjene
                 </button>
             </div>
             }
@@ -203,11 +204,13 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
     
 
     const handleOk = async () => {
-        onClose();
         setConfirmLoading(true);
         try {
           setOpen(false);
           setConfirmLoading(false);
+          onClose();
+          
+          
         } catch (error) {
           console.error("Error handling edit:", error);
           setConfirmLoading(false);

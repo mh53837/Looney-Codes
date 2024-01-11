@@ -31,6 +31,7 @@ interface CompetitionData {
 
 const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
   const [trophyData, setTrophyData] = useState<TrophyData[]>([]);
+  const [imageData, setImageData] = useState<string[]>([]);
 
   useEffect(() => {
     if (userData?.uloga === "NATJECATELJ") {
@@ -38,7 +39,15 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
         .then((response) => response.json())
         .then((data: TrophyData[]) => {
           console.log("Trophy data:", data);
+
+          
+          const imageUrls = data.map((trophy) => {
+            const blob = new Blob([trophy.slikaPehara], { type: 'image/jpeg' });
+            return URL.createObjectURL(blob);
+          });
+
           setTrophyData(data);
+          setImageData(imageUrls);
         })
         .catch((error) => {
           console.error("error fetching trophy data:", error);
@@ -48,18 +57,17 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
 
   return (
     <div>
-      {trophyData.map((trophy) => (
-
+      {trophyData.map((trophy, index) => (
         <div key={trophy.peharId} className="userTrophy">
           <h4>{trophy.natjecanje.nazivNatjecanja}</h4>
           <p>|</p>
           <p>Mjesto: {trophy.mjesto}</p>
           <p>|</p>
-          <img src={trophy.slikaPehara.replace(/^\./, '')} alt={`slika pehara`} />
+          <img src={imageData[index]} alt={`slika pehara`} />
         </div>
       ))}
     </div>
-  )
+  );
 };
 
 export default UserTrophies; 

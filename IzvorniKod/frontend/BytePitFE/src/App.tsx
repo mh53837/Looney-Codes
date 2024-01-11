@@ -26,6 +26,7 @@ const ProblemsList = React.lazy(() => import('./components/Problems/ProblemsList
 const App: React.FC = () => {
 
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
+    const [redirectToUserProfile, setRedirectToUserProfile] = useState<boolean>(false);
 
     const { theme } = useContext(ThemeContext); //!theme-light
     const { user } = useContext(UserContext);
@@ -39,6 +40,12 @@ const App: React.FC = () => {
         }, 100);
     };
 
+    const handleRedirectToProfile = () => {
+        setRedirectToUserProfile(true);
+        setTimeout(() => {
+            setRedirectToUserProfile(false);
+        }, 100);
+    }
     const handleLogout = () => {
         setRedirectToHome(true);
         setUser({ korisnickoIme: '', lozinka: '', uloga: '' });
@@ -58,6 +65,8 @@ const App: React.FC = () => {
                 <Navbar onLogout={handleLogout} />
             )}
             {redirectToHome && <Navigate to="/" replace={true} />}
+            {redirectToUserProfile &&  <Navigate to={`/user/profile/${user.korisnickoIme}`} replace={true}/>}
+            
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -97,8 +106,8 @@ const App: React.FC = () => {
                         </div>
                     } />
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
-                    <Route path="/problems/new" element={<NewProblem />} />
-                    <Route path="/natjecanja/new" element={<NewCompetition />} />
+                    <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile}/>} />
+                    <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
                     <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults />} />
                     <Route path="*" element={<NotFoundPage />} />
