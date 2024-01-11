@@ -84,4 +84,7 @@ public interface RjesenjeService {
      */
     public List<Rjesenje> findByNatjecanjeId(Integer natjecanjeId);
 
+	public List<Rjesenje> findByNatjecanjeAndZadatakAndNatjecatelj(Natjecanje natjecanje, Zadatak zadatak,
+			Korisnik natjecatelj);
+
 }

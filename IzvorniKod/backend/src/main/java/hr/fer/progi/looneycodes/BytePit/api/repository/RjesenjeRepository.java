@@ -25,9 +25,7 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
      * @return lista rješenja zadanog natjecatelja u određenom natjecanju
      */
     @Query("SELECT r FROM Rjesenje r " +
-            "JOIN Zadatak z ON r.rjesenjeId.zadatak.zadatakId = z.zadatakId " +
             "WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
-            "AND z.natjecanje = :natjecanje " +
             "AND r.natjecanje = :natjecanje")
     List<Rjesenje> findByNatjecateljAndNatjecanje(@Param("natjecatelj") Korisnik natjecatelj,
                                                   @Param("natjecanje") Natjecanje natjecanje);
@@ -40,12 +38,23 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
      * @return lista rješenja zadanog zadatka u određenom natjecanju
      */
     @Query("SELECT r FROM Rjesenje r " +
-            "JOIN Zadatak z ON r.rjesenjeId.zadatak.zadatakId = z.zadatakId " +
             "WHERE r.rjesenjeId.zadatak = :zadatak " +
-            "AND z.natjecanje = :natjecanje " +
             "AND r.natjecanje = :natjecanje")
     List<Rjesenje> findByNatjecanjeAndZadatak(@Param("natjecanje") Natjecanje natjecanje,
                                               @Param("zadatak")Zadatak zadatak);
+//    /**
+//    * Metoda koja pronalazi sva rješenja po zadatku i natjecanju.
+//    * @param natjecanje - identifikator natjecanja
+//    * @param zadatak - identifikator zadatka
+//    * @return lista rješenja zadanog zadatka u određenom natjecanju
+//    */
+//   @Query("SELECT r FROM Rjesenje r " +
+//           "WHERE r.rjesenjeId.zadatak = :zadatak " +
+//           "AND r.rjesenjeId.natjecatelj = :natjecatelj" +
+//           "AND r.natjecanje = :natjecanje")
+//   List<Rjesenje> findByNatjecanjeAndZadatakAndNatjecatelj(@Param("natjecanje") Natjecanje natjecanje,
+//                                             @Param("zadatak") Zadatak zadatak, 
+//                                             @Param("natjecatelj") Korisnik natjecatelj);
 
     /**
      * Metoda koja pronalazi sva rješenja po zadatku i natjecanju.

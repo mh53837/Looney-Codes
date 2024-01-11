@@ -102,10 +102,10 @@ INSERT INTO nadmetanje_zadaci (zadaci_zadatak_id, nadmetanje_natjecanje_id )
 
 INSERT INTO rjesenje (rjesenje_rb, zadatak_zadatak_id, natjecatelj_korisnik_id, programski_kod, vrijeme_odgovora, broj_tocnih_primjera, natjecanje_natjecanje_id)
 VALUES
-(1, 1005, 3, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'2 day'::INTERVAL, 1, 101),
+(1, 1005, 3, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'2 day'::INTERVAL, 1, 102),
 (2, 1005, 3, '#include<bits/stdc++.h>\n using namespace std;\n int main() {string s;\n cin >> s;\n cout << s;}', CURRENT_TIMESTAMP-'10 hour'::INTERVAL, 0.5, 102),
 -- syntax error (prazno rjesenje) -> ne prolaz
-(3, 1005, 5, null, CURRENT_TIMESTAMP-'16 hour'::INTERVAL, 0, 101),
+(3, 1005, 5, null, CURRENT_TIMESTAMP-'16 hour'::INTERVAL, 0, 102),
 (4, 1005, 4, '#include<bits/stdc++.h>\n int main() {int s; std::cin >> s; std::cout << s;}', CURRENT_TIMESTAMP-'1 day'::INTERVAL, 1, 101),
 -- syntax error -> ne prolazi
 (5, 1003, 5, '#include<bits/stdc++.h>\n int main() {int a, b; std::cin >> a >> b; std::cout << a*b', CURRENT_TIMESTAMP-'1 hour'::INTERVAL, 1, 105),

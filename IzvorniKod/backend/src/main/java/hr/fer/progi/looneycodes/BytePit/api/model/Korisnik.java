@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -181,4 +182,20 @@ public class Korisnik{
 	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(korisnik);
 	  props.forEach(p -> to.setPropertyValue(p, from.getPropertyValue(p) != null ? from.getPropertyValue(p) : to.getPropertyValue(p)));
   }
+@Override
+public int hashCode() {
+	return Objects.hash(korisnikId);
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (!(obj instanceof Korisnik))
+		return false;
+	Korisnik other = (Korisnik) obj;
+	return Objects.equals(korisnikId, other.korisnikId);
+}
+  
+  
+  
 }

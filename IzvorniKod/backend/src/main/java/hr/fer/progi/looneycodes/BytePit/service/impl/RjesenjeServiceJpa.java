@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.URI;
@@ -261,5 +260,11 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     return status;
+	}
+
+	@Override
+	public List<Rjesenje> findByNatjecanjeAndZadatakAndNatjecatelj(Natjecanje natjecanje, Zadatak zadatak,
+			Korisnik natjecatelj) {
+		return null;
 	}
 }
