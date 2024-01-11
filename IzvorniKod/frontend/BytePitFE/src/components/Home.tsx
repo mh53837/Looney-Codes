@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -21,6 +22,7 @@ const Home: React.FC = () => {
     const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
     const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
     const {user} = useContext(UserContext);
+    const navigate = useNavigate();
 
     const generirajNatjecanje = async () => {
         try {
@@ -35,23 +37,24 @@ const Home: React.FC = () => {
             };
 
             // request body
-            const response = await fetch('/api/virtualnaNatjecanja/new', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(virtualnoNatjecanjeDTO),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const novoNatjecanjeId = data.virtualnoNatjecanjeId;
-
-                return <Link to={`/natjecanja/rjesi/${novoNatjecanjeId}`}>Generiraj natjecanje</Link>;
-            } else {
-                console.error('Greška prilikom generiranja natjecanja:', response.statusText);
-            }
+            const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+            const options = {
+                            method: 'POST',
+                            headers: {
+                                Authorization: `Basic ${credentials}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(virtualnoNatjecanjeDTO),
+                        };
+            await fetch('/api/virtualnaNatjecanja/new', options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        const novoNatjecanjeId = data.virtualnoNatjecanjeId;
+                        navigate(`/natjecanja/rjesi/${novoNatjecanjeId}`);
+                    })
+                    .catch(() => {
+                          console.error('Greška prilikom generiranja natjecanja!');
+                    });
         } catch (error) {
             console.error('Greška prilikom generiranja natjecanja:', error);
         }
@@ -175,7 +178,7 @@ const Home: React.FC = () => {
                 }}>Nadolazeća natjecanja</button>
 
                 <button className={"generiraj-natjecanje-button"} onClick={generirajNatjecanje}>
-                    Generiraj natjecanje
+                    Generiraj natjecanje i pokreni ga!
                 </button>
 
             </div>
