@@ -31,7 +31,8 @@ interface CompetitionData {
 
 const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
   const [trophyData, setTrophyData] = useState<TrophyData[]>([]);
-  const [imageData, setImageData] = useState<string[]>([]);
+  const [imageData, setImageData] = useState<string[] | null>(null);
+
 
   useEffect(() => {
     if (userData?.uloga === "NATJECATELJ") {
@@ -39,15 +40,7 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
         .then((response) => response.json())
         .then((data: TrophyData[]) => {
           console.log("Trophy data:", data);
-
-          
-          const imageUrls = data.map((trophy) => {
-            const blob = new Blob([trophy.slikaPehara], { type: 'image/jpeg' });
-            return URL.createObjectURL(blob);
-          });
-
           setTrophyData(data);
-          setImageData(imageUrls);
         })
         .catch((error) => {
           console.error("error fetching trophy data:", error);
@@ -55,15 +48,38 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    const fetchTrophyPictures = async () => {
+      try {
+        if (trophyData.length > 0) {
+          const imagePromises = trophyData.map(async (trophy) => {
+            const response = await fetch(`/api/trophies/image/${trophy.peharId}`);
+            const blob = await response.blob();
+            return URL.createObjectURL(blob);
+          });
+  
+          const imageUrls = await Promise.all(imagePromises);
+          setImageData(imageUrls);
+        }
+      } catch (error) {
+        console.error("Error fetching trophy pictures:", error);
+      }
+    };
+  
+    fetchTrophyPictures();
+  }, [trophyData]);
+  
+
   return (
     <div>
+      {trophyData.length === 0 && (<p>nema osvojenih pehara</p>)}
       {trophyData.map((trophy, index) => (
         <div key={trophy.peharId} className="userTrophy">
           <h4>{trophy.natjecanje.nazivNatjecanja}</h4>
           <p>|</p>
           <p>Mjesto: {trophy.mjesto}</p>
           <p>|</p>
-          <img src={imageData[index]} alt={`slika pehara`} />
+          {imageData && (<img className='trophyImg' src={imageData[index]} alt={`slika pehara`} /> )}
         </div>
       ))}
     </div>
