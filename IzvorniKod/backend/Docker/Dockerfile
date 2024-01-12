@@ -20,6 +20,9 @@ FROM openjdk:17-alpine
 
 # Kopiranje izvrsnog JAR-a iz build containera u izvrsni container
 COPY --from=builder target/*.jar /app.jar
+# kopiraj mapu s profilnim slikama u docker
+RUN mkdir -p src/main/resources
+COPY --from=builder src/main/resources/profilneSlike src/main/resources/profilneSlike
 
 # Izlaganje porta
 EXPOSE 8080
