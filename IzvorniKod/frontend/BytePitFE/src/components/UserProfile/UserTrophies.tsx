@@ -14,18 +14,11 @@ interface UserData {
 
 interface TrophyData {
   peharId: number;
-  natjecatelj: UserData;
-  natjecanje: CompetitionData;
+  korisnickoImeNatjecatelja: string;
+  natjecanjeId: number;
+  natjecanjeNaziv: string | null;
   mjesto: number;
   slikaPehara: string;
-}
-
-interface CompetitionData {
-  natjecanjeId: number;
-  korisnickoImeVoditelja: string;
-  nazivNatjecanja: string;
-  pocetakNatjecanja: string;
-  krajNatjecanja: string;
 }
 
 
@@ -47,6 +40,34 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
         });
     }
   }, [userData]);
+
+  useEffect(() => {
+    const fetchCompetitionNames = async () => {
+      try {
+        if (trophyData.length > 0) {
+          const competitionPromises = trophyData.map(async (trophy) => {
+            const response = await fetch(`/api/natjecanja/get/${trophy.natjecanjeId}`);
+            const data = await response.json();
+            return data.nazivNatjecanja; // Return only the competition name
+          });
+  
+          const competitionNames = await Promise.all(competitionPromises);
+          
+          setTrophyData((prevTrophyData) =>
+            prevTrophyData.map((trophy, index) => ({
+              ...trophy,
+              natjecanjeNaziv: competitionNames[index],
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching competition names:", error);
+      }
+    };
+  
+    fetchCompetitionNames();
+  }, [trophyData]);
+  
 
   useEffect(() => {
     const fetchTrophyPictures = async () => {
@@ -75,7 +96,7 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
       {trophyData.length === 0 && (<p>nema osvojenih pehara</p>)}
       {trophyData.map((trophy, index) => (
         <div key={trophy.peharId} className="userTrophy">
-          <h4>{trophy.natjecanje.nazivNatjecanja}</h4>
+          <h4>{trophy.natjecanjeNaziv}</h4>
           <p>|</p>
           <p>Mjesto: {trophy.mjesto}</p>
           <p>|</p>

@@ -36,7 +36,7 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
 
     const [trophyData, setTrophyData] = useState<TrophyData>({
         natjecanjeId: 0,
-        mjesto:0,
+        mjesto:1,
         slikaPehara: null,
     })
 
@@ -78,7 +78,7 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
             const formData = new FormData();
             const jsonPart = {
                 natjecanjeId: natjecanjeId,
-                mjesto:0,
+                mjesto:1,
             };
             formData.append('image', trophyData.slikaPehara, trophyData.slikaPehara.name);
             
@@ -222,7 +222,7 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
 
                     <div className="FormRow">
                         <label>slika pehara</label>
-                        <input name="slikaPehara" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
+                        <input name="slikaPehara" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" className='fileInput'/>
                     </div>
                     
                     
