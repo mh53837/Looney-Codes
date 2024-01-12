@@ -23,6 +23,8 @@ COPY --from=builder target/*.jar /app.jar
 # kopiraj mapu s profilnim slikama u docker
 RUN mkdir -p src/main/resources
 COPY --from=builder src/main/resources/profilneSlike src/main/resources/profilneSlike
+# kopiraj mapu s slikama pehara u docker
+COPY --from=builder src/main/resources/slikePehara src/main/resources/slikePehara
 
 # Izlaganje porta
 EXPOSE 8080
