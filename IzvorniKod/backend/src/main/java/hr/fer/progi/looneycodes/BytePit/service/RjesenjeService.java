@@ -4,6 +4,7 @@ package hr.fer.progi.looneycodes.BytePit.service;
 import hr.fer.progi.looneycodes.BytePit.api.controller.EvaluationResultDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.SubmissionDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.model.Nadmetanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
@@ -46,7 +47,7 @@ public interface RjesenjeService {
      * @param zadatak - identifikator zadatka
      * @return lista rješenja zadanog zadatka u određenom natjecanju
      */
-    public List<Rjesenje> findByNatjecanjeAndZadatak(Natjecanje natjecanje, Zadatak zadatak);
+    public List<Rjesenje> findByNatjecanjeAndZadatak(Nadmetanje natjecanje, Zadatak zadatak);
 
     /**
      * Metoda koja pronalazi sva rješenja po zadatku i natjecanju.

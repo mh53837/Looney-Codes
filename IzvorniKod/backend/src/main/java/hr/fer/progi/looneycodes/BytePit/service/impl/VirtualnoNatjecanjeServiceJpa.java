@@ -102,18 +102,20 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     public RangDTO getRang(Integer virtualnoNatjecanjeId) {
         VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
 
-        if (virtualnoNatjecanje == null || virtualnoNatjecanje.getOrginalnoNatjecanje() == null) {
-            throw new IllegalArgumentException("Pogrešan ID ili nasumično generirano virtualno natjecanje!");
+        if (virtualnoNatjecanje == null) {
+            throw new IllegalArgumentException("Pogrešan ID virtualnog natjecanja!");
         }
+       
 
-        Integer origNatId = virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId();
-        List<RangDTO> rangLista = natjecanjeService.getRangList(origNatId);
         List<Rjesenje> rjesenja = rjesenjeService.findByNatjecanjeId(virtualnoNatjecanjeId);
         Map<Integer, Double> zadatakBodovi = new HashMap<>();
 
         virtualnoNatjecanje.getZadaci().forEach(
                 zadatak -> {
-                    Optional<Rjesenje> rjesenje = rjesenja.stream().filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId())).findFirst();
+                    Optional<Rjesenje> rjesenje = rjesenja.stream()
+                    		.filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId()))
+                    		.max((r1, r2) -> Double.compare(r1.getBrojTocnihPrimjera(),  
+                            r2.getBrojTocnihPrimjera()));
                     if (rjesenje.isPresent()){
                         zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova());
                     }
@@ -123,12 +125,21 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
                 }
         );
 
-        Duration vrijemeRjesavanja = Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
+        Duration vrijemeRjesavanja = rjesenja.size() == 0 ? Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), Instant.now()) :
+        		Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
         RangDTO rang = new RangDTO(virtualnoNatjecanje.getNatjecatelj().getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
-        rangLista.add(rang);
-        rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
-        int index = rangLista.indexOf(rang);
-        rang.setRang(index + 1);
+        
+        if (Objects.nonNull(virtualnoNatjecanje.getOrginalnoNatjecanje())) {
+            Integer origNatId = virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId();
+        	List<RangDTO> rangLista = natjecanjeService.getRangList(origNatId);
+        	rangLista.add(rang);
+            rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
+            int index = rangLista.indexOf(rang);
+            rang.setRang(index + 1);
+        }
+        else {
+        	rang.setRang(1);
+        }
         return rang;
 
     }

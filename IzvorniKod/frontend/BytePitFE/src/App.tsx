@@ -10,6 +10,8 @@ import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
 import CompetitionResults from './components/Competition/CompetitionResults.tsx';
 
+
+
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage.tsx'));
@@ -109,7 +111,8 @@ const App: React.FC = () => {
                     <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
-                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults />} />
+                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults virtualno={false} />} />
+                    <Route path="/natjecanja/virtualno/rezultat/:nadmetanjeId" element={<CompetitionResults virtualno={true} />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

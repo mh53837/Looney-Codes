@@ -40,7 +40,7 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
     @Query("SELECT r FROM Rjesenje r " +
             "WHERE r.rjesenjeId.zadatak = :zadatak " +
             "AND r.natjecanje = :natjecanje")
-    List<Rjesenje> findByNatjecanjeAndZadatak(@Param("natjecanje") Natjecanje natjecanje,
+    List<Rjesenje> findByNatjecanjeAndZadatak(@Param("natjecanje") Nadmetanje natjecanje,
                                               @Param("zadatak")Zadatak zadatak);
 //    /**
 //    * Metoda koja pronalazi sva rješenja po zadatku i natjecanju.

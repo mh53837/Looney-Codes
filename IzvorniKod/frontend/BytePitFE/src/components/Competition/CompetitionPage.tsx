@@ -17,6 +17,8 @@ interface CompetitionInfo {
   zadaci: Array<ProblemInfo>;
 }
 
+
+
 const ProblemPage = lazy(() => import('../Problems/ProblemPage.tsx'));
 
 const CompetitionPage: React.FC = () => {
@@ -59,10 +61,14 @@ const CompetitionPage: React.FC = () => {
     <div className='competitionPageWrapper'>
       <div className='competitionHeader'>
 
-        {zadatakId != undefined && <span><Link to={`/natjecanja/rjesi/${nadmetanjeId}`}>
+        {zadatakId != undefined && info.ime && <span><Link to={`/natjecanja/rjesi/${nadmetanjeId}`}>
           <h2>{info.ime}</h2>
         </Link></span>}
-
+        {info.krajNatjecanja == null &&
+          <span><Link to={`/natjecanja/virtualno/rezultat/${nadmetanjeId}`} className='countDown'>
+            Završi i predaj!
+          </Link></span>
+        }
         {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>}
       </div>
       {zadatakId === undefined && <h1>{info.ime}</h1>}

@@ -1,6 +1,7 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
+import hr.fer.progi.looneycodes.BytePit.api.model.Nadmetanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
@@ -51,6 +52,9 @@ public class RjesenjeController {
 
     @Autowired
     private NatjecanjeService natjecanjeService;
+    
+    @Autowired
+    private VirtualnoNatjecanjeService virtualnoNatjecanjeService;
 
     @Autowired
     private ZadatakService zadatakService;
@@ -111,7 +115,11 @@ public class RjesenjeController {
 																@RequestParam(value = "zadatak", required=true) Integer zadatakId, 
 																@RequestParam(value = "natjecatelj") Optional<String> korisnickoIme,
 																@AuthenticationPrincipal UserDetails user) {
-        Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
+        
+    	Nadmetanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
+        if (natjecanje == null) {
+        	natjecanje = virtualnoNatjecanjeService.getVirtualnoNatjecanje(natjecanjeId);
+        }
         Zadatak zadatak = zadatakService.fetch(zadatakId);
         
         List<RjesenjeDTO> rjesenja = rjesenjeService.findByNatjecanjeAndZadatak(natjecanje, zadatak)

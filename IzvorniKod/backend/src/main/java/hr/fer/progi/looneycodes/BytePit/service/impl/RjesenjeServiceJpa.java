@@ -66,7 +66,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     @Override
-    public List<Rjesenje> findByNatjecanjeAndZadatak(Natjecanje natjecanje, Zadatak zadatak) {
+    public List<Rjesenje> findByNatjecanjeAndZadatak(Nadmetanje natjecanje, Zadatak zadatak) {
         return rjesenjeRepository.findByNatjecanjeAndZadatak(natjecanje, zadatak);
     }
 
