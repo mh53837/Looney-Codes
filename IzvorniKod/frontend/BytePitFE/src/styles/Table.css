@@ -7,7 +7,8 @@
 }
 
 .info-table {
-  width: 100%;
+  width: 99%;
+  margin:5px;
   margin-top: 20px;
   margin-bottom: 20px;
   padding-bottom: 60px;
@@ -30,8 +31,6 @@
 
 }
 
-
-
 .info-table th {
   background-color: #f4c95de7;
 }
@@ -39,20 +38,6 @@
 .info-table tbody tr:hover {
   background-color: #f4c95d52;
 }
-
-/* table.problem-info-header, table.competition-info-header{
-  width: 80%;
-  margin: 0 auto;
-}
-
-.problem-info-header td, .competition-info-header td  {
-  text-align: left;
-  padding: 8px;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-} */
 
 button.addBtn{
   border: 2px solid #f4c95de7;
@@ -84,4 +69,51 @@ button.addBtn{
 
 [data-theme="dark"] .info-table tbody tr:hover {
   background-color: #dcdcdc34;
+}
+
+.info-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+  border: 1px solid #00000085;
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 30rem;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .info-table table {
+    width: 99%;
+  }
+  .info-table {
+    font-size: 10px;
+    margin:20px 1px;
+  }
+  .info-table a{
+    margin: 1px;
+    padding: 10px 2px;
+  }
+  .info-table th,
+  .info-table td {
+    white-space: normal; /* text wrap */
+    max-width: none; 
+    padding: 10px 2px;
+  }
+
+  .info-table th {
+    background-color: #f4c95de7;
+    position: sticky;
+    top: 0;
+  }
+
+  .info-table tbody tr:hover {
+    background-color: #f4c95d52;
+  }
 }

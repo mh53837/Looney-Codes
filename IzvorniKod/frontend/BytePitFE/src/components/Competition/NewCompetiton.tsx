@@ -15,6 +15,12 @@ interface CompetitionForm {
     krajNatjecanja: string;
 }
 
+interface TrophyData{
+    natjecanjeId: number;
+    mjesto: number;
+    slikaPehara: File | null;
+}
+
 interface NewCompProps{
     handleOk: () => void
 }
@@ -27,6 +33,12 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
     const [poruka, setPoruka] = useState<string>('');
     const [updatedPocetak, setUpdatedPocetak] = useState<Dayjs | null>(null);
     const [updatedKraj, setUpdatedKraj] = useState<Dayjs | null>(null);
+
+    const [trophyData, setTrophyData] = useState<TrophyData>({
+        natjecanjeId: 0,
+        mjesto:0,
+        slikaPehara: null,
+    })
 
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -52,9 +64,45 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
             console.log(competitionForm.pocetakNatjecanja);
         }
 
-      };
+    };
 
-      const onNewCompetitionCreated = (natjecanjeId: number) => {
+    function onSlikaChange(event: ChangeEvent<HTMLInputElement>) {
+        if (event.target.files && event.target.files.length > 0) {
+            const slikaPehara = event.target.files[0];
+            setTrophyData((oldForm) => ({ ...oldForm, slikaPehara }));
+        }
+    }
+
+    const postTrophy = (natjecanjeId: number) => {
+        if(trophyData.slikaPehara){
+            const formData = new FormData();
+            const jsonPart = {
+                natjecanjeId: natjecanjeId,
+                mjesto:0,
+            };
+            formData.append('image', trophyData.slikaPehara, trophyData.slikaPehara.name);
+            
+            formData.append('peharData', new Blob([JSON.stringify(jsonPart)], { type: 'application/json' }), 'peharData.json');
+            
+            const options = {
+                method: 'POST',
+                body: formData,
+            };
+    
+            fetch('/api/trophies/add', options).then((response) => {
+                if (!response.ok) {
+                    console.log(response);
+                    console.log("pogreška!");
+                    setError('Došlo je do pogreške, pokušajte ponovno!');
+                }
+                else console.log("uspjesno prenesena slika pehara!");
+            });
+        }
+
+
+    }
+
+    const onNewCompetitionCreated = (natjecanjeId: number) => {
         setCompetitionForm({
             nazivNatjecanja : "",
             pocetakNatjecanja: "",
@@ -117,6 +165,7 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            postTrophy(data.natjecanjeId);
             messageApi.open({
                 type: 'success',
                 content: 'uspješno ste kreirali novo natjecanje',
@@ -170,6 +219,11 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
                     </div>
                     </Space>
                     </ConfigProvider>
+
+                    <div className="FormRow">
+                        <label>slika pehara</label>
+                        <input name="slikaPehara" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
+                    </div>
                     
                     
                     <div className="error">{error}</div>
