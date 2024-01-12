@@ -34,8 +34,8 @@ public class PeharController {
      * @return lista svih pehara.
      */
     @GetMapping("/all")
-    public List<Pehar> listAll() {
-        return peharService.listAll();
+    public List<AddPeharDTO> listAll() {
+        return peharService.listAll().stream().map(AddPeharDTO::new).toList();
     }
 
     /**
@@ -43,8 +43,8 @@ public class PeharController {
      * @return jedan pehar.
      */
     @GetMapping("/get/{id}")
-    public Pehar oneTrophy(@PathVariable Integer id) {
-        return peharService.oneTrophy(id);
+    public AddPeharDTO oneTrophy(@PathVariable Integer id) {
+        return new AddPeharDTO(peharService.oneTrophy(id));
     }
 
     /**
@@ -52,8 +52,8 @@ public class PeharController {
      * @return lista pehara.
      */
     @GetMapping("/user/{korisnickoIme}")
-    public List<Pehar> listAllFromOneKorisnik(@PathVariable String korisnickoIme){
-        return peharService.listAllFromOneNatjecatelj(korisnickoIme);
+    public List<AddPeharDTO> listAllFromOneKorisnik(@PathVariable String korisnickoIme){
+        return peharService.listAllFromOneNatjecatelj(korisnickoIme).stream().map(AddPeharDTO::new).toList();
     }
 
     /**
