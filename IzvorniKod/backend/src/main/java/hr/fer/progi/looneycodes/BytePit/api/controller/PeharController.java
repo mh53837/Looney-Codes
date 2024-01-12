@@ -1,10 +1,12 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.PeharService;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
@@ -28,6 +30,8 @@ public class PeharController {
 
     @Autowired
     private PeharService peharService;
+    @Autowired
+    private ScheduledTasks scheduledTasks;
 
     /**
      * Ruta za ispis svih pehara.
@@ -81,6 +85,7 @@ public class PeharController {
         }
 
         Pehar pehar = peharService.createPehar(dto);
+        scheduledTasks.scheduleTaskTrophy(pehar.getNatjecanje().getNatjecanjeId(), pehar.getNatjecanje().getKrajNatjecanja());
         return new AddPeharDTO(pehar);
     }
     /**
