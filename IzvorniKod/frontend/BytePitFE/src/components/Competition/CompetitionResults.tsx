@@ -22,9 +22,13 @@ interface ProblemDetails {
         privatniZadatak: boolean;
 }
 
+interface CompetitionProps {
+        virtualno: boolean
+}
+
 const ProblemSolutions = React.lazy(() => import("../Problems/ProblemSolutions"));
 
-const CompetitionResults: React.FC = () => {
+const CompetitionResults: React.FC<CompetitionProps> = ({ virtualno }) => {
         const { nadmetanjeId } = useParams<{ nadmetanjeId: string }>();
         const [loading, setLoading] = useState(true);
         const [rankResults, setRankResults] = useState<RangDTO[]>([]);
@@ -41,7 +45,9 @@ const CompetitionResults: React.FC = () => {
                                 setTimeout(async () => {
                                         setLoading(false);
 
-                                        const response = await fetch(`/api/natjecanja/get/rang/${nadmetanjeId}`);
+                                        const response = virtualno ?
+                                                await fetch(`/api/virtualnaNatjecanja/get/rang/${nadmetanjeId}`) :
+                                                await fetch(`/api/natjecanja/get/rang/${nadmetanjeId}`);
                                         if (!response.ok) {
                                                 throw new Error('Failed to fetch data');
                                         }

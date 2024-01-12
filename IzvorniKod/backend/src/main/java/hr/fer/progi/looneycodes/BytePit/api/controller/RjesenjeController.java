@@ -164,6 +164,14 @@ public class RjesenjeController {
         return rjesenja.stream().filter(rj -> rj.getKorisnickoIme().equals(korisnickoIme.get())).toList();
     }
 
+    @GetMapping("/solved/{zadatakId}")
+    @Secured("NATJECATELJ")
+    public boolean hasSolved(@PathVariable Integer zadatakId,
+    		@AuthenticationPrincipal UserDetails user) {
+	    if(Objects.isNull(user))
+	    	throw new AccessDeniedException("You must be logged in for that!");
+    	return rjesenjeService.solved(zadatakId, user.getUsername());
+    }
     
 //    @GetMapping("/get")
 //    public List<Rjesenje> getRjesenjeByNatjecanjeIdAndZadatakId(@PathVariable Integer natjecanjeId, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
@@ -255,4 +263,7 @@ public class RjesenjeController {
     	return response.body();
     }
     
+
+    
+
 }

@@ -137,7 +137,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
           """
           {
             "source_code" : "%s",
-            "language_id" : 12,
+            "language_id" : 76,
             "stdin" : "%s",
             "expected_output" : "%s",
             "cpu_time_limit" : %d

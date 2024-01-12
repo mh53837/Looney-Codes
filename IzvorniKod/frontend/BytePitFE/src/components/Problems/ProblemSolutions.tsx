@@ -20,12 +20,18 @@ interface ProblemResultsProps {
 const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatelj }) => {
         const { nadmetanjeId } = useParams();
         const [rjesenja, setRjesenja] = useState<RjesenjeInfo[]>([]);
+        const [solved, setSolved] = useState<boolean>(false)
         const { theme } = useContext(ThemeContext);
         const { user } = useContext(UserContext)
 
         useEffect(() => {
                 const fetchData = async () => {
                         try {
+                                const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+                                const options = {
+                                        method: 'GET',
+                                        headers: { Authorization: `Basic ${credentials}` }
+                                };
                                 const response = await fetch(
                                         `/api/solutions/get/competition/${nadmetanjeId}?zadatak=${zadatakId}&natjecatelj=${natjecatelj}`
                                 );
@@ -34,6 +40,9 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
                                 }
                                 const data: RjesenjeInfo[] = await response.json();
                                 setRjesenja(data);
+                                const solvedResponse = await fetch(`/api/solutions/solved/${zadatakId}`, options);
+                                const solved = await solvedResponse.json();
+                                setSolved(solved)
                         } catch (error) {
                                 console.error('Error fetching data:', error);
                         }
@@ -52,10 +61,12 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
                         const response = await fetch(`/api/solutions/code?rbr=${rbr}&zadatak=${zadatakId}&natjecatelj=${natjecatelj}`,
                                 options);
                         if (!response.ok) {
+                                window.alert("Morate riješiti zadatak da biste vidjeli rješenja drugih korisnika!");
                                 throw new Error('Failed to fetch solution code');
                         }
 
                         const solutionCode = await response.text();
+
 
                         let formattedSolutionCode = solutionCode.replace(/\\n/g, '\n');
                         formattedSolutionCode = formattedSolutionCode.substring(1, formattedSolutionCode.length - 1);
@@ -73,7 +84,7 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
         };
 
 
-        const columns = [
+        const columns = solved ? [
                 {
                         title: 'Rješenje',
                         dataIndex: 'rBr',
@@ -93,7 +104,17 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
                                 </Button>
                         ),
                 },
-        ];
+        ] : [
+                {
+                        title: 'Rješenje',
+                        dataIndex: 'rBr',
+                        key: 'rBr',
+                },
+                {
+                        title: 'Rješenost (%)',
+                        dataIndex: 'postotakTocnihPrimjera',
+                        key: 'postotakTocnihPrimjera',
+                },];
 
         return (
                 <div className="tableWrapper">

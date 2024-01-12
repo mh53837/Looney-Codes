@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
 
-       
+
     }, [theme.isThemeDark]);
 
 
@@ -113,8 +113,8 @@ const App: React.FC = () => {
                     <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
-                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults />} />
-                    <Route path="/natjecanja/virtualno/rezultat/:nadmetanjeId" element={<CompetitionResults />} />
+                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults virtualno={false} />} />
+                    <Route path="/natjecanja/virtualno/rezultat/:nadmetanjeId" element={<CompetitionResults virtualno={true} />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>
