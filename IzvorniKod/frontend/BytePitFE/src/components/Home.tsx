@@ -13,7 +13,6 @@ interface Natjecanje {
     korisnickoImeVoditelja: string;
 }
 
-
 const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
@@ -69,7 +68,6 @@ const Home: React.FC = () => {
                     .catch(() => {
                           console.error('Greška prilikom generiranja natjecanja!');
                     });
-
         } catch (error) {
             console.error('Greška prilikom generiranja natjecanja:', error);
         }
@@ -192,17 +190,18 @@ const Home: React.FC = () => {
                         if (element != null)
                             element.scrollIntoView({ behavior: 'smooth' });
                     }}>Nadolazeća natjecanja</button>
+
                 </div>
-
-                <div className={"generiraj-virtualno-natjecanje"}>
-
+                <div className={"generiraj-vritualno-natjecanje"}>
                     {user.uloga == "NATJECATELJ" &&
                         <button className={"generiraj-natjecanje-button"} onClick={generirajNasumicno}>
-                            Generiraj virtualno natjecanje
+                            Generiraj nasumično natjecanje i pokreni ga!
                         </button>
                     }
+
                 </div>
             </div>
+
 
             {selectedTable === 'trenutna' && (
                 <div className="info-table">
