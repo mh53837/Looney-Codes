@@ -32,6 +32,12 @@ public interface RjesenjeRepository extends JpaRepository<Rjesenje, RjesenjeKey>
 
 
     /**
+     * Metoda koja pronalazi sva rješenja po zadatku.
+     * @param natjecatelj - identifikator natjecatelja
+     * @return lista rješenja zadanog natjecatelja
+     */
+    List<Rjesenje> findByRjesenjeIdZadatak(Zadatak zadatak);
+    /**
      * Metoda koja pronalazi sva rješenja po zadatku i natjecanju.
      * @param natjecanje - identifikator natjecanja
      * @param zadatak - identifikator zadatka

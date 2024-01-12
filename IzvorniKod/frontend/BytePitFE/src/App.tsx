@@ -10,6 +10,7 @@ import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
 import CompetitionResults from './components/Competition/CompetitionResults.tsx';
 import UserProfile from './components/UserProfile/UserProfile.tsx';
+import BestSolutions from './components/Problems/BestSolutions.tsx';
 
 
 
@@ -110,6 +111,7 @@ const App: React.FC = () => {
                         </div>
                     } />
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
+                    <Route path="/problem/solutions/:zadatakId" element={<BestSolutions />} />
                     <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
                     <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
