@@ -160,4 +160,6 @@ public class VirtualnoNatjecanjeController {
     public List<RangDTO> getRang(@PathVariable Integer virtualnoNatjecanjeId) {
         return virtualnoNatjecanjeService.getRang(virtualnoNatjecanjeId);
     }
+
+
 }

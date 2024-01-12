@@ -3,6 +3,7 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Nadmetanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Rjesenje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.*;
@@ -128,10 +129,13 @@ public class RjesenjeController {
 																@AuthenticationPrincipal UserDetails user) {
         
     	Nadmetanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
-        if (natjecanje == null) {
+    	Natjecanje originalnoNatjecanje = null;
+        if (!Objects.nonNull(natjecanje)) {
         	natjecanje = virtualnoNatjecanjeService.getVirtualnoNatjecanje(natjecanjeId);
+        	originalnoNatjecanje = ((VirtualnoNatjecanje) natjecanje).getOrginalnoNatjecanje();
         }
         Zadatak zadatak = zadatakService.fetch(zadatakId);
+        
         
         List<RjesenjeDTO> rjesenja = rjesenjeService.findByNatjecanjeAndZadatak(natjecanje, zadatak)
         											.stream()
@@ -140,9 +144,19 @@ public class RjesenjeController {
 																	rj.getNatjecanje().getNatjecanjeId(),
 																	rj.getRjesenjeId().getRjesenjeRb(),
 																	rj.getBrojTocnihPrimjera()
-																	)).toList();;
+																	)).toList();
         
-        
+        if(Objects.nonNull(originalnoNatjecanje) && !user.getUsername().equals(korisnickoIme.get())) {
+        	rjesenja = rjesenjeService.findByNatjecanjeAndZadatak(originalnoNatjecanje, zadatak)
+					.stream()
+					.map(rj-> new RjesenjeDTO(rj.getRjesenjeId().getZadatak().getZadatakId(),
+									rj.getRjesenjeId().getNatjecatelj().getKorisnickoIme(),
+									rj.getNatjecanje().getNatjecanjeId(),
+									rj.getRjesenjeId().getRjesenjeRb(),
+									rj.getBrojTocnihPrimjera()
+									)).toList();
+        }
+      
         if(korisnickoIme.isEmpty()) {
         	return rjesenja;
         }

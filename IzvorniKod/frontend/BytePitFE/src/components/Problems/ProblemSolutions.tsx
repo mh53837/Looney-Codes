@@ -33,7 +33,8 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
                                         headers: { Authorization: `Basic ${credentials}` }
                                 };
                                 const response = await fetch(
-                                        `/api/solutions/get/competition/${nadmetanjeId}?zadatak=${zadatakId}&natjecatelj=${natjecatelj}`
+                                        `/api/solutions/get/competition/${nadmetanjeId}?zadatak=${zadatakId}&natjecatelj=${natjecatelj}`,
+                                        options
                                 );
                                 if (!response.ok) {
                                         throw new Error('Failed to fetch data');
@@ -84,7 +85,7 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
         };
 
 
-        const columns = solved ? [
+        const columns = solved || user.korisnickoIme === natjecatelj ? [
                 {
                         title: 'Rješenje',
                         dataIndex: 'rBr',
