@@ -36,8 +36,22 @@ body {
   padding-bottom: 60px;
 }
 
+.table-buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
 .table-switch-buttons {
+  display: flex;
+  justify-content: space-between;
   margin: 20px;
+}
+
+.generiraj-virtualno-natjecanje {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .tablica-natjecanje-button {
@@ -51,11 +65,16 @@ body {
   position: relative;
 }
 
+.tablica-natjecanje-button:active {
+  border-bottom: 2px solid #213547;
+}
+
 .tablica-natjecanje-button:hover {
   font-size: 1.4em;
   color: #213547;
   background-color: white;
 }
+
 
 .tablica-natjecanje-button::after {
   content: '';
@@ -73,6 +92,7 @@ body {
   width: 100%;
   left: 0;
 }
+
 
 .oznacenaNatjecanja {
   font-size: large;

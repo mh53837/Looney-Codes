@@ -13,6 +13,7 @@ interface Natjecanje {
     korisnickoImeVoditelja: string;
 }
 
+
 const Home: React.FC = () => {
     const [date, setDate] = useState<Date>(new Date());
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
@@ -21,25 +22,25 @@ const Home: React.FC = () => {
     const [nadolazeca, setUpcomingData] = useState<Natjecanje[]>([]);
     const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
     const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
-    const { user } = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const navigate = useNavigate();
 
     const generirajNasumicno = async () => {
-        const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
-        const options = {
-            method: 'POST',
-            headers: { Authorization: `Basic ${credentials}` }
-        };
-        await fetch(`/api/virtualnaNatjecanja/new/random/${user.korisnickoIme}`, options)
-            .then(response => response.json())
-            .then(data => {
-                navigate(`/natjecanja/rjesi/${data.virtualnoNatjecanjeId}`);
-            })
-            .catch(() => {
-                console.error('Greška prilikom generiranja natjecanja!');
-            });
+      const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+      const options = {
+              method: 'POST',
+              headers: { Authorization: `Basic ${credentials}` }
+            };
+      await fetch(`/api/virtualnaNatjecanja/new/random/${user.korisnickoIme}`, options)
+              .then(response => response.json())
+              .then(data => {
+                  navigate(`/natjecanja/rjesi/${data.virtualnoNatjecanjeId}`);
+              })
+              .catch(() => {
+                  console.error('Greška prilikom generiranja natjecanja!');
+              });
     }
-    const generirajNatjecanje = async (originalId: number) => {
+    const generirajNatjecanje = async (originalId : number) => {
         try {
             // stavljeno je da se dohvati random natjecanje iz proslih natjecanja
             const virtualnoNatjecanjeDTO = {
@@ -52,22 +53,23 @@ const Home: React.FC = () => {
             // request body
             const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
             const options = {
-                method: 'POST',
-                headers: {
-                    Authorization: `Basic ${credentials}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(virtualnoNatjecanjeDTO),
-            };
+                            method: 'POST',
+                            headers: {
+                                Authorization: `Basic ${credentials}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(virtualnoNatjecanjeDTO),
+                        };
             await fetch('/api/virtualnaNatjecanja/new', options)
-                .then(response => response.json())
-                .then((data) => {
-                    const novoNatjecanjeId = data.virtualnoNatjecanjeId;
-                    navigate(`/natjecanja/rjesi/${novoNatjecanjeId}`);
-                })
-                .catch(() => {
-                    console.error('Greška prilikom generiranja natjecanja!');
-                });
+                    .then(response => response.json())
+                    .then((data) => {
+                        const novoNatjecanjeId = data.virtualnoNatjecanjeId;
+                        navigate(`/natjecanja/rjesi/${novoNatjecanjeId}`);
+                    })
+                    .catch(() => {
+                          console.error('Greška prilikom generiranja natjecanja!');
+                    });
+
         } catch (error) {
             console.error('Greška prilikom generiranja natjecanja:', error);
         }
@@ -147,17 +149,12 @@ const Home: React.FC = () => {
 
     return (
         <div>
-            {user.uloga === "VODITELJ" &&
+            {(
+                user.uloga === "VODITELJ" &&
                 <Link to="/natjecanja/new">
-                    <button className="addBtn">novo natjecanje</button>
+                <button className="addBtn">novo natjecanje</button>
                 </Link>
-            }
-
-            {user.uloga == "NATJECATELJ" &&
-                <button className={"generiraj-natjecanje-button"} onClick={generirajNasumicno}>
-                    Pokreni natjecanje za vježbu!
-                </button>
-            }
+            )}
             <div className="calendar-container">
                 <Calendar value={date} locale='hr-HR' onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
@@ -175,26 +172,36 @@ const Home: React.FC = () => {
                 )}
             </div>
 
-            <div className="table-switch-buttons">
-                <button className={"tablica-natjecanje-button"} onClick={() => {
-                    setSelectedTable('prosla');
-                    const element = document.getElementById("tablica");
-                    if (element != null)
-                        element.scrollIntoView({ behavior: 'smooth' });
-                }}>Prošla natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => {
-                    setSelectedTable('trenutna');
-                    const element = document.getElementById("tablica");
-                    if (element != null)
-                        element.scrollIntoView({ behavior: 'smooth' });
-                }}>Trenutna natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => {
-                    setSelectedTable('nadolazeca');
-                    const element = document.getElementById("tablica");
-                    if (element != null)
-                        element.scrollIntoView({ behavior: 'smooth' });
-                }}>Nadolazeća natjecanja</button>
+            <div className={"table-buttons-container"}>
+                <div className="table-switch-buttons">
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('prosla');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Prošla natjecanja</button>
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('trenutna');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Trenutna natjecanja</button>
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('nadolazeca');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Nadolazeća natjecanja</button>
+                </div>
 
+                <div className={"generiraj-virtualno-natjecanje"}>
+
+                    {user.uloga == "NATJECATELJ" &&
+                        <button className={"generiraj-natjecanje-button"} onClick={generirajNasumicno}>
+                            Generiraj virtualno natjecanje
+                        </button>
+                    }
+                </div>
             </div>
 
             {selectedTable === 'trenutna' && (
@@ -267,7 +274,7 @@ const Home: React.FC = () => {
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
                                 <th>Voditelj</th>
-                                {user.uloga == "NATJECATELJ" && <th></th>}
+                                {user.uloga == "NATJECATELJ" && <th></th> }
                             </tr>
                         </thead>
                         <tbody>
@@ -283,11 +290,11 @@ const Home: React.FC = () => {
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
                                     <td>{natjecanje.korisnickoImeVoditelja}</td>
                                     {user.uloga == "NATJECATELJ" &&
-                                        <td>
-                                            <button onClick={() => generirajNatjecanje(natjecanje.natjecanjeId)}>
-                                                Pokreni natjecanje kao virtualno
-                                            </button>
-                                        </td>
+                                      <td>
+                                          <Link to="#" onClick={() => generirajNatjecanje(natjecanje.natjecanjeId)}>
+                                              Pokreni natjecanje kao virtualno
+                                          </Link>
+                                      </td>
                                     }
                                 </tr>
                             ))}
