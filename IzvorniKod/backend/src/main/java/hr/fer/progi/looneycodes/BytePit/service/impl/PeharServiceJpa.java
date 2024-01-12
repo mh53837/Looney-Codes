@@ -65,9 +65,13 @@ public class PeharServiceJpa implements PeharService {
 
     @Override
     public Pehar createPehar(AddPeharDTO dto) {
-        Optional<Korisnik> korisnik = korisnikRepository.findByKorisnickoIme(dto.getKorisnickoImeNatjecatelja());
+        //Optional<Korisnik> korisnik = korisnikRepository.findByKorisnickoIme(dto.getKorisnickoImeNatjecatelja());
+
+        if(dto.getMjesto() < 1 || dto.getMjesto() > 3)
+            throw new IllegalArgumentException("Mjesto mora biti izmedu 1 i 3!");
+
         Natjecanje natjecanje = natjecanjeRepository.findByNatjecanjeId(dto.getNatjecanjeId());
-        Pehar pehar = new Pehar(korisnik.get(), natjecanje, dto.getMjesto(), dto.getSlikaPehara());
+        Pehar pehar = new Pehar(null, natjecanje, dto.getMjesto(), dto.getSlikaPehara());
         validate(pehar);
         return peharRepository.save(pehar);
     }

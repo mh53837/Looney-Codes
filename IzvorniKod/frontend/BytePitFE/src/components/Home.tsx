@@ -123,7 +123,7 @@ const Home: React.FC = () => {
 
             return natjecanjaZaDatum.length > 0 ? (
                 <div>
-                    <p className="naziv-natjecanje">
+                    <p style={{ fontSize: 15 }} className="naziv-natjecanje">
                         &#9733;
                     </p>
                 </div>

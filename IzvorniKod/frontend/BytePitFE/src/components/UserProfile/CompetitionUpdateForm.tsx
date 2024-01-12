@@ -6,12 +6,12 @@ import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import 'dayjs/locale/hr';
 import { UserContext } from "../../context/userContext";
-import { ThemeContext } from "../../context/themeContext";
 import "../../styles/CompetitionUpdateForm.css";
 
 interface CompetitionUpdateFormProps {
   natjecanjeId: number;
   onUpdateSuccess: () => void;
+  theme: boolean;
 }
 interface CompetitionData {
   natjecanjeId: number;
@@ -22,7 +22,7 @@ interface CompetitionData {
 }
 
 
-const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeId, onUpdateSuccess}) => {
+const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeId, onUpdateSuccess, theme}) => {
   const { user } = useContext(UserContext);
   const [competitionData, setCompetitionData] = useState<CompetitionData | null>(null);
   const [open, setOpen] = useState(false);
@@ -31,8 +31,6 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
   const [updatedNaziv, setUpdatedNaziv] = useState<string>("");
   const [updatedPocetak, setUpdatedPocetak] = useState<Dayjs | null>(null);
   const [updatedKraj, setUpdatedKraj] = useState<Dayjs | null>(null);
-
-  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -183,7 +181,7 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
     <>
       <button onClick={showModal}>uredi</button>
       {
-        theme.isThemeDark == false ? (
+        theme === false ? (
           <ConfigProvider
             locale={hrHR}
             theme={{

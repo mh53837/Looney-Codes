@@ -31,6 +31,7 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
 
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    console.log("dodaj zadatke tema: ", theme);
     useEffect( () => {
         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
             const options = {
@@ -242,54 +243,57 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
     
     return (
         <>
-        {visible && showModal()}
-        { !visible && (<button onClick={showModal}>zadaci</button>)}
-        {
-        theme.isThemeDark == false ? (
-            <ConfigProvider
+          {visible && showModal()}
+          {!visible && <button onClick={showModal}>zadaci</button>}
+          {theme.isThemeDark === false ? (
+            <>
+              {console.log("light theme applied")}
+              <ConfigProvider
                 theme={{
-                components: {
+                  components: {
                     Modal: {
-                    contentBg: "#fff",
-                    
+                      contentBg: "#fff",
                     },
                     Button: {
-                    colorPrimary: "#dd7230",
-                    colorPrimaryHover: "#dd723081",
-                    colorPrimaryActive: "#dd723081",
+                      colorPrimary: "#dd7230",
+                      colorPrimaryHover: "#dd723081",
+                      colorPrimaryActive: "#dd723081",
                     },
-                }, 
+                  },
                 }}
-            >
-                { renderModal() }
-            </ConfigProvider>
-            ) : (
-            <ConfigProvider
-            theme={{
-                components: {
-                Modal: {
-                    contentBg: "#2A2D34",
-                    headerBg: "#2A2D34",
-                    footerBg: "#2A2D34",
-                    titleColor: "#ECDCC9",
-                    colorPrimary: "#ECDCC9",
-                    colorText: "#ECDCC9",
-                },
-                Button: {
-                    colorPrimary: "#dd7230",
-                    colorPrimaryHover: "#dd723081",
-                    colorPrimaryActive: "#dd723081",
-                    textHoverBg:"#2A2D34",
-                },
-                }, 
-            }}
-            >
-            { renderModal() }
-            </ConfigProvider>
-            )
-        }
+              >
+                {renderModal()}
+              </ConfigProvider>
+            </>
+          ) : (
+            <>
+              {console.log("dark theme applied")}
+              <ConfigProvider
+                theme={{
+                  components: {
+                    Modal: {
+                      contentBg: "#2A2D34",
+                      headerBg: "#2A2D34",
+                      footerBg: "#2A2D34",
+                      titleColor: "#ECDCC9",
+                      colorPrimary: "#ECDCC9",
+                      colorText: "#ECDCC9",
+                    },
+                    Button: {
+                      colorPrimary: "#dd7230",
+                      colorPrimaryHover: "#dd723081",
+                      colorPrimaryActive: "#dd723081",
+                      textHoverBg: "#2A2D34",
+                    },
+                  },
+                }}
+              >
+                {renderModal()}
+              </ConfigProvider>
+            </>
+          )}
         </>
-    );
-}
+      );
+}      
 
 export default AddProblemsToCompetition;

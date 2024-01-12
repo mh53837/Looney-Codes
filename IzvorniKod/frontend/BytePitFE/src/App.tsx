@@ -9,13 +9,13 @@ import { UserContext } from './context/userContext';
 import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
 import CompetitionResults from './components/Competition/CompetitionResults.tsx';
+import UserProfile from './components/UserProfile/UserProfile.tsx';
 
 
 
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage.tsx'));
-const UserProfile = React.lazy(() => import('./components/UserProfile/UserProfile.tsx'));
 const Register = React.lazy(() => import('./components/Register.tsx'));
 const Navbar = React.lazy(() => import('./layout/Navbar.tsx'));
 const ConfirmEmail = React.lazy(() => import('./components/ConfirmEmail.tsx'));
@@ -58,6 +58,8 @@ const App: React.FC = () => {
     };
 
     useEffect(() => {
+
+       
     }, [theme.isThemeDark]);
 
 

@@ -145,3 +145,9 @@ body {
   background-color: #2A2D34;
   color: #ECDCC9;
 }
+
+@media screen and (max-width: 768px) {
+  body{
+    font-size: 10px;
+  }
+}

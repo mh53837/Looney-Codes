@@ -9,8 +9,8 @@
 }
 
 .logo-container img {
-    margin: 1rem;
-    width: 10rem;
+    margin: 5px;
+    width: 15vw;
 }
 
 .navbar-options-container {
@@ -25,10 +25,12 @@
     max-height: fit-content;
     max-width: 100%;
 }
-
+.navbar-options-container a {
+    margin: 2px;
+}
 .navbar-options-container button {
     height: fit-content;
-    margin: 20px;
+    margin: 10px;
     margin-bottom: 0;
     margin-top: 0;
     align-self: center;
@@ -45,7 +47,6 @@
     border: 3px solid transparent;
     border-radius: 10px;
     padding: 1rem;
-
 }
 
 .loginDiv a {
@@ -63,7 +64,6 @@
 .loginDiv button {
     margin: 0;
     padding: 0.5rem;
-
 }
 
 .loginDiv button:hover {
@@ -98,19 +98,35 @@
 }
 
 @media screen and (max-width: 768px) {
+    .navbar-container {
+        grid-template-columns: 1fr;
+        font-size: 10px;
+    }
+
+    .navbar-options-container {
+        grid-template-columns: 1fr;
+        margin:1px;
+    }
+
+    .navbar-options-container button {
+        margin: 5px 0;
+    }
+
     .logo-container {
-        display: none;
+        text-align: center;
     }
 
-    .nav-item {
-        padding: 5px;
-        margin: 0px;
+    .userIconImg {
+        margin-left: 0;
     }
 
-    .nav-item a {
-        padding: 0px;
-        margin: 0px;
+    .loginDiv {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
     }
 
-
+    .loginDiv a {
+        margin-bottom: 10px;
+    }
 }

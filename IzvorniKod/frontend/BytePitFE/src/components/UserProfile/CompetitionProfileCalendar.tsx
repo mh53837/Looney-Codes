@@ -78,12 +78,10 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
           date?.toDateString()
       )
       return filteredCompetitions.length > 0 ? (
-        <div>
-          {filteredCompetitions.map((competition: CompetitionData) => (
-            <p style={{ fontSize: 15 }} key={competition.natjecanjeId} className="naziv-natjecanje">
+        <div>        
+            <p style={{ fontSize: 15 }} className="naziv-natjecanje">
               &#9733;
             </p>
-          ))}
         </div>
       ) : null;
     }
@@ -119,6 +117,9 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
             key: "pocetakNatjecanja",
             className: "th-td",
             render: (date: string) => formatirajDatumVrijeme(date),
+            sorter: (a: CompetitionData, b: CompetitionData) =>
+              new Date(a.pocetakNatjecanja).getTime() - new Date(b.pocetakNatjecanja).getTime(),
+  
           },
           {
             title: "kraj",
@@ -126,6 +127,8 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
             key: "krajNatjecanja",
             className: "th-td",
             render: (date: string) => formatirajDatumVrijeme(date),
+            sorter: (a: CompetitionData, b: CompetitionData) =>
+              new Date(a.krajNatjecanja).getTime() - new Date(b.krajNatjecanja).getTime(),
           },
           ...(((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN") ? [
             {
@@ -140,6 +143,7 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
                     <CompetitonUpdateForm
                       natjecanjeId={data.natjecanjeId ?? 0}
                       onUpdateSuccess={handleUpdateSuccess}
+                      theme = {theme.isThemeDark}
                     />
                   </React.Suspense>
                 </span>
@@ -165,6 +169,7 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
         rowKey="natjecanjeId"
         showSorterTooltip={false}
         style={{ tableLayout: "fixed" }}
+        scroll={{ x: true }} 
       />
     )
   }
@@ -210,9 +215,10 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
                         theme.isThemeDark == false ? (
                           <ConfigProvider
                             theme={{
-
                               components: {
                                 Table: {
+                                  cellPaddingBlock: 16,
+                                  cellPaddingInline: 6,
                                   headerBg: "#f4c95de7",
                                   rowHoverBg: "#f4c95d52",
                                   borderColor: "#00000085",
@@ -236,6 +242,8 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
                             theme={{
                               components: {
                                 Table: {
+                                  cellPaddingBlock: 16,
+                                  cellPaddingInline: 6,
                                   headerBg: "#dd7230",
                                   rowHoverBg: "#dcdcdc34",
                                   borderColor: "#00000085",
