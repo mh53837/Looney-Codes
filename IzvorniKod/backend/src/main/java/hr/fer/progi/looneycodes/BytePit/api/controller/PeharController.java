@@ -61,7 +61,7 @@ public class PeharController {
      *
      */
     @PostMapping("/add")
-    public Pehar addPehar(@RequestPart("image") MultipartFile file, @RequestPart("peharData")  AddPeharDTO dto){
+    public AddPeharDTO addPehar(@RequestPart("image") MultipartFile file, @RequestPart("peharData")  AddPeharDTO dto){
         try {
             int extensionIndex = file.getOriginalFilename().lastIndexOf('.');
             if (extensionIndex < 1) {
@@ -81,7 +81,7 @@ public class PeharController {
         }
 
         Pehar pehar = peharService.createPehar(dto);
-        return pehar;
+        return new AddPeharDTO(pehar);
     }
     /**
      * Dohvati sliku pehara
