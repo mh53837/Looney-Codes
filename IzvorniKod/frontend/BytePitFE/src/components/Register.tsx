@@ -99,8 +99,6 @@ const Register: React.FC<RegisterProps> = (props) => {
 
         formData.append('userData', new Blob([JSON.stringify(jsonPart)], { type: 'application/json' }), 'userData.json');
 
-
-
         const options = {
             method: 'POST',
             body: formData,
@@ -147,7 +145,7 @@ const Register: React.FC<RegisterProps> = (props) => {
                         <input name="confirmLozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.confirmLozinka} />
                     </div>
                     <div className="FormRow">
-                        <label>Slika profila</label>
+                        <label>slika profila</label>
                         <input name="slika" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
                     </div>
                     <div className="FormRow">

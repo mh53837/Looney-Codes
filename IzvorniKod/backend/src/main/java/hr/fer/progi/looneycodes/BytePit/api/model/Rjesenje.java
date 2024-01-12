@@ -30,6 +30,7 @@ public class Rjesenje {
   /**
    * tekst programskog koda je bio evaluiran
    */
+  @Column(columnDefinition = "text")
   private String programskiKod;
   /**
    * povezano nadmetanje

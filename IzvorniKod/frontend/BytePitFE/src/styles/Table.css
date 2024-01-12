@@ -4,12 +4,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 40px;
 }
 
 .info-table {
   width: 100%;
   margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 60px;
 }
 
 .info-table table {
@@ -21,15 +22,21 @@
 .info-table td {
   border: 1px solid #00000085;
   padding: 10px;
-  text-align: left;
+  text-align: center;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 30rem;
+
 }
 
-.info-table th{
+
+
+.info-table th {
   background-color: #f4c95de7;
 }
 
-.info-table tbody tr:hover{
+.info-table tbody tr:hover {
   background-color: #f4c95d52;
 }
 
@@ -47,3 +54,27 @@
   white-space: nowrap;
 } */
 
+
+[data-theme="dark"] .info-table {
+  color: #ECDCC9;
+  background-color: #2A2D34;
+  border-color: #ECDCC9;
+}
+
+[data-theme="dark"] button:hover {
+  color: #2A2D34;
+  background-color: #dd7230e0;
+}
+
+[data-theme="dark"] button,
+[data-theme="dark"] a {
+  color: #ECDCC9;
+}
+
+[data-theme="dark"] .info-table th {
+  background-color: #dd7230e0;
+}
+
+[data-theme="dark"] .info-table tbody tr:hover {
+  background-color: #dcdcdc34;
+}

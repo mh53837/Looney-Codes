@@ -1,10 +1,11 @@
 .navbar-container {
-    display: flex;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: auto auto auto;
     align-items: center;
     padding: 10px;
     max-width: 100%;
-    overflow-x: hidden ;
+    max-height: fit-content;
+    overflow-x: hidden;
 }
 
 .logo-container img {
@@ -13,73 +14,94 @@
 }
 
 .navbar-options-container {
-    flex: 1;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
     margin: 1rem;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
     border-radius: 1px;
     display: flex;
     justify-content: center;
+    max-height: fit-content;
     max-width: 100%;
 }
 
-.nav-item {
-    padding: 15px;
-    margin: 0 10px;
-    color: #000;
-}
-
-.nav-item button {
+.navbar-options-container button {
+    height: fit-content;
     margin: 20px;
     margin-bottom: 0;
     margin-top: 0;
+    align-self: center;
 }
 
 .userIconImg {
     max-width: 1.5rem;
     margin-left: 0.5rem;
-    /* border: solid 1px black;
-    border-radius: 20%; */
+    border-radius: 50%;
 }
 
 .loginDiv {
     background-color: transparent;
     border: 3px solid transparent;
-    border-radius:10px;
+    border-radius: 10px;
     padding: 1rem;
 
 }
-.loginDiv a{
+
+.loginDiv a {
     display: flex;
     flex-direction: row;
     justify-content: baseline;
     align-items: center;
     border: 3px solid transparent;
-    border-radius:10px;
+    border-radius: 10px;
     padding: 0.1rem;
     transition: border-color 0.25s;
 
 }
+
 .loginDiv button {
-    margin:0;
+    margin: 0;
     padding: 0.5rem;
 
 }
+
 .loginDiv button:hover {
+    color: #dd7230;
     background-color: transparent;
 }
-.loginDiv a:hover{
+
+.loginDiv a:hover {
     border-color: #dd7230;
 }
 
-.korisnikIme{
+.korisnikIme {
     padding-left: 1rem;
+}
+
+[data-theme="dark"] .navbar-options-container a>button:hover {
+    color: #ECDCC9;
+}
+
+[data-theme="dark"] a:hover,
+[data-theme="dark"] button:hover {
+    color: #854d27;
+}
+
+[data-theme="dark"] button,
+[data-theme="dark"] a {
+    color: #ECDCC9;
+}
+
+[data-theme="dark"] .logo-container {
+    background-color: #2A2D34;
 }
 
 @media screen and (max-width: 768px) {
     .logo-container {
-      display: none;
+        display: none;
     }
+
     .nav-item {
         padding: 5px;
         margin: 0px;

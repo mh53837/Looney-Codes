@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ConfigProvider, Select } from "antd";
+import { ConfigProvider, Select, Modal } from "antd";
 import { UserContext } from "../../context/userContext";
+import { ThemeContext } from "../../context/themeContext";
 import "../../styles/CompetitionUpdateForm.css";
 
 interface ProblemUpdateFormProps {
@@ -18,12 +19,12 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
-const DynamicModal = React.lazy(() => import("antd/lib/modal"));
+/* const NewEvaluationTest = React.lazy(() => import("../Problems/NewEvaluationTest") ); */
 
 const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpdateSuccess }) => {
   const [problemData, setProblemData] = useState<ProblemData | null>(null);
   const { user } = useContext(UserContext);
-
+  const { theme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -31,6 +32,16 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
 	const [updatedTekst, setUpdatedTekst] = useState<string>("");
   const [updatedTezinaZadatka, setUpdatedTezinaZadatka] = useState<string>("");
   const [updatedBrojBodova, setUpdatedBrojBodova] = useState<number>(0);
+
+  const [selectedOption, setSelectedOption] = useState<boolean>(true);
+
+  const handlePrivateOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    if(event.target.value === 'true')
+      setSelectedOption(true);
+    else if (event.target.value === 'false')
+      setSelectedOption(false);
+  };
 
   const handleBrojBodovaChange = (value: string) => {
     const broj = parseInt(value, 10);
@@ -55,6 +66,7 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
         setUpdatedTekst(data.tekstZadatka);
         setUpdatedBrojBodova(data.brojBodova);
         setUpdatedTezinaZadatka(data.tezinaZadatka);
+        setSelectedOption(data.privatniZadatak);
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -62,6 +74,79 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
 
     fetchInitialData();
   }, [zadatakId]);
+
+  const renderModal = () => {
+    return (
+      <React.Suspense fallback={<div>učitavanje...</div>}>
+      <Modal
+        title="uredi zadatak"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        cancelText="odustani"
+        okText="spremi promjene"
+        okButtonProps={{ style: { color: "#2A2D34" } }}
+        cancelButtonProps={{ style: { color: "#2A2D34" } }}
+      >
+        <div className="updateFormContainer">
+          <p>naziv:</p>
+          <input
+            className="problemUpdateForm"
+            type="text"
+            placeholder="naziv zadatka"
+            value={updatedNaziv}
+            onChange={(e) => setUpdatedNaziv(e.target.value)}
+          />
+          <p>tekst:</p>
+          <input
+            className="problemUpdateForm"
+            type="text"
+            placeholder="tekst zadatka"
+            value={updatedTekst}
+            onChange={(e) => setUpdatedTekst(e.target.value)}
+          />
+          <p>broj bodova: </p>
+          <Select 
+            defaultValue= {problemData?.brojBodova.toString() || "10"  }
+            style={{ width: 120 }}
+            onChange={ handleBrojBodovaChange}
+            options={[
+              { value:"10", label: "10" },
+              { value:"20", label: "20" },
+              { value:"50", label: "50" },
+            ]}
+          />
+          <p>status zadatka:</p>
+          <label>
+            <input
+              type="radio"
+              value="true"
+              checked={selectedOption === true}
+              onChange={handlePrivateOptionChange}
+            />
+            privatni
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            value="false"
+            checked={selectedOption === false}
+            onChange={handlePrivateOptionChange}
+          />
+          javni
+        </label>
+
+{/*           <React.Suspense fallback={<div>učitavanje...</div>}>
+          <NewEvaluationTest zadatakId={zadatakId} /> 
+        </React.Suspense> */}
+
+        </div>
+      </Modal>
+      </React.Suspense>
+    );
+  }
 
   const showModal = () => {
     setOpen(true);
@@ -86,7 +171,6 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
     setOpen(false);
   };
 
-
   const HandleEdit = async (zadatakId: BigInteger) => {
     try {
       const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
@@ -97,13 +181,12 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
 				tekstZadatka: updatedTekst ? updatedTekst : problemData?.tekstZadatka,
         voditelj: problemData?.voditelj,
         brojBodova: updatedBrojBodova ? updatedBrojBodova : problemData?.brojBodova,
-        privatniZadatak: problemData?.privatniZadatak,
+        privatniZadatak: selectedOption,
         tezinaZadatka: updatedTezinaZadatka ? updatedTezinaZadatka : problemData?.tezinaZadatka,
         vremenskoOgranicenje: problemData?.vremenskoOgranicenje,
       };
       console.log("updated data:", updatedData);
       
-
       const response = await fetch(`/api/problems/update/${zadatakId}`, {
         method: "POST",
         headers: {
@@ -132,62 +215,54 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
   return (
     <>
       <button onClick={showModal}>uredi</button>
-      <ConfigProvider
-        theme={{
-          components: {
-            Modal: {},
-            Button: {
-              colorPrimary: "#dd7230",
-							colorPrimaryHover: "#dd723081",
-							colorPrimaryActive: "#dd723081"
-            },
-          },
-        }}
-      >
-        <React.Suspense fallback={<div>učitavanje...</div>}>
-        <DynamicModal
-          title="uredi zadatak"
-          open={open}
-          onOk={handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-          cancelText="odustani"
-          okText="spremi promjene"
+      {
+        theme.isThemeDark == false ? (
+          <ConfigProvider
+            theme={{
+              components: {
+                Modal: {
+                  contentBg: "#fff",
+                },
+                Button: {
+                  colorPrimary: "#dd7230",
+                  colorPrimaryHover: "#dd723081",
+                  colorPrimaryActive: "#dd723081",
+                },
+              }, 
+            }}
+          >
+            { renderModal() }
+          </ConfigProvider>
+        ) : (
+          <ConfigProvider
+          theme={{
+            components: {
+              Modal: {
+                contentBg: "#2A2D34",
+                headerBg: "#2A2D34",
+                footerBg: "#2A2D34",
+                titleColor: "#ECDCC9",
+                colorPrimary: "#2A2D34",
+                colorPrimaryText: "#2A2D34",
+                colorText: "#ECDCC9",
+              },
+              Button: {
+                colorPrimary: "#dd7230e0",
+                colorPrimaryHover: "#ECDCC9",
+                colorPrimaryActive: "#2A2D34",
+                colorLinkHover: "#000",
+                
+                textHoverBg:"#2A2D34",
+                colorText: "#2A2D34",
+                colorPrimaryText: "#2A2D34",
+              },
+            }, 
+          }}
         >
-          <div className="updateFormContainer">
-						<p>naziv:</p>
-            <input
-              className="problemUpdateForm"
-              type="text"
-              placeholder="naziv zadatka"
-              value={updatedNaziv}
-              onChange={(e) => setUpdatedNaziv(e.target.value)}
-            />
-						<p>tekst:</p>
-						<input
-              className="problemUpdateForm"
-              type="text"
-              placeholder="tekst zadatka"
-              value={updatedTekst}
-              onChange={(e) => setUpdatedTekst(e.target.value)}
-            />
-            <p>broj bodova: </p>
-            <Select 
-              defaultValue= {problemData?.brojBodova.toString() || "10"  }
-              style={{ width: 120 }}
-              onChange={ handleBrojBodovaChange}
-              options={[
-                { value:"10", label: "10" },
-                { value:"20", label: "20" },
-                { value:"50", label: "50" },
-              ]}
-            />
-
-           
-          </div>
-        </DynamicModal>
-        </React.Suspense>
-      </ConfigProvider>
+          { renderModal() }
+        </ConfigProvider>
+        )
+      }
     </>
   );
 };

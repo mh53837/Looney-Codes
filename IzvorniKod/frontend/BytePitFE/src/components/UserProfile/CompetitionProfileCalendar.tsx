@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
+import { Link } from 'react-router-dom';
 import { UserContext } from "../../context/userContext";
+import { ThemeContext } from "../../context/themeContext";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Table, ConfigProvider } from "antd";
@@ -39,6 +41,8 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
     onUpdate();
   };
 
+  const {theme} = useContext(ThemeContext);
+
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
       const filteredCompetitions = competitionsData.filter(
@@ -60,8 +64,82 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
     return null;
 };
 
+const renderTable = (filteredData : CompetitionData[] | undefined) => {
+  if (!filteredData) {
+    return;
+  }
+  return (
+    <Table
+      dataSource={filteredData}
+      columns={[
+        {
+          title: "korisničko ime",
+          dataIndex: "korisnickoImeVoditelja",
+          key: "korisnickoIme",
+          className: "th-td",
+        },
+        {
+          title: "naziv",
+          dataIndex: "nazivNatjecanja",
+          key: "nazivNatjecanja",
+          className: "th-td",
+          sorter: (a, b) =>
+            a.nazivNatjecanja.localeCompare(
+              b.nazivNatjecanja
+            ),
+        },
+        {
+          title: "početak",
+          dataIndex: "pocetakNatjecanja",
+          key: "pocetakNatjecanja",
+          className: "th-td",
+          render: (date) => new Date(date).toDateString(),
+        },
+        {
+          title: "kraj",
+          dataIndex: "krajNatjecanja",
+          key: "krajNatjecanja",
+          className: "th-td",
+          render: (date) => new Date(date).toDateString(),
+        },
+        ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
+          {
+            title: "",
+            key: "edit",
+            className: "th-td",
+            render: (data : CompetitionData) => (
+              <span>
+                    <React.Suspense
+                      fallback={<div>učitavanje...</div>}
+                    >
+                      <CompetitonUpdateForm
+                        natjecanjeId={data.natjecanjeId ?? 0}
+                        onUpdateSuccess={handleUpdateSuccess}
+                      />
+                    </React.Suspense>
+              </span>
+            ),
+          },
+          ] : []),
+      ]}
+      pagination={false}
+      rowKey="natjecanjeId"
+      showSorterTooltip={false}
+      style={{ tableLayout: "fixed" }}
+    />
+  )
+}
+
   return (
     <div className="calendar-container">
+      {(
+        user.korisnickoIme === userData.korisnickoIme &&
+        <Link to = "/natjecanja/new">
+          <button>novo natjecanje</button>
+        </Link>
+      )}
+      
+
       <Calendar
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate as Date)}
@@ -85,82 +163,55 @@ const CompetitionProfileCalendar: React.FC<CompetitionProfileCalendarProps> = ({
                 return (
                   <div className="tableWrapper">
                     <div className="info-table">
-                      <ConfigProvider
-                        theme={{
-                          components: {
-                            Table: {
-                              headerBg: "#f4c95de7",
-                              rowHoverBg: "#f4c95d52",
-                              borderColor: "#00000085",
-                              headerFilterHoverBg: "#f4c95de7",
-                              headerSortActiveBg: "#f4c95de7",
-                              headerSortHoverBg: "#f4c95da9",
-                              headerBorderRadius: 0,
-                              colorPrimary: "#dd7230",
-                              headerSplitColor: "transparent",
-                            },
-                          },
-                        }}
-                      >
-                        <Table
-                          dataSource={filteredData}
-                          columns={[
-                            {
-                              title: "korisničko ime",
-                              dataIndex: "korisnickoImeVoditelja",
-                              key: "korisnickoIme",
-                              className: "th-td",
-                            },
-                            {
-                              title: "naziv",
-                              dataIndex: "nazivNatjecanja",
-                              key: "nazivNatjecanja",
-                              className: "th-td",
-                              sorter: (a, b) =>
-                                a.nazivNatjecanja.localeCompare(
-                                  b.nazivNatjecanja
-                                ),
-                            },
-                            {
-                              title: "početak",
-                              dataIndex: "pocetakNatjecanja",
-                              key: "pocetakNatjecanja",
-                              className: "th-td",
-                              render: (date) => new Date(date).toDateString(),
-                            },
-                            {
-                              title: "kraj",
-                              dataIndex: "krajNatjecanja",
-                              key: "krajNatjecanja",
-                              className: "th-td",
-                              render: (date) => new Date(date).toDateString(),
-                            },
-                            ...( ((user.uloga === "VODITELJ" && user.korisnickoIme === userData.korisnickoIme) || user.uloga === "ADMIN")   ? [
-                              {
-                                title: "",
-                                key: "edit",
-                                className: "th-td",
-                                render: (data : CompetitionData) => (
-                                  <span>
-                                        <React.Suspense
-                                          fallback={<div>učitavanje...</div>}
-                                        >
-                                          <CompetitonUpdateForm
-                                            natjecanjeId={data.natjecanjeId ?? 0}
-                                            onUpdateSuccess={handleUpdateSuccess}
-                                          />
-                                        </React.Suspense>
-                                  </span>
-                                ),
+                      {
+                        theme.isThemeDark == false ? (
+                        <ConfigProvider
+                          theme={{
+                            
+                            components: {
+                              Table: {
+                                headerBg: "#f4c95de7",
+                                rowHoverBg: "#f4c95d52",
+                                borderColor: "#00000085",
+                                headerFilterHoverBg: "#f4c95de7",
+                                headerSortActiveBg: "#f4c95de7",
+                                headerSortHoverBg: "#f4c95da9",
+                                headerBorderRadius: 0,
+                                colorPrimary: "#dd7230",
+                                headerSplitColor: "transparent",
+                                colorBgContainer: "#fff",
+                                colorText:"#000"
                               },
-                             ] : []),
-                          ]}
-                          pagination={false}
-                          rowKey="natjecanjeId"
-                          showSorterTooltip={false}
-                          style={{ tableLayout: "fixed" }}
-                        />
-                      </ConfigProvider>
+                            },
+                          }}
+                        > 
+                        {renderTable(filteredData)}
+                        
+                        </ConfigProvider>
+                      ):(
+                        <ConfigProvider
+                          theme={{
+                            components: {
+                              Table: {
+                                headerBg: "#dd7230",
+                                rowHoverBg: "#dcdcdc34",
+                                borderColor: "#00000085",
+                                headerFilterHoverBg: "#dd7230e0",
+                                headerSortActiveBg: "#dd7230e0",
+                                headerSortHoverBg: "#dd7230",
+                                headerBorderRadius: 0,
+                                colorPrimary: "#f4c95d",
+                                headerSplitColor: "transparent",
+                                colorBgContainer: "#2A2D34",
+                                colorText:" #ECDCC9",
+                              },
+                            },
+                          }}
+                        > 
+                        {renderTable(filteredData)}
+                        
+                        </ConfigProvider>
+                      )}
                     </div>
                   </div>
                 );

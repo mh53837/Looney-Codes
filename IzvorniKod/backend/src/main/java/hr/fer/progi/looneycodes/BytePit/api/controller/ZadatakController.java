@@ -184,10 +184,10 @@ public class ZadatakController {
     if(Objects.isNull(user))
       throw new AccessDeniedException("You must be logged in for that!");
 
-		Zadatak zadatak = zadatakService.fetch(id);
+	Zadatak zadatak = zadatakService.fetch(id);
 
     if(!user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))
-        && !zadatak.getVoditelj().getIme().equals(user.getUsername()))
+        && !zadatak.getVoditelj().getKorisnickoIme().equals(user.getUsername()))
       throw new AccessDeniedException("Morate biti autor zadatka ili admin da biste dodali testove!");
 
 		test.setTestniPrimjerId(new TestniPrimjerKey(null, zadatak));

@@ -2,13 +2,18 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.PeharService;
+import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.util.Pair;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -51,4 +56,43 @@ public class PeharController {
         return peharService.listAllFromOneNatjecatelj(korisnickoIme);
     }
 
+    /**
+     * Dodaj novi pehar.
+     *
+     */
+    @PostMapping("/add")
+    public Pehar addPehar(@RequestPart("image") MultipartFile file, @RequestPart("peharData")  AddPeharDTO dto){
+        try {
+            int extensionIndex = file.getOriginalFilename().lastIndexOf('.');
+            if (extensionIndex < 1) {
+                dto.setSlikaPehara(null);
+            } else {
+                String extension = file.getOriginalFilename().substring(extensionIndex);
+
+                if (!List.of(".jpg", ".jpeg", ".png").contains(extension))
+                    throw new RequestDeniedException("Format slike nije podržan! Podržani formati su .jpg, .jpeg, .png");
+
+               Path savePath = Path.of("./src/main/resources/slikePehara").resolve(dto.getNatjecanjeId() +  extension);
+               file.transferTo(savePath);
+               dto.setSlikaPehara(savePath.toString());
+            }
+        } catch (IOException e) {
+            throw new RequestDeniedException("Nije uspio upload slike");
+        }
+
+        Pehar pehar = peharService.createPehar(dto);
+        return pehar;
+    }
+    /**
+     * Dohvati sliku pehara
+     * @param peharId id pehara za kojeg trazimo sliku
+     * @return slika pehara
+     */
+    @GetMapping("/image/{peharId}")
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable("peharId") Integer peharId) {
+        Pair<byte[], MediaType> image = peharService.getImage(peharId);
+        return ResponseEntity.ok()
+                .contentType(image.getSecond())
+                .body(image.getFirst());
+    }
 }

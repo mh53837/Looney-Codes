@@ -10,6 +10,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.OptionalInt;
 
 /**
  * Interface koji definira komunikaciju s bazom u odnosu na Rjesenje entitete.
@@ -65,7 +66,7 @@ public interface RjesenjeService {
      * @param nadmetanjeId
      * @return stvoreno Rjesenje
      */
-    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, Integer nadmetanjeId);
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, OptionalInt nadmetanjeId);
 
     /**
      * Vrati evaluirano rješenje s brojem točnih odgovora.

@@ -81,7 +81,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
         return rjesenjeRepository.findByNatjecanjeId(natjecanjeId);
     }
     @Override
-    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, Integer nadmetanjeId) {
+    public Rjesenje add(EvaluationResultDTO dto, String korisnickoIme, Integer zadatakId, String programskiKod, OptionalInt nadmetanjeId) {
       Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
       Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
 
@@ -100,13 +100,13 @@ public class RjesenjeServiceJpa implements RjesenjeService {
         rjesenjeRb = max.getAsInt() + 1;
 
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
-      Nadmetanje nadmetanje;
-      if(natjecanjeRepository.findById(nadmetanjeId).isPresent())
-        nadmetanje = natjecanjeRepository.findById(nadmetanjeId).get();
-      else if(virtualnoNatjecanjeRepository.findById(nadmetanjeId).isPresent())
-        nadmetanje = virtualnoNatjecanjeRepository.findById(nadmetanjeId).get();
-      else
-        throw new IllegalArgumentException("Traženo nadmetanje ne postoji!");
+      Nadmetanje nadmetanje = null;
+      if (nadmetanjeId.isPresent()) {
+        if(natjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
+          nadmetanje = natjecanjeRepository.findById(nadmetanjeId.getAsInt()).get();
+        else if(virtualnoNatjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
+          nadmetanje = virtualnoNatjecanjeRepository.findById(nadmetanjeId.getAsInt()).get();
+      }
 
       Rjesenje rjesenje = new Rjesenje(rjesenjeId,
                                       Timestamp.from(Instant.now()),
@@ -144,7 +144,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
             "cpu_time_limit" : %d
           }
           """,
-          dto.getProgramskiKod().replace("\n", "\\n"),
+          dto.getProgramskiKod().replace("\n", "\\n").replace("\"", "\\\""),
           test.getUlazniPodaci(), test.getIzlazniPodaci(),
           zadatak.getVremenskoOgranicenje()
       );

@@ -1,7 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import LoadingOverlay from 'react-loading-overlay-nextgen';
 import { useParams } from 'react-router-dom';
 import '../../styles/ProblemPage.css';
 import { UserContext } from '../../context/userContext';
+import CodeMirror from '@uiw/react-codemirror';
+import { cpp } from '@codemirror/lang-cpp';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 
 interface IProblemDetails {
         zadatakId: string;
@@ -11,23 +15,23 @@ interface IProblemDetails {
         tekstZadatka: string;
 }
 
-const ProblemPage: React.FC = () => {
-
-        const { id } = useParams();     //id zadatka preuzet iz url-a
+const ProblemPage: React.FC<string | {}> = () => {
+        const { zadatakId, nadmetanjeId } = useParams();     //id zadatka preuzet iz url-a
         const { user } = useContext(UserContext); //podaci ulogiranog korisnika
 
         const [problemDetails, setProblemDetails] = useState<IProblemDetails | null>(null); //atributi problema
         const [sourceCode, setSourceCode] = useState<string>('');       //programski kod iščitan iz datoteke
         const [testResults, setTestResults] = useState<number[]>([]);   //rezultati testova
         const [errorMessage, setErrorMessage] = useState<string | null>(null);  //poruka ukoliko nije ulogiran natjecatelj
+        const [isLoading, setLoading] = useState<boolean>(false); // za loading overlay...
 
         // izvuci podatke o zadatku na temelju id-a
         useEffect(() => {
-                fetch(`/api/problems/get/${id}`)
+                fetch(`/api/problems/get/${zadatakId}`)
                         .then((response) => response.json())
                         .then((data: IProblemDetails) => setProblemDetails(data))
                         .catch((error) => console.error('Error fetching problem details:', error));
-        }, [id]);
+        }, [zadatakId]);
 
         if (!problemDetails) {
                 return (<div>Zadatak ne postoji ili mu ne možete pristupiti</div>);
@@ -56,19 +60,26 @@ const ProblemPage: React.FC = () => {
         // pozivanje evaluacije na backendu
         const handleSubmitClick = async () => {
                 try {
-                        if (!user.korisnickoIme || !sourceCode) {
-                                setErrorMessage('Niste postavili datoteku ili niste ulogirani!');
-                                return;
+                        // ako nema fajla, onda citamo sadrzaj editora!
+                        if (!sourceCode && !code) {
+                          setErrorMessage("Greška kod uploadanja!");
+                          return;
                         }
 
                         // konstrukcija JSON-a
                         const solutionData = {
                                 korisnickoIme: user.korisnickoIme,
                                 zadatakId: problemDetails.zadatakId || '',
-                                programskiKod: sourceCode,
+                                programskiKod: sourceCode? sourceCode : code?.valueOf(), // salji sadrzaj editora ako nema fajla
+                                nadmetanjeId: nadmetanjeId,
                         };
 
+                        // zamijeni navodnike u programskom kodu
+                        solutionData.programskiKod = solutionData.programskiKod?.replace(`/"/g`, `\"`);
+
                         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+
+                        setLoading(true);
                         fetch('/api/solutions/upload', {
                                 method: 'POST',
                                 headers: {
@@ -99,8 +110,10 @@ const ProblemPage: React.FC = () => {
                                 })
                                 .catch((error) => {
                                         console.error('Error uploading solution:', error);
+                                })
+                                .finally(() => {
+                                        setLoading(false);
                                 });
-
                 } catch (error) {
                         console.error('Error uploading solution:', error);
                 }
@@ -109,6 +122,8 @@ const ProblemPage: React.FC = () => {
 
         // upload gumb koji je dostupan samo ulogiranom korisniku
         let uploadButton = null;
+        let codeEditor : ReactElement | null = null;
+        let code : string | null = null;
         if (user.uloga === 'NATJECATELJ') {
                 uploadButton = (
                         <div className="problem-upload">
@@ -117,8 +132,20 @@ const ProblemPage: React.FC = () => {
                                 <button onClick={handleSubmitClick}>Provjeri</button>
                         </div>
                 );
-        }
+                
+                code = `#include <bits/stdc++.h>
+using namespace std;
+int main() {
 
+  return 0;
+}`;
+                codeEditor = (
+                    <div className="code-editor">
+                      <CodeMirror value={code} onChange={(value, _) => code = value} height="30rem" theme = { dracula } extensions={[cpp()]} />
+                    </div>
+                );
+        }
+    
         // vraćanje stranice
         return (
                 <div className="problem-details-container">
@@ -132,6 +159,11 @@ const ProblemPage: React.FC = () => {
                                 <p>{problemDetails.tekstZadatka}</p>
                         </div>
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        <LoadingOverlay
+                        active={isLoading} spinner text='Provjeravamo rješenje...'
+                        >
+                        {codeEditor}
+                        </LoadingOverlay>
                         {uploadButton}
                         {testResults.length > 0 && (
                                 <div className="test-results">
