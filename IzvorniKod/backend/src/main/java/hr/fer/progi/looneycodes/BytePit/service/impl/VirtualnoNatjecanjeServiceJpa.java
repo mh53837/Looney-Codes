@@ -1,30 +1,32 @@
 package hr.fer.progi.looneycodes.BytePit.service.impl;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
-import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
-import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
-import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
-import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
-import hr.fer.progi.looneycodes.BytePit.api.repository.VirutalnoNatjecanjeRepository;
-import hr.fer.progi.looneycodes.BytePit.service.KorisnikService;
-import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
-import hr.fer.progi.looneycodes.BytePit.service.VirtualnoNatjecanjeService;
+import hr.fer.progi.looneycodes.BytePit.api.model.*;
+import hr.fer.progi.looneycodes.BytePit.api.repository.VirtualnoNatjecanjeRepository;
+import hr.fer.progi.looneycodes.BytePit.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService {
     @Autowired
+    private ZadatakService zadatakService;
+    @Autowired
     private KorisnikService korisnikService;
     @Autowired
-    NatjecanjeService natjecanjeService;
+    private NatjecanjeService natjecanjeService;
     @Autowired
-    private VirutalnoNatjecanjeRepository virtualnoNatjecanjeRepo;
+    private RjesenjeService rjesenjeService;
+    @Autowired
+    private VirtualnoNatjecanjeRepository virtualnoNatjecanjeRepo;
+
 
     @Override
     public List<VirtualnoNatjecanje> findAll() {
@@ -33,7 +35,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
 
     @Override
     public VirtualnoNatjecanje getVirtualnoNatjecanje(Integer Id) {
-        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByVirtualnoNatjecanjeId(Id);
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(Id);
         Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + Id + " ne postoji!");
         return virtualnoNatjecanje;
     }
@@ -50,17 +52,14 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     @Override
     public VirtualnoNatjecanje createVirtualnoNatjecanje(VirtualnoNatjecanjeDTO virtualnoNatjecanjeDTO) {
         //ako su poslani, id virtualnog natjecanja i timestamp se igonoriraju
-        Assert.notNull(virtualnoNatjecanjeDTO.getNatjecateljId(), "Id natjecatelja ne smije biti null!");
-        Optional<Korisnik> korisnik = korisnikService.fetch(virtualnoNatjecanjeDTO.getNatjecateljId());
-        Assert.isTrue(korisnik.isPresent(), "Korisnik s ID-em " + virtualnoNatjecanjeDTO.getNatjecateljId() + " ne postoji!");
-        Assert.isTrue(korisnik.get().getUloga().equals(Uloga.NATJECATELJ), "Korisnik s ID-em " + virtualnoNatjecanjeDTO.getNatjecateljId() + " nije natjecatelj!");
-        Natjecanje orig = null; //pretpostavka da originalno natjecanje moze biti null
-
-        if (virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() != null) {
-            orig = natjecanjeService.getNatjecanje(virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId());
-            Assert.notNull(orig, "Natjecanje s ID-em " + virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() + " ne postoji!");
-        }
-        return virtualnoNatjecanjeRepo.save(new VirtualnoNatjecanje(orig, korisnik.get(), new Timestamp(System.currentTimeMillis())));
+        Korisnik korisnik = korisnikService.getKorisnik(virtualnoNatjecanjeDTO.getKorisnickoImeNatjecatelja()).get();
+        Natjecanje origNatjecanje = natjecanjeService.getNatjecanje(virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId());
+        Assert.notNull(origNatjecanje, "Natjecanje s ID-em " + virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() + " ne postoji!");
+        Assert.isTrue(natjecanjeService.getFinishedNatjecanja().contains(origNatjecanje), "Natjecanje s ID-em " + virtualnoNatjecanjeDTO.getOrginalnoNatjecanjeId() + " nije zavrseno!");
+        VirtualnoNatjecanje virtualnoNatjecanje = new VirtualnoNatjecanje(origNatjecanje, korisnik, new Timestamp(System.currentTimeMillis()));
+        virtualnoNatjecanje.setListaZadataka(List.copyOf(origNatjecanje.getZadaci()));
+        virtualnoNatjecanjeRepo.save(virtualnoNatjecanje);
+        return virtualnoNatjecanje;
 
     }
 
@@ -70,5 +69,80 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         Natjecanje orig = natjecanjeService.getNatjecanje(origNatId);
         Assert.notNull(orig, "Natjecanje s ID-em " + origNatId + " ne postoji!");
         return virtualnoNatjecanjeRepo.findByOrigNatId(origNatId);
+    }
+
+    @Override
+    public Set<Zadatak> getZadaci(Integer virtualnoNatjecanjeId) {
+        Assert.notNull(virtualnoNatjecanjeId, "Id virtualnog natjecanja ne smije biti null");
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
+        Assert.notNull(virtualnoNatjecanje, "Virtualno natjecanje s ID-em " + virtualnoNatjecanjeId + " ne postoji!");
+        return virtualnoNatjecanje.getListaZadataka();
+    }
+
+    @Override
+    public VirtualnoNatjecanje createVirtualnoNatjecanjeRandom(String korisnickoImeNatjecatelja) {
+
+        Korisnik korisnik = korisnikService.getKorisnik(korisnickoImeNatjecatelja).get();
+        List<Zadatak> allJavniZadaci = zadatakService.listAllJavniZadatak().stream().map((zad) -> zadatakService.fetch(zad.getZadatakId())).toList();
+        List<Zadatak> randomZadaci = new ArrayList<>();
+
+        Arrays.asList(TezinaZadatka.values()).forEach(tezinaZadatka -> {
+        List<Zadatak> filteredZadaci = allJavniZadaci.stream().filter(zadatak -> zadatak.getTezinaZadatka().equals(tezinaZadatka)).toList();
+        if(filteredZadaci.size() == 0)
+            return;
+        randomZadaci.add(filteredZadaci.get(new Random().nextInt(filteredZadaci.size())));
+    }
+    );
+        VirtualnoNatjecanje virtualnoNatjecanje = new VirtualnoNatjecanje(null, korisnik, new Timestamp(System.currentTimeMillis()));
+        virtualnoNatjecanje.setListaZadataka(randomZadaci);
+        return virtualnoNatjecanjeRepo.save(virtualnoNatjecanje);
+    }
+
+    @Override
+    public List<RangDTO> getRang(Integer virtualnoNatjecanjeId) {
+        VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
+
+        if (virtualnoNatjecanje == null) {
+            throw new IllegalArgumentException("Pogrešan ID virtualnog natjecanja!");
+        }
+       
+
+        List<Rjesenje> rjesenja = rjesenjeService.findByNatjecanjeId(virtualnoNatjecanjeId);
+        Map<Integer, Double> zadatakBodovi = new HashMap<>();
+
+        virtualnoNatjecanje.getZadaci().forEach(
+                zadatak -> {
+                    Optional<Rjesenje> rjesenje = rjesenja.stream()
+                    		.filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId()))
+                    		.max((r1, r2) -> Double.compare(r1.getBrojTocnihPrimjera(),  
+                            r2.getBrojTocnihPrimjera()));
+                    if (rjesenje.isPresent()){
+                        zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova());
+                    }
+                    else{
+                        zadatakBodovi.put(zadatak.getZadatakId(), 0.0);
+                    }
+                }
+        );
+
+        Duration vrijemeRjesavanja = rjesenja.size() == 0 ? Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), Instant.now()) :
+        		Duration.between(virtualnoNatjecanje.getPocetakNatjecanja().toInstant(), rjesenja.stream().map(rjesenje -> rjesenje.getVrijemeOdgovora().toInstant()).max(Instant::compareTo).get());
+        RangDTO rang = new RangDTO(virtualnoNatjecanje.getNatjecatelj().getKorisnickoIme(), zadatakBodovi, vrijemeRjesavanja);
+        
+        if (Objects.nonNull(virtualnoNatjecanje.getOrginalnoNatjecanje())) {
+            Integer origNatId = virtualnoNatjecanje.getOrginalnoNatjecanje().getNatjecanjeId();
+        	List<RangDTO> rangLista = natjecanjeService.getRangList(origNatId);
+        	rangLista.add(rang);
+            rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
+            int index = rangLista.indexOf(rang);
+            rangLista.stream().filter(r -> r.getRang() > index).forEach(r -> r.setRang(r.getRang()+1));;
+            rang.setRang(index + 1);
+            return rangLista;
+        }
+        else {
+        	rang.setRang(1);
+        	return List.of(rang);
+        }
+
     }
 }

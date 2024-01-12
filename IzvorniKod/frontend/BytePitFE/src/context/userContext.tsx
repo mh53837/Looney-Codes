@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, ReactNode, Dispatch, SetStateAction
 interface User {
   korisnickoIme: string;
   lozinka: string;
+  uloga: string;
 }
 
 interface UserContextValue {
@@ -13,9 +14,10 @@ interface UserContextValue {
 export const UserContext = createContext<UserContextValue>({
   user: {
     korisnickoIme: '',
-    lozinka: ''
+    lozinka: '',
+    uloga: '',
   },
-  setUser: () => {},
+  setUser: () => { },
 });
 
 interface UserProviderProps {
@@ -25,10 +27,11 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>(() => {
     const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : { korisnickoIme: '' , lozinka: ''};
+    return storedUser ? JSON.parse(storedUser) : { korisnickoIme: '', lozinka: '', uloga: '' };
   });
 
   useEffect(() => {
+    localStorage.clear();
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
 

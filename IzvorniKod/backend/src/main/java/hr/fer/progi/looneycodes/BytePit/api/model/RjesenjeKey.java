@@ -19,6 +19,8 @@ public class RjesenjeKey implements Serializable {
   @ManyToOne
   private Zadatak zadatak;
 
+
+
   public RjesenjeKey() {
     super();
   }
@@ -53,4 +55,5 @@ public class RjesenjeKey implements Serializable {
   public Zadatak getZadatak() { return zadatak; }
 
   public void setZadatak(Zadatak zadatak) { this.zadatak = zadatak; }
+
 }

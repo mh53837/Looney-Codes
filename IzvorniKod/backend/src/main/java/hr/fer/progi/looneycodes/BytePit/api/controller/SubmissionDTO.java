@@ -1,0 +1,48 @@
+package hr.fer.progi.looneycodes.BytePit.api.controller;
+
+import java.util.OptionalInt;
+
+public class SubmissionDTO {
+  /**
+   * identifikator nadmetanja
+   */
+  private OptionalInt nadmetanjeId;
+	/**
+	 * identifikator zadatka
+	 */
+	private Integer zadatakId;
+	 /**
+	  * korisnicko ime natjecatelja koji je predao zadatka
+	  */
+	private String korisnickoIme;
+	 /**
+	  * tekst programskog koda
+	  */
+	private String programskiKod;
+	
+	//getteri i setteri
+	public OptionalInt getNadmetanjeId() {
+	return nadmetanjeId;
+  }
+  public void setNadmetanjeId(OptionalInt nadmetanjeId) {
+    this.nadmetanjeId = nadmetanjeId;
+  }
+	public Integer getZadatakId() {
+		return zadatakId;
+	}
+	public void setZadatakId(Integer zadatakId) {
+		this.zadatakId = zadatakId;
+	}
+	public String getKorisnickoIme() {
+		return korisnickoIme;
+	}
+	public void setKorisnickoIme(String korisnickoIme) {
+		this.korisnickoIme = korisnickoIme;
+	}
+	public String getProgramskiKod() {
+		return programskiKod;
+	}
+	public void setProgramskiKod(String programskiKod) {
+		this.programskiKod = programskiKod;
+	}
+}

@@ -1,0 +1,51 @@
+.competitionPageWrapper {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+}
+
+.countDown {
+        font-size: x-large;
+        border: #213547 3px solid;
+        border-radius: 10px;
+        padding: 10px;
+        width: fit-content;
+        align-self: center;
+}
+
+.problem-details-container {
+        width: 70%;
+        margin-left: 15%;
+}
+
+.problemMenu {
+        gap: 10px;
+        padding: 10px;
+        border: #213547 3px solid;
+        border-radius: 10px;
+        display: grid;
+        grid-template-rows: 1fr;
+        align-items: center;
+        min-width: fit-content;
+        text-align: center;
+        grid-auto-flow: column;
+        max-width: fit-content;
+        justify-content: center;
+        align-self: center;
+}
+
+.competitionHeader {
+        width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-around;
+}
+
+.competitionHeader>a {
+        font-size: xx-large;
+}
+
+[data-theme="dark"] .countDown,
+[data-theme="dark"] .problemMenu {
+        border: #dd7230e0 3px solid;
+}

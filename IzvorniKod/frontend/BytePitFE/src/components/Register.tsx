@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import './Register.css';
+import '../styles/Register.css';
 
 interface RegisterProps {
     onRegister: () => void;
@@ -49,9 +49,31 @@ const Register: React.FC<RegisterProps> = (props) => {
         }
     }
 
+    function provjeriLozinku(lozinka: string): string | null {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(lozinka);
+        const hasLowerCase = /[a-z]/.test(lozinka);
+        const hasDigit = /\d/.test(lozinka);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(lozinka);
+
+        if (lozinka.length < minLength) {
+            return "Lozinka mora sadržavati barem 8 znakova!";
+        } else if (!hasUpperCase || !hasLowerCase || !hasDigit || !hasSpecialChar) {
+            return "Lozinka mora sadržavati barem jedno veliko slovo, interpunkcijski znak i broj!"
+        }
+
+        return null;
+    }
+
     function onSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
+
+        const passError = provjeriLozinku(registerForm.lozinka);
+        if (passError) {
+            setError(passError);
+            return;
+        }
 
         if (registerForm.lozinka !== registerForm.confirmLozinka) {
             setError('Lozinke se ne podudaraju!');
@@ -76,8 +98,6 @@ const Register: React.FC<RegisterProps> = (props) => {
         }
 
         formData.append('userData', new Blob([JSON.stringify(jsonPart)], { type: 'application/json' }), 'userData.json');
-
-
 
         const options = {
             method: 'POST',
@@ -125,7 +145,7 @@ const Register: React.FC<RegisterProps> = (props) => {
                         <input name="confirmLozinka" placeholder='lozinka' type="password" onChange={onChange} value={registerForm.confirmLozinka} />
                     </div>
                     <div className="FormRow">
-                        <label>Slika profila</label>
+                        <label>slika profila</label>
                         <input name="slika" type="file" onChange={onSlikaChange} accept=".jpg, .jpeg, .png" />
                     </div>
                     <div className="FormRow">

@@ -1,10 +1,13 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
 import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface koje definira komunikaciju s bazom podataka u odnosu na Natjecanje entitete
@@ -51,11 +54,57 @@ public interface NatjecanjeService {
     List<Natjecanje> getNatjecanjaByKorisnikId(Integer korisnikId);
 
     /**
-     * Briše natjecanje prema jedinstvenom identifikatoru
+     * Dohvaća sva natjecanja koja se tek trebaju održati
      *
-     * @param natjecanjeId - jedinstveni identifikator natjecanja
+     * @return lista natjecanja
      */
-    //void deleteNatjecanje(Integer natjecanjeId);
+
+    List<Natjecanje> getUpcomingNatjecanja();
+
+    /**
+     * Dohvaća sva natjecanja koja su u tijeku
+     *
+     * @return lista natjecanja
+     */
+    List<Natjecanje> getOngoingNatjecanja();
+
+    /**
+     * Dohvaća sva natjecanja koja su završena
+     *
+     * @return lista natjecanja
+     */
+    List<Natjecanje> getFinishedNatjecanja();
+
+    /**
+     * Metoda koja pronalazi sve zadatake povezane s zadanim natjecanjem
+     * @param natjecanjeId
+     * @return lista zadataka
+     */
+    public Set<Zadatak> getZadaciByNatjecanjeId(Integer natjecanjeId);
+
+    /**
+     * Metoda koja dodaje zadatak u natjecanje
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+    public void addZadatakToNatjecanje(Integer natjecanjeId, Integer zadatakId);
+
+    /**
+     * Metoda koja uklanja zadatak iz natjecanja
+     * @param natjecanjeId
+     * @param zadatakId
+     */
+
+    public void removeZadatakFromNatjecanje(Integer natjecanjeId, Integer zadatakId);
+
+    /**
+     * Metoda koja dohvaća rang listu za zadano natjecanje
+     * @param natjecanjeId
+     * @return lista rangova
+     */
+
+    public List<RangDTO> getRangList(Integer natjecanjeId);
+
 
 
 }

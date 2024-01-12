@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
+import org.springframework.data.repository.query.Param;
 
 /**
  * Sučelje za provođenje upita nad tablicom zadatak u bazi.
@@ -28,9 +29,31 @@ public interface ZadatakRepository extends JpaRepository<Zadatak, Integer> {
 	List<Zadatak> findByNatjecanje(Natjecanje natjecanje);
 	/**
 	   * Metoda koja pronalazi zadatke jednog voditelja.
-	   * @param natjecanje - identifikator voditelja za kojeg se traže zadaci
+	   * @param voditelj - identifikator voditelja za kojeg se traže zadaci
 	   * @return listu zadataka jednog voditelja
 	   */
-	List<Zadatak> findByVoditelj(Korisnik vodiitelj);
+	List<Zadatak> findByVoditelj(Korisnik voditelj);
+
+
+	/**
+	 * Metoda koja pronalazi sve potpuno riješene zadatke zadanog natjecatelja.
+	 * @param natjecatelj - identifikator natjecatelja
+	 * @return listu zadataka zadanog natjecatelja
+	 */
+	@Query("SELECT z FROM Zadatak z " +
+			"JOIN Rjesenje r ON z.zadatakId = r.rjesenjeId.zadatak.zadatakId " +
+			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj " +
+			"AND r.brojTocnihPrimjera = 1")
+	List<Zadatak> findByNatjecateljAllSolved(@Param("natjecatelj") Korisnik natjecatelj);
+
+	/**
+	 * Metoda koja pronalazi sve isprobane zadatke zadanog natjecatelja.
+	 * @param natjecatelj - identifikator natjecatelja
+	 * @return listu zadataka zadanog natjecatelja
+	 */
+	@Query("SELECT z FROM Zadatak z " +
+			"JOIN Rjesenje r ON z.zadatakId = r.rjesenjeId.zadatak.zadatakId " +
+			"WHERE r.rjesenjeId.natjecatelj = :natjecatelj ")
+	List<Zadatak> findByNatjecateljAll(@Param("natjecatelj") Korisnik natjecatelj);
 
 }

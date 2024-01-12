@@ -10,11 +10,14 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 // spring-boot imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +67,15 @@ public class KorisnikController{
   public List<KorisnikInfoDTO> listAll(){
     return korisnikService.listAllVerified();
   }
+  /*
+   * Izlistaj sve registrirane korisnike (za admina!).
+   * @return lista svih korisnika
+   */
+  @GetMapping("/allAdmin")
+  @Secured("ADMIN")
+  public List<Korisnik> listAllAdmin(){
+    return korisnikService.listAllAdmin();
+  }
   /**
    * Izlistaj sve korisnike kojima je trenutna uloga razlicita od zatrazene.
    * @return lista svih korisnika s atributima uloga != requestedUloga
@@ -103,6 +115,19 @@ public class KorisnikController{
   public Optional<Korisnik> getKorisnik(@PathVariable int id){
     return korisnikService.fetch(id);
   }
+  
+  /**
+   * Vrati korisnika na temelju korisnickog imena
+   * @return bilo koji korisnik koji je zapisan u bazi s zadanim korisnickim imenom
+   * @return Optional.empty() ako ne postoji korisnik s tim korisnickim imenom
+   */
+  @GetMapping("/profile/{korisnickoIme}")
+  public Optional<KorisnikInfoDTO> profileKorisnik(@PathVariable String korisnickoIme){
+    Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+
+    return korisnik.isPresent()? Optional.of(new KorisnikInfoDTO(korisnik.get())) : Optional.empty();
+  }
+  
 
   /**
    * Registriraj novog korisnika, nakon cega on mora potvrditi registraciju
@@ -155,7 +180,7 @@ public class KorisnikController{
    * @exception RequestDeniedException ako imamo krive podatke ili nepotvrdeni account
    */
   @PostMapping("/login")
-  public ResponseEntity<?> loginKorisnik(@RequestBody LoginKorisnikDTO dto) {
+  public KorisnikInfoDTO loginKorisnik(@RequestBody LoginKorisnikDTO dto) {
     Korisnik korisnik = korisnikService.getKorisnik(dto.getKorisnickoIme())
                                        .orElseThrow(()
                                           -> new RequestDeniedException("Username not found!"));
@@ -164,7 +189,7 @@ public class KorisnikController{
       throw new RequestDeniedException("Wrong password!");
 
     if (korisnik.isConfirmedEmail()) {
-    	return ResponseEntity.ok(HttpStatus.OK);
+    	return new KorisnikInfoDTO(korisnik);
     } else {
     	throw new AccessDeniedException("Korisnik nije potvrdio email!");
     }
@@ -192,15 +217,32 @@ public class KorisnikController{
    * @param korisnickoIme salje se kao path variable
    * @param dto samo atributi koje zelimo mijenjati se postave u dto, ostalo se ignorira automatski
    * @param user trenutno autentificirani korisnik, radi sigurnosti provjeravamo da ne mijenja tude podatke
-   * @exception IllegalArgumentException u slucaju da pokusavamo mijenjati tude podatke
+   * @exception IllegalArgumentException u slucaju da pokusavamo mijenjati tude podatke (a da nismo ADMIN!)
+   * @exception AccessDeniedException u slucaju da nismo ulogirani
    * @return referenca na azurirani zapis u bazi
    */
   @PostMapping("/update/{korisnickoIme}")
   public Korisnik updateKorisnik(@PathVariable String korisnickoIme, @RequestBody RegisterKorisnikDTO dto, @AuthenticationPrincipal UserDetails user){
-    if(!(Objects.nonNull(user) && user.getUsername().equals(korisnickoIme)))
+    if(Objects.isNull(user))
+      throw new AccessDeniedException("You must be logged in for that!");
+
+    if(!user.getUsername().equals(korisnickoIme)
+        && !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
       throw new IllegalStateException("Krivi korisnik!");
 
     dto.setKorisnickoIme(korisnickoIme);
     return korisnikService.updateKorisnik(dto);
+  }
+  /**
+   * Dohvati profilnu sliku korisnika
+   * @param username korisnicko ime korisnika za kojeg trazimo profilnu sliku
+   * @return profilna slika korisnika
+   */
+  @GetMapping("/image/{username}")
+  public ResponseEntity<byte[]> getProfilePicture(@PathVariable("username") String username) {
+    Pair<byte[], MediaType> picture = korisnikService.getProfilePicture(username);
+    return ResponseEntity.ok()
+            .contentType(picture.getSecond())
+            .body(picture.getFirst());
   }
 }

@@ -1,66 +1,92 @@
-import UserList from './components/UserList.tsx';
-import './App.css';
+import React, { Suspense } from 'react';
+import UserList from './components/User/UserList.tsx';
+import { Link } from 'react-router-dom';
+import './styles/App.css';
 import Home from './components/Home';
-import ProblemsList from './components/ProblemsList.tsx';
-import Login from './components/Login.tsx';
-import ConfirmRegAdmin from './components/ConfirmRegAdmin.tsx';
-import ConfirmEmail from './components/ConfirmEmail.tsx';
-import { Navbar } from './layout/Navbar.tsx';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Register from "./components/Register.tsx";
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { UserContext } from './context/userContext';
-import NotFoundPage from "./components/NotFoundPage.tsx"
+import { ThemeContext } from './context/themeContext';
+import CompetitionPage from './components/Competition/CompetitionPage.tsx';
+import CompetitionResults from './components/Competition/CompetitionResults.tsx';
+import UserProfile from './components/UserProfile/UserProfile.tsx';
+
+
+
+const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
+const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
+const NotFoundPage = React.lazy(() => import('./components/NotFoundPage.tsx'));
+const Register = React.lazy(() => import('./components/Register.tsx'));
+const Navbar = React.lazy(() => import('./layout/Navbar.tsx'));
+const ConfirmEmail = React.lazy(() => import('./components/ConfirmEmail.tsx'));
+const ConfirmRegAdmin = React.lazy(() => import('./components/ConfirmRegAdmin.tsx'));
+const Login = React.lazy(() => import('./components/Login.tsx'));
+const ProblemPage = React.lazy(() => import('./components/Problems/ProblemPage.tsx'));
+const ProblemsList = React.lazy(() => import('./components/Problems/ProblemsList.tsx'));
+
 
 const App: React.FC = () => {
-    const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
 
+    const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
+    const [redirectToUserProfile, setRedirectToUserProfile] = useState<boolean>(false);
+
+    const { theme } = useContext(ThemeContext); //!theme-light
     const { user } = useContext(UserContext);
     const { setUser } = useContext(UserContext);
 
-
-    const handleLogin = (korisnickoIme: string, lozinka:string) => {
-
+    const handleLogin = (korisnickoIme: string, lozinka: string, uloga: string) => {
         setRedirectToHome(true);
-        
-        setUser({ korisnickoIme, lozinka });
-
+        setUser({ korisnickoIme, lozinka, uloga });
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
     };
 
+    const handleRedirectToProfile = () => {
+        setRedirectToUserProfile(true);
+        setTimeout(() => {
+            setRedirectToUserProfile(false);
+        }, 100);
+    }
     const handleLogout = () => {
         setRedirectToHome(true);
-
-        setUser({ korisnickoIme: '', lozinka: '' });
-
+        setUser({ korisnickoIme: '', lozinka: '', uloga: '' });
         setTimeout(() => {
             setRedirectToHome(false);
         }, 100);
+
     };
 
-    
-    
+    useEffect(() => {
+
+
+    }, [theme.isThemeDark]);
+
+
     return (
         <Router>
-            <Navbar loggedInUser={user.korisnickoIme} onLogout={handleLogout}/>
-            {redirectToHome && <Navigate to="/" replace={true} />} 
+            {user && (
+                <Navbar onLogout={handleLogout} />
+            )}
+            {redirectToHome && <Navigate to="/" replace={true} />}
+            {redirectToUserProfile && <Navigate to={`/user/profile/${user.korisnickoIme}`} replace={true} />}
+
+            <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
-                <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/user/all" element={<UserList />} />
                     <Route path="/problems/all" element={<ProblemsList />} />
                     <Route
                         path="/login"
                         element={
                             <div>
-                            {user.korisnickoIme !== '' ? (
-                                <div>
-                                <button onClick={handleLogout}>odjavi se!</button>
-                                </div>
-                            ) : (
-                                <Login onLogin={handleLogin} />
-                            )}
+                                {user.korisnickoIme !== '' ? (
+                                    <div>
+                                        <Link to="/"></Link>
+                                    </div>
+                                ) : (
+                                    <Login onLogin={handleLogin} />
+                                )}
                             </div>
                         }
                     />
@@ -68,26 +94,32 @@ const App: React.FC = () => {
                         <div>
                             <Register onRegister={() => console.log('User registered!')} />
                         </div>
-                    
-                        }
-                        
-                    />
+                    }
 
+                    />
+                    <Route path="/user/profile/:korisnickoIme" element={<UserProfile />} />
                     <Route path="/user/confirmEmail/:id" element={<ConfirmEmail />} />
                     <Route path="/user/listRequested" element={
                         <div>
-                        {user ? (
-                            <div>
-                            <ConfirmRegAdmin loggedInUser={user.korisnickoIme} loggedInUserPass = {user.lozinka}/>
-                            </div>
-                        ) : (
-                            <p>moras biti prijavljen kao admin</p>)}
+                            {user ? (
+                                <div>
+                                    <ConfirmRegAdmin loggedInUser={user.korisnickoIme} loggedInUserPass={user.lozinka} />
+                                </div>
+                            ) : (
+                                <p>moras biti prijavljen kao admin</p>)}
                         </div>
-                    }/>
-                  <Route path="*" element={<NotFoundPage />} />              
+                    } />
+                    <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
+                    <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
+                    <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
+                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
+                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults virtualno={false} />} />
+                    <Route path="/natjecanja/virtualno/rezultat/:nadmetanjeId" element={<CompetitionResults virtualno={true} />} />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
+            </Suspense>
         </Router>
-    );   
+    );
 };
 
 export default App;

@@ -1,0 +1,153 @@
+body {
+  box-sizing: inherit;
+  max-width: 100%;
+  margin: 0 0 40px 0;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.react-calendar {
+  width: 100vh !important;
+}
+
+.naziv-natjecanje {
+  font-size: 10px;
+  margin: 2px;
+}
+
+.tablica-natjecanja {
+  padding-bottom: 60px;
+}
+
+.table-switch-buttons {
+  margin: 20px;
+}
+
+.tablica-natjecanje-button {
+  font-size: 1.3em;
+  line-height: 1.1;
+  border: none;
+  background-color: white;
+  color: #213547;
+  cursor: pointer;
+  transition: font-size 0.25s;
+  position: relative;
+}
+
+.tablica-natjecanje-button:hover {
+  font-size: 1.4em;
+  color: #213547;
+  background-color: white;
+}
+
+.tablica-natjecanje-button::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 0;
+  background-color: #213547;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transition: width 0.25s ease-out;
+}
+
+.tablica-natjecanje-button:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.oznacenaNatjecanja {
+  font-size: large;
+}
+
+.download,
+.download>span {
+  border: none;
+  color: #213547;
+  background-color: transparent;
+}
+
+.download:hover,
+.download:hover>span {
+  border: none;
+  background-color: #dd7230e0;
+  color: #213547;
+}
+
+.download:hover>span {
+  background-color: transparent;
+}
+
+
+[data-theme="dark"].download:hover>span {
+  background-color: transparent;
+  color: #213547;
+}
+
+[data-theme="dark"] .download>span {
+  color: #dd7230e0;
+}
+
+[data-theme="dark"] .download,
+[data-theme="dark"] .ant-modal-content,
+[data-theme="dark"] body {
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+
+[data-theme="dark"] a:hover {
+  color: #dd7230e0;
+  color: #2A2D34;
+}
+
+[data-theme="dark"] button:hover {
+  background-color: #dd7230e0;
+  color: #2A2D34;
+}
+
+[data-theme="dark"] .react-calendar {
+  background-color: #2A2D34;
+  color: #ECDCC9;
+}
+
+[data-theme="dark"] .table-switch-buttons {
+  color: #ECDCC9;
+  background-color: #2A2D34;
+}
+
+[data-theme="dark"] .react-calendar__tile--now:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--now:enabled:focus,
+[data-theme="dark"] .react-calendar__tile--now {
+  background: #dd7230e0;
+}
+
+[data-theme="dark"] .tablica-natjecanje-button,
+[data-theme="dark"] .tablica-natjecanje-button:hover {
+  background-color: #2A2D34;
+  color: #ECDCC9;
+}
+
+@media screen and (max-width: 768px) {
+  body{
+    font-size: 10px;
+  }
+}

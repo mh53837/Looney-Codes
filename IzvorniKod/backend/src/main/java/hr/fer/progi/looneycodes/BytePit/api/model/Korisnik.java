@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -96,7 +97,7 @@ public class Korisnik{
    * konstruktor koji se koristi kod azuriranja
    */
   public static Korisnik update(Korisnik stariKorisnik, RegisterKorisnikDTO dto){   
-    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija");
+    Iterable<String> properties = Arrays.asList("ime", "prezime", "lozinka", "email", "fotografija", "requestedUloga");
     copyIfSpecified(dto, stariKorisnik, properties);
     return stariKorisnik;
   }
@@ -174,10 +175,27 @@ public class Korisnik{
   public void setConfirmedEmail(boolean confirmedEmail) {
     this.confirmedEmail = confirmedEmail;
   }
-  
+
+
   private static void copyIfSpecified(RegisterKorisnikDTO dto, Korisnik korisnik, Iterable<String> props) {
 	  BeanWrapper from = PropertyAccessorFactory.forBeanPropertyAccess(dto);
 	  BeanWrapper to = PropertyAccessorFactory.forBeanPropertyAccess(korisnik);
 	  props.forEach(p -> to.setPropertyValue(p, from.getPropertyValue(p) != null ? from.getPropertyValue(p) : to.getPropertyValue(p)));
   }
+@Override
+public int hashCode() {
+	return Objects.hash(korisnikId);
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (!(obj instanceof Korisnik))
+		return false;
+	Korisnik other = (Korisnik) obj;
+	return Objects.equals(korisnikId, other.korisnikId);
+}
+  
+  
+  
 }

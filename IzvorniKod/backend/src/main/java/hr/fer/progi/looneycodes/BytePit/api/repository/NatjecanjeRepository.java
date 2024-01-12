@@ -1,11 +1,13 @@
 package hr.fer.progi.looneycodes.BytePit.api.repository;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sučelje za provođenje upita nad tablicom natjecanje u bazi.
@@ -27,9 +29,41 @@ public interface NatjecanjeRepository extends JpaRepository<Natjecanje, Integer>
      * @param korisnikId
      * @return lista natjecanja
      */
-    @Query("SELECT n FROM Natjecanje n WHERE n.voditelj.korisnikId = :korisnikId")
+    @Query("SELECT n FROM Natjecanje n WHERE n.korisnik.korisnikId = :korisnikId")
     List<Natjecanje> findByKorisnikId(@Param("korisnikId") Integer korisnikId);
 
-    /*@Transactional
-    void deleteByNatjecanjeId(Integer natjecanjeId);*/
+    /**
+     * Metoda koja vraća sva natjecanja koja se tek trebaju održati
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.pocetakNatjecanja > CURRENT_TIMESTAMP")
+    List<Natjecanje> findUpcomingNatjecanja();
+
+    /**
+     * Metoda koja vraća sva natjecanja koja su u tijeku
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.pocetakNatjecanja < CURRENT_TIMESTAMP AND n.krajNatjecanja > CURRENT_TIMESTAMP")
+    List<Natjecanje> findOngoingNatjecanja();
+
+    /**
+     * Metoda koja vraća sva natjecanja koja su završena
+     *
+     * @return lista natjecanja
+     */
+    @Query("SELECT n FROM Natjecanje n WHERE n.krajNatjecanja < CURRENT_TIMESTAMP")
+    List<Natjecanje> findFinishedNatjecanja();
+
+    /**
+     * Metoda koja pronalazi sve zadatake povezane s zadanim natjecanjem
+     * @param natjecanjeId
+     * @return lista zadataka
+     */
+
+    @Query("select z from Natjecanje n join n.zadaci z where n.natjecanjeId = :natjecanjeId")
+    Set<Zadatak> findZadaciByNatjecanjeId(@Param("natjecanjeId") Integer natjecanjeId);
+
+
 }

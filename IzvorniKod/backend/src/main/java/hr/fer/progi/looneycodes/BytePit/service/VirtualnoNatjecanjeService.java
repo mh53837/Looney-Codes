@@ -1,10 +1,13 @@
 package hr.fer.progi.looneycodes.BytePit.service;
 
+import hr.fer.progi.looneycodes.BytePit.api.controller.RangDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.VirtualnoNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.model.VirtualnoNatjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface koje definira komunikaciju s bazom podataka u odnosu na Virtualno_natjecanje entitete
@@ -53,4 +56,27 @@ public interface VirtualnoNatjecanjeService {
      */
     List<VirtualnoNatjecanje> getByOrigNatId(Integer origNatId);
 
+    /**
+     * Vraća sve zadatke povezane s virtualnim natjecanjem
+     *
+     * @param virtualnoNatjecanjeId identifikator virtualnog natjecanja
+     * @return lista zadataka
+     */
+    Set<Zadatak> getZadaci(Integer virtualnoNatjecanjeId);
+
+    /**
+     * Stvara virtualno natjecanje s nasumičnim zadacima i sprema ga u bazu
+     *
+     * @param korisnickoImeNatjecatelja korisničko ime natjecatelja
+     */
+
+    VirtualnoNatjecanje createVirtualnoNatjecanjeRandom(String korisnickoImeNatjecatelja);
+
+    /**
+     * Vraća rang naspram orginalnog natjecanja
+     *
+     * @param virtualnoNatjecanjeId
+     * @return rang
+     */
+    List<RangDTO> getRang(Integer virtualnoNatjecanjeId);
 }

@@ -7,6 +7,8 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 
 // spring-boot imports
+import org.springframework.data.util.Pair;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 // java imports
@@ -23,6 +25,11 @@ public interface KorisnikService {
    * @return lista svih korisnika ili null ako nitko nije u sustavu
    */
   public List<KorisnikInfoDTO> listAllVerified();
+  /**
+   * Vrati listu svih korisnika
+   * @return lista svih korisnika ili null ako nitko nije u sustavu
+   */
+  public List<Korisnik> listAllAdmin();
   /**
    * Vrati listu svih korisnika koji traze promijenu uloga
    * @return lista svih korisnika s atributima: uloga != requestedUloga
@@ -85,4 +92,10 @@ public interface KorisnikService {
    * @return boolean ako smo uspjensno potvrdili
    */
   public boolean confirmMail(Korisnik korisnik);
+  /**
+   * Dohvati profilnu sliku korisnika
+   * @param username korisnicko ime korisnika za kojeg trazimo profilnu sliku
+   * @return Pair<byte[], MediaType> slika i njen tip
+   */
+  public Pair<byte[], MediaType> getProfilePicture(String username);
 }
