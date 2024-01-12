@@ -1,12 +1,12 @@
-import React, { ReactElement, useContext, useEffect, useState } from "react";
-import LoadingOverlay from "react-loading-overlay-nextgen";
-import { useParams } from "react-router-dom";
-import "../../styles/ProblemPage.css";
-import { UserContext } from "../../context/userContext";
-import CodeMirror from "@uiw/react-codemirror";
-import { cpp } from "@codemirror/lang-cpp";
-import { dracula } from "@uiw/codemirror-theme-dracula";
-import "../../styles/Table.css";
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import LoadingOverlay from 'react-loading-overlay-nextgen';
+import { useParams } from 'react-router-dom';
+import '../../styles/ProblemPage.css';
+import '../../styles/Table.css';
+import { UserContext } from '../../context/userContext';
+import CodeMirror from '@uiw/react-codemirror';
+import { cpp } from '@codemirror/lang-cpp';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 
 interface IProblemDetails {
   zadatakId: string;
@@ -30,7 +30,7 @@ const ProblemPage: React.FC = () => {
 using namespace std;
 int main() {
 
-return 0;
+  return 0;
 }`);
   // izvuci podatke o zadatku na temelju id-a
   useEffect(() => {
@@ -75,6 +75,9 @@ return 0;
 
   // pozivanje evaluacije na backendu
   const handleSubmitClick = async () => {
+    // obrisi stare rezultate
+    setErrorMessage(null);
+    setTestResults([]);
     try {
       // ako nema fajla, onda citamo sadrzaj editora!
       if (!code) {
@@ -138,93 +141,74 @@ return 0;
     }
   };
 
-  // upload gumb koji je dostupan samo ulogiranom korisniku
-  let uploadButton = null;
-  let codeEditor: ReactElement | null = null;
-  if (user.uloga === "NATJECATELJ") {
-    uploadButton = (
-      <div className="problem-upload">
-        <input
-          type="file"
-          accept=".cpp"
-          onChange={handleFileChange}
-          className="fileInput"
-        />
-        <br />
-        <button
-          disabled={isLoading}
-          style={isLoading ? { opacity: 0.6, cursor: "not-allowed" } : {}}
-          onClick={handleSubmitClick}
-        >
-          Provjeri
-        </button>
-      </div>
-    );
+        // upload gumb koji je dostupan samo ulogiranom korisniku
+        let uploadButton = null;
+        let codeEditor: ReactElement | null = null;
+        if (user.uloga === 'NATJECATELJ') {
+                uploadButton = (
+                        <div className="problem-upload">
+                                <input type="file" accept=".cpp" onChange={handleFileChange} />
+                                <br />
+                                <button disabled={isLoading} style={isLoading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+                                        onClick={handleSubmitClick}>Provjeri</button>
+                        </div>
+                );
 
-    codeEditor = (
-      <div className="code-editor">
-        <CodeMirror
-          value={code}
-          onChange={(value, _) => {
-            setCode(value);
-            if (zadatakId) localStorage.setItem(zadatakId, code);
-          }}
-          height="30rem"
-          theme={dracula}
-          extensions={[cpp()]}
-        />
-      </div>
-    );
-  }
+                codeEditor = (
+                        <div className="code-editor">
+                                <CodeMirror value={code} onChange={(value, _) => { setCode(value); if (zadatakId) localStorage.setItem(zadatakId, code); }}
+                                        height="30rem" theme={dracula} extensions={[cpp()]} />
+                        </div>
+                );
+        }
 
-  // vraćanje stranice
-  return (
-    <div className="problem-details-container">
-      <h1 className="problem-title">{problemDetails.nazivZadatka}</h1>
-      <div className="problem-info">
-        <p>Broj bodova: {problemDetails.brojBodova}</p>
-        <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
-      </div>
-      <div className="problem-description">
-        <h2>Tekst zadatka:</h2>
-        <p>{problemDetails.tekstZadatka}</p>
-      </div>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <br />
-      <LoadingOverlay
-        active={isLoading}
-        spinner
-        text="Provjeravamo rješenje..."
-      >
-        {codeEditor}
-        {uploadButton}
-        {testResults.length > 0 && (
-          <div className="test-results">
-            <h2>Rezultati testiranja</h2>
-			<div className="info-table">
-				<table>
-				<thead>
-					<tr>
-					<th>Redni broj testa</th>
-					<th>Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					{testResults.map((status, index) => (
-					<tr key={index}>
-						<td>{index + 1}</td>
-						<td>{getStatusMessage(status)}</td>
-					</tr>
-					))}
-				</tbody>
-				</table>
-			</div>
-          </div>
-        )}
-        <br />
-      </LoadingOverlay>
-    </div>
-  );
+        if (testResults.find(x => x < 3 || x > 6))
+          setErrorMessage("Greška kod evaluacije");
+        // vraćanje stranice
+        return (
+                <div className="problem-details-container">
+
+                        <h1 className="problem-title">{problemDetails.nazivZadatka}</h1>
+                        <div className="problem-info">
+                                <p>Broj bodova: {problemDetails.brojBodova}</p>
+                                <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
+                        </div>
+                        <div className="problem-description">
+                                <h2>Tekst zadatka:</h2>
+                                <p>{problemDetails.tekstZadatka}</p>
+                        </div>
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        <br />
+                        <LoadingOverlay
+                                active={isLoading} spinner text='Provjeravamo rješenje...'
+                        >
+                                {codeEditor}
+                                {uploadButton}
+                                {testResults.length > 0 && (
+                                        <div className="test-results">
+                                                <h2>Rezultati testiranja</h2>
+                                                <table className="info-table">
+                                                        <thead>
+                                                                <tr>
+                                                                        <th>Redni broj testa</th>
+                                                                        <th>Status</th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                                {testResults.map((status, index) => (
+                                                                        <tr key={index}>
+                                                                                <td>{index + 1}</td>
+                                                                                <td>{getStatusMessage(status)}</td>
+                                                                        </tr>
+                                                                ))}
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                )}
+                                <br />
+                        </LoadingOverlay>
+                </div>
+        );
 };
 
 // Pomoćna funkcija za dobivanje poruke ovisno o statusnom kodu testa
