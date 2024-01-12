@@ -33,7 +33,6 @@ const CompetitionResults: React.FC = () => {
         const [competitor, setCompetitor] = useState<string>("");
         const [open, setOpen] = useState<boolean>(false);
 
-        const [virtualCompetitionResults, setVirtualCompetitionResults] = useState<RangDTO[]>([]);
 
         useEffect(() => {
                 const fetchData = async () => {
@@ -60,12 +59,6 @@ const CompetitionResults: React.FC = () => {
                                         tasksDetails.forEach((taskDetail) => {
                                                 detailsMapping[taskDetail.zadatakId] = taskDetail;
                                         });
-
-                                        const virtualResponse = await fetch(`/api/natjecanja/get/rang/${nadmetanjeId}`);
-                                        if (virtualResponse.ok) {
-                                                const virtualData: RangDTO[] = await virtualResponse.json();
-                                                setVirtualCompetitionResults(virtualData);
-                                        }
 
                                         setTaskDetails(detailsMapping);
                                 }, 3000);
@@ -119,21 +112,21 @@ const CompetitionResults: React.FC = () => {
                                                                 </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {[...rankResults, ...virtualCompetitionResults].map((result, index) => (
-                                                            <tr key={index}>
-                                                                    <td>{result.rang}</td>
-                                                                    <td>{result.username}</td>
-                                                                    <td>{formatDuration(result.vrijemeRjesavanja)}</td>
-                                                                    {Object.keys(result.zadatakBodovi).map((taskId) => (
-                                                                        <td key={taskId}>
-                                                                                <button onClick={() => openResult(parseInt(taskId), result.username)}>
-                                                                                        {result.zadatakBodovi[parseInt(taskId)]}
-                                                                                </button>
-                                                                        </td>
-                                                                    ))}
-                                                                    <td>{result.ukupniBodovi}</td>
-                                                            </tr>
-                                                        ))}
+                                                                {rankResults.map((result, index) => (
+                                                                        <tr key={index}>
+                                                                                <td>{result.rang}</td>
+                                                                                <td>{result.username}</td>
+                                                                                <td>{formatDuration(result.vrijemeRjesavanja)}</td>
+                                                                                {Object.keys(result.zadatakBodovi).map((taskId) => (
+                                                                                        <td key={taskId}>
+                                                                                                <button onClick={() => openResult(parseInt(taskId), result.username)}>
+                                                                                                        {result.zadatakBodovi[parseInt(taskId)]}
+                                                                                                </button>
+                                                                                        </td>
+                                                                                ))}
+                                                                                <td>{result.ukupniBodovi}</td>
+                                                                        </tr>
+                                                                ))}
                                                         </tbody>
                                                 </table>
                                         </div>
