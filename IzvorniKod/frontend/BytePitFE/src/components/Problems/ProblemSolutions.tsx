@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Table, ConfigProvider, Button } from 'antd';
 import { ThemeContext } from '../../context/themeContext';
+import { UserContext } from '../../context/userContext';
 
 interface RjesenjeInfo {
         korisnickoIme: string;
@@ -20,11 +21,14 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
         const { nadmetanjeId } = useParams();
         const [rjesenja, setRjesenja] = useState<RjesenjeInfo[]>([]);
         const { theme } = useContext(ThemeContext);
+        const { user } = useContext(UserContext)
 
         useEffect(() => {
                 const fetchData = async () => {
                         try {
-                                const response = await fetch(`/api/solutions/get/competition/${nadmetanjeId}?zadatak=${zadatakId}&natjecatelj=${natjecatelj}`);
+                                const response = await fetch(
+                                        `/api/solutions/get/competition/${nadmetanjeId}?zadatak=${zadatakId}&natjecatelj=${natjecatelj}`
+                                );
                                 if (!response.ok) {
                                         throw new Error('Failed to fetch data');
                                 }
@@ -40,7 +44,13 @@ const ProblemSolutions: React.FC<ProblemResultsProps> = ({ zadatakId, natjecatel
 
         const downloadSolution = async (rbr: BigInt) => {
                 try {
-                        const response = await fetch(`/api/solutions/code?rbr=${rbr}&zadatak=${zadatakId}&natjecatelj=${natjecatelj}`);
+                        const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+                        const options = {
+                                method: 'GET',
+                                headers: { Authorization: `Basic ${credentials}` }
+                        };
+                        const response = await fetch(`/api/solutions/code?rbr=${rbr}&zadatak=${zadatakId}&natjecatelj=${natjecatelj}`,
+                                options);
                         if (!response.ok) {
                                 throw new Error('Failed to fetch solution code');
                         }

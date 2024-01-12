@@ -91,4 +91,6 @@ public interface RjesenjeService {
 
 	public Optional<Rjesenje> fetch(Integer redniBroj, Integer zadatakId, String korisnickoIme);
 
+	public boolean solved(Integer zadatakId, String korisnickoIme);
+
 }

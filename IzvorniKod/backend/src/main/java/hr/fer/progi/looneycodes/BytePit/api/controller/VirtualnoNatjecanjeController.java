@@ -158,6 +158,6 @@ public class VirtualnoNatjecanjeController {
      */
     @GetMapping("/get/rang/{virtualnoNatjecanjeId}")
     public List<RangDTO> getRang(@PathVariable Integer virtualnoNatjecanjeId) {
-        return List.of(virtualnoNatjecanjeService.getRang(virtualnoNatjecanjeId));
+        return virtualnoNatjecanjeService.getRang(virtualnoNatjecanjeId);
     }
 }

@@ -94,11 +94,22 @@ public class RjesenjeController {
 //    }
 
     @GetMapping("/code")
+    @Secured("NATJECATELJ")
     public Optional<String> getRjesenje(@RequestParam(value = "rbr", required=true) Integer redniBroj, 
     								  @RequestParam(value = "zadatak", required=true) Integer zadatakId, 
     								  @RequestParam(value = "natjecatelj", required=true) String korisnickoIme,
     								  @AuthenticationPrincipal UserDetails user){
+	    if(Objects.isNull(user))
+	    	throw new AccessDeniedException("You must be logged in for that!");
+	    if(!korisnickoIme.equals(user.getUsername()) &&
+	       !rjesenjeService.solved(zadatakId, user.getUsername()))
+	    		throw new AccessDeniedException("You do not have the authority to access this!");
+    	
     	Optional<Rjesenje> rj = rjesenjeService.fetch(redniBroj, zadatakId, korisnickoIme);
+    	
+
+
+    	
     	if(rj.isPresent()) {
     		Rjesenje rjesenje = rj.get();
     		return Optional.of(rjesenje.getProgramskiKod());

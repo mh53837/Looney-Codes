@@ -99,7 +99,7 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
     }
 
     @Override
-    public RangDTO getRang(Integer virtualnoNatjecanjeId) {
+    public List<RangDTO> getRang(Integer virtualnoNatjecanjeId) {
         VirtualnoNatjecanje virtualnoNatjecanje = virtualnoNatjecanjeRepo.findByNatjecanjeId(virtualnoNatjecanjeId);
 
         if (virtualnoNatjecanje == null) {
@@ -135,12 +135,14 @@ public class VirtualnoNatjecanjeServiceJpa implements VirtualnoNatjecanjeService
         	rangLista.add(rang);
             rangLista.sort(Comparator.comparing(RangDTO::getUkupniBodovi).reversed().thenComparing(RangDTO::getVrijemeRjesavanja));
             int index = rangLista.indexOf(rang);
+            rangLista.stream().filter(r -> r.getRang() > index).forEach(r -> r.setRang(r.getRang()+1));;
             rang.setRang(index + 1);
+            return rangLista;
         }
         else {
         	rang.setRang(1);
+        	return List.of(rang);
         }
-        return rang;
 
     }
 }

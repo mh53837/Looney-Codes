@@ -78,5 +78,5 @@ public interface VirtualnoNatjecanjeService {
      * @param virtualnoNatjecanjeId
      * @return rang
      */
-    RangDTO getRang(Integer virtualnoNatjecanjeId);
+    List<RangDTO> getRang(Integer virtualnoNatjecanjeId);
 }

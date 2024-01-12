@@ -275,4 +275,17 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 				zadatakRepository.findById(zadatakId).get());
 		return rjesenjeRepository.findById(id);
 	}
+
+	@Override
+	public boolean solved(Integer zadatakId, String korisnickoIme) {
+		Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
+		Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
+		if(natjecatelj.isPresent() && zadatak.isPresent()) {
+			List<Rjesenje> rjesenja = rjesenjeRepository.findByNatjecateljAndZadatak(natjecatelj.get(), zadatak.get());
+			if(rjesenja.size() > 0 && 
+					rjesenja.stream().filter(r -> r.getBrojTocnihPrimjera() == 1).toList().size() > 0)
+				return true;
+		}
+		return false;
+	}
 }
