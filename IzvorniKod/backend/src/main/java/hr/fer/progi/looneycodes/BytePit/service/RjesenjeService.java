@@ -93,4 +93,6 @@ public interface RjesenjeService {
 
 	public boolean solved(Integer zadatakId, String korisnickoIme);
 
+	public List<Rjesenje> findBestByZadatak(Zadatak zadatak);
+
 }

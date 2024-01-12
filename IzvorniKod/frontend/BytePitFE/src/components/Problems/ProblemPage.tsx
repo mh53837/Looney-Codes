@@ -129,6 +129,9 @@ int main() {
           if (data.tests && data.tests.length > 0) {
             setTestResults(data.tests);
           }
+          else if(data.tests === null) {
+            setErrorMessage("Greška kod evaluacije. Provjerite ispravnost koda i pokušajte ponovno!");
+          }
         })
         .catch((error) => {
           console.error("Error uploading solution:", error);

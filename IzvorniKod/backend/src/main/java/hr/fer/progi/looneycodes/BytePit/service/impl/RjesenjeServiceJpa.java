@@ -20,6 +20,9 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.OptionalInt;
 import java.sql.Timestamp;
@@ -287,5 +290,24 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<Rjesenje> findBestByZadatak(Zadatak zadatak) {
+		List<Rjesenje> rjesenja = rjesenjeRepository.findByRjesenjeIdZadatak(zadatak);
+		List<Rjesenje> najbolja = new ArrayList<>();
+		Set<Korisnik> natjecatelji = new HashSet<>();
+		rjesenja.stream().forEach(rj -> natjecatelji.add(rj.getRjesenjeId().getNatjecatelj()));
+		natjecatelji.stream().forEach(nat -> 
+				{
+					Optional<Rjesenje> rjes = rjesenja.stream()
+								.filter(rj -> rj.getRjesenjeId().getNatjecatelj().equals(nat))
+								.max((r1, r2) -> Double.compare(r1.getBrojTocnihPrimjera(), r2.getBrojTocnihPrimjera()));
+					if(rjes.isPresent()) {
+						najbolja.add(rjes.get());
+					} 
+				}
+				);
+		return najbolja;
 	}
 }

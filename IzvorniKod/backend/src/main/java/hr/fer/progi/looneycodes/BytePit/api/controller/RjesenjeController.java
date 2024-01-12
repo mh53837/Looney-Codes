@@ -74,26 +74,39 @@ public class RjesenjeController {
         return rjesenjeService.listAll();
     }
 
-//    /*
-//     * Ruta za dohvaćanje svih rješenja jednog korisnika.
-//     */
-//    @GetMapping("get/natjecatelj/{korisnickoIme}")
-//    public List<Rjesenje> getRjesenjeByKorisnikId(@PathVariable String korisnickoIme, @AuthenticationPrincipal UserDetails user) {
-//        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
-//
-//        if(Objects.isNull(user))
-//          throw new AccessDeniedException("You must be logged in for that!");
-//        if(!korisnickoIme.equals(user.getUsername()) &&
-//            !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
-//          throw new AccessDeniedException("You do not have the authority to access this!");
-//
-//        if (!korisnik.isPresent()) {
-//          throw new RequestDeniedException("Korisnik ne postoji!");
-//        }
-//
-//        return rjesenjeService.findByRjesenjeIdNatjecatelj(korisnik.get());
-//    }
-
+	/**
+	 * Ruta za dohvat najboljih rješenja korisnika koji su rješavali određeni zadatak.
+	 * @param zadatakId
+	 * @return
+	 */
+    @GetMapping("/get/best/{zadatakId}")
+    public List<RjesenjeDTO> getBestByZadatak(@PathVariable Integer zadatakId) {
+    	Zadatak zadatak = zadatakService.fetch(zadatakId);
+    	if(Objects.nonNull(zadatak)) {
+        	return rjesenjeService.findBestByZadatak(zadatak)
+        	.stream()
+			.map(rj-> new RjesenjeDTO(rj.getRjesenjeId().getZadatak().getZadatakId(),
+							rj.getRjesenjeId().getNatjecatelj().getKorisnickoIme(),
+							Objects.nonNull(rj.getNatjecanje()) ? 
+									rj.getNatjecanje().getNatjecanjeId() :
+									null,
+							rj.getRjesenjeId().getRjesenjeRb(),
+							rj.getBrojTocnihPrimjera()
+							)).toList();
+    	}
+    	return null;
+    }
+    
+	/**
+	 * Ruta za programski kod u obliku stringa za zadano rješenje.
+	 * URL oblika: /code?rbr={redniBroj}&zadatak={zadatakId}&natjecatelj={korisnickoIme}
+	 * 
+	 * @param redniBroj
+	 * @param zadatakId
+	 * @param korisnickoIme
+	 * @param user
+	 * @return
+	 */
     @GetMapping("/code")
     @Secured("NATJECATELJ")
     public Optional<String> getRjesenje(@RequestParam(value = "rbr", required=true) Integer redniBroj, 
@@ -178,41 +191,20 @@ public class RjesenjeController {
         return rjesenja.stream().filter(rj -> rj.getKorisnickoIme().equals(korisnickoIme.get())).toList();
     }
 
+    /**
+     * Vraća boolean ako je trenutni korisnik uspješno riješio zadatak.
+     * @param zadatakId
+     * @param user
+     * @return
+     */
     @GetMapping("/solved/{zadatakId}")
     @Secured("NATJECATELJ")
-    public boolean hasSolved(@PathVariable Integer zadatakId,
-    		@AuthenticationPrincipal UserDetails user) {
+    public boolean hasSolved(@PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
 	    if(Objects.isNull(user))
 	    	throw new AccessDeniedException("You must be logged in for that!");
     	return rjesenjeService.solved(zadatakId, user.getUsername());
     }
     
-//    @GetMapping("/get")
-//    public List<Rjesenje> getRjesenjeByNatjecanjeIdAndZadatakId(@PathVariable Integer natjecanjeId, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
-//        Natjecanje natjecanje = natjecanjeService.getNatjecanje(natjecanjeId);
-//        Zadatak zadatak = zadatakService.fetch(zadatakId);
-//
-//        return rjesenjeService.findByNatjecanjeAndZadatak(natjecanje, zadatak);
-//    }
-//
-//    @GetMapping("get/natjecatelj/{korisnickoIme}/{zadatakId}")
-//    public List<Rjesenje> getRjesenjeByKorisnikIdAndZadatakId(@PathVariable String korisnickoIme, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
-//        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
-//        Zadatak zadatak = zadatakService.fetch(zadatakId);
-//
-//        if(Objects.isNull(user))
-//            throw new AccessDeniedException("You must be logged in for that!");
-//        if(!korisnickoIme.equals(user.getUsername()) &&
-//                !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
-//            throw new AccessDeniedException("You do not have the authority to access this!");
-//
-//        if (!korisnik.isPresent()) {
-//            throw new RequestDeniedException("Korisnik ne postoji!");
-//        }
-//
-//        return rjesenjeService.findByNatjecateljAndZadatak(korisnik.get(), zadatak);
-//    }
-
     /*
      * Ruta za upload novog rješenja korisnika. Username se automatski postavlja!
      * Rezultat se vraća u obliku EvaluationResultDTO
@@ -277,7 +269,51 @@ public class RjesenjeController {
     	return response.body();
     }
     
+    /*
+     * Ruta za dohvaćanje svih rješenja jednog korisnika.
+     */
+    @GetMapping("get/natjecatelj/{korisnickoIme}")
+    public List<Rjesenje> getRjesenjeByKorisnikId(@PathVariable String korisnickoIme, @AuthenticationPrincipal UserDetails user) {
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
 
+        if(Objects.isNull(user))
+          throw new AccessDeniedException("You must be logged in for that!");
+        if(!korisnickoIme.equals(user.getUsername()) &&
+            !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+          throw new AccessDeniedException("You do not have the authority to access this!");
+
+        if (!korisnik.isPresent()) {
+          throw new RequestDeniedException("Korisnik ne postoji!");
+        }
+
+        return rjesenjeService.findByRjesenjeIdNatjecatelj(korisnik.get());
+    }
+
+    /**
+     * Ruta koja vraća rješenje za korisnika i zadatak.
+     * 
+     * @param korisnickoIme
+     * @param zadatakId
+     * @param user
+     * @return
+     */
+    @GetMapping("get/natjecatelj/{korisnickoIme}/{zadatakId}")
+    public List<Rjesenje> getRjesenjeByKorisnikIdAndZadatakId(@PathVariable String korisnickoIme, @PathVariable Integer zadatakId, @AuthenticationPrincipal UserDetails user) {
+        Optional<Korisnik> korisnik = korisnikService.getKorisnik(korisnickoIme);
+        Zadatak zadatak = zadatakService.fetch(zadatakId);
+
+        if(Objects.isNull(user))
+            throw new AccessDeniedException("You must be logged in for that!");
+        if(!korisnickoIme.equals(user.getUsername()) &&
+                !user.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")))
+            throw new AccessDeniedException("You do not have the authority to access this!");
+
+        if (!korisnik.isPresent()) {
+            throw new RequestDeniedException("Korisnik ne postoji!");
+        }
+
+        return rjesenjeService.findByNatjecateljAndZadatak(korisnik.get(), zadatak);
+    }
     
 
 }
