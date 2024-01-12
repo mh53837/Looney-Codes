@@ -9,6 +9,7 @@ import "../../styles/UserProfile.css";
 import "../../styles/Table.css";
 import ProblemsProfileTab from "./ProblemsProfileTab";
 import CompetitionProfileCalendar from "./CompetitionProfileCalendar";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 interface UserData {
   korisnickoIme: string;
@@ -297,14 +298,31 @@ const UserProfile: React.FC = () => {
           </ConfigProvider>
         )}
 
-        {userData.uloga === "NATJECATELJ" && (
+        {userData.uloga === "NATJECATELJ" && attempted > 0 && (
           <div>
+            <PieChart
+                title="Broj uspješno rješenih zadataka"
+                series={[
+                  {
+                    data: [
+                      { value: solved, color: 'green', label: 'rješeno' },
+                      { value: attempted-solved, color: 'red', label: 'nerješeno/isprobano'},
+                    ],
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                  },
+                ]}
+                height={200}
+              />
+
             <h3>broj točno riješenih zadataka: {solved} </h3>
             <h3>broj isprobanih zadataka: {attempted} </h3>
-            <h3>osvojeni pehari:</h3>
-            {renderUserTrophies()}
           </div>
         )}
+        {userData.uloga === "NATJECATELJ" && (<div>
+            <h3>osvojeni pehari:</h3>
+            {renderUserTrophies()}
+        </div>)}
       </div>
     </div>
   );
