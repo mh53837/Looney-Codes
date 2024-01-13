@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 interface Natjecanje {
     natjecanjeId: number;
@@ -16,6 +18,77 @@ const Home: React.FC = () => {
     const [natjecanja, setNatjecanja] = useState<Natjecanje[]>([]);
     const [oznacenaNatjecanja, setOznacenaNatjecanja] = useState<Natjecanje[]>([]);
     const [selectedTable, setSelectedTable] = useState<'nadolazeca' | 'prosla' | 'trenutna'>('trenutna');
+    const [nadolazeca, setUpcomingData] = useState<Natjecanje[]>([]);
+    const [trenutna, setOngoingData] = useState<Natjecanje[]>([]);
+    const [zavrsena, setFinishedData] = useState<Natjecanje[]>([]);
+    const {user} = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const generirajNasumicno = async () => {
+      const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+      const options = {
+              method: 'POST',
+              headers: { Authorization: `Basic ${credentials}` }
+            };
+      await fetch(`/api/virtualnaNatjecanja/new/random/${user.korisnickoIme}`, options)
+              .then(response => response.json())
+              .then(data => {
+                  navigate(`/natjecanja/rjesi/${data.virtualnoNatjecanjeId}`);
+              })
+              .catch(() => {
+                  console.error('Greška prilikom generiranja natjecanja!');
+              });
+    }
+    const generirajNatjecanje = async (originalId : number) => {
+        try {
+            // stavljeno je da se dohvati random natjecanje iz proslih natjecanja
+            const virtualnoNatjecanjeDTO = {
+                virtualnoNatjecanjeId: null,
+                orginalnoNatjecanjeId: originalId,
+                korisnickoImeNatjecatelja: user.korisnickoIme,
+                vrijemePocetka: new Date(),
+            };
+
+            // request body
+            const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
+            const options = {
+                            method: 'POST',
+                            headers: {
+                                Authorization: `Basic ${credentials}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(virtualnoNatjecanjeDTO),
+                        };
+            await fetch('/api/virtualnaNatjecanja/new', options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        const novoNatjecanjeId = data.virtualnoNatjecanjeId;
+                        navigate(`/natjecanja/rjesi/${novoNatjecanjeId}`);
+                    })
+                    .catch(() => {
+                          console.error('Greška prilikom generiranja natjecanja!');
+                    });
+        } catch (error) {
+            console.error('Greška prilikom generiranja natjecanja:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetch(`/api/natjecanja/get/finished`)
+            .then(response => response.json())
+            .then(data => setFinishedData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+
+        fetch(`/api/natjecanja/get/ongoing`)
+            .then(response => response.json())
+            .then(data => setOngoingData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+
+        fetch(`/api/natjecanja/get/upcoming`)
+            .then(response => response.json())
+            .then(data => setUpcomingData(data))
+            .catch(error => console.error('Error fetching competitions:', error));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,11 +123,9 @@ const Home: React.FC = () => {
 
             return natjecanjaZaDatum.length > 0 ? (
                 <div>
-                    {natjecanjaZaDatum.map((natjecanje) => (
-                        <p key={natjecanje.natjecanjeId} className="naziv-natjecanje">
-                            {natjecanje.nazivNatjecanja}
-                        </p>
-                    ))}
+                    <p style={{ fontSize: 15 }} className="naziv-natjecanje">
+                        &#9733;
+                    </p>
                 </div>
             ) : null;
         }
@@ -70,49 +141,71 @@ const Home: React.FC = () => {
             hour: '2-digit',
             minute: '2-digit',
         };
-        return new Date(datumVrijeme).toLocaleString('en-GB', options);
+        return new Date(datumVrijeme).toLocaleString('hr-HR', options);
     };
-
-    const proslaNatjecanja = natjecanja.filter(
-        (natjecanje) => date > new Date(natjecanje.krajNatjecanja)
-    );
-
-    const trenutnoNatjecanja = natjecanja.filter(
-        (natjecanje) => date.toDateString() === new Date(natjecanje.pocetakNatjecanja).toDateString()
-    );
-
 
 
     return (
         <div>
+            {(
+                user.uloga === "VODITELJ" &&
+                <Link to="/natjecanja/new">
+                <button className="addBtn">novo natjecanje</button>
+                </Link>
+            )}
             <div className="calendar-container">
-                <Calendar value={date} onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
+                <Calendar value={date} locale='hr-HR' onChange={(newDate) => setDate(newDate as Date)} tileContent={tileContent} />
             </div>
             <div className="selected-date-container">
-                Označeni datum: {date.toLocaleDateString()} {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                Označeni datum:
+                <br />
+                {formatirajDatumVrijeme(date.toUTCString())}
                 <br />
                 {oznacenaNatjecanja.length > 0 ? (
-                    <div>
-                        Označena natjecanja: {oznacenaNatjecanja.map(natjecanje => natjecanje.nazivNatjecanja).join(', ')}
+                    <div className='oznacenaNatjecanja'>
+                        {oznacenaNatjecanja.map(natjecanje => natjecanje.nazivNatjecanja).join(' | ')}
                     </div>
                 ) : (
                     <div>Ovog datuma se ne održava natjecanje.</div>
                 )}
             </div>
 
-            <div className="table-switch-buttons">
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('nadolazeca')}>Nadolazeća natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('prosla')}>Prošla natjecanja</button>
-                <button className={"tablica-natjecanje-button"} onClick={() => setSelectedTable('trenutna')}>Trenutna natjecanja</button>
+            <div className={"table-buttons-container"}>
+                <div className="table-switch-buttons">
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('prosla');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Prošla natjecanja</button>
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('trenutna');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Trenutna natjecanja</button>
+                    <button className={"tablica-natjecanje-button"} onClick={() => {
+                        setSelectedTable('nadolazeca');
+                        const element = document.getElementById("tablica");
+                        if (element != null)
+                            element.scrollIntoView({ behavior: 'smooth' });
+                    }}>Nadolazeća natjecanja</button>
 
-                {/*<button className={"generiraj-natjecanje-button"} onClick={handleGenerirajNatjecanje}>*/}
-                {/*    Generiraj natjecanje*/}
-                {/*</button>*/}
+                </div>
+                <div className={"generiraj-vritualno-natjecanje"}>
+                    {user.uloga == "NATJECATELJ" &&
+                        <button className={"generiraj-natjecanje-button"} onClick={generirajNasumicno}>
+                            Generiraj nasumično natjecanje i pokreni ga!
+                        </button>
+                    }
+
+                </div>
             </div>
+
 
             {selectedTable === 'trenutna' && (
                 <div className="info-table">
-                    <table>
+                    <table id="tablica">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -124,20 +217,20 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {trenutnoNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>
-                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                  Pokreni natjecanje
-                                </Link>
-                                </td>
-                            </tr>
-                        ))}
+                            {trenutna.map((natjecanje) => (
+                                <tr key={natjecanje.natjecanjeId}>
+                                    <td>{natjecanje.natjecanjeId}</td>
+                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
+                                    <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
+                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>
+                                        <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                            Pokreni natjecanje
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -156,7 +249,7 @@ const Home: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {natjecanja.map((natjecanje) => (
+                            {nadolazeca.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
                                     <td>{natjecanje.natjecanjeId}</td>
                                     <td>{natjecanje.nazivNatjecanja}</td>
@@ -180,37 +273,30 @@ const Home: React.FC = () => {
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
                                 <th>Voditelj</th>
-                                <th></th>
+                                {user.uloga == "NATJECATELJ" && <th></th> }
                             </tr>
                         </thead>
                         <tbody>
-<<<<<<< HEAD
-                            {proslaNatjecanja.map((natjecanje) => (
+                            {zavrsena.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
                                     <td>{natjecanje.natjecanjeId}</td>
-                                    <td>{natjecanje.nazivNatjecanja}</td>
+                                    <td>
+                                        <Link to={`/natjecanja/rezultati/${natjecanje.natjecanjeId}/`}>
+                                            {natjecanje.nazivNatjecanja}
+                                        </Link>
+                                    </td>
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
                                     <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                    <td>Pokreni natjecanje</td>
+                                    {user.uloga == "NATJECATELJ" &&
+                                      <td>
+                                          <Link to="#" onClick={() => generirajNatjecanje(natjecanje.natjecanjeId)}>
+                                              Pokreni natjecanje kao virtualno
+                                          </Link>
+                                      </td>
+                                    }
                                 </tr>
                             ))}
-=======
-                        {proslaNatjecanja.map((natjecanje) => (
-                            <tr key={natjecanje.natjecanjeId}>
-                                <td>{natjecanje.natjecanjeId}</td>
-                                <td>{natjecanje.nazivNatjecanja}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
-                                <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                <td>{natjecanje.korisnickoImeVoditelja}</td>
-                                <td>
-                                <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                  Pokreni natjecanje
-                                </Link>
-                                </td>
-                            </tr>
-                        ))}
->>>>>>> a6467d6 (dodana osnovna podrska za rjesavanje nadmetanja)
                         </tbody>
                     </table>
                 </div>

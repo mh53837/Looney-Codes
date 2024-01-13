@@ -7,28 +7,6 @@ interface NewEvaluationProps {
   zadatakId: BigInteger;
   onTestAdded: () => void;
 }
-/* interface ProblemData {
-    voditelj: UserData;
-    nazivZadatka: string;
-    tekstZadatka: string;
-    zadatakId: BigInteger;
-    brojBodova: number;
-    privatniZadatak: boolean;
-    tezinaZadatka: string;
-    vremenskoOgranicenje: number;
-}
-  interface UserData {
-    korisnickoIme: string;
-    ime: string;
-    prezime: string;
-    email: string;
-    uloga: string;
-}
-
-interface EvaluationTestData {
-    testniPrimjerRb: number, 
-    zadatak: ProblemData,
-} */
 
 interface EvaluationTest{
     ulazniPodaci: string;

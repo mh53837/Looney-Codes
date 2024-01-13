@@ -14,23 +14,18 @@ interface UserData {
 
 interface TrophyData {
   peharId: number;
-  natjecatelj: UserData;
-  natjecanje: CompetitionData;
+  korisnickoImeNatjecatelja: string;
+  natjecanjeId: number;
+  natjecanjeNaziv: string | null;
   mjesto: number;
   slikaPehara: string;
-}
-
-interface CompetitionData {
-  natjecanjeId: number;
-  korisnickoImeVoditelja: string;
-  nazivNatjecanja: string;
-  pocetakNatjecanja: string;
-  krajNatjecanja: string;
 }
 
 
 const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
   const [trophyData, setTrophyData] = useState<TrophyData[]>([]);
+  const [imageData, setImageData] = useState<string[] | null>(null);
+
 
   useEffect(() => {
     if (userData?.uloga === "NATJECATELJ") {
@@ -46,20 +41,70 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    const fetchCompetitionNames = async () => {
+      try {
+        if (trophyData.length > 0) {
+          const competitionPromises = trophyData.map(async (trophy) => {
+            const response = await fetch(`/api/natjecanja/get/${trophy.natjecanjeId}`);
+            const data = await response.json();
+            return data.nazivNatjecanja; // Return only the competition name
+          });
+  
+          const competitionNames = await Promise.all(competitionPromises);
+          
+          setTrophyData((prevTrophyData) =>
+            prevTrophyData.map((trophy, index) => ({
+              ...trophy,
+              natjecanjeNaziv: competitionNames[index],
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching competition names:", error);
+      }
+    };
+  
+    fetchCompetitionNames();
+  }, [trophyData]);
+  
+
+  useEffect(() => {
+    const fetchTrophyPictures = async () => {
+      try {
+        if (trophyData.length > 0) {
+          const imagePromises = trophyData.map(async (trophy) => {
+            const response = await fetch(`/api/trophies/image/${trophy.peharId}`);
+            const blob = await response.blob();
+            return URL.createObjectURL(blob);
+          });
+  
+          const imageUrls = await Promise.all(imagePromises);
+          setImageData(imageUrls);
+        }
+      } catch (error) {
+        console.error("Error fetching trophy pictures:", error);
+      }
+    };
+  
+    fetchTrophyPictures();
+  }, [trophyData]);
+  
+
   return (
     <div>
-      {trophyData.map((trophy) => (
-
+      {trophyData.length === 0 && (<p>nema osvojenih pehara</p>)}
+      {trophyData.map((trophy, index) => (
         <div key={trophy.peharId} className="userTrophy">
-          <h4>{trophy.natjecanje.nazivNatjecanja}</h4>
+          <h4>{trophy.natjecanjeNaziv}</h4>
           <p>|</p>
           <p>Mjesto: {trophy.mjesto}</p>
           <p>|</p>
-          <img src={trophy.slikaPehara.replace(/^\./, '')} alt={`slika pehara`} />
+          {imageData && (<img className='trophyImg' src={imageData[index]} alt={`slika pehara`} /> )}
         </div>
       ))}
     </div>
-  )
+  );
 };
 
 export default UserTrophies; 

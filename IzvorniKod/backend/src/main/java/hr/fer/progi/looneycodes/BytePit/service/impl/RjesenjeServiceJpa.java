@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,6 +20,9 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.OptionalInt;
 import java.sql.Timestamp;
@@ -67,7 +69,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     @Override
-    public List<Rjesenje> findByNatjecanjeAndZadatak(Natjecanje natjecanje, Zadatak zadatak) {
+    public List<Rjesenje> findByNatjecanjeAndZadatak(Nadmetanje natjecanje, Zadatak zadatak) {
         return rjesenjeRepository.findByNatjecanjeAndZadatak(natjecanje, zadatak);
     }
 
@@ -101,7 +103,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
 
       RjesenjeKey rjesenjeId = new RjesenjeKey(rjesenjeRb, natjecatelj.get(), zadatak.get());
       Nadmetanje nadmetanje = null;
-      if (nadmetanjeId.isPresent()) {
+      if (nadmetanjeId != null && nadmetanjeId.isPresent()) {
         if(natjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
           nadmetanje = natjecanjeRepository.findById(nadmetanjeId.getAsInt()).get();
         else if(virtualnoNatjecanjeRepository.findById(nadmetanjeId.getAsInt()).isPresent())
@@ -138,7 +140,7 @@ public class RjesenjeServiceJpa implements RjesenjeService {
           """
           {
             "source_code" : "%s",
-            "language_id" : 12,
+            "language_id" : 76,
             "stdin" : "%s",
             "expected_output" : "%s",
             "cpu_time_limit" : %d
@@ -261,5 +263,51 @@ public class RjesenjeServiceJpa implements RjesenjeService {
     }
 
     return status;
+	}
+
+	@Override
+	public List<Rjesenje> findByNatjecanjeAndZadatakAndNatjecatelj(Natjecanje natjecanje, Zadatak zadatak,
+			Korisnik natjecatelj) {
+		return null;
+	}
+
+	@Override
+	public Optional<Rjesenje> fetch(Integer redniBroj, Integer zadatakId, String korisnickoIme) {
+		RjesenjeKey id = new RjesenjeKey(redniBroj, 
+				korisnikRepository.findByKorisnickoIme(korisnickoIme).get(),
+				zadatakRepository.findById(zadatakId).get());
+		return rjesenjeRepository.findById(id);
+	}
+
+	@Override
+	public boolean solved(Integer zadatakId, String korisnickoIme) {
+		Optional<Korisnik> natjecatelj = korisnikRepository.findByKorisnickoIme(korisnickoIme);
+		Optional<Zadatak> zadatak = zadatakRepository.findById(zadatakId);
+		if(natjecatelj.isPresent() && zadatak.isPresent()) {
+			List<Rjesenje> rjesenja = rjesenjeRepository.findByNatjecateljAndZadatak(natjecatelj.get(), zadatak.get());
+			if(rjesenja.size() > 0 && 
+					rjesenja.stream().filter(r -> r.getBrojTocnihPrimjera() == 1).toList().size() > 0)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<Rjesenje> findBestByZadatak(Zadatak zadatak) {
+		List<Rjesenje> rjesenja = rjesenjeRepository.findByRjesenjeIdZadatak(zadatak);
+		List<Rjesenje> najbolja = new ArrayList<>();
+		Set<Korisnik> natjecatelji = new HashSet<>();
+		rjesenja.stream().forEach(rj -> natjecatelji.add(rj.getRjesenjeId().getNatjecatelj()));
+		natjecatelji.stream().forEach(nat -> 
+				{
+					Optional<Rjesenje> rjes = rjesenja.stream()
+								.filter(rj -> rj.getRjesenjeId().getNatjecatelj().equals(nat))
+								.max((r1, r2) -> Double.compare(r1.getBrojTocnihPrimjera(), r2.getBrojTocnihPrimjera()));
+					if(rjes.isPresent()) {
+						najbolja.add(rjes.get());
+					} 
+				}
+				);
+		return najbolja;
 	}
 }

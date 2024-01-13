@@ -1,8 +1,9 @@
 body {
   box-sizing: inherit;
   max-width: 100%;
-  margin:0 0 40px 0;
+  margin: 0 0 40px 0;
 }
+
 #root {
   max-width: 1280px;
   margin: 0;
@@ -73,10 +74,45 @@ body {
   left: 0;
 }
 
-[data-theme="dark"] body{
+.oznacenaNatjecanja {
+  font-size: large;
+}
+
+.download,
+.download>span {
+  border: none;
+  color: #213547;
+  background-color: transparent;
+}
+
+.download:hover,
+.download:hover>span {
+  border: none;
+  background-color: #dd7230e0;
+  color: #213547;
+}
+
+.download:hover>span {
+  background-color: transparent;
+}
+
+
+[data-theme="dark"].download:hover>span {
+  background-color: transparent;
+  color: #213547;
+}
+
+[data-theme="dark"] .download>span {
+  color: #dd7230e0;
+}
+
+[data-theme="dark"] .download,
+[data-theme="dark"] .ant-modal-content,
+[data-theme="dark"] body {
   color: #ECDCC9;
   background-color: #2A2D34;
 }
+
 
 [data-theme="dark"] a:hover {
   color: #dd7230e0;
@@ -93,16 +129,25 @@ body {
   color: #ECDCC9;
 }
 
-[data-theme="dark"] .table-switch-buttons{
+[data-theme="dark"] .table-switch-buttons {
   color: #ECDCC9;
   background-color: #2A2D34;
 }
 
-[data-theme="dark"]  .react-calendar__tile--now:enabled:hover, [data-theme="dark"] .react-calendar__tile--now:enabled:focus, [data-theme="dark"] .react-calendar__tile--now {
+[data-theme="dark"] .react-calendar__tile--now:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--now:enabled:focus,
+[data-theme="dark"] .react-calendar__tile--now {
   background: #dd7230e0;
 }
 
-[data-theme="dark"]  .tablica-natjecanje-button, [data-theme="dark"] .tablica-natjecanje-button:hover {
+[data-theme="dark"] .tablica-natjecanje-button,
+[data-theme="dark"] .tablica-natjecanje-button:hover {
   background-color: #2A2D34;
   color: #ECDCC9;
+}
+
+@media screen and (max-width: 768px) {
+  body{
+    font-size: 10px;
+  }
 }

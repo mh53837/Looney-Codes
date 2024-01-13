@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ConfigProvider } from 'antd';
 import '../../styles/Table.css';
@@ -39,7 +39,7 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
   const [selectedZadatakId, setSelectedZadatakId] = useState<BigInteger | null>(null);
   
   const {theme} = useContext(ThemeContext);
-
+  console.log("problems profile tab tema: ", theme);
   const renderTable = (problemData: ProblemData[] | undefined ) => {
     if(!problemData) {
       return;
@@ -66,7 +66,11 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
               title: 'tekst',
               dataIndex: 'tekstZadatka',
               key: 'tekstZadatka',
-              className: "th-td"
+              className: "th-td",
+              ellipsis: true, // Enable text wrap
+              render: (text) => (
+                <div style={{ whiteSpace: 'pre-wrap' }}>{text}</div>
+              ),
             },
             {
               title: 'broj bodova',
@@ -145,6 +149,7 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
           rowKey="zadatakId"
           showSorterTooltip={false}
           style={{ tableLayout: 'fixed' }}
+          scroll={{ x: true }} 
         />
     );
   }
@@ -161,13 +166,16 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
     setEvaluationTestsVisible(false);
     setSelectedZadatakId(null);
   };
+  useEffect(() => {
+
+  }, [theme.isThemeDark]);
 
   return (
     <div className="problemContainer">
       {(
         user.korisnickoIme === userData.korisnickoIme &&
         <Link to = "/problems/new">
-          <button>novi zadatak</button>
+          <button className="addBtn">novi zadatak</button>
         </Link>
       )}
       
@@ -178,11 +186,13 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
           <div className="tableWrapper">
           <div className="info-table">
             {
-              theme.isThemeDark == false ? (
+              theme.isThemeDark === false ? (
                 <ConfigProvider
                   theme={{
                     components: {
                       Table: {
+                        cellPaddingBlock: 16,
+                        cellPaddingInline: 6,
                         headerBg: "#f4c95de7",
                         rowHoverBg: "#f4c95d52",
                         borderColor: "#00000085",
@@ -205,6 +215,8 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
                   theme={{
                     components: {
                       Table: {
+                        cellPaddingBlock:16,
+                        cellPaddingInline: 6,
                         headerBg: "#dd7230",
                         rowHoverBg: "#dcdcdc34",
                         borderColor: "#00000085",

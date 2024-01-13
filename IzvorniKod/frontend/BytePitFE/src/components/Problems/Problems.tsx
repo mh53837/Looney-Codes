@@ -26,8 +26,13 @@ const Problems: React.FC<ProblemsProps> = (props) => {
                 </Link>
             </td>
             <td><span>{tekstZadatka}</span></td>
-            <td>{brojBodova == 10 ? '⭐' : brojBodova == 20 ? "⭐⭐" : "⭐⭐⭐"}</td>
-        </tr>
+            <td>{brojBodova == 10 ? '★' : brojBodova == 20 ? "★★" : "★★★"}</td>
+            <td>
+                <Link to={`/problem/solutions/${zadatakId}`}>
+                    Pregledaj
+                </Link>
+            </td>
+        </tr >
     );
 };
 

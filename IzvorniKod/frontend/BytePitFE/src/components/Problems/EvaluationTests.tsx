@@ -76,7 +76,7 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
             footer={        
             <div>
                 <button key="ok" onClick={handleOk}>
-                    ok
+                    spremi promjene
                 </button>
             </div>
             }

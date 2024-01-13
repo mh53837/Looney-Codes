@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import { ThemeContext } from "../../context/themeContext";
@@ -8,6 +7,9 @@ import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
 import "../../styles/UserProfile.css";
 import "../../styles/Table.css";
+import ProblemsProfileTab from "./ProblemsProfileTab";
+import CompetitionProfileCalendar from "./CompetitionProfileCalendar";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 interface UserData {
   korisnickoIme: string;
@@ -36,11 +38,9 @@ interface ProblemData {
   vremenskoOgranicenje: number;
 }
 
-
-const ProblemsProfileTab = React.lazy(() => import("./ProblemsProfileTab"));
-const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
 const UserTrophies = React.lazy(() => import("./UserTrophies"));
+const UserList = React.lazy(() => import("../User/UserList"));
 
 const UserProfile: React.FC = () => {
   const [imageData, setImageData] = useState<string | null>(null);
@@ -261,7 +261,9 @@ const UserProfile: React.FC = () => {
         )}
 
         {user.uloga === "ADMIN" && userData.uloga === "ADMIN" && (
-          <Link to="/user/listRequested"><button>odobri korisnike</button></Link>
+          <div>
+            <UserList />
+          </div>
         )}
 
         {userData.uloga === "VODITELJ" && (
@@ -282,12 +284,12 @@ const UserProfile: React.FC = () => {
               centered
               items={[
                 {
-                  label: <p> {userData.korisnickoIme === user.korisnickoIme ? "moji zadaci" : "zadaci"} </p>,
+                  label: <p style={{fontSize: 18}}> {userData.korisnickoIme === user.korisnickoIme ? "moji zadaci" : "zadaci"} </p>,
                   key: "1",
                   children: renderProblemsTab(),
                 },
                 {
-                  label: <p>{userData.korisnickoIme === user.korisnickoIme ? "moja natjecanja" : "natjecanja"}</p>,
+                  label: <p style={{fontSize: 18}}>{userData.korisnickoIme === user.korisnickoIme ? "moja natjecanja" : "natjecanja"}</p>,
                   key: "2",
                   children: renderCompetitionsCalendar(),
                 },
@@ -296,14 +298,31 @@ const UserProfile: React.FC = () => {
           </ConfigProvider>
         )}
 
-        {userData.uloga === "NATJECATELJ" && (
+        {userData.uloga === "NATJECATELJ" && attempted > 0 && (
           <div>
+            <PieChart
+                title="Broj uspješno rješenih zadataka"
+                series={[
+                  {
+                    data: [
+                      { value: solved, color: 'green', label: 'rješeno' },
+                      { value: attempted-solved, color: 'red', label: 'nerješeno/isprobano'},
+                    ],
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                  },
+                ]}
+                height={200}
+              />
+
             <h3>broj točno riješenih zadataka: {solved} </h3>
             <h3>broj isprobanih zadataka: {attempted} </h3>
-            <h3>osvojeni pehari:</h3>
-            {renderUserTrophies()}
           </div>
         )}
+        {userData.uloga === "NATJECATELJ" && (<div>
+            <h3>osvojeni pehari:</h3>
+            {renderUserTrophies()}
+        </div>)}
       </div>
     </div>
   );

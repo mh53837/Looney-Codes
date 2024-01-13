@@ -1,10 +1,12 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.service.NatjecanjeService;
 import hr.fer.progi.looneycodes.BytePit.service.PeharService;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
@@ -28,14 +30,16 @@ public class PeharController {
 
     @Autowired
     private PeharService peharService;
+    @Autowired
+    private ScheduledTasks scheduledTasks;
 
     /**
      * Ruta za ispis svih pehara.
      * @return lista svih pehara.
      */
     @GetMapping("/all")
-    public List<Pehar> listAll() {
-        return peharService.listAll();
+    public List<AddPeharDTO> listAll() {
+        return peharService.listAll().stream().map(AddPeharDTO::new).toList();
     }
 
     /**
@@ -43,8 +47,8 @@ public class PeharController {
      * @return jedan pehar.
      */
     @GetMapping("/get/{id}")
-    public Pehar oneTrophy(@PathVariable Integer id) {
-        return peharService.oneTrophy(id);
+    public AddPeharDTO oneTrophy(@PathVariable Integer id) {
+        return new AddPeharDTO(peharService.oneTrophy(id));
     }
 
     /**
@@ -52,8 +56,8 @@ public class PeharController {
      * @return lista pehara.
      */
     @GetMapping("/user/{korisnickoIme}")
-    public List<Pehar> listAllFromOneKorisnik(@PathVariable String korisnickoIme){
-        return peharService.listAllFromOneNatjecatelj(korisnickoIme);
+    public List<AddPeharDTO> listAllFromOneKorisnik(@PathVariable String korisnickoIme){
+        return peharService.listAllFromOneNatjecatelj(korisnickoIme).stream().map(AddPeharDTO::new).toList();
     }
 
     /**
@@ -61,7 +65,7 @@ public class PeharController {
      *
      */
     @PostMapping("/add")
-    public Pehar addPehar(@RequestPart("image") MultipartFile file, @RequestPart("peharData")  AddPeharDTO dto){
+    public AddPeharDTO addPehar(@RequestPart("image") MultipartFile file, @RequestPart("peharData")  AddPeharDTO dto){
         try {
             int extensionIndex = file.getOriginalFilename().lastIndexOf('.');
             if (extensionIndex < 1) {
@@ -81,7 +85,8 @@ public class PeharController {
         }
 
         Pehar pehar = peharService.createPehar(dto);
-        return pehar;
+        scheduledTasks.scheduleTaskTrophy(pehar.getNatjecanje().getNatjecanjeId(), pehar.getNatjecanje().getKrajNatjecanja());
+        return new AddPeharDTO(pehar);
     }
     /**
      * Dohvati sliku pehara

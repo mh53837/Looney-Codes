@@ -1,3 +1,10 @@
+/Dokumentacija/*.aux
+/Dokumentacija/*.lof
+/Dokumentacija/*.log
+/Dokumentacija/*.lot
+/Dokumentacija/*.out
+/Dokumentacija/*.synctex.gz
+/Dokumentacija/*.toc
 IzvorniKod/.classpath
 IzvorniKod/.project
 IzvorniKod/.settings
@@ -5,4 +12,3 @@ IzvorniKod/backend/target
 IzvorniKod/backend/main/resources/static
 IzvorniKod/frontend/node_modules
 *.idea
-

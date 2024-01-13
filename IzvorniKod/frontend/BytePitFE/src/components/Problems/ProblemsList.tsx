@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../../styles/Table.css'
 import { UserContext } from '../../context/userContext';
-
+import { Link } from 'react-router-dom';
 
 export interface IProblems {
     voditelj: string;
@@ -40,25 +40,35 @@ const ProblemsList: React.FC = () => {
         }
     }, [user]);
 
+
     return (
-        <div className="info-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>voditelj</th>
-                        <th>naziv</th>
-                        <th>tekst</th>
-                        <th>težina</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {problem.map((problem, index) => (
-                        <React.Suspense fallback={<div>učitavanje...</div>}>
-                            <Problems key={index} problem={problem} />
-                        </React.Suspense>
-                    ))}
-                </tbody>
-            </table>
+        <div>
+            {(user.uloga === "VODITELJ" &&
+                <Link to="/problems/new">
+                    <button className="addBtn">novi zadatak</button>
+                </Link>
+            )}
+
+            <div className="info-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>voditelj</th>
+                            <th>naziv</th>
+                            <th>tekst</th>
+                            <th>težina</th>
+                            <th>rješenja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {problem.map((problem, index) => (
+                            <React.Suspense fallback={<div>učitavanje...</div>}>
+                                <Problems key={index} problem={problem} />
+                            </React.Suspense>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

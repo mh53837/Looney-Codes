@@ -2,6 +2,8 @@ package hr.fer.progi.looneycodes.BytePit.api.controller;
 
 import org.springframework.data.util.Pair;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Duration;
 import java.util.Map;
 
@@ -52,9 +54,12 @@ public class RangDTO {
         this.zadatakBodovi = zadatakBodovi;
     }
 
-    public Duration getVrijemeRjesavanja() {
-        return vrijemeRjesavanja;
+
+    @JsonProperty("vrijemeRjesavanja")
+    public Long getVrijemeRjesavanja() {
+        return vrijemeRjesavanja.getSeconds();
     }
+    
     public void setVrijemeRjesavanja(Duration vrijemeRjesavanja) {
         this.vrijemeRjesavanja = vrijemeRjesavanja;
     }

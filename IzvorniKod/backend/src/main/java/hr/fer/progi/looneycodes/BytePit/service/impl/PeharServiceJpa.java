@@ -65,10 +65,17 @@ public class PeharServiceJpa implements PeharService {
 
     @Override
     public Pehar createPehar(AddPeharDTO dto) {
-        Optional<Korisnik> korisnik = korisnikRepository.findByKorisnickoIme(dto.getKorisnickoImeNatjecatelja());
+        //sva mjesta ce imati isti pehar
+        //ako vec postoji pehar za zadano natjecanje, onda bacamo exception
+        Pehar pehar = peharRepository.findAllTrophies().stream().filter(p -> p.getNatjecanje().getNatjecanjeId().equals(dto.getNatjecanjeId())).findFirst().orElse(null);
+        if(pehar != null)
+            //mozemo sloziti update metodu
+            throw new IllegalArgumentException("Pehar za natjecanje s id-em: " + dto.getNatjecanjeId() + " vec postoji!");
+
         Natjecanje natjecanje = natjecanjeRepository.findByNatjecanjeId(dto.getNatjecanjeId());
-        Pehar pehar = new Pehar(korisnik.get(), natjecanje, dto.getMjesto(), dto.getSlikaPehara());
+        pehar = new Pehar(null, natjecanje, 1, dto.getSlikaPehara());
         validate(pehar);
+
         return peharRepository.save(pehar);
     }
 

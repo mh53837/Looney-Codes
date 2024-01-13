@@ -159,7 +159,10 @@ public class NatjecanjeServiceJpa implements NatjecanjeService {
             // ne radi rjesenjeService.findByNatjecateljAndNatjecanje, pa filtriramo ovde
             List<Rjesenje> rjesenja = rjesenjaNatjecanje.stream().filter(rjesenje -> rjesenje.getRjesenjeId().getNatjecatelj().getKorisnikId().equals(natjecatelj.getKorisnikId())).collect(Collectors.toList());
             for (Zadatak zadatak : zadaci) {
-                Optional<Rjesenje> rjesenje = rjesenja.stream().filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId())).findFirst();
+                Optional<Rjesenje> rjesenje = rjesenja.stream()
+                		.filter(r -> r.getRjesenjeId().getZadatak().getZadatakId().equals(zadatak.getZadatakId()))
+                		.max((r1, r2) -> Double.compare(r1.getBrojTocnihPrimjera(),  
+                        r2.getBrojTocnihPrimjera()));
                 if (rjesenje.isPresent()) {
                     zadatakBodovi.put(zadatak.getZadatakId(), rjesenje.get().getBrojTocnihPrimjera() * zadatak.getBrojBodova());
                 } else {

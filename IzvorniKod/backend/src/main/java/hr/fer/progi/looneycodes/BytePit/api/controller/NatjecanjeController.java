@@ -59,7 +59,7 @@ public class NatjecanjeController {
 
 
         CreateNatjecanjeDTO dto = new CreateNatjecanjeDTO(natjecanjeService.createNatjecanje(natjecanjeDTO));
-        scheduledTasks.scheduleTask(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+        scheduledTasks.scheduleTaskProblems(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
         return dto;
 
 
@@ -127,7 +127,11 @@ public class NatjecanjeController {
           throw new IllegalStateException("Morate biti voditelj tog natjecanja ili admin!");
 
         CreateNatjecanjeDTO dto = new CreateNatjecanjeDTO(natjecanjeService.updateNatjecanje(natjecanjeDTO));
-        scheduledTasks.scheduleTask(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+        if(natjecanjeDTO.getKrajNatjecanja().after(natjecanje.getKrajNatjecanja())){
+            //ako je kraj natjecanja pomaknut, onda moramo ponovno zakazati objavu zadataka i dodjelu pehara
+            scheduledTasks.scheduleTaskProblems(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+            scheduledTasks.scheduleTaskTrophy(dto.getNatjecanjeId(), dto.getKrajNatjecanja());
+        }
         return dto;
     }
 

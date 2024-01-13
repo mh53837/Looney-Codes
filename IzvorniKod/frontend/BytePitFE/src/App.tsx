@@ -8,11 +8,15 @@ import { useContext, useState, useEffect } from 'react';
 import { UserContext } from './context/userContext';
 import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
+import CompetitionResults from './components/Competition/CompetitionResults.tsx';
+import UserProfile from './components/UserProfile/UserProfile.tsx';
+import BestSolutions from './components/Problems/BestSolutions.tsx';
+
+
 
 const NewProblem = React.lazy(() => import('./components/Problems/NewProblem.tsx'));
 const NewCompetition = React.lazy(() => import('./components/Competition/NewCompetiton.tsx'));
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage.tsx'));
-const UserProfile = React.lazy(() => import('./components/UserProfile/UserProfile.tsx'));
 const Register = React.lazy(() => import('./components/Register.tsx'));
 const Navbar = React.lazy(() => import('./layout/Navbar.tsx'));
 const ConfirmEmail = React.lazy(() => import('./components/ConfirmEmail.tsx'));
@@ -25,6 +29,7 @@ const ProblemsList = React.lazy(() => import('./components/Problems/ProblemsList
 const App: React.FC = () => {
 
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
+    const [redirectToUserProfile, setRedirectToUserProfile] = useState<boolean>(false);
 
     const { theme } = useContext(ThemeContext); //!theme-light
     const { user } = useContext(UserContext);
@@ -38,6 +43,12 @@ const App: React.FC = () => {
         }, 100);
     };
 
+    const handleRedirectToProfile = () => {
+        setRedirectToUserProfile(true);
+        setTimeout(() => {
+            setRedirectToUserProfile(false);
+        }, 100);
+    }
     const handleLogout = () => {
         setRedirectToHome(true);
         setUser({ korisnickoIme: '', lozinka: '', uloga: '' });
@@ -47,7 +58,9 @@ const App: React.FC = () => {
 
     };
 
-    useEffect ( () => {
+    useEffect(() => {
+
+
     }, [theme.isThemeDark]);
 
 
@@ -57,6 +70,8 @@ const App: React.FC = () => {
                 <Navbar onLogout={handleLogout} />
             )}
             {redirectToHome && <Navigate to="/" replace={true} />}
+            {redirectToUserProfile && <Navigate to={`/user/profile/${user.korisnickoIme}`} replace={true} />}
+
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -96,9 +111,12 @@ const App: React.FC = () => {
                         </div>
                     } />
                     <Route path="/problem/:nadmetanjeId?/:zadatakId" element={<ProblemPage />} />
-                    <Route path="/problems/new" element={<NewProblem />} />
-                    <Route path="/natjecanja/new" element={<NewCompetition />} />
-                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />}/>
+                    <Route path="/problem/solutions/:zadatakId" element={<BestSolutions />} />
+                    <Route path="/problems/new" element={<NewProblem handleOk={handleRedirectToProfile} />} />
+                    <Route path="/natjecanja/new" element={<NewCompetition handleOk={handleRedirectToProfile} />} />
+                    <Route path="/natjecanja/rjesi/:nadmetanjeId/:zadatakId?" element={<CompetitionPage />} />
+                    <Route path="/natjecanja/rezultati/:nadmetanjeId" element={<CompetitionResults virtualno={false} />} />
+                    <Route path="/natjecanja/virtualno/rezultat/:nadmetanjeId" element={<CompetitionResults virtualno={true} />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

@@ -1,6 +1,6 @@
 import React, {useState, ChangeEvent, FormEvent, useContext} from 'react';
 import '../../styles/NewProblem.css';
-import { Select, InputNumber } from "antd";
+import { Select, InputNumber, message } from "antd";
 import { UserContext } from '../../context/userContext';
 
 interface ProblemForm {
@@ -11,9 +11,13 @@ interface ProblemForm {
     privatniZadatak: boolean;
     tezinaZadatka: string;
 }
+
+interface NewProbProps{
+    handleOk: () => void;
+}
 const EvaluationTests = React.lazy(() => import("../Problems/EvaluationTests"));
 
-const NewProblem: React.FC = () => { 
+const NewProblem: React.FC<NewProbProps> = ({handleOk}) => { 
     const {user } = useContext(UserContext);
     const [error, setError] = useState<string>('');
     const [poruka, setPoruka] = useState<string>('');
@@ -25,6 +29,8 @@ const NewProblem: React.FC = () => {
         privatniZadatak: true,
         tezinaZadatka: "RECRUIT",
     });
+
+    const [messageApi, contextHolder] = message.useMessage();
 
     const [evaluationTestsVisible, setEvaluationTestsVisible] = useState(false);
     const [zadatakId, setZadatakId] = useState<BigInteger | null>(null);
@@ -90,6 +96,7 @@ const NewProblem: React.FC = () => {
     const onCloseEvaluationTests = () => {
         setEvaluationTestsVisible(false);
         setZadatakId(null);
+        handleOk();
     };
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -128,6 +135,10 @@ const NewProblem: React.FC = () => {
             }
         
             const data = await response.json();
+            messageApi.open({
+                type: 'success',
+                content: 'uspješno ste kreirali novi zadatak',
+              });
             setPoruka('uspješno ste kreirali novi zadatak');
             onNewProblemCreated(data.zadatakId);
             console.log('Server response:', data);
@@ -139,6 +150,7 @@ const NewProblem: React.FC = () => {
 
     return (
         <div className="newProblem-container">
+            {contextHolder}
             <div className="NewProblem">
                 <form onSubmit={onSubmit}>
                     <div className="FormRow">
@@ -150,15 +162,15 @@ const NewProblem: React.FC = () => {
                         <input className= "tekstZadatka" name="tekstZadatka" placeholder='tekst zadatka' onChange={onChange} value={problemForm.tekstZadatka} />
                     </div>
                     <div className="FormRow" id="brBodova">
-                        <label>broj bodova</label>
+                        <label>težina (broj bodova) </label>
                         <Select 
                             defaultValue= { "10"  }
-                            style={{ width: 120 }}
+                            style={{ width: 160 }}
                             onChange={ handleBrojBodovaChange}
                             options={[
-                                { value:"10", label: "10" },
-                                { value:"20", label: "20" },
-                                { value:"50", label: "50" },
+                                { value:"10", label: "★ (10 bodova)" },
+                                { value:"20", label: "★★ (20 bodova)" },
+                                { value:"50", label: "★★★ (50 bodova)" },
                             ]}
                         />
                     </div>

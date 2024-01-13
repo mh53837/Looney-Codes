@@ -1,60 +1,83 @@
 import { useParams } from 'react-router-dom';
-import ProblemPage from '../Problems/ProblemPage';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useMemo, lazy } from 'react';
 import { Link } from 'react-router-dom';
+import CountDown from 'react-countdown';
+import { Navigate } from "react-router-dom";
+import '../../styles/CompetitionPage.css';
 
 interface ProblemInfo {
-  zadatakId : BigInt;
-  zadatakIme : string;
-};
-
-interface CompetitionInfo {
-  virtualno : boolean;
-  zadaci : Array<ProblemInfo>;
+  zadatakId: bigint;
+  zadatakIme: string;
 }
 
-const CompetitionPage : React.FC = () => {
-  const { nadmetanjeId, zadatakId } = useParams();
-  const [ info, setInfo ] = useState<CompetitionInfo>();
-  const [ zadatakStranica, setZadatakStranica ] = useState<ReactNode | undefined>();
+interface CompetitionInfo {
+  ime: string;
+  virtualno: boolean;
+  krajNatjecanja: Date;
+  zadaci: Array<ProblemInfo>;
+}
 
-  useEffect(() => {
-      if(zadatakId != undefined && nadmetanjeId != undefined)
-        setZadatakStranica(<ProblemPage />);
-      else
-        setZadatakStranica((<h3> Odaberite zadatak. Sretno! </h3>))
-    }, [zadatakId]);
+
+
+const ProblemPage = lazy(() => import('../Problems/ProblemPage.tsx'));
+
+const CompetitionPage: React.FC = () => {
+  const { nadmetanjeId, zadatakId } = useParams();
+  const [info, setInfo] = useState<CompetitionInfo>();
+  const zadatakStranica = useMemo(() => {
+    if (zadatakId != undefined && nadmetanjeId != undefined)
+      return (<ProblemPage />);
+    else
+      return ((<h3> Odaberite zadatak. Sretno! </h3>))
+  }, [zadatakId]);
 
   useEffect(() => {
     fetch(`/api/nadmetanja/info/${nadmetanjeId}`)
-    .then((data) => data.json())
-    .then(data => setInfo(data))
-    .catch(() => {
-      console.log("Greška!")
-    });
+      .then((data) => data.json())
+      .then(data => setInfo(data))
+      .catch(() => {
+        return (<h3> Greška: natjecanje ne postoji! </h3>);
+      })
   }, [nadmetanjeId]);
 
-  if(info === undefined) 
-    return;
+  if (info === undefined)
+    return (<h3> Greška: natjecanje ne postoji! </h3>);
 
   const zadaci = [];
-  for(const zadatak of info?.zadaci.values()) {
+  for (const zadatak of info?.zadaci.values()) {
     console.log("debug: " + zadatak.zadatakIme);
     zadaci.push((
-        <Link to={`/natjecanja/rjesi/${nadmetanjeId}/${zadatak.zadatakId}`}>
-        <button> {zadatak.zadatakIme} </button>
-        </Link>
-        ));
+
+      <Link to={`/natjecanja/rjesi/${nadmetanjeId}/${zadatak.zadatakId}`}>
+        {zadatak.zadatakIme}
+      </Link>
+
+
+    ));
   }
 
-  return  (
-      <div>
-        {zadatakStranica != null && zadatakStranica}
-        <span>
-          <h3> Lista zadataka... </h3>
-          {zadaci}
-        </span>
+
+  return (
+    <div className='competitionPageWrapper'>
+      <div className='competitionHeader'>
+
+        {zadatakId != undefined && info.ime && <span><Link to={`/natjecanja/rjesi/${nadmetanjeId}`}>
+          <h2>{info.ime}</h2>
+        </Link></span>}
+        {info.krajNatjecanja == null &&
+          <span><Link to={`/natjecanja/virtualno/rezultat/${nadmetanjeId}`} className='countDown'>
+            Završi i predaj!
+          </Link></span>
+        }
+        {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>}
       </div>
+      {zadatakId === undefined && <h1>{info.ime}</h1>}
+      {zadatakStranica != null && zadatakStranica}
+      <div className="problemMenu">
+        <h4> Odaberite zadatak: </h4>
+        {zadaci}
+      </div>
+    </div>
   );
 }
 

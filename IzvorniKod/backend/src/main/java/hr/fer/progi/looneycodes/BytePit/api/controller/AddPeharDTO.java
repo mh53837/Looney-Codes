@@ -1,12 +1,25 @@
 package hr.fer.progi.looneycodes.BytePit.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
-import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.model.Pehar;
 
 /**
  * Objekt koji se preda routeru prilikom dodavanja pehara
  */
 public class AddPeharDTO {
+
+    public AddPeharDTO() {
+    }
+    public AddPeharDTO(Pehar pehar)
+    {
+        Korisnik natjecatelj = pehar.getNatjecatelj();
+        this.korisnickoImeNatjecatelja = natjecatelj ==null ? null : natjecatelj.getKorisnickoIme();
+        this.natjecanjeId = pehar.getNatjecanje().getNatjecanjeId();
+        this.mjesto = pehar.getMjesto();
+        this.slikaPehara = pehar.getSlikaPehara();
+        this.peharId = pehar.getPeharId();
+    }
     /**
      * korisničko ime natjecatelja koji je dobio pehar kojeg dodajemo
      */
@@ -22,7 +35,14 @@ public class AddPeharDTO {
     /**
      * slika pehara kojeg dodajemo
      */
+    @JsonIgnore
     private String slikaPehara;
+
+    private Integer peharId;
+
+    public Integer getPeharId() { return peharId;}
+
+    public void setPeharId(Integer peharId) { this.peharId = peharId;}
 
     public String getKorisnickoImeNatjecatelja() {
         return korisnickoImeNatjecatelja;
