@@ -264,7 +264,7 @@ Dijagram aktivnosti na slici \ref{fig:dijagramAktivnosti} prikazuje proces kreir
 %\eject
 \section{Dijagram komponenti}
 
-Dijagram komponenti prikazan na slici \ref{fig:dijagramKomponenti} opisuje organizaciju i međuovisnost  komponenti, interne strukture i odnose prema okolini. Web aplikacija sastoji se od komponenti: Controllers, Services, Repositories i Models. Controllers pruža REST API sučelje na koje vanjski web preglednik može slati zahtjeve i primati odgovore pomoću JSON datoteka. Repositories pristupa SQL bazi podataka koja ostvaruje sučelje SQL API. Repositories upisuje podatke iz baze podataka u komponentu Services. Models oblikuje korištene entitete i njihov međuodnos. Controllers šalje i prima podatke od komponente Services.
+Dijagram komponenti prikazan na slici \ref{fig:dijagramKomponenti} opisuje organizaciju i međuovisnost  komponenti, interne strukture i odnose prema okolini. Web aplikacija sastoji se od komponenti: Controllers, Services, Repositories, DTO i Models. Controllers pruža REST API sučelje na koje vanjski web preglednik može slati zahtjeve i primati odgovore pomoću JSON datoteka. Repositories pristupa SQL bazi podataka koja ostvaruje sučelje SQL API. Podaci koji su pristigli iz baze se šalju dalje MVC arhitekturi u obliku DTO(Data transfer objcet). Repositories upisuje podatke iz baze podataka u komponentu Services. Models oblikuje korištene entitete i njihov međuodnos. Controllers šalje i prima podatke od komponente Services. Controllers pruža MAIL API sučelje Mailjet preko kojeg šalje mailove i Judge0 API za evaluaciju programskog rješenja.
 \\
 \begin{figure}[H]
 	\includegraphics[scale=0.5]{dijagrami/dijagramKomponenti.png}
