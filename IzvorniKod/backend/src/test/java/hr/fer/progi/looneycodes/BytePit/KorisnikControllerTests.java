@@ -7,11 +7,9 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import org.junit.jupiter.api.Test;
-import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -70,7 +68,8 @@ public class KorisnikControllerTests {
     public void test_throw_exception_if_username_already_exists() {
         // Arrange
         String existingUsername = "MoranaZibar";
-        MultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test".getBytes());
+        MultipartFile file = new MockMultipartFile(
+                "image", "test.jpg", "image/jpeg", "test".getBytes());
         RegisterKorisnikDTO dto = new RegisterKorisnikDTO();
         dto.setKorisnickoIme(existingUsername);
         dto.setIme("Morana");
@@ -100,7 +99,7 @@ public class KorisnikControllerTests {
         when(korisnikRepository.findByKorisnickoIme("MladenVukorepa")).thenReturn(Optional.of(korisnik));
 
         // Act
-        ResponseEntity response = korisnikController.confirmRequest("MladenVukorepa");
+        ResponseEntity<?> response = korisnikController.confirmRequest("MladenVukorepa");
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

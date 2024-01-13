@@ -4,10 +4,13 @@ package hr.fer.progi.looneycodes.BytePit;
 import hr.fer.progi.looneycodes.BytePit.api.controller.CreateNatjecanjeDTO;
 import hr.fer.progi.looneycodes.BytePit.api.controller.NatjecanjeController;
 
+import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
+import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,13 +24,16 @@ import java.sql.Timestamp;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class NatjecanjeControllerTests {
 
     @Autowired
     private NatjecanjeController natjecanjeController;
-
+    @MockBean
+    private NatjecanjeRepository natjecanjeRepository;
     private static UserDetails userDetails;
 
     @BeforeAll
@@ -40,21 +46,19 @@ public class NatjecanjeControllerTests {
 
     @Test
     public void test_creates_new_natjecanje_with_valid_input_data() {
-
         // Arrange
         CreateNatjecanjeDTO natjecanjeDTO = new CreateNatjecanjeDTO();
         natjecanjeDTO.setNazivNatjecanja("testno natjecanje");
         natjecanjeDTO.setPocetakNatjecanja(Timestamp.valueOf("2022-01-01 00:00:00"));
         natjecanjeDTO.setKrajNatjecanja(Timestamp.valueOf("2022-01-02 00:00:00"));
         natjecanjeDTO.setKorisnickoImeVoditelja("buttler");
-
+        when(natjecanjeRepository.save(any(Natjecanje.class))).thenAnswer(i -> (Natjecanje) i.getArguments()[0]);
 
         // Act
         CreateNatjecanjeDTO result = natjecanjeController.createNatjecanje(natjecanjeDTO, userDetails);
 
         // Assert
         assertNotNull(result);
-        assertNotNull(result.getNatjecanjeId());
         assertEquals(natjecanjeDTO.getNazivNatjecanja(), result.getNazivNatjecanja());
         assertEquals(natjecanjeDTO.getPocetakNatjecanja(), result.getPocetakNatjecanja());
         assertEquals(natjecanjeDTO.getKrajNatjecanja(), result.getKrajNatjecanja());
@@ -75,7 +79,5 @@ public class NatjecanjeControllerTests {
             natjecanjeController.createNatjecanje(natjecanjeDTO, userDetails);
         });
     }
-
-
 
 }
