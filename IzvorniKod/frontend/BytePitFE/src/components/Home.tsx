@@ -208,27 +208,31 @@ const Home: React.FC = () => {
                     <table id="tablica">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Naziv natjecanja</th>
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
                                 <th>Voditelj</th>
-                                <th></th>
+                                { user.uloga === "NATJECATELJ" && <th></th>}
                             </tr>
                         </thead>
                         <tbody>
                             {trenutna.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
-                                    <td>{natjecanje.natjecanjeId}</td>
                                     <td>{natjecanje.nazivNatjecanja}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
                                     <td>
-                                        <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
-                                            Pokreni natjecanje
+                                        <Link to={`/user/profile/${natjecanje.korisnickoImeVoditelja}`}>
+                                            {natjecanje.korisnickoImeVoditelja}
                                         </Link>
                                     </td>
+                                    { user.uloga === "NATJECATELJ" &&
+                                        <td>
+                                            <Link to={`/natjecanja/rjesi/${natjecanje.natjecanjeId}/`}>
+                                                Pokreni natjecanje
+                                            </Link>
+                                        </td>
+                                    }
                                 </tr>
                             ))}
                         </tbody>
@@ -241,7 +245,6 @@ const Home: React.FC = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Naziv natjecanja</th>
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
@@ -251,11 +254,14 @@ const Home: React.FC = () => {
                         <tbody>
                             {nadolazeca.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
-                                    <td>{natjecanje.natjecanjeId}</td>
                                     <td>{natjecanje.nazivNatjecanja}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>
+                                        <Link to={`/user/profile/${natjecanje.korisnickoImeVoditelja}`}>
+                                            {natjecanje.korisnickoImeVoditelja}
+                                        </Link>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -268,7 +274,6 @@ const Home: React.FC = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Naziv natjecanja</th>
                                 <th>Početak natjecanja</th>
                                 <th>Kraj natjecanja</th>
@@ -279,7 +284,6 @@ const Home: React.FC = () => {
                         <tbody>
                             {zavrsena.map((natjecanje) => (
                                 <tr key={natjecanje.natjecanjeId}>
-                                    <td>{natjecanje.natjecanjeId}</td>
                                     <td>
                                         <Link to={`/natjecanja/rezultati/${natjecanje.natjecanjeId}/`}>
                                             {natjecanje.nazivNatjecanja}
@@ -287,7 +291,11 @@ const Home: React.FC = () => {
                                     </td>
                                     <td>{formatirajDatumVrijeme(natjecanje.pocetakNatjecanja)}</td>
                                     <td>{formatirajDatumVrijeme(natjecanje.krajNatjecanja)}</td>
-                                    <td>{natjecanje.korisnickoImeVoditelja}</td>
+                                    <td>
+                                        <Link to={`/user/profile/${natjecanje.korisnickoImeVoditelja}`}>
+                                            {natjecanje.korisnickoImeVoditelja}
+                                        </Link>
+                                    </td>
                                     {user.uloga == "NATJECATELJ" &&
                                       <td>
                                           <Link to="#" onClick={() => generirajNatjecanje(natjecanje.natjecanjeId)}>
