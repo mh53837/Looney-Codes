@@ -7,8 +7,10 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
 import org.junit.jupiter.api.Test;
+import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +27,8 @@ import java.util.Optional;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,7 +36,7 @@ public class KorisnikControllerTests {
 
     @Autowired
     private KorisnikController korisnikController;
-    @SpyBean
+    @MockBean
     private KorisnikRepository korisnikRepository;
 
     @Test
@@ -46,6 +50,7 @@ public class KorisnikControllerTests {
         dto.setLozinka("MladenVukorepaJeKul");
         dto.setEmail("dean@kotiga.com");
         dto.setRequestedUloga(Uloga.NATJECATELJ);
+        when(korisnikRepository.save(any(Korisnik.class))).thenAnswer(i -> (Korisnik) i.getArguments()[0]);
 
         // Act
         Korisnik result = korisnikController.addKorisnik(file, dto);
@@ -57,14 +62,14 @@ public class KorisnikControllerTests {
         assertEquals(dto.getPrezime(), result.getPrezime());
         assertEquals(dto.getEmail(), result.getEmail());
         assertEquals(dto.getRequestedUloga(), result.getRequestedUloga());
+        assertNotNull(result.getLozinka());
+        assertNotNull(result.getFotografija());
     }
 
     @Test
     public void test_throw_exception_if_username_already_exists() {
         // Arrange
         String existingUsername = "MoranaZibar";
-        when(korisnikRepository.findByKorisnickoIme(existingUsername)).thenReturn(Optional.of(new Korisnik()));
-
         MultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test".getBytes());
         RegisterKorisnikDTO dto = new RegisterKorisnikDTO();
         dto.setKorisnickoIme(existingUsername);
@@ -73,6 +78,7 @@ public class KorisnikControllerTests {
         dto.setLozinka("kresojezivcenjak");
         dto.setEmail("morana@zibar.hr");
         dto.setRequestedUloga(Uloga.NATJECATELJ);
+        when(korisnikRepository.findByKorisnickoIme(existingUsername)).thenReturn(Optional.of(mock(Korisnik.class)));
 
         // Act & Assert
         assertThrows(RequestDeniedException.class, () -> {
@@ -91,12 +97,10 @@ public class KorisnikControllerTests {
         korisnik.setRequestedUloga(Uloga.VODITELJ);
         korisnik.setKorisnickoIme("MladenVukorepa");
         korisnik.setEmail("ScarlettOHara@gmail.com");
-
         when(korisnikRepository.findByKorisnickoIme("MladenVukorepa")).thenReturn(Optional.of(korisnik));
 
         // Act
         ResponseEntity response = korisnikController.confirmRequest("MladenVukorepa");
-
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
