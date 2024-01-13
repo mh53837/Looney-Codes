@@ -38,7 +38,7 @@ public class ZadatakControllerTests {
     private ZadatakRepository zadatakRepository;
 
     @Test
-    public void test_returns_all_public_problems() {
+    public void test_returns_empty_list_when_no_public_tasks() {
         // Arrange
         List<Zadatak> problems = new ArrayList<>();
         when(zadatakRepository.findAllJavniZadatak()).thenReturn(problems);
