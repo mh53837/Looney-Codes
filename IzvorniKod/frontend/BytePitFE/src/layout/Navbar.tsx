@@ -16,7 +16,8 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const location = useLocation();
 
   const { theme, setTheme } = useContext(ThemeContext);
-
+  
+  if(!theme) setTheme({isThemeDark:false});
 
   useEffect(() => {
     const fetchProfilePicture = async () => {

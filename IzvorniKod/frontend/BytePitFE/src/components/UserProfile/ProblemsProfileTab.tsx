@@ -39,7 +39,6 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
   const [selectedZadatakId, setSelectedZadatakId] = useState<BigInteger | null>(null);
   
   const {theme} = useContext(ThemeContext);
-  console.log("problems profile tab tema: ", theme);
   const renderTable = (problemData: ProblemData[] | undefined ) => {
     if(!problemData) {
       return;

@@ -167,7 +167,6 @@ const ProblemUpdateForm: React.FC<ProblemUpdateFormProps> = ({ zadatakId, onUpda
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
 

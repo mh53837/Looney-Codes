@@ -53,15 +53,13 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
         setCompetitionForm((oldForm) => ({ ...oldForm, [name]: value }));
     }
 
-    const onPocetakChange: DatePickerProps["onChange"] = (date, dateString) => {
-        console.log(date, dateString);
+    const onPocetakChange: DatePickerProps["onChange"] = (date) => {
         setUpdatedPocetak(date);
         if(date){
             setCompetitionForm((oldForm) => ({
                 ...oldForm,
                 pocetakNatjecanja: date.toISOString(),
             }));
-            console.log(competitionForm.pocetakNatjecanja);
         }
 
     };
@@ -92,7 +90,6 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
             fetch('/api/trophies/add', options).then((response) => {
                 if (!response.ok) {
                     console.log(response);
-                    console.log("pogreška!");
                     setError('Došlo je do pogreške, pokušajte ponovno!');
                 }
                 else console.log("uspjesno prenesena slika pehara!");
@@ -110,7 +107,6 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
         });
         setPoruka('');
         setError('');
-        console.log('new competition id:', natjecanjeId);
         setNatjecanjeId(natjecanjeId);
         setEvaluationTestsVisible(true);
     };
@@ -120,8 +116,7 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
         handleOk();
     };
      
-      const onKrajChange: DatePickerProps["onChange"] = (date, dateString) => {
-        console.log(date, dateString);
+      const onKrajChange: DatePickerProps["onChange"] = (date) => {
         setUpdatedKraj(date);
         if(date){
             setCompetitionForm((oldForm) => ({
@@ -129,7 +124,6 @@ const NewCompetition: React.FC<NewCompProps> = ({handleOk}) => {
                 krajNatjecanja: date.toISOString(),
                 
             }));
-            console.log(competitionForm.krajNatjecanja);
         }
       };
 
