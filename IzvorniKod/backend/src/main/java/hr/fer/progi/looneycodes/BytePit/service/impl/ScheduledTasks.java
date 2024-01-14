@@ -122,7 +122,7 @@ public class ScheduledTasks {
     }
 
 
-    @EventListener(ApplicationReadyEvent.class)
+    //@EventListener(ApplicationReadyEvent.class)
     public void scheduleAll() {
         List<Natjecanje> natjecanja = natjecanjeService.listAllNatjecanja();
         // moramo proci kroz sva natjecanja, mozda je koje natjecanje zavrsilo kad je server bio ugasen
