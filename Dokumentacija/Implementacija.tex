@@ -135,7 +135,7 @@ Ispitni slučaj \ref{fig:selenium3} provjerava ispravnost stvaranja novog zadatk
 	\label{fig:selenium3}
 \end{figure}
 
-\noindent Rezultati ispitivanja sustava se mogu vidjeti na slici \ref{fig:selenium_rezultati}.
+\noindent Rezultati ispitivanja sustava mogu se vidjeti na slici \ref{fig:selenium_rezultati}.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.8]{slike/selenium_reultati.png}
@@ -170,12 +170,63 @@ UML-dijagrami razmještaja prikazuju fizičku arhitekturu i konfiguraciju razmje
 
 \section{Upute za puštanje u pogon}
 
-\textbf{\textit{dio 2. revizije}}\\
-
-\textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+Za puštanje našeg projekta u pogon može se koristiti Render.com. Ovu smo platformu odabrali zbog njezine jednostavnosti i pristupačnosti. U nastavku ćemo opisati korake koje smo poduzeli kako bismo uspješno postavili našu aplikaciju na Render.com.
 
 
-\textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+Na početku je pripremiti otvoriti GitHub repozitorij i korisnički račun na Renderu. Dovoljno je za kratkoročnu uporabu koristiti besplatni plan na obje platforme.
+Aplikacija je prilagođena za korištenje izgrađenih statičkih resursa korisničke strane koji se potom dostavljaju s poslužitelja. Prije samog pokretanja u pogon potrebno je generirati te datoteke naredbom \textit{npm run build} iz vršnog foldera implementacije klijentske strane kao što je prikazano na slici dolje.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{slike/deployment1.png}
+	\centering
+	\caption{Generiranje statičkih resursa korisničke strane}
+	\label{deployment1}
+\end{figure}
+
+
+Prije postavljanja na GitHub potrebno je napraviti Maven Wrapper naredbom \textit{mvn wrapper:wrapper} u vršnom direktoriju izvornog koda poslužiteljske strane te dodati u isti direktorij direktorij naziva \textit{Docker} koji sadrži datoteku \textit{Dockerfile} sadržaja kao na donjoj slici. Sve spomenute datoteke valja spremiti u GitHub repozitorij zajedno s ostatkom izvornog koda. 
+
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{slike/deployment2.png}
+	\centering
+	\caption{Dockerfile korišten za puštanje u pogon}
+	\label{deployment2}
+\end{figure}
+
+Sada prelazimo na pokretanje aplikacije na Render platformi. Koraci koje treba obaviti su: 
+
+\begin{itemize}
+	\item \textbf{Stvaranje baze podataka} \newline
+	Po izradi računa treba otvoriti novu PostgreSQL bazu podataka pritiskom na \textit{new} gumb u izborniku početne stranice i odabirom prikladne opcije. Postaviti željeno ime baze i korisnika te regiju na Frankfurt (EU Central). U \textit{application.properties} datoteci treba postaviti \textit{spring.datasource.url} na dobivenu adresu baze i \textit{spring.datasource.username} te \textit{spring.datasource.password} na dobivene korisničke podatke, a promjene pohraniti na GitHub repozitorij.
+	\item \textbf{Stvaranje novog web servisa} \newline
+	Slijedi inicijalizacija novog web servisa za poslužitelj naše stranice. Odabir početka stvaranja takvog servisa vrši se na sličan način kao i stvaranje nove baze podataka - pritiskom \textit{new} gumb u izborniku početne stranice i odabirom prikladne opcije.  \newline
+	Pri početnom odabiru odabrati \textit{Build and deploy from a Git repository} te zatim povezati s željenim GitHub repozitorijem. Na slici \ref{deployment3} prikazan je odabir vršnog direktorija i grane repozitorija. Kao \textit{Enviroment} odabrati Docker, a vrijednost putanje do \textit{Dockerfilea} treba biti postavljena na \textit{./Docker/Dockerfile}. Nije potrebno postavljati varijable okruženja jer su postavljene u aplikacijskim specifikacijama. Završiti kreiranje novog web servisa pritiskom na gumb \textit{Create Web Service}.
+	\begin{figure}[H]
+		\includegraphics[scale=0.3]{slike/deployment3.png}
+		\centering
+		\caption{Povezivanje s GitHub repozitorijem}
+		\label{deployment3}
+	\end{figure}
+	\item \textbf{Pokretanje web servisa}
+	Po stvaranju web servisa počet će proces inicijalizacije poslužitelja. Prilikom toga na karticama \textit{Events} i \textit{Logs} potrebno je pratiti uspješnost puštanja u pogon kako bi se uvidjeli eventualni problemi i ispravili isti (ako pažljivo nije proveden neki od prethodnih koraka treba se vratiti i ponoviti ga). U logovima moguća je vidjeti kako se prvo vrši alociranje samog poslužitelja, pa \textit{dokerizacija} i na kraju se pokreće naša aplikacija. Kada je završeno puštanje u pogon moguće je vidjeti obavijest kao na slici ispod.
+	\begin{figure}[H]
+		\includegraphics[scale=0.3]{slike/deployment4.jpeg}
+		\centering
+		\caption{Završetak pokretanja web servisa}
+		\label{deployment4}
+	\end{figure}
+\end{itemize}
+
+Nakon završetka puštanja u pogon na Renderu, moguće se spojiti na bazu s prije-dobivenim korisničkim podacima. Ovo je moguće napraviti kroz grafičko sučelje (primjerice PGAdmin) ili kroz naredbenu liniju. Po spajanju se dolje prikazanom naredbom u bazu podataka mogu dodati inicijalni korisnici i primjeri ostalih entiteta.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.25]{slike/deployment5.jpeg}
+	\centering
+	\caption{Dodavanje podataka u bazu}
+	\label{deployment5}
+\end{figure}
+
+Primjer naše aplikacije moguće je pronaći na poveznici \href{https://bytepit.onrender.com/}{bytepit.onrender.com}. 
 
 
 \eject 
