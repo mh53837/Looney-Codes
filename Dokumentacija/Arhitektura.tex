@@ -208,21 +208,20 @@ Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitori
 Osim repozitorija, na slici \ref{fig:dijagramRazreda2} prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
 Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose prethodno navedenih razreda. \\
 
-Razred Korisnik predstavlja registriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav.
-Razred Natjecanje definira naziv, početak i kraj natjecanja te voditelja. Razred Pehar je entitet u kojeg spremamo koje mjesto je osvojio natjecatelj na nekom natjecanju i sliku pehara.
+Razred Korisnik predstavlja registriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav. Nadmetanje je bazni razred kojeg nasljeđuju razredi Natjecanje i VirtualnoNatjecanje.
+Razred Natjecanje definira naziv, početak i kraj natjecanja te voditelja, a VirtualnoNatjecanje predstavlja natjecanje koje se može naknadno pokrenuti i rješavati. Razred Pehar je entitet u kojeg spremamo koje mjesto je osvojio natjecatelj na nekom natjecanju i sliku pehara.
 Razred uloga je enumeracija koja definira ulogu korisnika (admin, natjecatelj ili voditelj). Razred zadatak je entitet koji predstavlja određeni problem na natjecanju i sadrži referencu na testne primjere.
 Testni primjer sadrži informacije o tesnim primjerima za pojedinačni zadatak. Razred Rjesenje predstavlja predano rješenje pojedinog korisnika za zadatak. 
-Razred Virtualno natjecanje predstavlja natjecanje koje se može naknadno pokrenuti i rješavati. 
 
 \begin{figure}[H]
-	\includegraphics[scale=0.19]{dijagrami/serviceDiagram.png}
+	\includegraphics[scale=0.13]{dijagrami/serviceDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Servisi}
 	\label{fig:dijagramRazreda1}
 \end{figure}
 
 \begin{figure}[H]
-	\includegraphics[scale=0.2]{dijagrami/apiDiagram.png}
+	\includegraphics[scale=0.15]{dijagrami/apiDiagram.png}
 	\centering
 	\caption{Dijagram razreda - Kontroleri, Repozitoriji i Modeli}
 	\label{fig:dijagramRazreda2}
