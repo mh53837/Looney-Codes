@@ -31,7 +31,6 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
 
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    console.log("dodaj zadatke tema: ", theme);
     useEffect( () => {
         const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
             const options = {
@@ -43,8 +42,7 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
             };
         fetch(`/api/natjecanja/get/zadaci/${natjecanjeId}`, options)
         .then(response => response.json())
-        .then((data: ProblemData[]) => {setCompetitionProblems(data);
-        console.log("test data: ", data)})
+        .then((data: ProblemData[]) => {setCompetitionProblems(data);})
         .catch(error => console.error('Error fetching problems:', error));
     }, [natjecanjeId, user] );
 
@@ -64,7 +62,6 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
                 !competitionProblems.some(compProblem => compProblem.zadatakId === problem.zadatakId)
             );
             setProblemsToAdd(filteredProblemsToAdd);
-            console.log("test data: ", data)
         })
         .catch(error => console.error('Error fetching problems:', error));
     }, [user, competitionProblems] );
@@ -224,7 +221,6 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
     }
 
     const handleCancel = () => {
-        console.log("Clicked cancel button");
         setOpen(false);
         visible=false;
     };
@@ -247,7 +243,6 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
           {!visible && <button onClick={showModal}>zadaci</button>}
           {theme.isThemeDark === false ? (
             <>
-              {console.log("light theme applied")}
               <ConfigProvider
                 theme={{
                   components: {
@@ -267,7 +262,6 @@ const AddProblemsToCompetition : React.FC<ProblemsToCompetitionProps> = ({natjec
             </>
           ) : (
             <>
-              {console.log("dark theme applied")}
               <ConfigProvider
                 theme={{
                   components: {

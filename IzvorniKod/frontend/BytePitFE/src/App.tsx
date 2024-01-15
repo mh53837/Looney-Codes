@@ -120,7 +120,10 @@ const App: React.FC = () => {
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>
+            <div style = {{height:25}}
+                className='footer'></div>
         </Router>
+        
     );
 };
 

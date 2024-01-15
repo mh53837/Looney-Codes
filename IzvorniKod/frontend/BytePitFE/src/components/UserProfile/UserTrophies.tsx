@@ -32,7 +32,6 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
       fetch(`/api/trophies/user/${userData.korisnickoIme}`)
         .then((response) => response.json())
         .then((data: TrophyData[]) => {
-          console.log("Trophy data:", data);
           setTrophyData(data);
         })
         .catch((error) => {

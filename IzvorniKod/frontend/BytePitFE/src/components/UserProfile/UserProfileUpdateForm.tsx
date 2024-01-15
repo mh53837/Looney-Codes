@@ -123,7 +123,6 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
     setError("");
   
@@ -137,9 +136,7 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
 
 
   const HandleEdit = async (korisnickoIme: string) => {
-
     try {
-      console.log(`credentials:${user.korisnickoIme} : ${user.lozinka}`);
       const credentials = btoa(`${user.korisnickoIme}:${user.lozinka}`);
       const updatedData = {
         ...(updatedIme !== "" && { ime: updatedIme }),
@@ -148,7 +145,6 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
         ...(updatedUloga !== "" && { requestedUloga: updatedUloga }),
         ...(updatedLozinka !== "" && { lozinka: updatedLozinka })
       }
-      
 /*       if( updatedSlika ){
          const userData = new FormData();
         userData.append('image', updatedSlika, updatedSlika.name);
@@ -173,9 +169,6 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
         };
 /*       } */
       
-
-      console.log("updated data:", updatedData);
-
       const response = await fetch(`/api/user/update/${korisnickoIme}`, options);
       if (response.ok) {
         console.log(
@@ -195,7 +188,6 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
   };
 
   const renderModal = () => {
-    console.log("tema: ", theme, theme.isThemeDark );
     return (
     <React.Suspense fallback={<div>učitavanje...</div>}>
       <Modal

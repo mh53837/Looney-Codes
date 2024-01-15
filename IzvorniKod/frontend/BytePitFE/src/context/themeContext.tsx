@@ -23,7 +23,7 @@ interface ThemeProviderProps {
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const storedTheme = localStorage.getItem('theme');
-    return storedTheme ? JSON.parse(storedTheme) : {theme: false};
+    return storedTheme ? JSON.parse(storedTheme) : {isThemeDark: false};
   });
 
   useEffect(() => {

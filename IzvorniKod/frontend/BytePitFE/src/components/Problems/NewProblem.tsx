@@ -63,7 +63,7 @@ const NewProblem: React.FC<NewProbProps> = ({handleOk}) => {
         
       };
 
-    function onChange(event: ChangeEvent<HTMLInputElement>) {
+    function onChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
         const { name, value } = event.target;
         setProblemForm((oldForm) => ({ ...oldForm, [name]: value }));
     }
@@ -159,7 +159,7 @@ const NewProblem: React.FC<NewProbProps> = ({handleOk}) => {
                     </div>
                     <div className="FormRow">
                         <label>tekst zadatka</label>
-                        <input className= "tekstZadatka" name="tekstZadatka" placeholder='tekst zadatka' onChange={onChange} value={problemForm.tekstZadatka} />
+                        <textarea className= "tekstZadatka" name="tekstZadatka" placeholder='tekst zadatka' onChange={onChange} value={problemForm.tekstZadatka} />
                     </div>
                     <div className="FormRow" id="brBodova">
                         <label>težina (broj bodova) </label>

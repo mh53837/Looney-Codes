@@ -30,6 +30,10 @@ const CompetitionPage: React.FC = () => {
     else
       return ((<h3> Odaberite zadatak. Sretno! </h3>))
   }, [zadatakId]);
+  const countDown = useMemo(() => {
+    if(info !== undefined && info.krajNatjecanja)
+      return (<CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>);
+  }, [nadmetanjeId]);
 
   useEffect(() => {
     fetch(`/api/nadmetanja/info/${nadmetanjeId}`)
@@ -55,7 +59,7 @@ const CompetitionPage: React.FC = () => {
 
     ));
   }
-
+  
 
   return (
     <div className='competitionPageWrapper'>
@@ -69,7 +73,7 @@ const CompetitionPage: React.FC = () => {
             Završi i predaj!
           </Link></span>
         }
-        {info.krajNatjecanja && <CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>}
+        {countDown}
       </div>
       {zadatakId === undefined && <h1>{info.ime}</h1>}
       {zadatakStranica != null && zadatakStranica}

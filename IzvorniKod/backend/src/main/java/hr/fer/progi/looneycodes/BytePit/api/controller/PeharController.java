@@ -76,7 +76,7 @@ public class PeharController {
                 if (!List.of(".jpg", ".jpeg", ".png").contains(extension))
                     throw new RequestDeniedException("Format slike nije podržan! Podržani formati su .jpg, .jpeg, .png");
 
-               Path savePath = Path.of("./src/main/resources/slikePehara").resolve(dto.getNatjecanjeId() + "_" + dto.getMjesto() +  extension);
+               Path savePath = Path.of("./src/main/resources/slikePehara").resolve(dto.getNatjecanjeId() +  extension);
                file.transferTo(savePath);
                dto.setSlikaPehara(savePath.toString());
             }

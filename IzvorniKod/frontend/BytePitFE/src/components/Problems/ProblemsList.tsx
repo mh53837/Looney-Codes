@@ -57,7 +57,8 @@ const ProblemsList: React.FC = () => {
                             <th>naziv</th>
                             <th>tekst</th>
                             <th>težina</th>
-                            <th>rješenja</th>
+                            {user.uloga === "NATJECATELJ" &&  <th>rješenja</th>}
+                           
                         </tr>
                     </thead>
                     <tbody>

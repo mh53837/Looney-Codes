@@ -7,8 +7,6 @@ import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
 import "../../styles/UserProfile.css";
 import "../../styles/Table.css";
-import ProblemsProfileTab from "./ProblemsProfileTab";
-import CompetitionProfileCalendar from "./CompetitionProfileCalendar";
 import { PieChart } from '@mui/x-charts/PieChart';
 
 interface UserData {
@@ -41,6 +39,9 @@ interface ProblemData {
 const UserProfileUpdateForm = React.lazy(() => import("./UserProfileUpdateForm"));
 const UserTrophies = React.lazy(() => import("./UserTrophies"));
 const UserList = React.lazy(() => import("../User/UserList"));
+const ProblemsProfileTab = React.lazy( () => import("./ProblemsProfileTab"));
+const CompetitionProfileCalendar = React.lazy(() => import("./CompetitionProfileCalendar"));
+
 
 const UserProfile: React.FC = () => {
   const [imageData, setImageData] = useState<string | null>(null);

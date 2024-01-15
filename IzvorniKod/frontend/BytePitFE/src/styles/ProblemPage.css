@@ -12,6 +12,7 @@
 
 .problem-description {
 	text-align: justify;
+  white-space: pre;
 }
 
 .test-results {
