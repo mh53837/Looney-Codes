@@ -33,7 +33,7 @@ const CompetitionPage: React.FC = () => {
   const countDown = useMemo(() => {
     if(info !== undefined && info.krajNatjecanja)
       return (<CountDown date={info.krajNatjecanja} className='countDown'><Navigate to={`/natjecanja/rezultati/${nadmetanjeId}`} replace={true} /></CountDown>);
-  }, [nadmetanjeId]);
+  }, [info]);
 
   useEffect(() => {
     fetch(`/api/nadmetanja/info/${nadmetanjeId}`)
