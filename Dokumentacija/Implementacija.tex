@@ -103,16 +103,57 @@ Posljednjom testirajućom metodom \ref{fig:test7} ispitujemo funkcionalnost meto
 
 \subsection{Ispitivanje sustava}
 
-\textit{Potrebno je provesti i opisati ispitivanje sustava koristeći radni okvir Selenium\footnote{\url{https://www.seleniumhq.org/}}. Razraditi \textbf{minimalno 4 ispitna slučaja} u kojima će se ispitati redovni slučajevi, rubni uvjeti te poziv funkcionalnosti koja nije implementirana/izaziva pogrešku kako bi se vidjelo na koji način sustav reagira kada nešto nije u potpunosti ostvareno. Ispitni slučaj se treba sastojati od ulaza (npr. korisničko ime i lozinka), očekivanog izlaza ili rezultata, koraka ispitivanja i dobivenog izlaza ili rezultata.\\ }
+Ispitivanje sustava proveli smo pomoću \textit{Selenium Web Drivera}, implementirajući ispitne slučajeve unutar \textit{JUnit} testova. Ukupno smo napisali tri testna slučaja.
 
-\textit{Izradu ispitnih slučajeva pomoću radnog okvira Selenium moguće je provesti pomoću jednog od sljedeća dva alata:}
-\begin{itemize}
-	\item \textit{dodatak za preglednik \textbf{Selenium IDE} - snimanje korisnikovih akcija radi automatskog ponavljanja ispita	}
-	\item \textit{\textbf{Selenium WebDriver} - podrška za pisanje ispita u jezicima Java, C\#, PHP koristeći posebno programsko sučelje.}
-\end{itemize}
-\textit{Detalji o korištenju alata Selenium bit će prikazani na posebnom predavanju tijekom semestra.}
+\vspace{1em}
+
+Ispitnim slučajem \ref{fig:selenium1} ispitali smo uspješnost prijave korisnika s točnim korisničkim imenom i lozinkom te potvrdili očekivano preusmjeravanje na početnu stranicu i prisutnost gumba za odjavu.
+
+
+\begin{figure}[H]
+	\includegraphics[scale=0.15]{slike/selenium_test1.png}
+	\centering
+	\caption{Selenium test - prijava korisnika s ispravnim podacima}
+	\label{fig:selenium1}
+\end{figure}
+
+Testom \ref{fig:selenium2} ispitali smo ponašanje sustava prilikom pokušaja prijave s nepostojećim korisničkim imenom i lozinkom. U takvim slučajevima očekujemo zadržavanje na stranici za prijavu.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.16]{slike/selenium_test2.png}
+	\centering
+	\caption{Selenium test - pokušaj prijave nepostojećeg korisnika}
+	\label{fig:selenium2}
+\end{figure}
+\pagebreak
+Ispitni slučaj \ref{fig:selenium3} provjerava ispravnost stvaranja novog zadatka od strane prijavljenog voditelja. Kao rezultat očekujemo pojavljivanje novostvorenog zadatka na korisničkom profilu voditelja.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.14]{slike/selenium_test3.png}
+	\centering
+	\caption{Selenium test - dodavanje novog zadatka}
+	\label{fig:selenium3}
+\end{figure}
+
+\noindent Rezultati ispitivanja sustava se mogu vidjeti na slici \ref{fig:selenium_rezultati}.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.8]{slike/selenium_reultati.png}
+	\centering
+	\caption{Rezultati testiranja}
+	\label{fig:selenium_rezultati}
+\end{figure}
+
+
+%\textit{Izradu ispitnih slučajeva pomoću radnog okvira Selenium moguće je provesti pomoću jednog od sljedeća dva alata:}
+%\begin{itemize}
+%	\item \textit{dodatak za preglednik \textbf{Selenium IDE} - snimanje korisnikovih akcija radi automatskog ponavljanja ispita	}
+%	\item \textit{\textbf{Selenium WebDriver} - podrška za pisanje ispita u jezicima Java, C\#, PHP koristeći posebno programsko sučelje.}
+%\end{itemize}
+%\textit{Detalji o korištenju alata Selenium bit će prikazani na posebnom predavanju tijekom semestra.}
 
 \eject
+
 
 
 \section{Dijagram razmještaja}
