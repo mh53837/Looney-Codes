@@ -3,6 +3,7 @@ package hr.fer.progi.looneycodes.BytePit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -10,7 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
+
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,59 +31,78 @@ class BytePitApplicationTests {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		driver.get("http://localhost:8080/");
 
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.findElement(By.cssSelector(".loginDiv button")).click();
+		WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".loginDiv button")));
+		loginButton.click();
 
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		driver.findElement(By.cssSelector("input[name='korisnickoIme']")).sendKeys("spiderman");
-		driver.findElement(By.cssSelector("input[name='lozinka']")).sendKeys("iLoveMJ");
-		driver.findElement(By.cssSelector("button[type='submit']")).click();
+		WebElement usernameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='korisnickoIme']")));
+		usernameInput.sendKeys("spiderman");
 
-		wait.until(d -> d.findElement(By.cssSelector(".loginDiv button")).getText().equals("odjavi se!"));
+		WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='lozinka']")));
+		passwordInput.sendKeys("iLoveMJ");
+
+		WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+		submitButton.click();
+
+		Boolean logoutPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "odjavi se!"));
 
 		assertEquals("http://localhost:8080/", driver.getCurrentUrl());
+		assertTrue(logoutPrisutan);
 		driver.quit();
-
 	}
 
 	@Test
-	public void test_create_zadatak_success() {
+	public void test_login_with_invalid_credentials() {
 		WebDriver driver = new FirefoxDriver();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
 		driver.get("http://localhost:8080/");
 
 		WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".loginDiv button")));
 		loginButton.click();
 
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("korisnickoIme")));
-		driver.findElement(By.name("korisnickoIme")).sendKeys("buttler");
-		driver.findElement(By.name("lozinka")).sendKeys("robin");
+		WebElement usernameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='korisnickoIme']")));
+		usernameInput.sendKeys("mojstarifrendimarokenrolbend");
+
+		WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='lozinka']")));
+		passwordInput.sendKeys("netkotoodgorevidisve");
 
 		WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
 		submitButton.click();
 
-		WebElement zadaciButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='zadaci']")));
-		zadaciButton.click();
-		zadaciButton.click();
+		Boolean loginPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "prijavi se!"));
 
+		assertEquals("http://localhost:8080/login", driver.getCurrentUrl());
+		assertTrue(loginPrisutan);
+		driver.quit();
+	}
+
+	@Test
+	public void test_create_zadatak() {
+		WebDriver driver = new FirefoxDriver();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		driver.get("http://localhost:8080/");
+
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".loginDiv button"))).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("korisnickoIme"))).sendKeys("buttler");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("lozinka"))).sendKeys("robin");
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']"))).submit();
+		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/"));
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='zadaci']"))).click();
 		wait.until(ExpectedConditions.urlContains("/problems/all"));
-		WebElement noviZadatakButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".addBtn")));
-		noviZadatakButton.click();
-
-		// Unos podataka za novi zadatak
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("nazivZadatka")));
-		driver.findElement(By.name("nazivZadatka")).sendKeys("testni zadatak");
-		driver.findElement(By.cssSelector("input[name='tekstZadatka']")).sendKeys("testni tekst");
-		driver.findElement(By.cssSelector("span.ant-select-selection-item")).click();
-		driver.findElements(By.cssSelector(".ant-select-item-option-content")).get(1).click();
-
-		driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-		WebElement spremiPromjeneButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='spremi promjene']")));
-		spremiPromjeneButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='novi zadatak']"))).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("nazivZadatka"))).sendKeys("zivotjemore");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='tekstZadatka']"))).sendKeys(
+				"Da se ja pitam, ja bih proterao autobus ovuda." +
+				" Nije to tako loše kao što izgleda.");
+		WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.ant-select-selection-item")));
+		dropdown.click();
+		List<WebElement> bodoviOpcije = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".ant-select-item-option-content")));
+		bodoviOpcije.get(1).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='spremi promjene']"))).click();
 
 		assertTrue(driver.getCurrentUrl().contains("/user/profile/buttler"));
-		assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='testni zadatak']"))).isDisplayed());
+		assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='zivotjemore']"))).isDisplayed());
+		driver.quit();
 	}
+
 }
