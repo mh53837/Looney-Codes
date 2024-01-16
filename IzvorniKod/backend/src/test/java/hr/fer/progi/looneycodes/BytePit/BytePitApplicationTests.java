@@ -3,18 +3,15 @@ package hr.fer.progi.looneycodes.BytePit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
-
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,7 +40,7 @@ class BytePitApplicationTests {
 		WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
 		submitButton.click();
 
-		Boolean logoutPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "odjavi se!"));
+		Boolean logoutPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "odjavi se"));
 
 		assertEquals("http://localhost:8080/", driver.getCurrentUrl());
 		assertTrue(logoutPrisutan);
@@ -68,7 +65,7 @@ class BytePitApplicationTests {
 		WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
 		submitButton.click();
 
-		Boolean loginPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "prijavi se!"));
+		Boolean loginPrisutan = wait.until(ExpectedConditions.textToBe(By.cssSelector(".loginDiv button"), "prijavi se"));
 
 		assertEquals("http://localhost:8080/login", driver.getCurrentUrl());
 		assertTrue(loginPrisutan);
@@ -90,7 +87,7 @@ class BytePitApplicationTests {
 		wait.until(ExpectedConditions.urlContains("/problems/all"));
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='novi zadatak']"))).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("nazivZadatka"))).sendKeys("zivotjemore");
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='tekstZadatka']"))).sendKeys(
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("tekstZadatka"))).sendKeys(
 				"Da se ja pitam, ja bih proterao autobus ovuda." +
 				" Nije to tako loše kao što izgleda.");
 		WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.ant-select-selection-item")));

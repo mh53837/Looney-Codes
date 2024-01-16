@@ -18,7 +18,7 @@ import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 public class BytePitApplication {
 
   public static void main(String[] args) {

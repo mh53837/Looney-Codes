@@ -6,6 +6,7 @@ import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.TezinaZadatka;
 import hr.fer.progi.looneycodes.BytePit.api.model.Zadatak;
 import hr.fer.progi.looneycodes.BytePit.api.repository.ZadatakRepository;
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,11 +32,12 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ZadatakControllerTests {
-
     @Autowired
     private ZadatakController zadatakController;
     @MockBean
     private ZadatakRepository zadatakRepository;
+    @MockBean
+    private ScheduledTasks scheduledTasks;
 
     @Test
     public void test_returns_empty_list_when_no_public_tasks() {
