@@ -120,17 +120,14 @@ const CompetitonUpdateForm: React.FC<CompetitionUpdateFormProps> = ({natjecanjeI
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
 
-  const onPocetakChange: DatePickerProps["onChange"] = (date, dateString) => {
-    console.log(date, dateString);
+  const onPocetakChange: DatePickerProps["onChange"] = (date) => {
     setUpdatedPocetak(date);
   };
 
-  const onKrajChange: DatePickerProps["onChange"] = (date, dateString) => {
-    console.log(date, dateString);
+  const onKrajChange: DatePickerProps["onChange"] = (date) => {
     setUpdatedKraj(date);
   };
 

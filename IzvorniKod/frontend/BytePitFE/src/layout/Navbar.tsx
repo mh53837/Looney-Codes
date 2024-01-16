@@ -16,7 +16,8 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const location = useLocation();
 
   const { theme, setTheme } = useContext(ThemeContext);
-
+  
+  if(!theme) setTheme({isThemeDark:false});
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -70,7 +71,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       {user.korisnickoIme ? (
         <div className="loginDiv">
           {location.pathname === `/user/profile/${user.korisnickoIme}` ? ( //ako je navbar na profilu korisnika nek se prikaze odjavi
-            <button onClick={onLogout}>odjavi se!</button>
+            <button onClick={onLogout}>odjavi se</button>
           ) : (
             //inace se prikazuje njegov username
             <Link to={`/user/profile/${user.korisnickoIme}`}>
@@ -88,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
                 />
               )}
               <p className="korisnikIme"> {user.korisnickoIme}</p>
-              <button onClick={onLogout}>odjavi se!</button>
+              <button onClick={onLogout}>odjavi se</button>
             </Link>
           )}
         </div>
@@ -100,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
               src="/slike/bytepit-usericon.png"
               alt="BytePit unregistered user icon"
             />
-            <button>prijavi se!</button>
+            <button>prijavi se</button>
           </Link>
         </div>
       )}

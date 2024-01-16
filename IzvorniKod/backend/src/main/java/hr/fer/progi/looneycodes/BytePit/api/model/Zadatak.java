@@ -55,6 +55,7 @@ public class Zadatak {
   /**
    * tekst zadatka
    */
+  @Column(columnDefinition = "text")
   private String tekstZadatka;
   /**
    * je li zadatak privatni, tj. vidljiv samo voditelju koji ga je napisao

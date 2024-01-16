@@ -59,8 +59,7 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
             };
         fetch(`/api/problems/get/${zadatakId}/tests`, options)
         .then(response => response.json())
-        .then((data: EvaluationTestsData[]) => {setTestsData(data);
-        console.log("test data: ", data)})
+        .then((data: EvaluationTestsData[]) => {setTestsData(data);})
         .catch(error => console.error('Error fetching problems:', error));
     }, [zadatakId, user] );
 
@@ -131,7 +130,6 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
     }
 
     const handleCancel = () => {
-        console.log("Clicked cancel button");
         setOpen(false);
         visible=false;
     };
@@ -158,8 +156,7 @@ const EvaluationTests: React.FC<EvaluationTestProps> = ({zadatakId, visible, onC
         };
         fetch(`/api/problems/get/${zadatakId}/tests`, options)
         .then(response => response.json())
-        .then((data: EvaluationTestsData[]) => {setTestsData(data);
-        console.log("test data: ", data)})
+        .then((data: EvaluationTestsData[]) => {setTestsData(data);})
         .catch(error => console.error('Error fetching problems:', error));
     };
 

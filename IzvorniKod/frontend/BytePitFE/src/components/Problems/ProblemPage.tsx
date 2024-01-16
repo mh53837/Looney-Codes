@@ -1,12 +1,12 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import LoadingOverlay from 'react-loading-overlay-nextgen';
-import { useParams } from 'react-router-dom';
-import '../../styles/ProblemPage.css';
-import '../../styles/Table.css';
-import { UserContext } from '../../context/userContext';
-import CodeMirror from '@uiw/react-codemirror';
-import { cpp } from '@codemirror/lang-cpp';
-import { dracula } from '@uiw/codemirror-theme-dracula';
+import React, { ReactElement, useContext, useEffect, useState } from "react";
+import LoadingOverlay from "react-loading-overlay-nextgen";
+import { useParams } from "react-router-dom";
+import "../../styles/ProblemPage.css";
+import "../../styles/Table.css";
+import { UserContext } from "../../context/userContext";
+import CodeMirror from "@uiw/react-codemirror";
+import { cpp } from "@codemirror/lang-cpp";
+import { dracula } from "@uiw/codemirror-theme-dracula";
 
 interface IProblemDetails {
   zadatakId: string;
@@ -44,7 +44,7 @@ int main() {
     setTestResults([]);
     setErrorMessage(null);
     if (zadatakId) {
-      let backup = localStorage.getItem(zadatakId);
+      const backup = localStorage.getItem(zadatakId);
       if (backup) setCode(backup);
     }
   }, [zadatakId]);
@@ -116,7 +116,7 @@ int main() {
             return response.json();
           } else if (response.status === 403) {
             // Dodaj poruku o pogrešci kada je status 403
-            setErrorMessage("Morate biti prijavljeni kao natjecatelj");
+            setErrorMessage("Morate biti prijavljeni kao natjecatelj.");
             throw new Error("Forbidden");
           } else {
             setErrorMessage("Greška pri uploadu. Molimo pokušajte kasnije.");
@@ -128,9 +128,10 @@ int main() {
           console.log("Response body:", data);
           if (data.tests && data.tests.length > 0) {
             setTestResults(data.tests);
-          }
-          else if(data.tests === null) {
-            setErrorMessage("Greška kod evaluacije. Provjerite ispravnost koda i pokušajte ponovno!");
+          } else if (data.tests === null) {
+            setErrorMessage(
+              "Greška kod evaluacije. Provjerite ispravnost koda i pokušajte ponovno!"
+            );
           }
         })
         .catch((error) => {
@@ -144,74 +145,88 @@ int main() {
     }
   };
 
-        // upload gumb koji je dostupan samo ulogiranom korisniku
-        let uploadButton = null;
-        let codeEditor: ReactElement | null = null;
-        if (user.uloga === 'NATJECATELJ') {
-                uploadButton = (
-                        <div className="problem-upload">
-                                <input type="file" accept=".cpp" onChange={handleFileChange} />
-                                <br />
-                                <button disabled={isLoading} style={isLoading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
-                                        onClick={handleSubmitClick}>Provjeri</button>
-                        </div>
-                );
+  // upload gumb koji je dostupan samo ulogiranom korisniku
+  let uploadButton = null;
+  let codeEditor: ReactElement | null = null;
+  if (user.uloga === "NATJECATELJ") {
+    uploadButton = (
+      <div className="problem-upload">
+        <input type="file" accept=".cpp" onChange={handleFileChange} />
+        <br />
+        <button
+          disabled={isLoading}
+          style={isLoading ? { opacity: 0.6, cursor: "not-allowed" } : {}}
+          onClick={handleSubmitClick}
+        >
+          Provjeri
+        </button>
+      </div>
+    );
 
-                codeEditor = (
-                        <div className="code-editor">
-                                <CodeMirror value={code} onChange={(value, _) => { setCode(value); if (zadatakId) localStorage.setItem(zadatakId, code); }}
-                                        height="30rem" theme={dracula} extensions={[cpp()]} />
-                        </div>
-                );
-        }
+    codeEditor = (
+      <div className="code-editor">
+        <CodeMirror
+          value={code}
+          onChange={(value, _) => {
+            setCode(value);
+            if (zadatakId) localStorage.setItem(zadatakId, code);
+          }}
+          height="30rem"
+          theme={dracula}
+          extensions={[cpp()]}
+        />
+      </div>
+    );
+  }
 
-        if (testResults.find(x => x < 3 || x > 6))
-          setErrorMessage("Greška kod evaluacije");
-        // vraćanje stranice
-        return (
-                <div className="problem-details-container">
-
-                        <h1 className="problem-title">{problemDetails.nazivZadatka}</h1>
-                        <div className="problem-info">
-                                <p>Broj bodova: {problemDetails.brojBodova}</p>
-                                <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
-                        </div>
-                        <div className="problem-description">
-                                <h2>Tekst zadatka:</h2>
-                                <p>{problemDetails.tekstZadatka}</p>
-                        </div>
-                        {errorMessage && <p className="error-message">{errorMessage}</p>}
-                        <br />
-                        <LoadingOverlay
-                                active={isLoading} spinner text='Provjeravamo rješenje...'
-                        >
-                                {codeEditor}
-                                {uploadButton}
-                                {testResults.length > 0 && (
-                                        <div className="test-results">
-                                                <h2>Rezultati testiranja</h2>
-                                                <table className="info-table">
-                                                        <thead>
-                                                                <tr>
-                                                                        <th>Redni broj testa</th>
-                                                                        <th>Status</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                                {testResults.map((status, index) => (
-                                                                        <tr key={index}>
-                                                                                <td>{index + 1}</td>
-                                                                                <td>{getStatusMessage(status)}</td>
-                                                                        </tr>
-                                                                ))}
-                                                        </tbody>
-                                                </table>
-                                        </div>
-                                )}
-                                <br />
-                        </LoadingOverlay>
-                </div>
-        );
+  if (testResults.find((x) => x < 3 || x > 6))
+    setErrorMessage("Greška kod evaluacije");
+  // vraćanje stranice
+  return (
+    <div className="problem-details-container">
+      <h1 className="problem-title">{problemDetails.nazivZadatka}</h1>
+      <div className="problem-info">
+        <p>Broj bodova: {problemDetails.brojBodova}</p>
+        <p>Vremensko ograničenje: {problemDetails.vremenskoOgranicenje}</p>
+      </div>
+      <div className="problem-description">
+        <h2>Tekst zadatka:</h2>
+        <p>{problemDetails.tekstZadatka}</p>
+      </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <br />
+      <LoadingOverlay
+        active={isLoading}
+        spinner
+        text="Provjeravamo rješenje..."
+      >
+        {codeEditor}
+        {uploadButton}
+        {testResults.length > 0 && (
+          <div className="test-results">
+            <h2>Rezultati testiranja</h2>
+            <table className="info-table">
+              <thead>
+                <tr>
+                  <th>Redni broj testa</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {testResults.map((status, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{getStatusMessage(status)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <br />
+      </LoadingOverlay>
+    </div>
+  );
 };
 
 // Pomoćna funkcija za dobivanje poruke ovisno o statusnom kodu testa

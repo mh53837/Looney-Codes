@@ -1,6 +1,5 @@
 .FormRow {
     margin: 8px 0;
-
 }
 
 .Login {
@@ -58,4 +57,9 @@
 
 .LoginToRegister p{
     font-size: 1.2rem;
+}
+
+.Login a {
+    margin:0;
+    padding:0;
 }

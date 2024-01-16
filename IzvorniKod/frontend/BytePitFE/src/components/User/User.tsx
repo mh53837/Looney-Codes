@@ -36,7 +36,6 @@ const User: React.FC<UserProps> = (props) => {
     };
     fetchProfilePicture(); */
     };
-
                   
     return (
         <tr className="user-info-header">
