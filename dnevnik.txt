@@ -32,7 +32,41 @@
 5. sastanak
 - Datum: 15. studenog 2023.
 - Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
-Teme sastanka:
+- Teme sastanka:
 	- pregled svih odrađenih zadataka
 	- diskusija o predaji projekta 17.11.
-     	- deployment aplikacije
+  - deployment aplikacije
+6. sastanak
+- Datum: 11. prosinca 2023.
+- Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
+- Teme sastanka:
+  – diskusija o ostvarenom uspjehu nakon prve predaje
+  – detaljni pregled preostalih zadataka
+  – raspodjela poslova
+7. sastanak
+- Datum: 21. prosinca 2023.
+- Prisustvovali: Jakov Novak, Marko Varga, Nikola Vlahović
+- Teme sastanka:
+  – diskusija o daljnjem razvoju backenda aplikacije
+  – detaljni pregled preostalih zahtjeva
+  – diskusija o testovima (junit i Selenium)
+  – raspodjela poslova
+8. sastanak
+- Datum: 10. siječnja 2024.
+- Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
+- Teme sastanka:
+  – pregled odradenih zadataka
+  – dogovor o daljnjem nastavku rada
+9. sastanak
+- Datum: 12. siječnja 2024.
+- Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
+- Teme sastanka:
+– sastanak s demonstratoricom
+– dogovor o daljnjem nastavku rada
+10. sastanak
+- Datum: 15. siječnja 2024.
+- Prisustvovali: Vedran Ćutić, Antonio Glavaš, Marina Hrbud, Lara Marčec, Jakov Novak, Marko Varga, Nikola Vlahović
+- Teme sastanka:
+  – pregled odradenih zadataka
+  – dogovor o daljnjem nastavku rada
+  – krajnji dogovor za dokumentaciju i izradu prezentacije
