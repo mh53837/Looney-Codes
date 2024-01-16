@@ -5,11 +5,14 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.KorisnikController;
 import hr.fer.progi.looneycodes.BytePit.api.model.Korisnik;
 import hr.fer.progi.looneycodes.BytePit.api.model.Uloga;
 import hr.fer.progi.looneycodes.BytePit.api.repository.KorisnikRepository;
+import hr.fer.progi.looneycodes.BytePit.service.EmailService;
 import hr.fer.progi.looneycodes.BytePit.service.RequestDeniedException;
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.MailSender;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,11 +34,14 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class KorisnikControllerTests {
-
     @Autowired
     private KorisnikController korisnikController;
     @MockBean
     private KorisnikRepository korisnikRepository;
+    @MockBean
+    private ScheduledTasks scheduledTasks;
+    @MockBean
+    private EmailService mailService;
 
     @Test
     public void test_register_new_user_with_valid_data_and_image() {

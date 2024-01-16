@@ -6,6 +6,7 @@ import hr.fer.progi.looneycodes.BytePit.api.controller.NatjecanjeController;
 
 import hr.fer.progi.looneycodes.BytePit.api.model.Natjecanje;
 import hr.fer.progi.looneycodes.BytePit.api.repository.NatjecanjeRepository;
+import hr.fer.progi.looneycodes.BytePit.service.impl.ScheduledTasks;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,12 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class NatjecanjeControllerTests {
-
     @Autowired
     private NatjecanjeController natjecanjeController;
     @MockBean
     private NatjecanjeRepository natjecanjeRepository;
+    @MockBean
+    private ScheduledTasks scheduledTasks;
     private static UserDetails userDetails;
 
     @BeforeAll
