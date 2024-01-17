@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ConfigProvider } from 'antd';
 import '../../styles/Table.css';
@@ -165,9 +165,6 @@ const ProblemsProfileTab: React.FC<ProblemsTabProps> = ({ problemsData, onUpdate
     setEvaluationTestsVisible(false);
     setSelectedZadatakId(null);
   };
-  useEffect(() => {
-
-  }, [theme.isThemeDark]);
 
   return (
     <div className="problemContainer">

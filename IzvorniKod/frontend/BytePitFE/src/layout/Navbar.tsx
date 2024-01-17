@@ -24,12 +24,18 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       try {
         if (user.korisnickoIme !== "") {
           const response = await fetch(`/api/user/image/${user.korisnickoIme}`);
-          const blob = await response.blob();
+          if(response.ok){
+                      const blob = await response.blob();
           const imageUrl = URL.createObjectURL(blob);
           setImageData(imageUrl);
+          }
+          else{
+            setImageData("/slike/placeHolder.png");
+          }
         }
       } catch (error) {
         console.error("Error fetching profile picture:", error);
+        setImageData("/slike/placeHolder.png");
       }
     };
     fetchProfilePicture();

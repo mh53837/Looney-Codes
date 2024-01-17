@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import './styles/App.css';
 import Home from './components/Home';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
-import { ThemeContext } from './context/themeContext';
 import CompetitionPage from './components/Competition/CompetitionPage.tsx';
 import CompetitionResults from './components/Competition/CompetitionResults.tsx';
 import UserProfile from './components/UserProfile/UserProfile.tsx';
@@ -31,7 +30,6 @@ const App: React.FC = () => {
     const [redirectToHome, setRedirectToHome] = useState<boolean>(false);
     const [redirectToUserProfile, setRedirectToUserProfile] = useState<boolean>(false);
 
-    const { theme } = useContext(ThemeContext); //!theme-light
     const { user } = useContext(UserContext);
     const { setUser } = useContext(UserContext);
 
@@ -57,12 +55,6 @@ const App: React.FC = () => {
         }, 100);
 
     };
-
-    useEffect(() => {
-
-
-    }, [theme.isThemeDark]);
-
 
     return (
         <Router>

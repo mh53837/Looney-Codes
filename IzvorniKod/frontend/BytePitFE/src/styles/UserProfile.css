@@ -6,8 +6,10 @@
 }
 
 .userProfileImg {
-    max-width: 25vw;
+    width: 20rem;
     border-radius: 50%;
+    height: 20rem;
+    object-fit: cover;
 }
 
 .userData {
@@ -46,7 +48,8 @@
     align-items: center;
     gap: 20px;
 }
-.trophyImg{
+
+.trophyImg {
     max-width: 12rem;
     padding: 1rem;
 }

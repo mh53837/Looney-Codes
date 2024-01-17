@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
-import { ThemeContext } from "../../context/themeContext";
 import { Tabs, ConfigProvider } from "antd";
 import { fetchData } from "../../hooks/usersAPI";
 import UserProfileHeader from "./UserProfileHeader";
@@ -53,12 +52,6 @@ const UserProfile: React.FC = () => {
   const [attempted, setAttempted] = useState<number>(0);
   const [solved, setSolved] = useState<number>(0);
 
-  const { theme } = useContext(ThemeContext);
-
-  useEffect(() => {
-
-  }, [theme.isThemeDark]);
-
   const handleCompetitionUpdate = () => {
     if (userData?.uloga === "VODITELJ") {
       fetch(`/api/natjecanja/get/voditelj/${korisnickoIme}`)
@@ -82,12 +75,19 @@ const UserProfile: React.FC = () => {
       try {
         if (korisnickoIme !== "") {
           const response = await fetch(`/api/user/image/${korisnickoIme}`);
-          const blob = await response.blob();
-          const imageUrl = URL.createObjectURL(blob);
-          setImageData(imageUrl);
+          if (response.ok){
+            console.log("img:", response);
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            setImageData(imageUrl);
+          }
+          else{
+            setImageData("/slike/placeHolder.png");
+          }
         }
       } catch (error) {
         console.error("Error fetching profile picture:", error);
+        setImageData("/slike/placeHolder.png");
       }
     };
     fetchProfilePicture();
@@ -147,13 +147,20 @@ const UserProfile: React.FC = () => {
       try {
         if (korisnickoIme !== "") {
           const response = await fetch(`/api/user/image/${korisnickoIme}`);
-          console.log("img:", response);
-          const blob = await response.blob();
-          const imageUrl = URL.createObjectURL(blob);
-          setImageData(imageUrl);
+          if (response.ok){
+            console.log("img:", response);
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            setImageData(imageUrl);
+          }
+          else{
+            setImageData("/slike/placeHolder.png");
+          }
+
         }
       } catch (error) {
         console.error("Error fetching profile picture:", error);
+        setImageData("/slike/placeHolder.png");
       }
     };
     fetchProfilePicture();

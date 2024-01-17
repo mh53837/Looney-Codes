@@ -16,26 +16,7 @@ const User: React.FC<UserProps> = (props) => {
     const { korisnickoIme, ime, prezime, email, uloga } = props.user;
     const {user} = useContext(UserContext);
 
-    const handleProfileUpdate = () => {
-/*  fetchData(`/api/user/profile/${korisnickoIme}`, user)
-        .then((data: UserData) => setUserData(data))
-        .catch((error) => {
-        console.error("error fetching user profile data:", error);
-        });
-    const fetchProfilePicture = async () => {
-        try {
-        if (korisnickoIme !== "") {
-            const response = await fetch(`/api/user/image/${korisnickoIme}`);
-            const blob = await response.blob();
-            const imageUrl = URL.createObjectURL(blob);
-            setImageData(imageUrl);
-        }
-        } catch (error) {
-        console.error("Error fetching profile picture:", error);
-        }
-    };
-    fetchProfilePicture(); */
-    };
+    const handleProfileUpdate = () => { };
                   
     return (
         <tr className="user-info-header">
