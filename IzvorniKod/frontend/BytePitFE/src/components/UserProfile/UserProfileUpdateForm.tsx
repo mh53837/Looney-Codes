@@ -37,9 +37,6 @@ const UserProfileUpdateForm: React.FC<UserProfileUpdateFormProps> = ({ korisnick
     setUpdatedUloga(event.target.value);
   }
 
-  useEffect(() => {
-
-  }, [theme.isThemeDark]);
 /*   const onSlikaChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
         const slika = event.target.files[0];

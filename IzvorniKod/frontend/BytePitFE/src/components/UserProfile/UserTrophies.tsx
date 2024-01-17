@@ -25,6 +25,7 @@ interface TrophyData {
 const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
   const [trophyData, setTrophyData] = useState<TrophyData[]>([]);
   const [imageData, setImageData] = useState<string[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -74,20 +75,27 @@ const UserTrophies: React.FC<TrophyProps> = ({ userData }) => {
         if (trophyData.length > 0) {
           const imagePromises = trophyData.map(async (trophy) => {
             const response = await fetch(`/api/trophies/image/${trophy.peharId}`);
-            const blob = await response.blob();
-            return URL.createObjectURL(blob);
+            if (response.ok) {
+              const blob = await response.blob();
+              return URL.createObjectURL(blob);
+            } else {
+              return '/slike/trophyPlaceholder.png';
+            }
           });
-  
           const imageUrls = await Promise.all(imagePromises);
           setImageData(imageUrls);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching trophy pictures:", error);
+        setLoading(false);
       }
     };
   
-    fetchTrophyPictures();
-  }, [trophyData]);
+    if (loading) {
+      fetchTrophyPictures();
+    }
+  }, [trophyData, loading]);
   
 
   return (
