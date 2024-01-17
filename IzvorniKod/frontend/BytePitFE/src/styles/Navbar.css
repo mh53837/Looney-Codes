@@ -25,9 +25,11 @@
     max-height: fit-content;
     max-width: 100%;
 }
+
 .navbar-options-container a {
     margin: 2px;
 }
+
 .navbar-options-container button {
     height: fit-content;
     margin: 10px;
@@ -37,9 +39,11 @@
 }
 
 .userIconImg {
-    max-width: 1.5rem;
-    margin-left: 0.5rem;
+    width: 2rem;
+    margin-left: .5rem;
     border-radius: 50%;
+    height: 2rem;
+    object-fit: cover;
 }
 
 .loginDiv {
@@ -105,7 +109,7 @@
 
     .navbar-options-container {
         grid-template-columns: 1fr;
-        margin:1px;
+        margin: 1px;
     }
 
     .navbar-options-container button {
