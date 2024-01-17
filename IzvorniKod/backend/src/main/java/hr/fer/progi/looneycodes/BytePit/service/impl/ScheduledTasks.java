@@ -82,7 +82,7 @@ public class ScheduledTasks {
             return; // natjecanje je updateano, pehari su ili vec dodijeljeni ili ce se dodijeliti kasnije
 
         List<Pehar> pehari = peharRepository.findAllTrophies().stream().filter(p -> p.getNatjecanje().getNatjecanjeId().equals(natjecanjeId)).toList();
-        if(pehari.isEmpty() || pehari.size() != 1)
+        if(pehari.size() == 0 || pehari.get(0).getNatjecatelj() != null)
             return; // voditelj nije dodao pehar ili su pehari vec dodjeljeni
 
         Pehar pehar = pehari.get(0);  // mjesto bi mu trebalo biti postavljeno na 1
