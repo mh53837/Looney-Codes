@@ -21,7 +21,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ imageData, userDa
           {imageData ? (
             <img className="userProfileImg" src={imageData} alt="User icon" />
           ) : (
-            <img className="userProfileImg" src="/slike/bytepit-usericon.png" alt="Default icon" />
+            <img className="userProfileImg" src="/slike/placeHolder.png" alt="Default icon" />
           )}
         </div>
         <div className="userData">
