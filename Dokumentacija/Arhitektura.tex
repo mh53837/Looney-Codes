@@ -8,12 +8,12 @@
 
 Arhitektura sustava može se podijeliti na tri glavna podsustava, a to su \textbf{Frontend Web aplikacija, Backend Web aplikacija i baza podataka}.
 \begin{itemize}
-	\item 	\textit{\textbf{Web poslužitelj}} prima zahtjeve od klijenata putem interneta, obrađuje ih i pruža resurse poput web stranice, slike, videa i datoteke kao odgovor. Za distribuciju resursa najčešče se koriste protokoli kao što su HTTP (Hypertext Transfer Protocol) ili HTTPS (HTTP Secure).
+	\item 	\textit{\textbf{Web poslužitelj}} prima zahtjeve od klijenata putem interneta, obrađuje ih i pruža resurse poput web stranice, slike, videa i datoteke kao odgovor. Za distribuciju resursa najčešće se koriste protokoli kao što su HTTP (Hypertext Transfer Protocol) ili HTTPS (HTTP Secure).
 	\item 	\textit{\textbf{Web aplikacija}} je program koji se izvršava na web pregledniku (Google Chrome, Mozilla Firefox, Safari itd.) i pruža korisnicima mogućnost izvršavanja željenih zahtjeva, odnosno interakciju s određenim uslugama i funkcionalnostima web aplikacije. Prilikom obrade zahtjeva pristupa se bazi podataka i korisniku se odgovor vraća kao HTML dokument.
 	\item 	\textit{\textbf{Baza podataka}} je organizirani skup podataka namijenjen za efikasno upravljanje, ažuriranje, pretraživanje i dohvat podataka. Uloge baze podataka u web aplikaciji su pohrana podataka, očuvanje integriteta podataka i osiguravanje dosljednosti, upravljanje transakcijama itd.
 \end{itemize}
 
-Za izradu naše web aplikacije odabrali smo \textit{\textbf{Spring Boot}} (open-source Java framework) i \textit{\textbf{React}} (open-source JavaScript library). Odabrana razvojna okruženja su InteliJ IDEA i Eclipse IDE za Spring Boot, odnosno Visual Studio Code i WebStorm za React. Za izradu baze podatka koristimo PostgreSQL.
+Za izradu naše web aplikacije odabrali smo \textit{\textbf{Spring Boot}} (open-source Java framework) i \textit{\textbf{React}} (open-source JavaScript library). Odabrana razvojna okruženja su IntelliJ IDEA i Eclipse IDE za Spring Boot, odnosno Visual Studio Code i WebStorm za React. Za izradu baze podatka koristimo PostgreSQL.
 Arhitektura, koja je podržana Spring Boot-om, temelji se na \textit{\textbf{MVC (Model-View-Controller)}} konceptu koji strogo odvaja model, akcije i prezentaciju, olakšava razvoj i održavanje aplikacije te čini aplikaciju prilagodljivom i jednostavnom za proširenje.
 \begin{itemize}
 	\item \textit{\textbf{Model}} - predstavlja poslovnu logiku, odnosno dinamičke strukture podataka, mijenja pogled na zahtjev kontrolera. Modeli u pravilu predstavljaju podatke(objekte) koje aplikacija obrađuje.
@@ -37,7 +37,7 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 \subsection{Opis tablica}
 			
 
-\textbf{Natjecanje} \quad Ovaj entitet sadržava informacije o natjecanju koje trenutno rješava korisnik. Atributi koje sadržava su: NatjecanjeID, KorisnikID, NazivNatjecanja, PocetakNatjecanja, KrajNatjecanja. Ovaj entitet ima  \textit{One-to-Many} vazu s entitetom Pehar preko atributa NatjecanjeID, te  \textit{One-to-Many} vezu sa slabim entitetom VirtualnoNatjecanje preko atributa OriginalnoNajtecanjeID. Ima  \textit{One-to-Many} vezu s entitetom Korisnik preko atributa KorisnikID.
+\textbf{Natjecanje} \quad Ovaj entitet sadržava informacije o natjecanju koje trenutno rješava korisnik. Atributi koje sadržava su: natjecanjeID, korisnikID, nazivNatjecanja, pocetakNatjecanja, krajNatjecanja. Ovaj entitet ima  \textit{One-to-Many} vezu s entitetom Pehar preko atributa natjecanjeID, te  \textit{One-to-Many} vezu sa slabim entitetom VirtualnoNatjecanje preko atributa originalnoNatjecanjeID. Ima  \textit{One-to-Many} vezu s entitetom Korisnik preko atributa korisnikID.
 				
 				
 				\begin{longtblr}[
@@ -49,14 +49,14 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Natjecanje}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}NatjecanjeID & INT	&  	Jedinstveni identifikator natjecanja  	\\ \hline
-					\SetCell{LightBlue}KorisnikID	& INT &  Jedinstveni identifikator korisnika 	\\ \hline
-					NazivNatjecanja & VARCHAR &  Naziv natjecanja \\ \hline 
-					PocetakNatjecanja & TIMESTAMP	&  	Vrijeme početka natjecanja	\\ \hline 
-					KrajNatjecanja	& TIMESTAMP &   Vrijeme završetka natjecanja	\\ \hline
+					\SetCell{LightGreen}natjecanjeID & INT	&  	Jedinstveni identifikator natjecanja  	\\ \hline
+					\SetCell{LightBlue}korisnikID	& INT &  Jedinstveni identifikator korisnika 	\\ \hline
+					nazivNatjecanja & VARCHAR &  Naziv natjecanja \\ \hline 
+					pocetakNatjecanja & TIMESTAMP	&  	Vrijeme početka natjecanja	\\ \hline 
+					krajNatjecanja	& TIMESTAMP &   Vrijeme završetka natjecanja	\\ \hline
 				\end{longtblr}
 				
-\textbf{VirtualnoNatjecanje} \quad Ovaj enitet sadržava informacije o virtualnom natjecanju koje je pokrenuo korisnik na temelju nekog natjecanja. Atributi koje sadržava su: virtualnoNatjecanjeID, KorisnikID, OriginalnoNatjecanjeID i PocetakNatjecanja. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom Korisnik preko atributa i vanjskog ključa KorisnikID. Atribut originalnoNatjecanjeID predstavlja vanjski ključ koji se referencira na natjecanjeID u relaciji natjecanje pa se time tvori \textit{Many-To-One} veza.
+\textbf{VirtualnoNatjecanje} \quad Ovaj entitet sadržava informacije o virtualnom natjecanju koje je pokrenuo korisnik na temelju nekog natjecanja. Atributi koje sadržava su: virtualnoNatjecanjeID, korisnikID, originalnoNatjecanjeID i pocetakNatjecanja. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom Korisnik preko atributa i vanjskog ključa korisnikID. Atribut originalnoNatjecanjeID predstavlja vanjski ključ koji se referencira na natjecanjeID u relaciji Natjecanje pa se time tvori \textit{Many-To-One} veza.
 		
 				\begin{longtblr}[
 					label=none,
@@ -67,13 +67,13 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{VirtualnoNatjecanje}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}VirtualnoNatjecanjeID & INT & Jedinstveni identifikator virtualnog natjecanja  	\\ \hline
-					\SetCell{LightBlue}KorisnikID & INT &  ID korisnika koji je stvorio virtualno natjecanje \\ \hline
+					\SetCell{LightGreen}virtualnoNatjecanjeID & INT & Jedinstveni identifikator virtualnog natjecanja  	\\ \hline
+					\SetCell{LightBlue}korisnikID & INT &  ID korisnika koji je stvorio virtualno natjecanje \\ \hline
 					\SetCell{LightBlue}originalnoNatjecanjeID & INT &  ID natjecanja na kojem se temelji virtualno natjecanje 	\\ \hline
-					PocetakNatjecanja & TIMESTAMP & Vrijeme početka natjecanja 	\\ \hline
+					pocetakNatjecanja & TIMESTAMP & Vrijeme početka natjecanja 	\\ \hline
 				\end{longtblr}
 
-\textbf{Korisnik} \quad Ovaj entitet sadržava sve bitne informacije o korisniku aplikacije. Sadrži atribute: KorisnickoIme, lozinka, ime, prezime, email, fotografija, vrijemeRegistracije, ulogaID, requestedUloga i confirmedEmail. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom Natjecanje preko atributa KorisnikID, u vezi \textit{One-to-Many} s entitetom VirtualnoNatjecanje preko atributa KorisnikID, u vezi  \textit{One-to-Many} s entitetom Zadatak preko atributa VoditeljID, u vezi  \textit{One-to-Many} s entitetom Rjesenje preko atributa NatjecateljID, te je u  \textit{One-to-Many} s entitetom Pehar preko atributa NatjecateljID.
+\textbf{Korisnik} \quad Ovaj entitet sadržava sve bitne informacije o korisniku aplikacije. Sadrži atribute: korisnickoIme, lozinka, ime, prezime, email, fotografija, vrijemeRegistracije, ulogaID, requestedUloga i confirmedEmail. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom Natjecanje preko atributa korisnikID, u vezi \textit{One-to-Many} s entitetom VirtualnoNatjecanje preko atributa korisnikID, u vezi  \textit{One-to-Many} s entitetom Zadatak preko atributa voditeljID, u vezi  \textit{One-to-Many} s entitetom Rjesenje preko atributa natjecateljID te je u vezi \textit{One-to-Many} s entitetom Pehar preko atributa natjecateljID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -84,20 +84,20 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Korisnik}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}KorisnikID & INT	&  	Jedinstveni identifikator korisnika  	\\ \hline
-					KorisničkoIme	& VARCHAR &  Jedinstveno ime korisnika 	\\ \hline 
-					Lozinka & VARCHAR &  Korisnikova lozinka \\ \hline 
-					Ime & VARCHAR	&  	Ime korisnika	\\ \hline 
-					Prezime	& VARCHAR &   Prezime korisnika	\\ \hline 
-					Email & VARCHAR & elektronička pošta korisnika \\ \hline 
-					Fotografija & PATH & fotografija korisnika \\ \hline 
-					VrijemeRegistracije & TIMESTAMP & Vrijeme kada se korisnik registrirao u sustav \\ \hline 
-					UlogaID & VARCHAR & Jedinstveni identifikator uloge	\\ \hline
+					\SetCell{LightGreen}korisnikID & INT	&  	Jedinstveni identifikator korisnika  	\\ \hline
+					korisnickoIme	& VARCHAR &  Jedinstveno ime korisnika 	\\ \hline 
+					lozinka & VARCHAR &  Korisnikova lozinka \\ \hline 
+					ime & VARCHAR	&  	Ime korisnika	\\ \hline 
+					prezime	& VARCHAR &   Prezime korisnika	\\ \hline 
+					email & VARCHAR & Elektronička pošta korisnika \\ \hline 
+					fotografija & PATH & Fotografija korisnika \\ \hline 
+					vrijemeRegistracije & TIMESTAMP & Vrijeme kada se korisnik registrirao u sustav \\ \hline 
+					ulogaID & VARCHAR & Jedinstveni identifikator uloge	\\ \hline
 					requestedUloga & VARCHAR & Uloga koju je korisnik zatražio \\ \hline
-					confirmedEmail & BOOLEAN & Zastavica koja određuje je li korisnik potvrdio Email za registraciju	\\ \hline
+					confirmedEmail & BOOLEAN & Zastavica koja određuje je li korisnik potvrdio email za registraciju	\\ \hline
 				\end{longtblr}
 				
-\textbf{Pehar} \quad Ovaj entitet predstavlja pehar kojeg natjecatelji (korisnici) mogu osvojiti u natjecanju. Sadrži atribute: PeharID, NatjecateljID, NatjecanjeID, Mjesto te SlikaPehara. Ovaj entitet ima  \textit{Many-to-One} vezu s entitetom Natjecanje preko atributa NatjecanjeID, te ima vezu  \textit{Many-to-One} s entitetom Korisnik preko atributa NatjecateljID.
+\textbf{Pehar} \quad Ovaj entitet predstavlja pehar kojeg natjecatelji (korisnici) mogu osvojiti u natjecanju. Sadrži atribute: peharID, natjecateljID, natjecanjeID, mjesto te slikaPehara. Ovaj entitet ima  \textit{Many-to-One} vezu s entitetom Natjecanje preko atributa natjecanjeID, te ima vezu  \textit{Many-to-One} s entitetom Korisnik preko atributa natjecateljID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -108,14 +108,14 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Pehar}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}PeharID & INT	&  	Jedinstveni identifikator pehara  	\\ \hline
-					\SetCell{LightBlue}NatjecateljID	 & INT &  Jedinstveni identifikator natjecatelja 	\\ \hline 
-					\SetCell{LightBlue}NatjecanjeID & INT &  Jedinstveni identifikator natjecanja	\\ \hline 
-					Mjesto & INT & Mjesto koje je dobiveno peharom (1, 2 ili 3) \\ \hline
-					SlikaPehara & VARCHAR & Slika dobivenog pehara \\ \hline
+					\SetCell{LightGreen}peharID & INT	&  	Jedinstveni identifikator pehara  	\\ \hline
+					\SetCell{LightBlue}natjecateljID	 & INT &  Jedinstveni identifikator natjecatelja 	\\ \hline 
+					\SetCell{LightBlue}natjecanjeID & INT &  Jedinstveni identifikator natjecanja	\\ \hline 
+					mjesto & INT & Mjesto koje je dobiveno peharom (1, 2 ili 3) \\ \hline
+					slikaPehara & VARCHAR & Slika dobivenog pehara \\ \hline
 				\end{longtblr}
 
-\textbf{Zadatak} \quad Ovaj enitet sadržava sve bitne značajke za definiciju jednog zadataka u aplikaciji. Atributi koje sadržava su: zadatakID, voditeljID, nazivZadatka, brojBodova, vremenskoOgranicenje, tekstZadatka, tezinaZadatka te privatniZadatak. Ovaj entitet ima \textit{One-To-Many} vezu sa slabim entitetom testniPrimjer preko atributa zadatakID. Vanjskim ključem natjecanjeID stvorena je opcionalna \textit{Many-To-One} veza sa entitetom natjecanje. Postoji i \textit{One-To-Many} veza s entitetom rješenje preko atributa zadatakID. \textit{Many-To-One} veza postoji i sa entitetom korisnik preko vanjskog ključa voditeljID (označava identifikator korisnika s ulogom voditelja).
+\textbf{Zadatak} \quad Ovaj entitet sadržava sve bitne značajke za definiciju jednog zadataka u aplikaciji. Atributi koje sadržava su: zadatakID, voditeljID, nazivZadatka, brojBodova, vremenskoOgranicenje, tekstZadatka, tezinaZadatka te privatniZadatak. Ovaj entitet ima \textit{One-To-Many} vezu sa slabim entitetom TestniPrimjer preko atributa zadatakID. Vanjskim ključem natjecanjeID stvorena je opcionalna \textit{Many-To-One} veza s entitetom Natjecanje. Postoji i \textit{One-To-Many} veza s entitetom Rješenje preko atributa zadatakID. \textit{Many-To-One} veza postoji i s entitetom Korisnik preko vanjskog ključa voditeljID (označava identifikator korisnika s ulogom voditelja).
 				
 				\begin{longtblr}[
 					label=none,
@@ -126,18 +126,18 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Zadatak}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}ZadatakID & INT	&  	Jedinstveni  privatni identifikator zadatka  	\\ \hline
+					\SetCell{LightGreen}zadatakID & INT	&  	Jedinstveni  privatni identifikator zadatka  	\\ \hline
 					nazivZadatka & VARCHAR & Naziv zadatka \\ \hline
-					tekstZadatka & VARCHAR & tekst kojim je zadan zadatak \\ \hline
-					tezinaZadatka & VARCHAR & Predstavlja tezinu zadatka \\ \hline
-					brojBodova & INT & broj bodova koliko nosi zadatak \\ \hline
-					vremenskoOgranicenje & INT & vremensko ograničenje za izvođenje predanog rješenja \\ \hline
-					privatniZadatak & BOOLEAN & zastavica koja određuje ako je zadatak privatan \\ \hline
+					tekstZadatka & VARCHAR & Tekst kojim je zadan zadatak \\ \hline
+					tezinaZadatka & VARCHAR & Predstavlja težinu zadatka \\ \hline
+					brojBodova & INT & Broj bodova koje nosi zadatak \\ \hline
+					vremenskoOgranicenje & INT & Vremensko ograničenje za izvođenje predanog rješenja \\ \hline
+					privatniZadatak & BOOLEAN & Zastavica koja određuje je li zadatak privatan \\ \hline
 					\SetCell{LightBlue}VoditeljID & INT &  Jedinstveni identifikator voditelja koji je stvorio zadatak	\\ \hline 
 				\end{longtblr}
 				
 				
-\textbf{Rješenje} \quad Ovaj slabi enitet sadržava informacije o predenim rješenjima pojedinog korisnika za određeni zadatak. Atributi koje sadržava su: rješenjeRb, natjecateljID, zadatakID, vrijemeOdgovora, brojTočnihPrimjera, brojBodova i programskiKod. Ovaj entitet ima \textit{Many-To-One} vezu s  entitetom zadatak preko atributa i vanjskog ključa zadatakID. \textit{Many-To-One} veza postoji i sa entitetom korisnik preko vanjskog ključa korisnikID.
+\textbf{Rješenje} \quad Ovaj slabi entitet sadržava informacije o predanim rješenjima pojedinog korisnika za određeni zadatak. Atributi koje sadržava su: rješenjeRb, natjecateljID, zadatakID, vrijemeOdgovora, brojTocnihPrimjera, brojBodova i programskiKod. Ovaj entitet ima \textit{Many-To-One} vezu s  entitetom Zadatak preko atributa i vanjskog ključa zadatakID. \textit{Many-To-One} veza postoji i s entitetom Korisnik preko vanjskog ključa korisnikID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -149,15 +149,15 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Rješenje}}	 \\ \hline[3pt]
 					\SetCell{LightGreen}rjesenjeRb & INT & Redni broj predanog rješenja određenog korisnika za predani zadatak \\ \hline
-					\SetCell{LightGreen}ZadatakID & INT	&  	Jedinstveni  privatni identifikator zadatka  	\\ \hline
-					\SetCell{LightGreen}NatjecateljID & INT &  Jedinstveni identifikator natjecatelja koji je predao rješenje	\\ \hline
+					\SetCell{LightGreen}zadatakID & INT	&  	Jedinstveni  privatni identifikator zadatka  	\\ \hline
+					\SetCell{LightGreen}natjecateljID & INT &  Jedinstveni identifikator natjecatelja koji je predao rješenje	\\ \hline
 					vrijemeOdgovora & TIMESTAMP & Vrijeme predaje rješenja \\ \hline
-					brojTočnihOdgovora & DOUBLE & Broj primjera koji prolaze evaluaciju \\ \hline
+					brojTocnihOdgovora & DOUBLE & Broj primjera koji prolaze evaluaciju \\ \hline
 					brojBodova & INT & Ostvareni broj bodova na zadatku \\ \hline
 					programskiKod & TEXT & Programski kod predanog rješenja \\ \hline
 				\end{longtblr}
 				
-\textbf{TesniPrimjer} \quad Ovaj slabi enitet sadržava informacije o testnim primjerima za određeni zadatak. Atributi koje sadržava su: testniPrimjerRb, zadatakID, ulazniPodaci i izlazniPodaci. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom zadatak preko atributa i vanjskog ključa zadatakID.
+\textbf{TestniPrimjer} \quad Ovaj slabi entitet sadržava informacije o testnim primjerima za određeni zadatak. Atributi koje sadržava su: testniPrimjerRb, zadatakID, ulazniPodaci i izlazniPodaci. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom Zadatak preko atributa i vanjskog ključa zadatakID.
 	
 				\begin{longtblr}[
 					label=none,
@@ -168,13 +168,13 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{TestniPrimjer}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}TestniPrimjerRB & INT & Redni broj testnog primjera za pojedini zadatak  	\\ \hline
+					\SetCell{LightGreen}testniPrimjerRB & INT & Redni broj testnog primjera za pojedini zadatak  	\\ \hline
 					\SetCell{LightGreen}zadatakID & INT &  Jedinstveni privatni identifikator zadatka \\ \hline
 					ulazniPodaci & VARCHAR & ulazni podaci za testiranje programskog rješenja \\ \hline
 					izlazniPodaci & VARCHAR & očekivani ispis programskog rješenja \\ \hline
 				\end{longtblr}
 
-\textbf{NadmetanjeZadaci} \quad Ovaj slabi enitet sadržava informacije o zadacima vezanim uz natjecanje. Atributi koje sadržava su: NadmetanjeID i ZadatakID. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom zadatak preko atributa i vanjskog ključa ZadatakID.
+\textbf{NadmetanjeZadaci} \quad Ovaj slabi entitet sadržava informacije o zadacima vezanim uz natjecanje. Atributi koje sadržava su: nadmetanjeID i zadatakID. Ovaj entitet ima \textit{Many-To-One} vezu s entitetom Zadatak preko atributa i vanjskog ključa zadatakID.
 \begin{longtblr}[
 					label=none,
 					entry=none
@@ -183,9 +183,9 @@ Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka koja svojom st
 					colspec={|X[11,l]|X[3, l]|X[20, l]|},
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-					\hline \SetCell[c=3]{c}{\textbf{TestniPrimjer}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}NadmetanjeID & INT & Jedinstveni privatni identifikator zadatka nadmetanja  	\\ \hline
-					\SetCell{LightGreen}ZadatakID & INT &  Jedinstveni privatni identifikator zadatka \\ \hline
+					\hline \SetCell[c=3]{c}{\textbf{NadmetanjeZadaci}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}nadmetanjeID & INT & Jedinstveni privatni identifikator zadatka nadmetanja  	\\ \hline
+					\SetCell{LightGreen}zadatakID & INT &  Jedinstveni privatni identifikator zadatka \\ \hline
 				\end{longtblr}
 
 
@@ -208,12 +208,12 @@ Na slikama \ref{fig:dijagramRazreda1} i \ref{fig:dijagramRazreda2} prikazani su 
 Prva slika opisuje servise, odnosno njihovu implementaciju i prikazani su atributi i metode u pojedinim razredima.
 Servisi predstavljaju glavnu logiku i oni su uglavnom u interakciji s repozitorijima koji su između ostalog prikazani na slici \ref{fig:dijagramRazreda2}.
 Osim repozitorija, na slici \ref{fig:dijagramRazreda2} prikazani su i modeli (predstavljaju strukturu baze podataka) te kontroleri. 
-Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose prethodno navedenih razreda. \\
+Kontroleri su zaduženi za upravljanje HTTP zahtjevima i pružanje prikladnog odgovora. Na drugoj slici možemo uočiti atribute i međusobne odnose navedenih razreda. \\
 
 Razred Korisnik predstavlja registriranog korisnika koji se može registrirati kao voditelj ili natjecatelj unoseći svoje podatke u sustav. Nadmetanje je bazni razred kojeg nasljeđuju razredi Natjecanje i VirtualnoNatjecanje.
 Razred Natjecanje definira naziv, početak i kraj natjecanja te voditelja, a VirtualnoNatjecanje predstavlja natjecanje koje se može naknadno pokrenuti i rješavati. Razred Pehar je entitet u kojeg spremamo koje mjesto je osvojio natjecatelj na nekom natjecanju i sliku pehara.
-Razred uloga je enumeracija koja definira ulogu korisnika (admin, natjecatelj ili voditelj). Razred zadatak je entitet koji predstavlja određeni problem na natjecanju i sadrži referencu na testne primjere.
-Testni primjer sadrži informacije o tesnim primjerima za pojedinačni zadatak. Razred Rjesenje predstavlja predano rješenje pojedinog korisnika za zadatak. 
+Razred Uloga je enumeracija koja definira ulogu korisnika (admin, natjecatelj ili voditelj). Razred Zadatak je entitet koji predstavlja određeni problem na natjecanju i sadrži referencu na testne primjere.
+TestniPrimjer sadrži informacije o testnim primjerima za pojedinačni zadatak. Razred Rjesenje predstavlja predano rješenje pojedinog korisnika za zadatak. 
 
 \begin{figure}[H]
 	\includegraphics[scale=0.13]{dijagrami/serviceDiagram.png}
@@ -265,7 +265,7 @@ Dijagram aktivnosti na slici \ref{fig:dijagramAktivnosti} prikazuje proces kreir
 %\eject
 \section{Dijagram komponenti}
 
-Dijagram komponenti prikazan na slici \ref{fig:dijagramKomponenti} opisuje organizaciju i međuovisnost  komponenti, interne strukture i odnose prema okolini. Web aplikacija sastoji se od komponenti: Controllers, Services, Repositories, DTO i Models. Controllers pruža REST API sučelje na koje vanjski web preglednik može slati zahtjeve i primati odgovore pomoću JSON datoteka. Repositories pristupa SQL bazi podataka koja ostvaruje sučelje SQL API. Podaci koji su pristigli iz baze se šalju dalje MVC arhitekturi u obliku DTO(Data transfer objcet). Repositories upisuje podatke iz baze podataka u komponentu Services. Models oblikuje korištene entitete i njihov međuodnos. Controllers šalje i prima podatke od komponente Services. Controllers pruža MAIL API sučelje Mailjet preko kojeg šalje mailove i Judge0 API za evaluaciju programskog rješenja.
+Dijagram komponenti prikazan na slici \ref{fig:dijagramKomponenti} opisuje organizaciju i međuovisnost  komponenti, interne strukture i odnose prema okolini. Web aplikacija sastoji se od komponenti: Controllers, Services, Repositories, DTO i Models. Controllers pruža REST API sučelje na koje vanjski web preglednik može slati zahtjeve i primati odgovore pomoću JSON datoteka. Repositories pristupa SQL bazi podataka koja ostvaruje sučelje SQL API. Podaci koji su pristigli iz baze se šalju dalje MVC arhitekturi u obliku DTO (Data transfer object). Repositories upisuje podatke iz baze podataka u komponentu Services. Models oblikuje korištene entitete i njihov međuodnos. Controllers šalje i prima podatke od komponente Services. Controllers pruža MAIL API sučelje Mailjet preko kojeg šalje mailove i Judge0 API za evaluaciju programskog rješenja.
 \\
 \begin{figure}[H]
 	\includegraphics[scale=0.5]{dijagrami/dijagramKomponenti.png}

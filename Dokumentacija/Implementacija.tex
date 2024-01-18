@@ -9,7 +9,8 @@ Za izradu dokumentacije korišten je \underline{LaTeX}\footnote{https://www.late
 
 Za razvojna okruženja korišteni su \underline{Visual Studio Code}\footnote{https://visualstudio.microsoft.com/}. Visual Studio Code je integrirano razvojno okruženje (IDE) kompanije Microsoft. Koristi se za razvoj wen-stranica, web-aplikacija, web-usluga i mobilnih aplikacija. Za razvoj softvera koristi Windows API, Windows Forms, Windows Presentation Foundation, Windows Store i Microsoft Silverlight.
 
-Za pisanje aplikacije korišten je \underline{Spring Boot}\footnote{https://spring.io/projects/spring-boot/}, framework za razvoj Java aplikacija, za razvoj backenda. Za razvoj frontenda korišten je \underline{React}\footnote{https://react.dev}, biblioteka za izgradnju sučelja u jeziku \underline{JavaScript}\footnote{https://www.javascript.com/}. Također je korišten \underline{TypeScript}\footnote{https://www.typescriptlang.org} kao nadrogradnja nad JavaScriptom. On poboljšava kvalitetu i održivost koda napisanog u JavaScriptu.
+Za pisanje aplikacije korišten je \underline{Spring Boot}\footnote{https://spring.io/projects/spring-boot/}, framework za razvoj Java aplikacija, za razvoj backenda. Za razvoj frontenda korišten je \underline{React}\footnote{https://react.dev}, biblioteka za izgradnju sučelja u jeziku \underline{JavaScript}\footnote{https://www.javascript.com/}. Također je korišten \underline{TypeScript}\footnote{https://www.typescriptlang.org} kao nadogradnja nad JavaScriptom. On poboljšava kvalitetu i održivost koda napisanog u JavaScriptu. U pogledu korisničkog sučelja, integrirana je i \underline{Ant Design}\footnote{https://ant.design/}, popularna biblioteka za React koja pruža širok spektar već gotovih komponenata. Ant Design je korišten za implementaciju određenih dijelova korisničkog sučelja kako bi se postigla dosljednost i funkcionalnost.
+
 
 Baza podataka nalazi se na poslužitelju 
 
@@ -82,7 +83,7 @@ Na kraju, implementirana su i dva testa za klasu \textit{ZadatakController}. U m
 	\label{fig:test6}
 \end{figure}
 
-Posljednjom testirajućom metodom \ref{fig:test7} ispitujemo funkcionalnost metode za ažuriranje zadatka u scenariju kada administrator želi izvršiti ažuriranje. Testiranoj metodi \textit{updateKorisnik} prosljeđujemo identifikator zadatka, podatke koje želimo ažurirati (naziv i težina) te informacije o prijavljenom korisniku (administratoru). Očekujemo da će kao izlaz metoda vratiti ažurirani objekt tipa \textit{Zadatak} te provjeravamo je su li naziv zadatka i težina zadatka ispravno ažurirani prema zadanim promjenama.
+Posljednjom testirajućom metodom \ref{fig:test7} ispitujemo funkcionalnost metode za ažuriranje zadatka u scenariju kada administrator želi izvršiti ažuriranje. Testiranoj metodi \textit{updateKorisnik} prosljeđujemo identifikator zadatka, podatke koje želimo ažurirati (naziv i težina) te informacije o prijavljenom korisniku (administratoru). Očekujemo da će kao izlaz metoda vratiti ažurirani objekt tipa \textit{Zadatak} te provjeravamo jesu li naziv zadatka i težina zadatka ispravno ažurirani prema zadanim promjenama.
 
 
 \begin{figure}[H]
@@ -173,7 +174,7 @@ UML-dijagrami razmještaja prikazuju fizičku arhitekturu i konfiguraciju razmje
 Za puštanje našeg projekta u pogon može se koristiti Render.com. Ovu smo platformu odabrali zbog njezine jednostavnosti i pristupačnosti. U nastavku ćemo opisati korake koje smo poduzeli kako bismo uspješno postavili našu aplikaciju na Render.com.
 
 
-Na početku je pripremiti otvoriti GitHub repozitorij i korisnički račun na Renderu. Dovoljno je za kratkoročnu uporabu koristiti besplatni plan na obje platforme.
+Na početku je potrebno pripremiti GitHub repozitorij i stvoriti korisnički račun na Renderu. Dovoljno je za kratkoročnu uporabu koristiti besplatni plan na obje platforme.
 Aplikacija je prilagođena za korištenje izgrađenih statičkih resursa korisničke strane koji se potom dostavljaju s poslužitelja. Prije samog pokretanja u pogon potrebno je generirati te datoteke naredbom \textit{npm run build} iz vršnog foldera implementacije klijentske strane kao što je prikazano na slici dolje.
 
 \begin{figure}[H]
@@ -200,7 +201,7 @@ Sada prelazimo na pokretanje aplikacije na Render platformi. Koraci koje treba o
 	Po izradi računa treba otvoriti novu PostgreSQL bazu podataka pritiskom na \textit{new} gumb u izborniku početne stranice i odabirom prikladne opcije. Postaviti željeno ime baze i korisnika te regiju na Frankfurt (EU Central). U \textit{application.properties} datoteci treba postaviti \textit{spring.datasource.url} na dobivenu adresu baze i \textit{spring.datasource.username} te \textit{spring.datasource.password} na dobivene korisničke podatke, a promjene pohraniti na GitHub repozitorij.
 	\item \textbf{Stvaranje novog web servisa} \newline
 	Slijedi inicijalizacija novog web servisa za poslužitelj naše stranice. Odabir početka stvaranja takvog servisa vrši se na sličan način kao i stvaranje nove baze podataka - pritiskom \textit{new} gumb u izborniku početne stranice i odabirom prikladne opcije.  \newline
-	Pri početnom odabiru odabrati \textit{Build and deploy from a Git repository} te zatim povezati s željenim GitHub repozitorijem. Na slici \ref{deployment3} prikazan je odabir vršnog direktorija i grane repozitorija. Kao \textit{Enviroment} odabrati Docker, a vrijednost putanje do \textit{Dockerfilea} treba biti postavljena na \textit{./Docker/Dockerfile}. Nije potrebno postavljati varijable okruženja jer su postavljene u aplikacijskim specifikacijama. Završiti kreiranje novog web servisa pritiskom na gumb \textit{Create Web Service}.
+	Pri početnom odabiru odabrati \textit{Build and deploy from a Git repository} te zatim povezati sa željenim GitHub repozitorijem. Na slici \ref{deployment3} prikazan je odabir vršnog direktorija i grane repozitorija. Kao \textit{Environment} odabrati Docker, a vrijednost putanje do \textit{Dockerfilea} treba biti postavljena na \textit{./Docker/Dockerfile}. Nije potrebno postavljati varijable okruženja jer su postavljene u aplikacijskim specifikacijama. Završiti kreiranje novog web servisa pritiskom na gumb \textit{Create Web Service}.
 	\begin{figure}[H]
 		\includegraphics[scale=0.3]{slike/deployment3.png}
 		\centering
@@ -208,7 +209,7 @@ Sada prelazimo na pokretanje aplikacije na Render platformi. Koraci koje treba o
 		\label{deployment3}
 	\end{figure}
 	\item \textbf{Pokretanje web servisa}
-	Po stvaranju web servisa počet će proces inicijalizacije poslužitelja. Prilikom toga na karticama \textit{Events} i \textit{Logs} potrebno je pratiti uspješnost puštanja u pogon kako bi se uvidjeli eventualni problemi i ispravili isti (ako pažljivo nije proveden neki od prethodnih koraka treba se vratiti i ponoviti ga). U logovima moguća je vidjeti kako se prvo vrši alociranje samog poslužitelja, pa \textit{dokerizacija} i na kraju se pokreće naša aplikacija. Kada je završeno puštanje u pogon moguće je vidjeti obavijest kao na slici ispod.
+	Po stvaranju web servisa počet će proces inicijalizacije poslužitelja. Prilikom toga na karticama \textit{Events} i \textit{Logs} potrebno je pratiti uspješnost puštanja u pogon kako bi se uvidjeli eventualni problemi i ispravili isti (ako pažljivo nije proveden neki od prethodnih koraka treba se vratiti i ponoviti ga). U logovima moguće je vidjeti kako se prvo vrši alociranje samog poslužitelja, pa \textit{dokerizacija} i na kraju se pokreće naša aplikacija. Kada je završeno puštanje u pogon moguće je vidjeti obavijest kao na slici ispod.
 	\begin{figure}[H]
 		\includegraphics[scale=0.3]{slike/deployment4.jpeg}
 		\centering
